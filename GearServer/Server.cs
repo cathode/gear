@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GearServer
 {
-    class Program
+    internal static class Server
     {
         static void Main(string[] args)
         {

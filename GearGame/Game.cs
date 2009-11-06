@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GearGame
 {
-    class Program
+    internal static class Game
     {
         static void Main(string[] args)
         {
