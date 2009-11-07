@@ -7,10 +7,10 @@ using System.Text;
 
 namespace GearServer
 {
-    internal static class Server
+    /// <summary>
+    /// Represents the session on the server.
+    /// </summary>
+    internal sealed class ServerSession
     {
-        static void Main(string[] args)
-        {
-        }
     }
 }

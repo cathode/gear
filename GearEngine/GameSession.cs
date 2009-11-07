@@ -5,12 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GearServer
+namespace GearEngine
 {
-    internal static class Server
+    public abstract class GameSession
     {
-        static void Main(string[] args)
-        {
-        }
+
     }
 }

@@ -5,12 +5,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GearServer
+namespace GearClient
 {
-    internal static class Server
+    internal static class Client
     {
-        static void Main(string[] args)
+        /// <summary>
+        /// GearClient application entry point.
+        /// </summary>
+        /// <param name="args"></param>
+        internal static void Main(string[] args)
         {
+
         }
     }
 }

@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GearServer
+namespace GearEngine
 {
-    internal static class Server
+    /// <summary>
+    /// Represnts an abstract instruction sent from a client to server or visa versa.
+    /// </summary>
+    public abstract class Command
     {
-        static void Main(string[] args)
-        {
-        }
+
     }
 }

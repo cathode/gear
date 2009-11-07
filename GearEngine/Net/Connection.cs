@@ -5,12 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GearServer
+namespace GearEngine.Net
 {
-    internal static class Server
+    public abstract class Connection
     {
-        static void Main(string[] args)
-        {
-        }
     }
 }
