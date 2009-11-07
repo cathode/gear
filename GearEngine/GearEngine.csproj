@@ -51,14 +51,26 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Command.cs" />
+    <Compile Include="CommandArgs.cs" />
     <Compile Include="CommandQueue.cs" />
+    <Compile Include="Commands\QuitCommand.cs" />
+    <Compile Include="Commands\SetCommand.cs" />
+    <Compile Include="EngineResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EngineResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="GameConsole.cs" />
     <Compile Include="GameSession.cs" />
     <Compile Include="Net\Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Commands\" />
+    <EmbeddedResource Include="EngineResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EngineResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

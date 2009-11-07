@@ -8,10 +8,22 @@ using System.Text;
 namespace GearEngine
 {
     /// <summary>
-    /// Represnts an abstract instruction sent from a client to server or visa versa.
+    /// Represnts an action that alters the game session.
     /// </summary>
     public abstract class Command
     {
-
+        #region Methods
+        public abstract bool Execute(GameSession session);
+        #endregion
+        #region Properties
+        public abstract string Name
+        {
+            get;
+        }
+        public abstract string Description
+        {
+            get;
+        }
+        #endregion
     }
 }

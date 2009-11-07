@@ -103,6 +103,9 @@ namespace GearEngine
 
         #region Properties
 
+        /// <summary>
+        /// Returns the number of commands contained in the queue.
+        /// </summary>
         public int Count
         {
             get
@@ -111,6 +114,9 @@ namespace GearEngine
             }
         }
 
+        /// <summary>
+        /// Indicates if the current queue is empty.
+        /// </summary>
         public bool IsEmpty
         {
             get
