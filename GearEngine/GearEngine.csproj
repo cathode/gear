@@ -51,6 +51,8 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Command.cs" />
+    <Compile Include="CommandQueue.cs" />
+    <Compile Include="GameConsole.cs" />
     <Compile Include="GameSession.cs" />
     <Compile Include="Net\Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

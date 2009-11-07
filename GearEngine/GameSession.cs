@@ -7,6 +7,9 @@ using System.Text;
 
 namespace GearEngine
 {
+    /// <summary>
+    /// Holds and maintains all information related to an active game session.
+    /// </summary>
     public abstract class GameSession
     {
 
