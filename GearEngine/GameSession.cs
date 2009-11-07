@@ -22,10 +22,10 @@ namespace GearEngine
 
         public void Dispose()
         {
-            if (!this.IsDisposed)
-                this.Dispose(true);
+            this.Dispose(true);
 
             this.isDisposed = true;
+            GC.SuppressFinalize(this);
         }
 
         #endregion
