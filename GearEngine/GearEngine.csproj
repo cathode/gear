@@ -37,6 +37,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -51,24 +53,41 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Command.cs" />
-    <Compile Include="CommandArgs.cs" />
+    <Compile Include="CommandId.cs" />
     <Compile Include="CommandQueue.cs" />
-    <Compile Include="Commands\QuitCommand.cs" />
-    <Compile Include="Commands\SetCommand.cs" />
+    <Compile Include="Commands\HelpCommand.cs" />
+    <Compile Include="Commands\QuitCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\SetCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ShellCommand.cs" />
     <Compile Include="EngineResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EngineResources.resx</DependentUpon>
     </Compile>
     <Compile Include="GameConsole.cs" />
+    <Compile Include="GameConsoleParseException.cs" />
     <Compile Include="GameSession.cs" />
     <Compile Include="Net\Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Winforms\GameConsoleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Winforms\GameConsoleForm.Designer.cs">
+      <DependentUpon>GameConsoleForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EngineResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EngineResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Winforms\GameConsoleForm.resx">
+      <DependentUpon>GameConsoleForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

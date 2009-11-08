@@ -13,17 +13,10 @@ namespace GearEngine
     public abstract class Command
     {
         #region Methods
-        public abstract bool Execute(GameSession session);
+        //public abstract bool Execute(GameSession session);
         #endregion
         #region Properties
-        public abstract string Name
-        {
-            get;
-        }
-        public abstract string Description
-        {
-            get;
-        }
+
         #endregion
     }
 }

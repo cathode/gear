@@ -10,13 +10,10 @@ namespace GearEngine.Commands
     /// <summary>
     /// Represents a command that assigns or alters a session variable.
     /// </summary>
-    public sealed class SetCommand : Command
+    public sealed class SetCommand : ShellCommand
     {
         #region Methods
-        public override bool Execute(GameSession session)
-        {
-            throw new NotImplementedException();
-        }
+
         #endregion
         #region Properties
         /// <summary>
@@ -26,18 +23,7 @@ namespace GearEngine.Commands
         {
             get
             {
-                return "set";
-            }
-        }
-
-        /// <summary>
-        /// Gets the description of the command.
-        /// </summary>
-        public override string Description
-        {
-            get
-            {
-                return EngineResources.CommandSetDescription;
+                return "Set";
             }
         }
         #endregion

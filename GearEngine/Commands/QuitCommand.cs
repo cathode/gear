@@ -10,28 +10,13 @@ namespace GearEngine.Commands
     /// <summary>
     /// Quits the game/server.
     /// </summary>
-    public sealed class QuitCommand : Command
+    public sealed class QuitCommand : ShellCommand
     {
-        public override bool Execute(GameSession session)
-        {
-            session.Dispose();
-
-            return true;
-        }
-
         public override string Name
         {
             get
             {
-                return "quit";
-            }
-        }
-
-        public override string Description
-        {
-            get
-            {
-                return EngineResources.CommandQuitDescription;
+                return "Quit";
             }
         }
     }

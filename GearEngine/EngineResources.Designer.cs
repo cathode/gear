@@ -61,20 +61,29 @@ namespace GearEngine {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Displays help for a command..
+        /// </summary>
+        public static string ShellCmdHelp_Help {
+            get {
+                return ResourceManager.GetString("ShellCmdHelp_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Quits the game..
         /// </summary>
-        public static string CommandQuitDescription {
+        public static string ShellCmdHelp_Quit {
             get {
-                return ResourceManager.GetString("CommandQuitDescription", resourceCulture);
+                return ResourceManager.GetString("ShellCmdHelp_Quit", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Sets a session parameter to a new value..
         /// </summary>
-        public static string CommandSetDescription {
+        public static string ShellCmdHelp_Set {
             get {
-                return ResourceManager.GetString("CommandSetDescription", resourceCulture);
+                return ResourceManager.GetString("ShellCmdHelp_Set", resourceCulture);
             }
         }
     }
