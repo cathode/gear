@@ -12,7 +12,7 @@ namespace GearClient
     internal static class Client
     {
         #region Fields
-        internal static GameConsole GConsole;
+        internal static GameShell GConsole;
         #endregion
         #region Methods
         /// <summary>
@@ -23,7 +23,7 @@ namespace GearClient
         {
             var cq = new CommandQueue();
 
-            GConsole = new GameConsole(cq);
+            GConsole = new GameShell(cq);
 
             while (true)
             {

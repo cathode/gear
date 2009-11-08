@@ -7,12 +7,13 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Windows.Forms;
 
 namespace GearEngine.Winforms
 {
     /// <summary>
-    /// A form that provides a user interface for a <see cref="GameConsole"/> instance.
+    /// A form that provides a user interface for a <see cref="GameShell"/> instance.
     /// </summary>
     public partial class GameConsoleForm : Form
     {
@@ -23,12 +24,12 @@ namespace GearEngine.Winforms
         public GameConsoleForm()
         {
             InitializeComponent();
-
+            this.Text = EngineResources.ShellUITitle;
             this.Console = null;
         }
         #endregion
         #region Fields
-        private GameConsole console;
+        private GameShell console;
         #endregion
         #region Methods - Private
 
@@ -44,9 +45,11 @@ namespace GearEngine.Winforms
                 {
                     this.Console.Parse(commandText);
                 }
-                catch (GameConsoleParseException ex)
+                catch (GameShellParseException ex)
                 {
-                    //TODO: handle parse exception
+                    string line = ex.Message + "\r\n";
+
+                    this.output.Text += line;
                 }
             }
         }
@@ -58,7 +61,7 @@ namespace GearEngine.Winforms
         {
             this.input.Clear();
             this.input.ClearUndo();
-            this.output.Nodes.Clear();
+            this.output.Clear();
 
             this.input.Enabled = (this.Console != null);
             this.output.Enabled = (this.Console != null);
@@ -68,9 +71,9 @@ namespace GearEngine.Winforms
         #endregion
         #region Properties
         /// <summary>
-        /// Gets or sets the active <see cref="GameConsole"/>.
+        /// Gets or sets the active <see cref="GameShell"/>.
         /// </summary>
-        public GameConsole Console
+        public GameShell Console
         {
             get
             {

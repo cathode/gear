@@ -11,31 +11,31 @@ namespace GearEngine
     /// <summary>
     /// Represents an exception that occurs when a user supplies an incorrect 
     /// </summary>
-    public sealed class GameConsoleParseException : Exception
+    public sealed class GameShellParseException : Exception
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="GameConsoleParseException"/> class.
+        /// Initializes a new instance of the <see cref="GameShellParseException"/> class.
         /// </summary>
-        public GameConsoleParseException()
+        public GameShellParseException()
         {
 
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="GameConsoleParseException"/> class.
+        /// Initializes a new instance of the <see cref="GameShellParseException"/> class.
         /// </summary>
         /// <param name="message"></param>
-        public GameConsoleParseException(string message)
+        public GameShellParseException(string message)
             : base(message)
         {
 
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="GameConsoleParseException"/> class.
+        /// Initializes a new instance of the <see cref="GameShellParseException"/> class.
         /// </summary>
         /// <param name="message"></param>
         /// <param name="inner"></param>
-        public GameConsoleParseException(string message, Exception inner)
+        public GameShellParseException(string message, Exception inner)
             : base(message, inner)
         {
 

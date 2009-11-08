@@ -14,10 +14,27 @@ namespace GearEngine.Commands
     {
         #region Methods
 
+        public override void ParseData(string data)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
         #region Properties
+
         /// <summary>
-        /// Gets the name of the command.
+        /// Overridden. Gets the command id.
+        /// </summary>
+        public override CommandId Id
+        {
+            get
+            {
+                return CommandId.Set;
+            }
+        }
+
+        /// <summary>
+        /// Overridden. Gets the command name.
         /// </summary>
         public override string Name
         {
@@ -26,6 +43,11 @@ namespace GearEngine.Commands
                 return "Set";
             }
         }
+
         #endregion
+
+       
+
+      
     }
 }

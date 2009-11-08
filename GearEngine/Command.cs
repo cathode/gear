@@ -16,7 +16,13 @@ namespace GearEngine
         //public abstract bool Execute(GameSession session);
         #endregion
         #region Properties
-
+        /// <summary>
+        /// When implemented in a derived class, gets the <see cref="CommandId"/> of the current <see cref="Command"/>.
+        /// </summary>
+        public abstract CommandId Id
+        {
+            get;
+        }
         #endregion
     }
 }

@@ -12,6 +12,9 @@ namespace GearEngine.Commands
     /// </summary>
     public abstract class ShellCommand : Command
     {
+        #region Methods
+        public abstract void ParseData(string data);
+        #endregion
         #region Properties
         /// <summary>
         /// When overridden in a derived class, gets the name of the current command.

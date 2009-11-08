@@ -86,5 +86,41 @@ namespace GearEngine {
                 return ResourceManager.GetString("ShellCmdHelp_Set", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown command: {0}.
+        /// </summary>
+        public static string ShellErrorUnknownCommand {
+            get {
+                return ResourceManager.GetString("ShellErrorUnknownCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Client:.
+        /// </summary>
+        public static string ShellUIClient {
+            get {
+                return ResourceManager.GetString("ShellUIClient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server:.
+        /// </summary>
+        public static string ShellUIServer {
+            get {
+                return ResourceManager.GetString("ShellUIServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gear Shell.
+        /// </summary>
+        public static string ShellUITitle {
+            get {
+                return ResourceManager.GetString("ShellUITitle", resourceCulture);
+            }
+        }
     }
 }

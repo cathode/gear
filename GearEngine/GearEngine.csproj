@@ -68,9 +68,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EngineResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="GameConsole.cs" />
-    <Compile Include="GameConsoleParseException.cs" />
     <Compile Include="GameSession.cs" />
+    <Compile Include="GameShell.cs" />
+    <Compile Include="GameShellParseException.cs" />
     <Compile Include="Net\Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Winforms\GameConsoleForm.cs">
