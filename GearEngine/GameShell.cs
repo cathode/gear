@@ -41,21 +41,28 @@ namespace GearEngine
         #endregion
         #region Fields
         private readonly CommandQueue target;
-        private StreamWriter output;
+        private StringBuilder output = new StringBuilder();
         #endregion
         #region Methods - Private
         private void ProcessShellOnly(ShellCommand cmd)
         {
             if (this.output == null)
                 return; // No destination for shell output.
-
-            /*
+            
             switch (cmd.Id)
             {
-                case CommandId.Info:
-
+                case CommandId.Comment:
+                    this.Output.AppendLine(((CommentCommand)cmd).Comment);
+                    break;
+                case CommandId.Help:
+                    var topicName = ((HelpCommand)cmd).Topic;
+                    if (string.IsNullOrEmpty(topicName))
+                        topicName = "help";
+                    var topic = ShellCommand.CreateShellCommand(topicName);
+                    if (topic != null)
+                        this.Output.AppendLine(topic.HelpInfo ?? "No help available for this command.");
+                    break;
             }
-            */
         }
         #endregion
         #region Methods - Public
@@ -63,15 +70,14 @@ namespace GearEngine
         {
             var cmd = ShellCommand.ParseShellCommand(line);
 
-            if (cmd.IsShellOnly)
+            if (cmd.GeneratesShellOutput)
                 this.ProcessShellOnly(cmd);
-            else
+            if (!cmd.IsShellOnly)
                 this.target.Enqueue(cmd);
-
         }
         #endregion
         #region Properties
-        public StreamWriter Output
+        public StringBuilder Output
         {
             get
             {

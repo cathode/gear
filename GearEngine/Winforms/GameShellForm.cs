@@ -44,12 +44,18 @@ namespace GearEngine.Winforms
                 try
                 {
                     this.Shell.Parse(commandText);
+                    this.output.AppendText(this.Shell.Output.ToString().TrimEnd('\r', '\n', ' ', '\t') + "\r\n");
                 }
                 catch (GameShellParseException ex)
                 {
                     string line = ex.Message + "\r\n";
 
-                    this.output.Text += line;
+                    this.output.AppendText(line);
+                }
+                finally
+                {
+                    if (this.Shell.Output.Length > 0)
+                        this.Shell.Output.Remove(0, shell.Output.Length);
                 }
             }
         }
@@ -88,6 +94,6 @@ namespace GearEngine.Winforms
         }
         #endregion
 
-      
+
     }
 }

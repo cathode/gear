@@ -57,14 +57,14 @@ namespace GearEngine.Commands
         {
             get
             {
-                return CommandId.Info;
+                return CommandId.Comment;
             }
         }
 
         /// <summary>
         /// Gets or sets the informative string associated with the current <see cref="CommentCommand"/>.
         /// </summary>
-        public string Info
+        public string Comment
         {
             get
             {
@@ -94,7 +94,7 @@ namespace GearEngine.Commands
         {
             get
             {
-                return "Info";
+                return "Comment";
             }
         }
 

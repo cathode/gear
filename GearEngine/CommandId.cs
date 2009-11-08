@@ -28,6 +28,6 @@ namespace GearEngine
         /// <summary>
         /// See <see cref="CommentCommand"/>.
         /// </summary>
-        Info = 0x4,
+        Comment = 0x4,
     }
 }
