@@ -14,9 +14,13 @@ namespace GearEngine.Commands
     {
         #region Methods
 
+        /// <summary>
+        /// Overridden. Parses the data and assimilates it.
+        /// </summary>
+        /// <param name="data">The data to parse.</param>
         public override void ParseData(string data)
         {
-            throw new NotImplementedException();
+            //if (string.IsNullOrEmpty(data))
         }
 
         #endregion

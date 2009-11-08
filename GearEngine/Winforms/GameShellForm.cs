@@ -15,21 +15,21 @@ namespace GearEngine.Winforms
     /// <summary>
     /// A form that provides a user interface for a <see cref="GameShell"/> instance.
     /// </summary>
-    public partial class GameConsoleForm : Form
+    public partial class GameShellForm : Form
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="GameConsoleForm"/> class.
+        /// Initializes a new instance of the <see cref="GameShellForm"/> class.
         /// </summary>
-        public GameConsoleForm()
+        public GameShellForm()
         {
             InitializeComponent();
             this.Text = EngineResources.ShellUITitle;
-            this.Console = null;
+            this.Shell = null;
         }
         #endregion
         #region Fields
-        private GameShell console;
+        private GameShell shell;
         #endregion
         #region Methods - Private
 
@@ -43,7 +43,7 @@ namespace GearEngine.Winforms
                 this.input.Text = string.Empty;
                 try
                 {
-                    this.Console.Parse(commandText);
+                    this.Shell.Parse(commandText);
                 }
                 catch (GameShellParseException ex)
                 {
@@ -55,7 +55,7 @@ namespace GearEngine.Winforms
         }
 
         /// <summary>
-        /// Forces the current <see cref="GameConsoleForm"/> to reflect it's current state.
+        /// Forces the current <see cref="GameShellForm"/> to reflect it's current state.
         /// </summary>
         private void Reset()
         {
@@ -63,8 +63,8 @@ namespace GearEngine.Winforms
             this.input.ClearUndo();
             this.output.Clear();
 
-            this.input.Enabled = (this.Console != null);
-            this.output.Enabled = (this.Console != null);
+            this.input.Enabled = (this.Shell != null);
+            this.output.Enabled = (this.Shell != null);
 
             this.Invalidate(true);
         }
@@ -73,15 +73,15 @@ namespace GearEngine.Winforms
         /// <summary>
         /// Gets or sets the active <see cref="GameShell"/>.
         /// </summary>
-        public GameShell Console
+        public GameShell Shell
         {
             get
             {
-                return this.console;
+                return this.shell;
             }
             set
             {
-                this.console = value;
+                this.shell = value;
 
                 this.Reset();
             }

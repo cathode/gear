@@ -18,8 +18,15 @@ namespace GearEngine
 
         #region Methods
 
+        /// <summary>
+        /// Performs disposal of the current <see cref="GameSession"/>.
+        /// </summary>
+        /// <param name="disposing"></param>
         protected abstract void Dispose(bool disposing);
 
+        /// <summary>
+        /// Disposes the current <see cref="GameSession"/>, releasing all managed and unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             this.Dispose(true);
@@ -30,6 +37,10 @@ namespace GearEngine
 
         #endregion
         #region Properties
+
+        /// <summary>
+        /// Indicates if the current <see cref="GameSession"/> is disposed.
+        /// </summary>
         public bool IsDisposed
         {
             get

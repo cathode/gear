@@ -25,5 +25,9 @@ namespace GearEngine
         /// See <see cref="QuitCommand"/>.
         /// </summary>
         Quit = 0x3,
+        /// <summary>
+        /// See <see cref="CommentCommand"/>.
+        /// </summary>
+        Info = 0x4,
     }
 }

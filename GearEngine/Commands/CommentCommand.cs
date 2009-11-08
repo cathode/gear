@@ -8,55 +8,71 @@ using System.Text;
 namespace GearEngine.Commands
 {
     /// <summary>
-    /// A command that displays help for a specific topic.
+    /// Displays a comment to the shell output.
     /// </summary>
-    public sealed class HelpCommand : ShellCommand
+    public sealed class CommentCommand : ShellCommand
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HelpCommand"/>.
+        /// Initializes a new instance of the <see cref="CommentCommand"/> class.
         /// </summary>
-        public HelpCommand()
+        public CommentCommand()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HelpCommand"/>
+        /// Initializes a new instance of the <see cref="CommentCommand"/> class.
         /// </summary>
-        /// <param name="topic">The topic that help is requested for.</param>
-        public HelpCommand(string topic)
+        /// <param name="info">The information associated with the new <see cref="CommentCommand"/>.</param>
+        public CommentCommand(string info)
         {
+            this.info = info;
         }
 
         #endregion
         #region Fields
 
-        private string topic;
+        private string info;
 
         #endregion
         #region Methods
 
         /// <summary>
-        /// Overridden. Parses data into the current shell command.
+        /// Overridden.
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="data">The data to parse.</param>
         public override void ParseData(string data)
         {
-            this.topic = data.Trim();
+            this.info = data;
         }
 
         #endregion
         #region Properties
 
         /// <summary>
-        /// Overridden. Gets the <see cref="CommandId"/> of the current command.
+        /// Overridden. Gets the command id.
         /// </summary>
         public override CommandId Id
         {
             get
             {
-                return CommandId.Help;
+                return CommandId.Info;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the informative string associated with the current <see cref="CommentCommand"/>.
+        /// </summary>
+        public string Info
+        {
+            get
+            {
+                return this.info;
+            }
+            set
+            {
+                this.info = value;
             }
         }
 
@@ -72,31 +88,18 @@ namespace GearEngine.Commands
         }
 
         /// <summary>
-        /// Overridden. Gets the name of the command.
+        /// Overridden. Gets the command name.
         /// </summary>
         public override string Name
         {
             get
             {
-                return "Help";
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the topic that help is requested for.
-        /// </summary>
-        public string Topic
-        {
-            get
-            {
-                return this.topic;
-            }
-            set
-            {
-                this.topic = value;
+                return "Info";
             }
         }
 
         #endregion
+
+
     }
 }

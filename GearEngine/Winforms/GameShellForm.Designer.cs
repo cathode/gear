@@ -1,6 +1,6 @@
 ﻿namespace GearEngine.Winforms
 {
-    partial class GameConsoleForm
+    partial class GameShellForm
     {
         /// <summary>
         /// Required designer variable.
@@ -82,7 +82,7 @@
             this.output.Size = new System.Drawing.Size(752, 322);
             this.output.TabIndex = 1;
             // 
-            // GameConsoleForm
+            // GameShellForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -93,7 +93,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "GameConsoleForm";
+            this.Name = "GameShellForm";
             this.ShowIcon = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GearEngine.Commands;
+using System.IO;
 
 namespace GearEngine
 {
@@ -40,56 +41,47 @@ namespace GearEngine
         #endregion
         #region Fields
         private readonly CommandQueue target;
+        private StreamWriter output;
+        #endregion
+        #region Methods - Private
+        private void ProcessShellOnly(ShellCommand cmd)
+        {
+            if (this.output == null)
+                return; // No destination for shell output.
+
+            /*
+            switch (cmd.Id)
+            {
+                case CommandId.Info:
+
+            }
+            */
+        }
         #endregion
         #region Methods - Public
-        /// <summary>
-        /// Parses text input from the user into a command, which is then added to the target queue.
-        /// </summary>
-        /// <param name="line"></param>
         public void Parse(string line)
         {
-            if (line == null || line.Trim() == string.Empty)
-                return; // Nothing to process
+            var cmd = ShellCommand.ParseShellCommand(line);
 
-            line = line.Trim();
-            int sp = line.IndexOf(' ');
-            string rawCmd = string.Empty;
-            string rawData = string.Empty;
-
-            if (sp == -1)
-                rawCmd = line;
+            if (cmd.IsShellOnly)
+                this.ProcessShellOnly(cmd);
             else
-            {
-                rawCmd = line.Substring(0, sp);
-                rawData = line.Substring(sp).Trim();
-            }
+                this.target.Enqueue(cmd);
 
-            ShellCommand cmd;
-
-            switch (rawCmd.ToLower())
-            {
-                case "quit":
-                    cmd = new QuitCommand();
-                    break;
-                case "help":
-                    cmd = new HelpCommand();
-                    break;
-                case "set":
-                    cmd = new SetCommand();
-                    break;
-
-                default:
-                    throw new GameShellParseException(string.Format(EngineResources.ShellErrorUnknownCommand, rawCmd));
-            }
-
-            cmd.ParseData(rawData);
-
-            throw new GameShellParseException();
-            //throw new NotImplementedException();
         }
         #endregion
         #region Properties
-
+        public StreamWriter Output
+        {
+            get
+            {
+                return this.output;
+            }
+            set
+            {
+                this.output = value;
+            }
+        }
         #endregion
     }
 }

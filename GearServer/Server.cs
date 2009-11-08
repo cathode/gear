@@ -17,7 +17,7 @@ namespace GearServer
     {
         #region Fields
         internal static ServerSession Session;
-        internal static GameConsoleForm Form;
+        internal static GameShellForm Form;
         internal static GameShell Console;
         #endregion
         #region Methods
@@ -30,8 +30,8 @@ namespace GearServer
             Server.Session = new ServerSession();
             var queue = new CommandQueue();
             Server.Console = new GameShell(queue);
-            Server.Form = new GameConsoleForm();
-            Server.Form.Console = Server.Console;
+            Server.Form = new GameShellForm();
+            Server.Form.Shell = Server.Console;
 
             Application.EnableVisualStyles();
             Application.Run(Server.Form);
