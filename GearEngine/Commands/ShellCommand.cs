@@ -20,61 +20,6 @@ namespace GearEngine.Commands
         /// <param name="data">The data to parse.</param>
         public abstract void ParseData(string data);
 
-        /// <summary>
-        /// Creates and returns a <see cref="ShellCommand"/> by name.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static ShellCommand CreateShellCommand(string name)
-        {
-            if (name == null)
-                throw new ArgumentNullException("name");
-
-            switch (name.ToLower())
-            {
-                case "quit":
-                    return new QuitCommand();
-                case "help":
-                    return new HelpCommand();
-                case "set":
-                    return new SetCommand();
-                case "info":
-                    return new CommentCommand();
-
-                default:
-                    throw new GameShellParseException(string.Format(EngineResources.ShellErrorUnknownCommand, name));
-            }
-        }
-
-        /// <summary>
-        /// Processes a line of text and attempts to extract a shell command instance from the string.
-        /// </summary>
-        /// <param name="line"></param>
-        /// <returns></returns>
-        public static ShellCommand ParseShellCommand(string line)
-        {
-            if (line == null || line.Trim() == string.Empty)
-                return null; // Nothing to process
-
-            line = line.Trim();
-            int sp = line.IndexOf(' ');
-            string rawCmd = string.Empty;
-            string rawData = string.Empty;
-
-            if (sp == -1)
-                rawCmd = line;
-            else
-            {
-                rawCmd = line.Substring(0, sp);
-                rawData = line.Substring(sp).Trim();
-            }
-
-            ShellCommand cmd = ShellCommand.CreateShellCommand(rawCmd);
-            cmd.ParseData(rawData);
-
-            return cmd;
-        }
-
         #endregion
         #region Properties
 

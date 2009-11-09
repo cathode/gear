@@ -16,9 +16,10 @@ namespace GearServer
     internal static class Server
     {
         #region Fields
+        internal static ServerEngine Engine;
         internal static ServerSession Session;
         internal static GameShellForm Form;
-        internal static GameShell Console;
+        internal static GameShell Shell;
         #endregion
         #region Methods
         /// <summary>
@@ -27,11 +28,12 @@ namespace GearServer
         /// <param name="args"></param>
         internal static void Main(string[] args)
         {
+            Server.Engine = new ServerEngine();
+
             Server.Session = new ServerSession();
-            var queue = new CommandQueue();
-            Server.Console = new GameShell(queue);
+            Server.Shell = new GameShell(Server.Engine.Input);
             Server.Form = new GameShellForm();
-            Server.Form.Shell = Server.Console;
+            Server.Form.Shell = Server.Shell;
 
             Application.EnableVisualStyles();
             Application.Run(Server.Form);

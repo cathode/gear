@@ -69,6 +69,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EngineResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="GameEngine.cs" />
     <Compile Include="GameSession.cs" />
     <Compile Include="GameShell.cs" />
     <Compile Include="GameShellParseException.cs" />

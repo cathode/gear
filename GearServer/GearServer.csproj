@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerEngine.cs" />
     <Compile Include="ServerSession.cs" />
   </ItemGroup>
   <ItemGroup>

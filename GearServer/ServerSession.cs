@@ -13,9 +13,14 @@ namespace GearServer
     /// </summary>
     internal sealed class ServerSession : GameSession
     {
+        #region Methods
         protected override void Dispose(bool disposing)
         {
             throw new NotImplementedException();
         }
+        #endregion
+        #region Properties
+     
+        #endregion
     }
 }
