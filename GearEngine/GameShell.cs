@@ -41,30 +41,7 @@ namespace GearEngine
         #endregion
         #region Fields
         private readonly CommandQueue target;
-        private StringBuilder output = new StringBuilder();
-        #endregion
-        #region Methods - Private
-        private void ProcessShellOnly(ShellCommand cmd)
-        {
-            if (this.output == null)
-                return; // No destination for shell output.
-            
-            switch (cmd.Id)
-            {
-                case CommandId.Comment:
-                    this.Output.AppendLine(((CommentCommand)cmd).Comment);
-                    break;
-
-                case CommandId.Help:
-                    var topicName = ((HelpCommand)cmd).Topic;
-                    if (string.IsNullOrEmpty(topicName))
-                        topicName = "help";
-                    var topic = GameShell.CreateShellCommand(topicName);
-                    if (topic != null)
-                        this.Output.AppendLine(topic.HelpInfo ?? "No help available for this command.");
-                    break;
-            }
-        }
+        private StringWriter output = new StringWriter();
         #endregion
         #region Methods - Public
         public void Parse(string line)
@@ -131,7 +108,7 @@ namespace GearEngine
 
         #endregion
         #region Properties
-        public StringBuilder Output
+        public StringWriter Output
         {
             get
             {

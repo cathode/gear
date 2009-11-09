@@ -32,7 +32,7 @@ namespace GearServer
             Server.Engine = new ServerEngine();
 
             Server.Session = new ServerSession();
-            Server.Shell = new GameShell(Server.Engine.Input);
+            Server.Shell = Server.Engine.Shell;
             Server.Form = new GameShellForm();
             Server.Form.Shell = Server.Shell;
 

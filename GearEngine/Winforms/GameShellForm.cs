@@ -30,6 +30,7 @@ namespace GearEngine.Winforms
         #endregion
         #region Fields
         private GameShell shell;
+        private StringBuilder outputBuilder = new StringBuilder();
         #endregion
         #region Methods - Private
 
@@ -44,19 +45,17 @@ namespace GearEngine.Winforms
                 try
                 {
                     this.Shell.Parse(commandText);
-                    this.output.AppendText(this.Shell.Output.ToString().TrimEnd('\r', '\n', ' ', '\t') + "\r\n");
                 }
                 catch (GameShellParseException ex)
                 {
                     string line = ex.Message + "\r\n";
 
-                    this.output.AppendText(line);
+                    this.outputBuilder.AppendLine(line);
                 }
-                finally
-                {
-                    if (this.Shell.Output.Length > 0)
-                        this.Shell.Output.Remove(0, shell.Output.Length);
-                }
+                System.Threading.Thread.Sleep(50);
+                this.output.AppendText(this.outputBuilder.ToString());
+                this.outputBuilder.Length = 0;
+                this.outputBuilder.Capacity = 0;
             }
         }
 
@@ -73,6 +72,9 @@ namespace GearEngine.Winforms
             this.output.Enabled = (this.Shell != null);
 
             this.Invalidate(true);
+
+            if (this.Shell != null)
+                this.Shell.Output = new StringWriter(this.outputBuilder);
         }
         #endregion
         #region Properties
@@ -93,7 +95,8 @@ namespace GearEngine.Winforms
             }
         }
         #endregion
+        #region Types
 
-
+        #endregion
     }
 }

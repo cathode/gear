@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Diagnostics;
+
+using GearEngine.Commands;
 
 namespace GearEngine
 {
@@ -20,6 +23,10 @@ namespace GearEngine
         /// </summary>
         protected GameEngine()
         {
+            this.input = new CommandQueue();
+            this.output = new CommandQueue();
+            this.shell = new GameShell(this.input);
+
             this.Input.NonEmpty += new EventHandler(Input_NonEmpty);
 
             this.engineThread = new Thread(new ThreadStart(this.ProcessQueuedInput));
@@ -29,8 +36,9 @@ namespace GearEngine
         #region Fields
 
         private bool active = false;
-        private readonly CommandQueue input = new CommandQueue();
-        private readonly CommandQueue output = new CommandQueue();
+        private readonly CommandQueue input;
+        private readonly CommandQueue output;
+        private readonly GameShell shell;
         private Thread engineThread;
 
         #endregion
@@ -47,12 +55,10 @@ namespace GearEngine
         private void ProcessQueuedInputCallback(object state)
         {
             this.active = true;
-            Console.WriteLine(DateTime.Now.Ticks.ToString() + ": Started queue processing");
 
             this.ProcessQueuedInput();
 
             this.active = false;
-            Console.WriteLine(DateTime.Now.Ticks.ToString() + ": Ended queue processing");
         }
 
         private void ProcessQueuedInput()
@@ -64,10 +70,31 @@ namespace GearEngine
                 this.ProcessInputCommand(current);
             }
         }
+
         protected virtual void ProcessInputCommand(Command command)
         {
-            Console.WriteLine(command.Id);
+            switch (command.Id)
+            {
+                case CommandId.Comment:
+                    this.Shell.Output.WriteLine(((CommentCommand)command).Comment);
+                    break;
+
+                case CommandId.Help:
+                    var topicName = ((HelpCommand)command).Topic;
+                    if (string.IsNullOrEmpty(topicName))
+                        topicName = "help";
+                    var topic = GameShell.CreateShellCommand(topicName);
+                    if (topic != null)
+                        this.Shell.Output.WriteLine(topic.HelpInfo ?? "No help available for this command.");
+                    break;
+
+                case CommandId.Quit:
+                    Process.GetCurrentProcess().Kill();
+                    break;
+            }
+            
         }
+
         #endregion
         #region Properties
         public bool Active
@@ -95,6 +122,14 @@ namespace GearEngine
             get
             {
                 return this.output;
+            }
+        }
+
+        public GameShell Shell
+        {
+            get
+            {
+                return this.shell;
             }
         }
         #endregion
