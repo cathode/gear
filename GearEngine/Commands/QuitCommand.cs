@@ -33,7 +33,7 @@ namespace GearEngine.Commands
         {
             get
             {
-                throw new NotImplementedException();
+                return CommandId.Quit;
             }
         }
 
@@ -47,7 +47,7 @@ namespace GearEngine.Commands
                 return "Quit";
             }
         }
-       
+
         #endregion
     }
 }
