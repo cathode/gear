@@ -71,10 +71,7 @@ namespace GearEngine
         {
             var cmd = GameShell.ParseShellCommand(line);
 
-            if (cmd.GeneratesShellOutput)
-                this.ProcessShellOnly(cmd);
-            if (!cmd.IsShellOnly)
-                this.target.Enqueue(cmd);
+            this.target.Enqueue(cmd);
         }
 
         /// <summary>

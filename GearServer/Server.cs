@@ -7,6 +7,7 @@ using System.Text;
 using GearEngine;
 using GearEngine.Winforms;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace GearServer
 {
