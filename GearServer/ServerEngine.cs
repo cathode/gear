@@ -10,6 +10,13 @@ namespace GearServer
 {
     internal sealed class ServerEngine : GameEngine
     {
+        #region Constructors
 
+        internal ServerEngine()
+        {
+            this.RegisterCommandProcessor(CommandId.Unknown, null);
+        }
+
+        #endregion
     }
 }
