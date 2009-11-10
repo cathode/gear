@@ -29,7 +29,7 @@ namespace GearEngine
             this.input = new CommandQueue();
             this.output = new CommandQueue();
             this.shell = new GameShell(this.input);
-            this.processors = new Dictionary<CommandId, CommandProcessor>();
+            this.processors = new Dictionary<int, CommandProcessor>();
 
             // Set up event trigger so commands get processed.
             this.Input.NonEmpty += new EventHandler(Input_NonEmpty);
@@ -48,7 +48,7 @@ namespace GearEngine
         private readonly CommandQueue input;
         private readonly CommandQueue output;
         private readonly GameShell shell;
-        private readonly Dictionary<CommandId, CommandProcessor> processors;
+        private readonly Dictionary<int, CommandProcessor> processors;
         #endregion
         #region Methods - Private
 
@@ -119,7 +119,7 @@ namespace GearEngine
                 this.processors[cmd.Id](cmd);
         }
 
-        protected void RegisterCommandProcessor(CommandId id, CommandProcessor callback)
+        protected void RegisterCommandProcessor(int id, CommandProcessor callback)
         {
             if (!this.processors.ContainsKey(id))
                 this.processors.Add(id, callback);

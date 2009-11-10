@@ -19,7 +19,7 @@ namespace GearEngine
         /// <summary>
         /// When implemented in a derived class, gets the <see cref="CommandId"/> of the current <see cref="Command"/>.
         /// </summary>
-        public abstract CommandId Id
+        public abstract ushort Id
         {
             get;
         }

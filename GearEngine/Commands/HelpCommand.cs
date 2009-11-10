@@ -52,7 +52,7 @@ namespace GearEngine.Commands
         /// <summary>
         /// Overridden. Gets the <see cref="CommandId"/> of the current command.
         /// </summary>
-        public override CommandId Id
+        public override ushort Id
         {
             get
             {

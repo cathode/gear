@@ -29,7 +29,7 @@ namespace GearEngine.Commands
         /// <summary>
         /// Overridden. Gets the command id.
         /// </summary>
-        public override CommandId Id
+        public override ushort Id
         {
             get
             {

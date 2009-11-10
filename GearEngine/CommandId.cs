@@ -7,27 +7,27 @@ namespace GearEngine
     /// <summary>
     /// Enumerates built in commands.
     /// </summary>
-    public enum CommandId
+    public static class CommandId
     {
         /// <summary>
         /// If a command id is unknown. Usually indicates an error.
         /// </summary>
-        Unknown = 0x0,
+        public const ushort Unknown = 0x0;
         /// <summary>
         /// See <see cref="HelpCommand"/>.
         /// </summary>
-        Help = 0x1,
+        public const ushort Help = 0x1;
         /// <summary>
         /// See <see cref="SetCommand"/>.
         /// </summary>
-        Set = 0x2,
+        public const ushort Set = 0x2;
         /// <summary>
         /// See <see cref="QuitCommand"/>.
         /// </summary>
-        Quit = 0x3,
+        public const ushort Quit = 0x3;
         /// <summary>
         /// See <see cref="CommentCommand"/>.
         /// </summary>
-        Comment = 0x4,
+        public const ushort Comment = 0x4;
     }
 }

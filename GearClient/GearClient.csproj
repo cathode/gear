@@ -56,7 +56,10 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Client.cs" />
+    <Compile Include="ClientCommandIds.cs" />
+    <Compile Include="ClientEngine.cs" />
     <Compile Include="ClientSession.cs" />
+    <Compile Include="Commands\ConnectCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
