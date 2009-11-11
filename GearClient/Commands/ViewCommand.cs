@@ -25,7 +25,7 @@ namespace GearClient.Commands
         {
             get
             {
-
+                return ClientCommandIds.ViewCommand;
             }
         }
     }

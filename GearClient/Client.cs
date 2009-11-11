@@ -29,7 +29,7 @@ namespace GearClient
             shellUI.Shell = Client.Engine.Shell;
 
             // Initialize MOGRE rendering
-            var window = new OgreWindow();
+            var window = new GearWindow();
             var creator = new Client.SceneCreator(window);
 
             try
@@ -48,6 +48,29 @@ namespace GearClient
         }
         #endregion
 
+        internal class GearWindow : OgreWindow
+        {
+            protected override void CreateCamera()
+            {
+                var cam = this.SceneManager.CreateCamera("PlayerCam");
+
+                cam.Position = new Vector3(50, 50, 100);
+                cam.LookAt(Vector3.ZERO);
+                cam.NearClipDistance = 5;
+
+                this.Camera = cam;
+            }
+            protected override void CreateViewport()
+            {
+                var vp = this.RenderWindow.AddViewport(this.Camera);
+
+                vp.BackgroundColour = ColourValue.Black;
+                this.Camera.AspectRatio = vp.ActualWidth / (float)vp.ActualHeight;
+
+                this.Viewport = vp;
+            }
+        }
+
         internal class SceneCreator
         {
             internal SceneCreator(OgreWindow window)
@@ -58,15 +81,26 @@ namespace GearClient
             {
                 var mgr = window.SceneManager;
 
-                mgr.AmbientLight = new ColourValue(1, 1, 1);
+                mgr.AmbientLight = ColourValue.Black;
+                mgr.ShadowTechnique = ShadowTechnique.SHADOWTYPE_STENCIL_ADDITIVE;
 
-                var ent = mgr.CreateEntity("Robot", "robot.mesh");
+                var ent = mgr.CreateEntity("Ninja", "ninja.mesh");
+                ent.CastShadows = true;
                 var node = mgr.RootSceneNode.CreateChildSceneNode("RobotNode");
                 node.AttachObject(ent);
 
-                var ent2 = mgr.CreateEntity("Robot2", "robot.mesh");
-                var node2 = mgr.RootSceneNode.CreateChildSceneNode("RobotNode2", new Vector3(50, 0, 0));
-                node2.AttachObject(ent2);
+                var plane = new Plane(Vector3.UNIT_Y, 0);
+                MeshManager.Singleton.CreatePlane("ground", ResourceGroupManager.DEFAULT_RESOURCE_GROUP_NAME, plane, 1500, 1500, 20, 20, true, 1, 5, 5, Vector3.UNIT_Z);
+                ent = mgr.CreateEntity("GroundEntity", "ground");
+                mgr.RootSceneNode.CreateChildSceneNode().AttachObject(ent);
+                ent.SetMaterialName("Examples/Rockwall");
+                ent.CastShadows = false;
+
+                var light = mgr.CreateLight("Light1");
+                light.Type = Light.LightTypes.LT_POINT;
+                light.Position = new Vector3(0, 150, 250);
+                light.DiffuseColour = ColourValue.Red;
+                light.SpecularColour = ColourValue.Red;
             }
         }
     }
