@@ -14,7 +14,7 @@ namespace GearServer
 
         internal ServerEngine()
         {
-            this.RegisterCommandProcessor(CommandId.Unknown, null);
+            
         }
 
         #endregion

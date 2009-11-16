@@ -2,12 +2,13 @@
 // Released under the Microsoft Reference License - see license.txt for details.
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 using GearEngine;
 using GearEngine.Winforms;
-using System.Windows.Forms;
-using System.Threading;
 
 namespace GearServer
 {
@@ -35,6 +36,8 @@ namespace GearServer
             Server.Shell = Server.Engine.Shell;
             Server.Form = new GameShellForm();
             Server.Form.Shell = Server.Shell;
+
+            
 
             Application.EnableVisualStyles();
             Application.Run(Server.Form);

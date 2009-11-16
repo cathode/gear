@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Mod>
+  <Build>
+    <Output>output/Gear.mod</Output>
+  </Build>
+  <AssetGroup Name="Items">
+    <AssetGroup Name="Weapons">
+      <AssetGroup Name="Swords">
+        <Asset Name="ShortSword" Variations="1">
+          <Model>ShortSword001.model</Model>
+          <Material>ShortSword001.material</Material>
+        </Asset>
+      </AssetGroup>
+    </AssetGroup>
+  </AssetGroup>
+</Mod>
