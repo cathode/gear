@@ -126,6 +126,9 @@
   <data name="ShellCmdHelp_Set" xml:space="preserve">
     <value>Sets a session parameter to a new value.</value>
   </data>
+  <data name="ShellErrorNoHelp" xml:space="preserve">
+    <value>No help is available for that command.</value>
+  </data>
   <data name="ShellErrorUnknownCommand" xml:space="preserve">
     <value>Unknown command: {0}</value>
   </data>

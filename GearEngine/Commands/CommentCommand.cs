@@ -37,7 +37,10 @@ namespace GearEngine.Commands
 
         #endregion
         #region Methods
-
+        public override void Execute(GameEngine engine)
+        {
+            throw new NotImplementedException();
+        }
         /// <summary>
         /// Overridden.
         /// </summary>
@@ -49,7 +52,6 @@ namespace GearEngine.Commands
 
         #endregion
         #region Properties
-
         /// <summary>
         /// Overridden. Gets the command id.
         /// </summary>
@@ -60,7 +62,6 @@ namespace GearEngine.Commands
                 return CommandId.Comment;
             }
         }
-
         /// <summary>
         /// Gets or sets the informative string associated with the current <see cref="CommentCommand"/>.
         /// </summary>
@@ -75,7 +76,6 @@ namespace GearEngine.Commands
                 this.info = value;
             }
         }
-
         /// <summary>
         /// Overridden.
         /// </summary>
@@ -86,7 +86,6 @@ namespace GearEngine.Commands
                 return true;
             }
         }
-
         /// <summary>
         /// Overridden. Gets the command name.
         /// </summary>
@@ -97,9 +96,6 @@ namespace GearEngine.Commands
                 return "Comment";
             }
         }
-
         #endregion
-
-
     }
 }

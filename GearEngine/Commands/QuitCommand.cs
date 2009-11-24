@@ -13,7 +13,10 @@ namespace GearEngine.Commands
     public sealed class QuitCommand : ShellCommand
     {
         #region Methods
-
+        public override void Execute(GameEngine engine)
+        {
+            throw new NotImplementedException();
+        }
         /// <summary>
         /// Overridden. Parses data for the current command.
         /// </summary>

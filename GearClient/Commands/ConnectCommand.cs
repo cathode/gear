@@ -31,5 +31,10 @@ namespace GearClient.Commands
                 throw new NotImplementedException();
             }
         }
+
+        public override void Execute(GameEngine engine)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

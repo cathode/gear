@@ -11,8 +11,6 @@ using GearEngine.Commands;
 
 namespace GearEngine
 {
-    public delegate void CommandProcessor(Command cmd);
-
     /// <summary>
     /// Supervises and directs the operation of all subsystems of the Gear engine.
     /// </summary>
@@ -29,16 +27,9 @@ namespace GearEngine
             this.input = new CommandQueue();
             this.output = new CommandQueue();
             this.shell = new GameShell(this.input);
-            this.processors = new Dictionary<int, CommandProcessor>();
 
             // Set up event trigger so commands get processed.
             this.Input.NonEmpty += new EventHandler(Input_NonEmpty);
-
-            // Register command processors for generic commands
-            this.RegisterCommandProcessor(CommandId.Comment, new CommandProcessor(this.P_Comment));
-            this.RegisterCommandProcessor(CommandId.Help, new CommandProcessor(this.P_Help));
-            this.RegisterCommandProcessor(CommandId.Quit, new CommandProcessor(this.P_Quit));
-            this.RegisterCommandProcessor(CommandId.Set, new CommandProcessor(this.P_Set));
         }
 
         #endregion
@@ -48,7 +39,6 @@ namespace GearEngine
         private readonly CommandQueue input;
         private readonly CommandQueue output;
         private readonly GameShell shell;
-        private readonly Dictionary<int, CommandProcessor> processors;
         #endregion
         #region Methods - Private
 
@@ -85,17 +75,6 @@ namespace GearEngine
 
             this.Shell.Output.WriteLine(c.Comment);
         }
-        private void P_Help(Command cmd)
-        {
-            var c = (HelpCommand)cmd;
-
-            var topicName = c.Topic;
-            if (string.IsNullOrEmpty(topicName))
-                topicName = "help";
-            var topic = GameShell.CreateShellCommand(topicName);
-            if (topic != null)
-                this.Shell.Output.WriteLine(topic.HelpInfo ?? "No help available for this command.");
-        }
         private void P_Quit(Command cmd)
         {
             var c = (QuitCommand)cmd;
@@ -115,16 +94,10 @@ namespace GearEngine
         /// <param name="cmd"></param>
         protected void ProcessCommand(Command cmd)
         {
-            if (this.processors.ContainsKey(cmd.Id))
-                this.processors[cmd.Id](cmd);
-        }
+            if (cmd == null)
+                throw new ArgumentNullException("cmd");
 
-        protected void RegisterCommandProcessor(int id, CommandProcessor callback)
-        {
-            if (!this.processors.ContainsKey(id))
-                this.processors.Add(id, callback);
-            else
-                this.processors[id] = callback;
+            cmd.Execute(this);
         }
 
         #endregion

@@ -13,7 +13,10 @@ namespace GearEngine.Commands
     public sealed class SetCommand : ShellCommand
     {
         #region Methods
-
+        public override void Execute(GameEngine engine)
+        {
+            throw new NotImplementedException();
+        }
         /// <summary>
         /// Overridden. Parses the data and assimilates it.
         /// </summary>
@@ -49,9 +52,5 @@ namespace GearEngine.Commands
         }
 
         #endregion
-
-       
-
-      
     }
 }

@@ -36,7 +36,16 @@ namespace GearEngine.Commands
 
         #endregion
         #region Methods
+        public override void Execute(GameEngine engine)
+        {
+            var topicName = (string.IsNullOrEmpty(this.Topic)) ? "help" : this.Topic;
 
+            var topicCmd = GameShell.CreateShellCommand(topicName);
+            if (topicCmd != null)
+                engine.Shell.Output.WriteLine(topicCmd.HelpInfo ?? EngineResources.ShellErrorNoHelp);
+            else
+                engine.Shell.Output.WriteLine(EngineResources.ShellErrorUnknownCommand, topicName);
+        }
         /// <summary>
         /// Overridden. Parses data into the current shell command.
         /// </summary>

@@ -7,10 +7,13 @@ namespace GearEngine
     /// <summary>
     /// Enumerates built in commands.
     /// </summary>
+    /// <remarks>
+    /// Command ID is not implemented as an enumeration because it is an open set.
+    /// </remarks>
     public static class CommandId
     {
         /// <summary>
-        /// If a command id is unknown. Usually indicates an error.
+        /// The command id is unknown. Usually indicates an error.
         /// </summary>
         public const ushort Unknown = 0x0;
         /// <summary>

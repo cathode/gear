@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GearEngine.Commands;
 
 namespace GearEngine
 {
@@ -13,7 +14,7 @@ namespace GearEngine
     public abstract class Command
     {
         #region Methods
-        //public abstract bool Execute(GameSession session);
+        public abstract void Execute(GameEngine engine);
         #endregion
         #region Properties
         /// <summary>

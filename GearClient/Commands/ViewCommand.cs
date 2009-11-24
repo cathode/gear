@@ -28,5 +28,10 @@ namespace GearClient.Commands
                 return ClientCommandIds.ViewCommand;
             }
         }
+
+        public override void Execute(GearEngine.GameEngine engine)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
