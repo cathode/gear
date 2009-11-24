@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Diagnostics;
 
-using GearEngine.Commands;
+using Gear.Commands;
 
-namespace GearEngine
+namespace Gear
 {
     /// <summary>
     /// Supervises and directs the operation of all subsystems of the Gear engine.

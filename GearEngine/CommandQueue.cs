@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GearEngine
+namespace Gear
 {
     /// <summary>
     /// Provides a way for commands to be queued and processed and provides events that notify subscribers when new commands are added to the queue.

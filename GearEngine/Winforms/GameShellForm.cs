@@ -10,7 +10,7 @@ using System.Text;
 using System.IO;
 using System.Windows.Forms;
 
-namespace GearEngine.Winforms
+namespace Gear.Winforms
 {
     /// <summary>
     /// A form that provides a user interface for a <see cref="GameShell"/> instance.

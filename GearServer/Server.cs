@@ -7,10 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using GearEngine;
-using GearEngine.Winforms;
+using Gear;
+using Gear.Winforms;
 
-namespace GearServer
+namespace Gear.Server
 {
     /// <summary>
     /// Holds the GearServer entry point method.

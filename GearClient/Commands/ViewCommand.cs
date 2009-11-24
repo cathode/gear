@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using GearEngine.Commands;
+﻿/* Copyright © 2009 Will Shelley. All Rights Reserved.
+   See the included license.txt file for details. */
+using System;
+using Gear.Commands;
 
-namespace GearClient.Commands
+namespace Gear.Client.Commands
 {
     internal sealed class ViewCommand : ShellCommand
     {
@@ -29,7 +28,7 @@ namespace GearClient.Commands
             }
         }
 
-        public override void Execute(GearEngine.GameEngine engine)
+        public override void Execute(Gear.GameEngine engine)
         {
             throw new NotImplementedException();
         }

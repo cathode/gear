@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GearEngine.Commands
+namespace Gear.Commands
 {
     /// <summary>
     /// Displays a comment to the shell output.
@@ -37,6 +37,10 @@ namespace GearEngine.Commands
 
         #endregion
         #region Methods
+        /// <summary>
+        /// Overridden. Executes the current <see cref="CommentCommand"/>.
+        /// </summary>
+        /// <param name="engine"></param>
         public override void Execute(GameEngine engine)
         {
             throw new NotImplementedException();

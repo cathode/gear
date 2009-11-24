@@ -1,8 +1,8 @@
 ﻿// Gear - Copyright © 2009 Will Shelley. All Rights Reserved.
 // Released under the Microsoft Reference License - see license.txt for details.
-using GearEngine.Commands;
+using Gear.Commands;
 
-namespace GearEngine
+namespace Gear
 {
     /// <summary>
     /// Enumerates built in commands.

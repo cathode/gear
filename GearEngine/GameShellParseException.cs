@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace GearEngine
+namespace Gear
 {
     /// <summary>
     /// Represents an exception that occurs when a user supplies an incorrect 

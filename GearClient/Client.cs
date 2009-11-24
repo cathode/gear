@@ -1,14 +1,14 @@
-﻿// Gear - Copyright © 2009 Will Shelley. All Rights Reserved.
-// Released under the Microsoft Reference License - see license.txt for details.
+﻿/* Copyright © 2009 Will Shelley. All Rights Reserved.
+   See the included license.txt file for details. */
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using GearEngine;
-using GearEngine.Winforms;
+using Gear;
+using Gear.Winforms;
 
-namespace GearClient
+namespace Gear.Client
 {
     internal static class Client
     {

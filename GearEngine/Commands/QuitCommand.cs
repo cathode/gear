@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GearEngine.Commands
+namespace Gear.Commands
 {
     /// <summary>
     /// Quits the game/server.
@@ -13,6 +13,10 @@ namespace GearEngine.Commands
     public sealed class QuitCommand : ShellCommand
     {
         #region Methods
+        /// <summary>
+        /// Overridden. Executes the current <see cref="QuitCommand"/>.
+        /// </summary>
+        /// <param name="engine"></param>
         public override void Execute(GameEngine engine)
         {
             throw new NotImplementedException();

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GearEngine {
+namespace Gear {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace GearEngine {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GearEngine.EngineResources", typeof(EngineResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Gear.EngineResources", typeof(EngineResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GearEngine.Commands;
+using Gear.Commands;
 using System.IO;
 
-namespace GearEngine
+namespace Gear
 {
     /// <summary>
     /// Processes commands entered as text by the user into game commands.
@@ -44,6 +44,10 @@ namespace GearEngine
         private StringWriter output = new StringWriter();
         #endregion
         #region Methods - Public
+        /// <summary>
+        /// Derives a <see cref="ShellCommand"/> from the specified line of text and enqueues it.
+        /// </summary>
+        /// <param name="line"></param>
         public void Parse(string line)
         {
             var cmd = GameShell.ParseShellCommand(line);

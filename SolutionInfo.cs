@@ -1,7 +1,6 @@
-﻿// Gear - Copyright © 2009 Will Shelley. All Rights Reserved.
-// Released under the Microsoft Reference License - see license.txt for details.
+﻿/* Copyright © 2009 Will Shelley. All Rights Reserved.
+   See the included license.txt file for details. */
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyConfiguration("")]

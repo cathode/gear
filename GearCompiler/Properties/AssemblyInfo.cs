@@ -2,5 +2,5 @@
    See the included license.txt file for details. */
 using System.Reflection;
 
-[assembly: AssemblyTitle("GearClient")]
-[assembly: AssemblyDescription("Client program")]
+[assembly: AssemblyTitle("GearCompiler")]
+[assembly: AssemblyDescription("")]

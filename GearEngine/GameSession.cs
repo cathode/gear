@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GearEngine
+namespace Gear
 {
     /// <summary>
     /// Holds and maintains all information related to an active game session.

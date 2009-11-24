@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GearEngine.Commands
+namespace Gear.Commands
 {
     /// <summary>
     /// Provides shared functionality for commands that can be invoked from the game shell.

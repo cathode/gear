@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+# Visual C# Express 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GearEngine", "GearEngine\GearEngine.csproj", "{B13E769A-A4B6-466F-9896-7FA30F89CAFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GearServer", "GearServer\GearServer.csproj", "{9CEAEA25-EB58-4BB2-915F-0BFDCD134D1A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GearClient", "GearClient\GearClient.csproj", "{E05300FD-8B7A-4E58-9BD9-73D4E7DF02D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GearEdit", "GearEdit\GearEdit.csproj", "{766C00AC-DE0C-4105-91FE-4CE9B7C65069}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GearCompiler", "GearCompiler\GearCompiler.csproj", "{87AE9406-6E24-4973-8CF9-6AD0585ACC80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +29,14 @@ Global
 		{E05300FD-8B7A-4E58-9BD9-73D4E7DF02D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E05300FD-8B7A-4E58-9BD9-73D4E7DF02D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E05300FD-8B7A-4E58-9BD9-73D4E7DF02D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{766C00AC-DE0C-4105-91FE-4CE9B7C65069}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{766C00AC-DE0C-4105-91FE-4CE9B7C65069}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{766C00AC-DE0C-4105-91FE-4CE9B7C65069}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{766C00AC-DE0C-4105-91FE-4CE9B7C65069}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87AE9406-6E24-4973-8CF9-6AD0585ACC80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87AE9406-6E24-4973-8CF9-6AD0585ACC80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87AE9406-6E24-4973-8CF9-6AD0585ACC80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87AE9406-6E24-4973-8CF9-6AD0585ACC80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

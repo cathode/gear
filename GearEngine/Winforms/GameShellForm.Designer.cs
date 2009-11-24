@@ -1,4 +1,4 @@
-﻿namespace GearEngine.Winforms
+﻿namespace Gear.Winforms
 {
     partial class GameShellForm
     {

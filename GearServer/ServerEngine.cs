@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GearEngine;
+using Gear;
 
-namespace GearServer
+namespace Gear.Server
 {
     internal sealed class ServerEngine : GameEngine
     {
