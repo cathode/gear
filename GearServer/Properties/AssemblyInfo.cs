@@ -1,4 +1,4 @@
-﻿// Gear - Copyright © 2009 Will Shelley. All Rights Reserved.
+﻿// Gear - Copyright © 2009-2010 Will Shelley. All Rights Reserved.
 // Released under the Microsoft Reference License - see license.txt for details.
 using System.Reflection;
 using System.Runtime.CompilerServices;

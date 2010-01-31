@@ -4,11 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Gear;
 
-namespace Gear.Client
+namespace Gear.Assets
 {
-    internal class ClientEngine : GameEngine
+    /// <summary>
+    /// Represents a collection of assets and provides methods to perform random reads of specific asset data.
+    /// </summary>
+    public class Package
     {
     }
 }

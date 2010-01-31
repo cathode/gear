@@ -53,6 +53,12 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Assets\Asset.cs" />
+    <Compile Include="Assets\AssetGraph.cs" />
+    <Compile Include="Assets\AssetIdentifier.cs" />
+    <Compile Include="Assets\AssetKind.cs" />
+    <Compile Include="Assets\AssetManager.cs" />
+    <Compile Include="Assets\Package.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandId.cs" />
     <Compile Include="CommandQueue.cs" />
