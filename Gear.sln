@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C# Express 2008
+# Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GearEngine", "GearEngine\GearEngine.csproj", "{B13E769A-A4B6-466F-9896-7FA30F89CAFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GearServer", "GearServer\GearServer.csproj", "{9CEAEA25-EB58-4BB2-915F-0BFDCD134D1A}"
@@ -10,6 +10,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GearEdit", "GearEdit\GearEdit.csproj", "{766C00AC-DE0C-4105-91FE-4CE9B7C65069}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GearCompiler", "GearCompiler\GearCompiler.csproj", "{87AE9406-6E24-4973-8CF9-6AD0585ACC80}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0683CB68-00D7-465E-898B-00308EA00C46}"
+	ProjectSection(SolutionItems) = preProject
+		Settings.StyleCop = Settings.StyleCop
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

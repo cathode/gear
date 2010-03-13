@@ -59,6 +59,9 @@
     <Compile Include="Assets\AssetKind.cs" />
     <Compile Include="Assets\AssetManager.cs" />
     <Compile Include="Assets\Package.cs" />
+    <Compile Include="Assets\PackageIndex.cs" />
+    <Compile Include="Assets\PackageIndexEntry.cs" />
+    <Compile Include="Assets\SubStream.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandId.cs" />
     <Compile Include="CommandQueue.cs" />

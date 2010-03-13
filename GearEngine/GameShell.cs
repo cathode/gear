@@ -1,11 +1,9 @@
-﻿/* Copyright © 2009-2010 Will Shelley. All Rights Reserved.
-   See the included license.txt file for details. */
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Gear.Commands;
-using System.IO;
 
 namespace Gear
 {
@@ -18,7 +16,18 @@ namespace Gear
     /// </remarks>
     public sealed class GameShell
     {
-        #region Constructors - Public
+        #region Fields
+
+        private readonly CommandQueue target;
+
+        /// <summary>
+        /// Backing field for <see cref="GameShell.Output"/> property.
+        /// </summary>
+        private StringWriter output = new StringWriter();
+
+        #endregion
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GameShell"/> class.
         /// </summary>
@@ -26,6 +35,7 @@ namespace Gear
         {
             this.target = new CommandQueue();
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GameShell"/> class.
         /// </summary>
@@ -38,22 +48,24 @@ namespace Gear
 
             this.target = target;
         }
-        #endregion
-        #region Fields
-        private readonly CommandQueue target;
-        private StringWriter output = new StringWriter();
-        #endregion
-        #region Methods - Public
-        /// <summary>
-        /// Derives a <see cref="ShellCommand"/> from the specified line of text and enqueues it.
-        /// </summary>
-        /// <param name="line"></param>
-        public void Parse(string line)
-        {
-            var cmd = GameShell.ParseShellCommand(line);
 
-            this.target.Enqueue(cmd);
+        #endregion
+        #region Properties
+
+        public StringWriter Output
+        {
+            get
+            {
+                return this.output;
+            }
+            set
+            {
+                this.output = value;
+            }
         }
+
+        #endregion
+        #region Methods
 
         /// <summary>
         /// Creates and returns a <see cref="ShellCommand"/> by name.
@@ -110,19 +122,17 @@ namespace Gear
             return cmd;
         }
 
-        #endregion
-        #region Properties
-        public StringWriter Output
+        /// <summary>
+        /// Derives a <see cref="ShellCommand"/> from the specified line of text and enqueues it.
+        /// </summary>
+        /// <param name="line"></param>
+        public void Parse(string line)
         {
-            get
-            {
-                return this.output;
-            }
-            set
-            {
-                this.output = value;
-            }
+            var cmd = GameShell.ParseShellCommand(line);
+
+            this.target.Enqueue(cmd);
         }
+
         #endregion
     }
 }

@@ -1,6 +1,4 @@
-﻿/* Copyright © 2009-2010 Will Shelley. All Rights Reserved.
-   See the included license.txt file for details. */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,47 +10,55 @@ namespace Gear.Assets
     /// </summary>
     public abstract class Asset : IDisposable
     {
-        #region Constructors - Protected
+        #region Fields
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="Gear.Assets.Asset"/> class with a newly generated UniqueId.
+        /// Backing field for the <see cref="Asset.UniqueId"/> property.
+        /// </summary>
+        private readonly Guid uniqueId;
+
+        /// <summary>
+        /// Backing field for the <see cref="Asset.IsDisposed"/> property.
+        /// </summary>
+        private bool isDisposed;
+
+        #endregion
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Asset"/> class.
         /// </summary>
         protected Asset()
         {
             this.uniqueId = Guid.NewGuid();
         }
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="Gear.Assets.Asset"/> class with the specified UniqueId.
+        /// Initializes a new instance of the <see cref="Asset"/> class.
         /// </summary>
         /// <param name="uniqueId"></param>
         protected Asset(Guid uniqueId)
         {
             this.uniqueId = uniqueId;
         }
+
         #endregion
-        #region Fields
-        private bool isDisposed;
-        private readonly Guid uniqueId;
-        #endregion
-        #region Methods - Protected
-        protected virtual bool Dispose(bool disposing)
+        #region Properties
+
+        /// <summary>
+        /// Gets the unique identifier of the current <see cref="Asset"/>.
+        /// </summary>
+        public Guid UniqueId
         {
-            return true;
-        }
-        #endregion
-        #region Methods - Public
-
-        public void Dispose()
-        {
-            if (this.IsDisposed)
-                return;
-
-            this.isDisposed = true;
-
-
+            get
+            {
+                return this.uniqueId;
+            }
         }
 
-        #endregion
-        #region Properties - Public
+        /// <summary>
+        /// Gets a value indicating whether the current <see cref="Asset"/> is disposed.
+        /// </summary>
         public bool IsDisposed
         {
             get
@@ -60,6 +66,33 @@ namespace Gear.Assets
                 return this.isDisposed;
             }
         }
+
+        #endregion
+        #region Methods
+
+        /// <summary>
+        /// Releases unmanaged resources used by the current <see cref="Asset"/>.
+        /// </summary>
+        public void Dispose()
+        {
+            if (this.IsDisposed)
+                return;
+
+            this.isDisposed = true;
+
+            this.Dispose(false);
+        }
+
+        /// <summary>
+        /// Releases unmanaged resources used by the current <see cref="Asset"/>.
+        /// </summary>
+        /// <param name="disposing"></param>
+        /// <returns></returns>
+        protected virtual bool Dispose(bool disposing)
+        {
+            return true;
+        }
+
         #endregion
     }
 }

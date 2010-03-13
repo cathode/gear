@@ -1,0 +1,44 @@
+<stylecopresultscache>
+  <version>10</version>
+  <project key="1117849026">
+    <configuration>DEBUG;TRACE</configuration>
+  </project>
+  <sourcecode name="AssemblyInfo.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>02/28/2010 16:33:34</timestamp>
+      <milliseconds>199</milliseconds>
+    </settings>
+    <timestamp>01/30/2010 23:31:08</timestamp>
+    <milliseconds>207</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="SolutionInfo.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>02/28/2010 16:33:34</timestamp>
+      <milliseconds>199</milliseconds>
+    </settings>
+    <timestamp>01/30/2010 23:31:07</timestamp>
+    <milliseconds>581</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="Program.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>02/28/2010 16:33:34</timestamp>
+      <milliseconds>199</milliseconds>
+    </settings>
+    <timestamp>01/30/2010 23:31:08</timestamp>
+    <milliseconds>307</milliseconds>
+    <violations>
+      <violation namespace="Microsoft.StyleCop.CSharp.DocumentationRules" rule="ElementsMustBeDocumented" ruleCheckId="SA1600">
+        <context>The class must have a documentation header.</context>
+        <line>9</line>
+        <warning>False</warning>
+      </violation>
+      <violation namespace="Microsoft.StyleCop.CSharp.DocumentationRules" rule="ElementsMustBeDocumented" ruleCheckId="SA1600">
+        <context>The method must have a documentation header.</context>
+        <line>11</line>
+        <warning>False</warning>
+      </violation>
+    </violations>
+  </sourcecode>
+</stylecopresultscache>
