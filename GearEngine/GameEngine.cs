@@ -1,12 +1,6 @@
-﻿/* Copyright © 2009-2010 Will Shelley. All Rights Reserved.
-   See the included license.txt file for details. */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System;
 using System.Diagnostics;
-
+using System.Threading;
 using Gear.Commands;
 
 namespace Gear
@@ -16,6 +10,13 @@ namespace Gear
     /// </summary>
     public abstract class GameEngine
     {
+        #region Fields
+        private readonly CommandQueue input;
+        private readonly CommandQueue output;
+        private readonly GameShell shell;
+        private bool active = false;
+        
+        #endregion
         #region Constructors
 
         /// <summary>
@@ -29,18 +30,69 @@ namespace Gear
             this.shell = new GameShell(this.input);
 
             // Set up event trigger so commands get processed.
-            this.Input.NonEmpty += new EventHandler(Input_NonEmpty);
+            this.Input.NonEmpty += new EventHandler(this.Input_NonEmpty);
         }
 
         #endregion
-        #region Fields
+        #region Properties
 
-        private bool active = false;
-        private readonly CommandQueue input;
-        private readonly CommandQueue output;
-        private readonly GameShell shell;
+        /// <summary>
+        /// Gets a value indicating whether the engine is actively processing the input queue.
+        /// </summary>
+        public bool Active
+        {
+            get
+            {
+                return this.active;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="CommandQueue"/> where input commands are retrieved from.
+        /// </summary>
+        public CommandQueue Input
+        {
+            get
+            {
+                return this.input;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="CommandQueue"/> where output commands are sent to.
+        /// </summary>
+        public CommandQueue Output
+        {
+            get
+            {
+                return this.output;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="GameShell"/> that provides a CLI interaction with the engine.
+        /// </summary>
+        public GameShell Shell
+        {
+            get
+            {
+                return this.shell;
+            }
+        }
         #endregion
-        #region Methods - Private
+        #region Methods
+
+        /// <summary>
+        /// Processes a command.
+        /// </summary>
+        /// <param name="cmd"></param>
+        protected void ProcessCommand(Command cmd)
+        {
+            if (cmd == null)
+                throw new ArgumentNullException("cmd");
+
+            cmd.Execute(this);
+        }
 
         private void Input_NonEmpty(object sender, EventArgs e)
         {
@@ -85,67 +137,6 @@ namespace Gear
         {
         }
 
-        #endregion
-        #region Methods - Protected
-
-        /// <summary>
-        /// Processes a command.
-        /// </summary>
-        /// <param name="cmd"></param>
-        protected void ProcessCommand(Command cmd)
-        {
-            if (cmd == null)
-                throw new ArgumentNullException("cmd");
-
-            cmd.Execute(this);
-        }
-
-        #endregion
-        #region Properties
-
-        /// <summary>
-        /// Indicates if the engine is actively processing the input queue.
-        /// </summary>
-        public bool Active
-        {
-            get
-            {
-                return this.active;
-            }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="CommandQueue"/> where input commands are retrieved from.
-        /// </summary>
-        public CommandQueue Input
-        {
-            get
-            {
-                return this.input;
-            }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="CommandQueue"/> where output commands are sent to.
-        /// </summary>
-        public CommandQueue Output
-        {
-            get
-            {
-                return this.output;
-            }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="GameShell"/> that provides a CLI interaction with the engine.
-        /// </summary>
-        public GameShell Shell
-        {
-            get
-            {
-                return this.shell;
-            }
-        }
         #endregion
     }
 }
