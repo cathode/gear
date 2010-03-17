@@ -1,0 +1,17 @@
+<Project DefaultTargets="Test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <UsingTask
+    AssemblyFile="xunit.runner.msbuild.dll"
+    TaskName="Xunit.Runner.MSBuild.xunit"/>
+
+  <Target Name="Build">
+    <MSBuild Projects="Gear.sln"
+             Targets="Build"
+             Properties="Configuration=Debug" />
+    <xunit
+      Assembly="Tests.Intralock\bin\Debug\Tests.Intralock.dll" />
+    <xunit
+      Assembly="Tests\bin\Debug\Tests.dll" />
+  </Target>
+
+</Project>
