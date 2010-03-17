@@ -47,6 +47,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ReferenceAssemblies\xunit.dll</HintPath>
     </Reference>
+    <Reference Include="xunit.runner.msbuild, Version=1.5.0.1479, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ReferenceAssemblies\xunit.runner.msbuild.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Gear\Assets\PackageTests.cs" />
