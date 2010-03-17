@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using NUnit.Framework;
+using Xunit;
 
 namespace Tests.Gear.Assets
 {
-    [TestFixture]
     public class PackageTests
     {
         /* Things to know about a package:
@@ -21,19 +20,19 @@ namespace Tests.Gear.Assets
          * The ability to add and remove assets and read and write assets must support arbitrary accesses.
          */
 
-        [Test]
+        [Fact]
         public void AssetCountShouldReturnOneWhenOneAssetAdded()
         {
             Package pkg = new Package();
             pkg.Add(new Asset());
 
-            Assert.AreEqual(1, pkg.AssetCount);
+            Assert.Equal<int>(1, pkg.AssetCount);
         }
 
         /// <summary>
         /// Ensures that an asset instance shows up as being part of a package after it is added to that package.
         /// </summary>
-        [Test]
+        [Fact]
         public void AssetShouldExistInPackageAfterBeingAdded()
         {
             Package pkg = new Package();
@@ -45,7 +44,7 @@ namespace Tests.Gear.Assets
             bool expected = true;
             bool actual = pkg.Contains(asset);
 
-            Assert.AreEqual(expected, actual);
+            Assert.Equal<bool>(expected, actual);
         }
     }
 
