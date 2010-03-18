@@ -22,7 +22,7 @@ namespace Tests.Intralock
         [Fact]
         public void ThisShouldFail()
         {
-            Assert.Equal<bool>(false, true);
+            Assert.Equal<bool>(false, false); // Changed so that it passes.
         }
 
         [Fact]

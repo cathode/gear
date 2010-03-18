@@ -10,8 +10,6 @@
              Properties="Configuration=Debug" />
     <xunit
       Assembly="Tests.Intralock\bin\Debug\Tests.Intralock.dll" />
-    <xunit
-      Assembly="Tests\bin\Debug\Tests.dll" />
   </Target>
 
 </Project>
