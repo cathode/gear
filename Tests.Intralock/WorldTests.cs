@@ -18,22 +18,27 @@ namespace Tests.Intralock
          * The state of a World should be persistable (to a file or database or another server).
          * The state of a World should support synchronization between servers.
          * A World instance needs to be thread-safe.
+         * 
+         * Implementation details:
+         * When an entity is added to the world, the EntityCount should reflect the added entity.
+         * When an entity with child entities is added to the world, any child entities that aren't associated with the World should be added as well.
+         * 
          */
-        [Fact]
-        public void ThisShouldFail()
+
+        public void WorldContainsEntities()
         {
-            Assert.Equal<bool>(false, false); // Changed so that it passes.
+
         }
 
-        [Fact]
-        public void ThisShouldPass()
+        //[Fact]
+        public void WorldShouldBeWritableByMultipleSimultaneousThreads()
         {
-            Assert.Equal<int>(1, 1);
+            throw new NotImplementedException();
         }
     }
 
     public class World
     {
-
+        
     }
 }

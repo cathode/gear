@@ -45,6 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="ClientNode.cs" />
+    <Compile Include="Entity.cs" />
+    <Compile Include="EntityField.cs" />
+    <Compile Include="EntitySchema.cs" />
+    <Compile Include="HostNode.cs" />
+    <Compile Include="Node.cs" />
+    <Compile Include="NodeInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>

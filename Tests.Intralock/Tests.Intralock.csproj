@@ -54,6 +54,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntityTests.cs" />
+    <Compile Include="NodeInterfaceTests.cs" />
+    <Compile Include="NodeTests.cs" />
     <Compile Include="WorldTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
