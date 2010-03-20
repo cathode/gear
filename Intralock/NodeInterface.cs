@@ -8,7 +8,7 @@ namespace Intralock
     /// Represents a communication channel used by a <see cref="Node"/> to synchronize state with another. Hides the underlying method of communication (socket, named pipe, cross-thread call, etc.)
     /// </summary>
     /// <remarks>
-    /// Encapsulates a pair of queues. <see cref="Update"/> items are added to the send queue by the local <see cref="Node"/>. When the <see cref="NodeInterface.Synchronize"/> method is called,
+    /// Encapsulates a pair of queues. <see cref="Update"/> items are added to the send queue by the local <see cref="Node"/>. When the <see cref="NodeInterface.Flush"/> method is called,
     /// all queued updates on the send queue are removed and sent to the remote <see cref="Node"/> at once (in the order they were originally enqueued). At the same time, any updates that were sent
     /// from the remote node are added to the receive queue.
     /// </remarks>
@@ -107,15 +107,7 @@ namespace Intralock
         /// <summary>
         /// Causes all updates in the send queue to be sent to the remote node and receives any updates sent from the remote node.
         /// </summary>
-        public void Synchronize()
-        {
-            this.PerformSync();
-        }
-
-        /// <summary>
-        /// Performs implementation-based synchronization between local and remote nodes.
-        /// </summary>
-        protected abstract void PerformSync();
+        public abstract void Flush();
         #endregion
     }
 }
