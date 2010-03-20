@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Intralock
@@ -10,5 +9,17 @@ namespace Intralock
     /// </summary>
     public sealed class CrossThreadNodeInterface : NodeInterface
     {
+        public override TimeSpan Latency
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        protected override void DoSync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
