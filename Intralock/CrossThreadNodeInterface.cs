@@ -9,6 +9,10 @@ namespace Intralock
     /// </summary>
     public sealed class CrossThreadNodeInterface : NodeInterface
     {
+        #region Properties
+        /// <summary>
+        /// Gets the latency between the local node and the remote node.
+        /// </summary>
         public override TimeSpan Latency
         {
             get
@@ -17,9 +21,13 @@ namespace Intralock
             }
         }
 
-        protected override void DoSync()
+        /// <summary>
+        /// Performs synchronization with the remote node.
+        /// </summary>
+        protected override void PerformSync()
         {
             throw new NotImplementedException();
         }
+        #endregion
     }
 }

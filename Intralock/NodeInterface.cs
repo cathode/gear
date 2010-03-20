@@ -109,13 +109,13 @@ namespace Intralock
         /// </summary>
         public void Synchronize()
         {
-            this.DoSync();
+            this.PerformSync();
         }
 
         /// <summary>
         /// Performs implementation-based synchronization between local and remote nodes.
         /// </summary>
-        protected abstract void DoSync();
+        protected abstract void PerformSync();
         #endregion
     }
 }

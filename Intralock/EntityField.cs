@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Intralock
 {
-    class EntityField
+    /// <summary>
+    /// Represents a dynamic field within an entity.
+    /// </summary>
+    public class EntityField
     {
     }
 }
