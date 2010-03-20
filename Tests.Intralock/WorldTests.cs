@@ -36,9 +36,4 @@ namespace Tests.Intralock
             throw new NotImplementedException();
         }
     }
-
-    public class World
-    {
-        
-    }
 }

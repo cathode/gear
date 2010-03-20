@@ -10,6 +10,6 @@ namespace Intralock
     /// </summary>
     public abstract class NodeInterface
     {
-
+        //public 
     }
 }

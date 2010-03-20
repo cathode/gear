@@ -19,9 +19,4 @@ namespace Tests.Intralock
          * Entities are instances of a schema.
          */
     }
-
-    public class Entity
-    {
-
-    }
 }
