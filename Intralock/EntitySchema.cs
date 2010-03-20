@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Intralock
 {
-    class EntitySchema
+    public class EntitySchema
     {
     }
 }

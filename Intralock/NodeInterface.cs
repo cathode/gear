@@ -10,6 +10,21 @@ namespace Intralock
     /// </summary>
     public abstract class NodeInterface
     {
-        //public 
+        public void Push(Update update)
+        {
+            throw new NotImplementedException();
+        }
+        public void Push(IEnumerable<Update> update)
+        {
+            throw new NotImplementedException();
+        }
+        public Update Pop()
+        {
+            throw new NotImplementedException();
+        }
+        public IEnumerable<Update> Pop(int max)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
