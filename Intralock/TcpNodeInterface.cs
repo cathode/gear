@@ -9,6 +9,10 @@ namespace Intralock
     /// </summary>
     public sealed class TcpNodeInterface : NodeInterface
     {
+        #region Properties
+        /// <summary>
+        /// Gets a <see cref="TimeSpan"/> indicating the latency (delay) between the local node and the remote node.
+        /// </summary>
         public override TimeSpan Latency
         {
             get
@@ -16,10 +20,15 @@ namespace Intralock
                 throw new NotImplementedException();
             }
         }
-
+        #endregion
+        #region Methods
+        /// <summary>
+        /// Sends all unsent updates to the remote node.
+        /// </summary>
         public override void Flush()
         {
             throw new NotImplementedException();
         }
+        #endregion
     }
 }

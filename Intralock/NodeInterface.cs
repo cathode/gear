@@ -23,6 +23,11 @@ namespace Intralock
         /// Local storage of updates that have been received.
         /// </summary>
         protected Queue<Update> Receive = new Queue<Update>();
+
+        /// <summary>
+        /// Backing field for the <see cref="NodeInterface.Status"/> property.
+        /// </summary>
+        private NodeInterfaceStatus status;
         #endregion
         #region Constructors
         /// <summary>
@@ -54,6 +59,21 @@ namespace Intralock
             get
             {
                 return this.Receive.Count;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the status of the current <see cref="NodeInterface"/>.
+        /// </summary>
+        public NodeInterfaceStatus Status
+        {
+            get
+            {
+                return this.status;
+            }
+            protected set
+            {
+                this.status = value;
             }
         }
 
