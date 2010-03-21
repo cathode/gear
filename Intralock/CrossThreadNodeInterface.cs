@@ -27,9 +27,12 @@ namespace Intralock
         #endregion
         #region Constructors
         /// <summary>
-        /// Prevents a default instance of the <see cref="CrossThreadNodeInterface"/> class from being created.
+        /// Initializes a new instance of the <see cref="CrossThreadNodeInterface"/> class.
         /// </summary>
-        private CrossThreadNodeInterface()
+        /// <remarks>
+        /// Two instances are created. The second one is assigned as the "remote" node interface.
+        /// </remarks>
+        public CrossThreadNodeInterface()
         {
             this.remote = new CrossThreadNodeInterface(this);
         }
@@ -67,15 +70,6 @@ namespace Intralock
         }
         #endregion
         #region Methods
-        /// <summary>
-        /// Creates a linked pair of <see cref="CrossThreadNodeInterface"/> instances where each instance refers to the other as the "remote".
-        /// </summary>
-        /// <returns>One of the two linked <see cref="CrossThreadNodeInterface"/> instances.</returns>
-        public static CrossThreadNodeInterface CreatePair()
-        {
-            return new CrossThreadNodeInterface();
-        }
-
         /// <summary>
         /// Removes the next <see cref="Update"/> from the receive queue and returns it.
         /// </summary>
