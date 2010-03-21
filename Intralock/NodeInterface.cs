@@ -18,12 +18,12 @@ namespace Intralock
         /// <summary>
         /// Local storage of updates to be sent.
         /// </summary>
-        protected readonly Queue<Update> Send = new Queue<Update>();
+        protected Queue<Update> Send = new Queue<Update>();
 
         /// <summary>
         /// Local storage of updates that have been received.
         /// </summary>
-        protected readonly Queue<Update> Receive = new Queue<Update>();
+        protected Queue<Update> Receive = new Queue<Update>();
         #endregion
         #region Constructors
         /// <summary>
@@ -71,37 +71,36 @@ namespace Intralock
         /// Adds the specified <see cref="Update"/> onto the send queue.
         /// </summary>
         /// <param name="update">The <see cref="Update"/> instance to push to the send queue.</param>
-        public void Enqueue(Update update)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void Enqueue(Update update);
 
         /// <summary>
         /// Adds the specified range of <see cref="Update"/>s onto the send queue.
         /// </summary>
-        /// <param name="update">A collection of <see cref="Update"/> instnaces to push to the send queue.</param>
-        public void Enqueue(IEnumerable<Update> update)
+        /// <param name="updates">A collection of <see cref="Update"/> instnaces to push to the send queue.</param>
+        public virtual void Enqueue(IEnumerable<Update> updates)
         {
-            throw new NotImplementedException();
+            foreach (Update update in updates)
+                this.Enqueue(update);
         }
 
         /// <summary>
         /// Removes the next <see cref="Update"/> from the receive queue and returns it.
         /// </summary>
         /// <returns>The <see cref="Update"/> instance that was popped from the receive queue.</returns>
-        public Update Dequeue()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract Update Dequeue();
 
         /// <summary>
         /// Removes the specified number of <see cref="Update"/>s from the receive queue and returns them in the order they were removed.
         /// </summary>
         /// <param name="max">The maximum number of <see cref="Update"/>s to dequeue.</param>
         /// <returns>A collection of <see cref="Update"/>s that were dequeued.</returns>
-        public IEnumerable<Update> Dequeue(int max)
+        public virtual IEnumerable<Update> Dequeue(int max)
         {
-            throw new NotImplementedException();
+            var result = new Update[Math.Min(this.ReceiveCount, max)];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = this.Receive.Dequeue();
+
+            return result;
         }
 
         /// <summary>
