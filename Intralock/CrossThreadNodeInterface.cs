@@ -51,7 +51,7 @@ namespace Intralock
         {
             get
             {
-                throw new NotImplementedException();
+                return TimeSpan.Zero;
             }
         }
 
@@ -77,21 +77,33 @@ namespace Intralock
         }
 
         /// <summary>
-        /// Adds the specified <see cref="Update"/> onto the send queue.
-        /// </summary>
-        /// <param name="update">The <see cref="Update"/> instance to push to the send queue.</param>
-        public override void Enqueue(Update update)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Removes the next <see cref="Update"/> from the receive queue and returns it.
         /// </summary>
         /// <returns>The <see cref="Update"/> instance that was popped from the receive queue.</returns>
         public override Update Dequeue()
         {
-            throw new NotImplementedException();
+            lock (this.flushLock)
+                return this.Receive.Dequeue();
+        }
+
+        /// <summary>
+        /// Removes the specified number of <see cref="Update"/>s from the receive queue and returns them in the order they were removed.
+        /// </summary>
+        /// <param name="max">The maximum number of <see cref="Update"/>s to dequeue.</param>
+        /// <returns>A collection of <see cref="Update"/>s that were dequeued.</returns>
+        public override IEnumerable<Update> Dequeue(int max)
+        {
+            lock (this.flushLock)
+            {
+                if (this.Receive.Count == 0)
+                    return new Update[0];
+
+                var result = new Update[Math.Min(this.ReceiveCount, max)];
+                for (int i = 0; i < result.Length; i++)
+                    result[i] = this.Receive.Dequeue();
+
+                return result;
+            }
         }
 
         /// <summary>

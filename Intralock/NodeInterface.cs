@@ -9,8 +9,7 @@ namespace Intralock
     /// </summary>
     /// <remarks>
     /// Encapsulates a pair of queues. <see cref="Update"/> items are added to the send queue by the local <see cref="Node"/>. When the <see cref="NodeInterface.Flush"/> method is called,
-    /// all queued updates on the send queue are removed and sent to the remote <see cref="Node"/> at once (in the order they were originally enqueued). At the same time, any updates that were sent
-    /// from the remote node are added to the receive queue.
+    /// all queued updates on the send queue are removed and sent to the remote <see cref="Node"/> at once (in the order they were originally enqueued).
     /// </remarks>
     public abstract class NodeInterface
     {
@@ -71,7 +70,10 @@ namespace Intralock
         /// Adds the specified <see cref="Update"/> onto the send queue.
         /// </summary>
         /// <param name="update">The <see cref="Update"/> instance to push to the send queue.</param>
-        public abstract void Enqueue(Update update);
+        public virtual void Enqueue(Update update)
+        {
+            this.Send.Enqueue(update);
+        }
 
         /// <summary>
         /// Adds the specified range of <see cref="Update"/>s onto the send queue.
@@ -87,7 +89,10 @@ namespace Intralock
         /// Removes the next <see cref="Update"/> from the receive queue and returns it.
         /// </summary>
         /// <returns>The <see cref="Update"/> instance that was popped from the receive queue.</returns>
-        public abstract Update Dequeue();
+        public virtual Update Dequeue()
+        {
+            return this.Receive.Dequeue();
+        }
 
         /// <summary>
         /// Removes the specified number of <see cref="Update"/>s from the receive queue and returns them in the order they were removed.
