@@ -38,9 +38,9 @@ namespace Intralock
         }
 
         /// <summary>
-        /// Gets or sets the status of the current <see cref="NodeInterface"/>.
+        /// Gets the <see cref="NodeInterfaceStatus"/> value that describes the state of the current <see cref="NodeInterface"/>.
         /// </summary>
-        public abstract NodeInterfaceStatus Status
+        public abstract NodeInterfaceStatus State
         {
             get;
         }

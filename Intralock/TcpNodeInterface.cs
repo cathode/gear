@@ -57,7 +57,7 @@ namespace Intralock
             throw new NotImplementedException();
         }
 
-        public override NodeInterfaceStatus Status
+        public override NodeInterfaceStatus State
         {
             get
             {

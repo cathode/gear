@@ -19,14 +19,20 @@ namespace Intralock
         /// </summary>
         private readonly CrossThreadNodeInterface remote;
 
+        /// <summary>
+        /// The primary (active) buffer to hold items queued for sending.
+        /// </summary>
         private Queue<Update> primarySend = new Queue<Update>();
 
         /// <summary>
-        /// A secondary buffer to enable double-buffered send queuing.
+        /// The secondary (inact) buffer to hold items queued for sending.
         /// </summary>
         private Queue<Update> secondarySend = new Queue<Update>();
 
-        private Queue<Update> Receive = new Queue<Update>();
+        /// <summary>
+        /// The buffer to hold received items.
+        /// </summary>
+        private Queue<Update> receive = new Queue<Update>();
         #endregion
         #region Constructors
         /// <summary>
@@ -71,6 +77,39 @@ namespace Intralock
                 return this.remote;
             }
         }
+
+        /// <summary>
+        /// Gets the number of items waiting to be sent.
+        /// </summary>
+        public override int SendCount
+        {
+            get
+            {
+                return this.primarySend.Count;
+            }
+        }
+
+        /// <summary>
+        /// Gets the number of received items waiting to be processed.
+        /// </summary>
+        public override int ReceiveCount
+        {
+            get
+            {
+                return this.receive.Count;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="NodeInterfaceStatus"/> describing the state of the current <see cref="NodeInterface"/>.
+        /// </summary>
+        public override NodeInterfaceStatus State
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
         #endregion
         #region Methods
         /// <summary>
@@ -80,7 +119,7 @@ namespace Intralock
         public override Update Dequeue()
         {
             lock (this.flushLock)
-                return this.Receive.Dequeue();
+                return this.receive.Dequeue();
         }
 
         /// <summary>
@@ -92,12 +131,12 @@ namespace Intralock
         {
             lock (this.flushLock)
             {
-                if (this.Receive.Count == 0)
+                if (this.receive.Count == 0)
                     return new Update[0];
 
                 var result = new Update[Math.Min(this.ReceiveCount, max)];
                 for (int i = 0; i < result.Length; i++)
-                    result[i] = this.Receive.Dequeue();
+                    result[i] = this.receive.Dequeue();
 
                 return result;
             }
@@ -114,40 +153,23 @@ namespace Intralock
                 // Atomic exchange of the "active" send queue and the secondary, "inactive" send queue.
                 // This allows lockless, safe access to the send queue of the local node interface.
                 this.secondarySend = System.Threading.Interlocked.Exchange<Queue<Update>>(ref this.primarySend, this.secondarySend); // Basically, double buffering.
-                
+
                 while (this.secondarySend.Count > 0)
-                    this.remote.Receive.Enqueue(this.secondarySend.Dequeue());
-            }
-        }
-        #endregion
-
-        public override int SendCount
-        {
-            get
-            {
-                throw new NotImplementedException();
+                    this.remote.receive.Enqueue(this.secondarySend.Dequeue());
             }
         }
 
-        public override int ReceiveCount
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
+        /// <summary>
+        /// Adds the specified <see cref="Update"/> onto the send queue.
+        /// </summary>
+        /// <param name="update">The <see cref="Update"/> instance to push to the send queue.</param>
         public override void Enqueue(Update update)
         {
-            throw new NotImplementedException();
-        }
+            if (update == null)
+                throw new ArgumentNullException("update"); // Do we need to throw an exception here, or just passively ignore a null update?
 
-        public override NodeInterfaceStatus Status
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            this.primarySend.Enqueue(update);
         }
+        #endregion
     }
 }

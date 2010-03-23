@@ -53,7 +53,7 @@
     <Compile Include="NodeInterface.cs" />
     <Compile Include="NodeInterfaceStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TcpNodeInterface.cs" />
+    <None Include="TcpNodeInterface.cs" />
     <Compile Include="Update.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
