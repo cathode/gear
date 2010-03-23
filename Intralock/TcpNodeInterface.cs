@@ -30,5 +30,39 @@ namespace Intralock
             throw new NotImplementedException();
         }
         #endregion
+
+        public override int SendCount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override int ReceiveCount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override void Enqueue(Update update)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Update Dequeue()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override NodeInterfaceStatus Status
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

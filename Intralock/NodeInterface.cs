@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Intralock
 {
@@ -13,68 +12,37 @@ namespace Intralock
     /// </remarks>
     public abstract class NodeInterface
     {
-        #region Fields
-        /// <summary>
-        /// Local storage of updates to be sent.
-        /// </summary>
-        protected Queue<Update> Send = new Queue<Update>();
-
-        /// <summary>
-        /// Local storage of updates that have been received.
-        /// </summary>
-        protected Queue<Update> Receive = new Queue<Update>();
-
-        /// <summary>
-        /// Backing field for the <see cref="NodeInterface.Status"/> property.
-        /// </summary>
-        private NodeInterfaceStatus status;
-        #endregion
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="NodeInterface"/> class.
         /// </summary>
         protected NodeInterface()
         {
-            this.Send = new Queue<Update>();
-            this.Receive = new Queue<Update>();
         }
         #endregion
         #region Properties
         /// <summary>
         /// Gets the number of <see cref="Update"/>s that are in the send queue.
         /// </summary>
-        public int SendCount
+        public abstract int SendCount
         {
-            get
-            {
-                return this.Send.Count;
-            }
+            get;
         }
 
         /// <summary>
         /// Gets the number of <see cref="Update"/>s that are in the receive queue.
         /// </summary>
-        public int ReceiveCount
+        public abstract int ReceiveCount
         {
-            get
-            {
-                return this.Receive.Count;
-            }
+            get;
         }
 
         /// <summary>
         /// Gets or sets the status of the current <see cref="NodeInterface"/>.
         /// </summary>
-        public NodeInterfaceStatus Status
+        public abstract NodeInterfaceStatus Status
         {
-            get
-            {
-                return this.status;
-            }
-            protected set
-            {
-                this.status = value;
-            }
+            get;
         }
 
         /// <summary>
@@ -90,10 +58,7 @@ namespace Intralock
         /// Adds the specified <see cref="Update"/> onto the send queue.
         /// </summary>
         /// <param name="update">The <see cref="Update"/> instance to push to the send queue.</param>
-        public virtual void Enqueue(Update update)
-        {
-            this.Send.Enqueue(update);
-        }
+        public abstract void Enqueue(Update update);
 
         /// <summary>
         /// Adds the specified range of <see cref="Update"/>s onto the send queue.
@@ -109,10 +74,7 @@ namespace Intralock
         /// Removes the next <see cref="Update"/> from the receive queue and returns it.
         /// </summary>
         /// <returns>The <see cref="Update"/> instance that was popped from the receive queue.</returns>
-        public virtual Update Dequeue()
-        {
-            return this.Receive.Dequeue();
-        }
+        public abstract Update Dequeue();
 
         /// <summary>
         /// Removes the specified number of <see cref="Update"/>s from the receive queue and returns them in the order they were removed.
@@ -123,7 +85,7 @@ namespace Intralock
         {
             var result = new Update[Math.Min(this.ReceiveCount, max)];
             for (int i = 0; i < result.Length; i++)
-                result[i] = this.Receive.Dequeue();
+                result[i] = this.Dequeue();
 
             return result;
         }

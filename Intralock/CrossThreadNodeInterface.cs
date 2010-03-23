@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Intralock
 {
@@ -20,10 +19,14 @@ namespace Intralock
         /// </summary>
         private readonly CrossThreadNodeInterface remote;
 
+        private Queue<Update> primarySend = new Queue<Update>();
+
         /// <summary>
         /// A secondary buffer to enable double-buffered send queuing.
         /// </summary>
         private Queue<Update> secondarySend = new Queue<Update>();
+
+        private Queue<Update> Receive = new Queue<Update>();
         #endregion
         #region Constructors
         /// <summary>
@@ -83,7 +86,7 @@ namespace Intralock
         /// <summary>
         /// Removes the specified number of <see cref="Update"/>s from the receive queue and returns them in the order they were removed.
         /// </summary>
-        /// <param name="max">The maximum number of <see cref="Update"/>s to dequeue.</param>
+        /// <param name="max">The maximum number of <seesho cref="Update"/>s to dequeue.</param>
         /// <returns>A collection of <see cref="Update"/>s that were dequeued.</returns>
         public override IEnumerable<Update> Dequeue(int max)
         {
@@ -110,12 +113,41 @@ namespace Intralock
             {
                 // Atomic exchange of the "active" send queue and the secondary, "inactive" send queue.
                 // This allows lockless, safe access to the send queue of the local node interface.
-                this.secondarySend = System.Threading.Interlocked.Exchange<Queue<Update>>(ref this.Send, this.secondarySend); // Basically, double buffering.
-
+                this.secondarySend = System.Threading.Interlocked.Exchange<Queue<Update>>(ref this.primarySend, this.secondarySend); // Basically, double buffering.
+                
                 while (this.secondarySend.Count > 0)
                     this.remote.Receive.Enqueue(this.secondarySend.Dequeue());
             }
         }
         #endregion
+
+        public override int SendCount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override int ReceiveCount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override void Enqueue(Update update)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override NodeInterfaceStatus Status
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }
