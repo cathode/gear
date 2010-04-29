@@ -1,6 +1,4 @@
-﻿/* Copyright © 2009-2010 Will Shelley. All Rights Reserved.
-   See the included license.txt file for details. */
-using Gear.Commands;
+﻿using Gear.Commands;
 
 namespace Gear
 {

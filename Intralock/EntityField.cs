@@ -7,7 +7,11 @@ namespace Intralock
     /// <summary>
     /// Represents a dynamic field within an entity.
     /// </summary>
-    public class EntityField
+    public abstract class EntityField<T>
     {
+        #region Fields
+        private T value;
+        #endregion
+
     }
 }
