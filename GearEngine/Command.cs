@@ -13,13 +13,6 @@ namespace Gear
     /// </summary>
     public abstract class Command
     {
-        #region Methods
-        /// <summary>
-        /// When overridden in a derived class, performs the functionality associated with the current command.
-        /// </summary>
-        /// <param name="engine"></param>
-        public abstract void Execute(GameEngine engine);
-        #endregion
         #region Properties
         /// <summary>
         /// When implemented in a derived class, gets the <see cref="CommandId"/> of the current <see cref="Command"/>.
@@ -28,6 +21,13 @@ namespace Gear
         {
             get;
         }
+        #endregion
+        #region Methods
+        /// <summary>
+        /// When overridden in a derived class, performs the functionality associated with the current command.
+        /// </summary>
+        /// <param name="engine"></param>
+        public abstract void Execute(GameEngine engine);
         #endregion
     }
 }
