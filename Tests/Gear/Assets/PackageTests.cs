@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 namespace Tests.Gear.Assets
 {
+    [TestFixture]
     public class PackageTests
     {
         /* Things to know about a package:
