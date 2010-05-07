@@ -6,6 +6,7 @@ namespace Tests.Intralock
     /// <summary>
     /// Tests for the <see cref="CrossThreadNodeInterface"/> class.
     /// </summary>
+    [TestFixture]
     public class CrossThreadNodeInterfaceTests
     {
         /// <summary>

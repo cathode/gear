@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 namespace Tests.Intralock
 {
+    [TestFixture]
     public class WorldTests
     {
         /* World - Represents a virtual environment and everything in it. Basically, a huge global container that directly or indirectly contains everything.
@@ -23,13 +24,13 @@ namespace Tests.Intralock
          * When an entity with child entities is added to the world, any child entities that aren't associated with the World should be added as well.
          * 
          */
-
+        [Test]
         public void WorldContainsEntities()
         {
 
         }
 
-        //[Fact]
+        [Test]
         public void WorldShouldBeWritableByMultipleSimultaneousThreads()
         {
             throw new NotImplementedException();

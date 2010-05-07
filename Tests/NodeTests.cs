@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using NUnit.Framework;
 
 namespace Tests.Intralock
 {
+    [TestFixture]
     public class NodeTests
     {
         /* Node - Maintains a World or part of a World. Communicates with clients.

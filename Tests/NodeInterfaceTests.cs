@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using NUnit.Framework;
 
 namespace Tests.Intralock
 {
+    [TestFixture]
     public class NodeInterfaceTests
     {
         /* NodeInterface - Transparently relays state synchronizations between a local node, and a remote node.
