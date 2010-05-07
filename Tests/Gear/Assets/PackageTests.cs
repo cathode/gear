@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
-using Xunit;
+using NUnit.Framework;
 
 namespace Tests.Gear.Assets
 {
@@ -20,19 +19,19 @@ namespace Tests.Gear.Assets
          * The ability to add and remove assets and read and write assets must support arbitrary accesses.
          */
 
-        [Fact]
+        [Test]
         public void AssetCountShouldReturnOneWhenOneAssetAdded()
         {
             Package pkg = new Package();
             pkg.Add(new Asset());
 
-            Assert.Equal<int>(1, pkg.AssetCount);
+            Assert.AreEqual(1, pkg.AssetCount);
         }
 
         /// <summary>
         /// Ensures that an asset instance shows up as being part of a package after it is added to that package.
         /// </summary>
-        [Fact]
+        [Test]
         public void AssetShouldExistInPackageAfterBeingAdded()
         {
             Package pkg = new Package();
@@ -44,7 +43,7 @@ namespace Tests.Gear.Assets
             bool expected = true;
             bool actual = pkg.Contains(asset);
 
-            Assert.Equal<bool>(expected, actual);
+            Assert.AreEqual(expected, actual);
         }
     }
 

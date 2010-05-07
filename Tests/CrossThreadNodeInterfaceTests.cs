@@ -1,5 +1,5 @@
 ﻿using Intralock;
-using Xunit;
+using NUnit.Framework;
 
 namespace Tests.Intralock
 {
@@ -11,7 +11,7 @@ namespace Tests.Intralock
         /// <summary>
         /// Verifies that enquing an update increments the reported count of updates in the send queue by 1.
         /// </summary>
-        [Fact]
+        [Test]
         public void EnquingUpdateShouldIncrementSendCount()
         {
             var local = new CrossThreadNodeInterface();
@@ -20,14 +20,14 @@ namespace Tests.Intralock
             local.Enqueue(new Update());
             int after = local.SendCount;
 
-            Assert.Equal<int>(before + 1, after);
+            Assert.AreEqual(before + 1, after);
         }
 
         /// <summary>
         /// Verifies that after the <see cref="CrossThreadNodeInterface.Flush"/> method returns,
         /// the send queue is reset to empty.
         /// </summary>
-        [Fact]
+        [Test]
         public void FlushShouldRemoveAllItemsFromSendQueue()
         {
             var local = new CrossThreadNodeInterface();
@@ -36,14 +36,14 @@ namespace Tests.Intralock
             local.Flush();
             int count = local.SendCount;
 
-            Assert.Equal<int>(0, count);
+            Assert.AreEqual(0, count);
         }
 
         /// <summary>
         /// Tests to verify that when enquing updates, they are dequeued by the remote node
         /// in the same order they were enqued.
         /// </summary>
-        [Fact]
+        [Test]
         public void EnqueueOrderShouldBePreserved()
         {
             var local = new CrossThreadNodeInterface();
@@ -63,9 +63,9 @@ namespace Tests.Intralock
             var remoteSecond = remote.Dequeue();
             var remoteThird = remote.Dequeue();
 
-            Assert.Same(first, remoteFirst);
-            Assert.Same(second, remoteSecond);
-            Assert.Same(third, remoteThird);
+            Assert.AreSame(first, remoteFirst);
+            Assert.AreSame(second, remoteSecond);
+            Assert.AreSame(third, remoteThird);
         }
     }
 }
