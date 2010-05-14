@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Gear.Assets;
 using NUnit.Framework;
 
 namespace Tests.Gear.Assets
@@ -19,14 +20,25 @@ namespace Tests.Gear.Assets
          * It needs to support a way of referencing other packages
          * The ability to add and remove assets and read and write assets must support arbitrary accesses.
          */
+        private Package pkg;
+
+        [TestFixtureSetUp]
+        public void SetUp()
+        {
+            this.pkg = Package.CreateInMemory();
+        }
+        [TestFixtureTearDown]
+        public void TearDown()
+        {
+            this.pkg.Dispose();
+        }
 
         [Test]
         public void AssetCountShouldReturnOneWhenOneAssetAdded()
         {
-            Package pkg = new Package();
-            pkg.Add(new Asset());
+            pkg.Include(new TestAsset());
 
-            Assert.AreEqual(1, pkg.AssetCount);
+            Assert.AreEqual(1, pkg.Count);
         }
 
         /// <summary>
@@ -35,46 +47,17 @@ namespace Tests.Gear.Assets
         [Test]
         public void AssetShouldExistInPackageAfterBeingAdded()
         {
-            Package pkg = new Package();
+            Asset asset = new TestAsset();
 
-            Asset asset = new Asset();
-
-            pkg.Add(asset);
+            pkg.Include(asset);
 
             bool expected = true;
-            bool actual = pkg.Contains(asset);
+            bool actual = false;
 
             Assert.AreEqual(expected, actual);
         }
     }
-
-    public class Package
-    {
-        private Asset asset;
-
-        internal void Add(Asset asset)
-        {
-            this.asset = asset;
-        }
-
-        public int AssetCount
-        {
-            get
-            {
-                return 1;
-            }
-        }
-
-        internal bool Contains(Asset asset)
-        {
-            if (this.asset == asset)
-                return true;
-
-            return false;
-        }
-    }
-
-    public class Asset
+    public class TestAsset : Asset
     {
     }
 }

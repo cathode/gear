@@ -11,7 +11,6 @@ namespace Gear.Assets
     public abstract class Asset : IDisposable
     {
         #region Fields
-
         /// <summary>
         /// Backing field for the <see cref="Asset.UniqueId"/> property.
         /// </summary>
@@ -21,10 +20,8 @@ namespace Gear.Assets
         /// Backing field for the <see cref="Asset.IsDisposed"/> property.
         /// </summary>
         private bool isDisposed;
-
         #endregion
         #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Asset"/> class.
         /// </summary>
@@ -41,10 +38,8 @@ namespace Gear.Assets
         {
             this.uniqueId = uniqueId;
         }
-
         #endregion
         #region Properties
-
         /// <summary>
         /// Gets the unique identifier of the current <see cref="Asset"/>.
         /// </summary>
@@ -66,10 +61,8 @@ namespace Gear.Assets
                 return this.isDisposed;
             }
         }
-
         #endregion
         #region Methods
-
         /// <summary>
         /// Releases unmanaged resources used by the current <see cref="Asset"/>.
         /// </summary>
@@ -92,7 +85,6 @@ namespace Gear.Assets
         {
             return true;
         }
-
         #endregion
     }
 }

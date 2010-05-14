@@ -1,4 +1,6 @@
-﻿using System;
+﻿/* Copyright © 2009-2010 Will Shelley. All Rights Reserved.
+ * See the license.txt file for license information. */
+using System;
 using System.IO;
 
 namespace Gear.Assets
@@ -37,6 +39,11 @@ namespace Gear.Assets
         #endregion
         #region Methods
 
+        public void Include(Asset asset)
+        {
+            this.Count += 1;
+        }
+
         /// <summary>
         /// Disposes the current <see cref="Gear.Assets.Package"/>, releasing any unmanaged resources.
         /// </summary>
@@ -47,8 +54,22 @@ namespace Gear.Assets
 
             this.isDisposed = true;
         }
+        public static Package CreateInMemory()
+        {
+            MemoryStream ms = new MemoryStream();
+            return new Package(ms);
+        }
+        public static Package Open(Stream stream)
+        {
+            if (stream == null)
+                throw new ArgumentNullException("stream");
 
-        
+            return new Package(stream);
+        }
+        public static Package Open(string path)
+        {
+            return Package.Open(File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite));
+        }
 
         private void ReadPackageHeader()
         {
@@ -95,6 +116,12 @@ namespace Gear.Assets
             }
         }
 
+        public int Count
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets or sets the block where the package index starts.
         /// </summary>
@@ -111,5 +138,7 @@ namespace Gear.Assets
         }
 
         #endregion
+
+
     }
 }
