@@ -45,7 +45,7 @@ namespace Gear.Assets
         }
 
         /// <summary>
-        /// Disposes the current <see cref="Gear.Assets.Package"/>, releasing any unmanaged resources.
+        /// Releases any unmanaged resources held by the current <see cref="Package"/>.
         /// </summary>
         public void Dispose()
         {
@@ -54,11 +54,13 @@ namespace Gear.Assets
 
             this.isDisposed = true;
         }
+
         public static Package CreateInMemory()
         {
             MemoryStream ms = new MemoryStream();
             return new Package(ms);
         }
+
         public static Package Open(Stream stream)
         {
             if (stream == null)
@@ -66,6 +68,7 @@ namespace Gear.Assets
 
             return new Package(stream);
         }
+
         public static Package Open(string path)
         {
             return Package.Open(File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite));
@@ -82,7 +85,6 @@ namespace Gear.Assets
 
         #endregion
         #region Properties
-
         /// <summary>
         /// Gets a value indicating whether the current <see cref="Gear.Assets.Package"/> is disposed.
         /// </summary>
@@ -136,9 +138,6 @@ namespace Gear.Assets
                 this.indexOffset = value;
             }
         }
-
         #endregion
-
-
     }
 }

@@ -58,10 +58,13 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Assets\Asset.cs" />
+    <Compile Include="Assets\AssetField.cs" />
     <Compile Include="Assets\AssetGraph.cs" />
     <Compile Include="Assets\AssetIdentifier.cs" />
     <Compile Include="Assets\AssetKind.cs" />
     <Compile Include="Assets\AssetManager.cs" />
+    <Compile Include="Assets\Delta.cs" />
+    <Compile Include="Assets\Gear\ItemAsset.cs" />
     <Compile Include="Assets\Package.cs" />
     <Compile Include="Assets\PackageIndex.cs" />
     <Compile Include="Assets\PackageIndexEntry.cs" />
