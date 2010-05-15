@@ -21,12 +21,14 @@ namespace Tests.Gear.Assets
         private byte[] original;
         private byte[] current;
 
+        [TestFixtureSetUp]
         public void SetUp()
         {
             this.original = null;
             this.current = null;
         }
 
+        [TestFixtureTearDown]
         public void TearDown()
         {
             this.original = null;
@@ -36,12 +38,13 @@ namespace Tests.Gear.Assets
         [Test]
         public void NullOrEmptyOriginalIsInvalid()
         {
-
+            Assert.Fail();
         }
 
+        [Test]
         public void NullOrEmptyCurrentIsInvalid()
         {
-
+            Assert.Fail();
         }
 
         [Test]
