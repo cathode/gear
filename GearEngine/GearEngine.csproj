@@ -64,6 +64,8 @@
     <Compile Include="Assets\AssetKind.cs" />
     <Compile Include="Assets\AssetManager.cs" />
     <Compile Include="Assets\Delta.cs" />
+    <Compile Include="Assets\DeltaOperation.cs" />
+    <Compile Include="Assets\DeltaInstruction.cs" />
     <Compile Include="Assets\Gear\ItemAsset.cs" />
     <Compile Include="Assets\Package.cs" />
     <Compile Include="Assets\PackageIndex.cs" />
@@ -92,6 +94,11 @@
     <Compile Include="GameShellParseException.cs" />
     <None Include="GearEngine.dll.config" />
     <None Include="Net\Connection.cs" />
+    <Compile Include="Game\IBaseDoodad.cs" />
+    <Compile Include="Game\IBaseItem.cs" />
+    <Compile Include="Game\Item.cs" />
+    <Compile Include="Game\ItemFlags.cs" />
+    <Compile Include="Game\ItemKind.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Winforms\GameShellForm.cs">
       <SubType>Form</SubType>

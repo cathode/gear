@@ -24,8 +24,8 @@ namespace Tests.Gear.Assets
         [TestFixtureSetUp]
         public void SetUp()
         {
-            this.original = null;
-            this.current = null;
+            this.original = Encoding.ASCII.GetBytes("Hello world");
+            this.current = Encoding.ASCII.GetBytes("hELLO world");
         }
 
         [TestFixtureTearDown]
