@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Gear.Game
 {
-    public enum ItemKind
+    public enum ItemPartSize
     {
-        Artifact,
-        Armor,
-        Weapon,
-        Part,
+        Small,
+        Medium,
+        Large,
+        Structure,
     }
 }

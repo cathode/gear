@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Gear.Game
 {
-    public interface IBaseDoodad
+    class Actor
     {
     }
 }
