@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Gear.Game
 {
@@ -11,7 +8,7 @@ namespace Gear.Game
     [Flags]
     public enum BodyLocation : ulong
     {
-        None = 0x0,
+        None            = 0x0,
 
         // Head Area
 
@@ -48,8 +45,8 @@ namespace Gear.Game
 
         // Lower Body Area
 
-        LeftThigh       = 0x1000000,
-        RightThigh      = 0x2000000,
+        LeftLeg         = 0x1000000,
+        RightLeg        = 0x2000000,
         LeftKnee        = 0x4000000,
         RightKnee       = 0x8000000,
         LeftShin        = 0x10000000,
@@ -57,7 +54,7 @@ namespace Gear.Game
         LeftFoot        = 0x40000000,
         RightFoot       = 0x80000000,
 
-        // Equipment positions
+        // Equipment locations
 
         LeftGrip        = 0x100000000,
         RightGrip       = 0x200000000,
@@ -69,26 +66,32 @@ namespace Gear.Game
 
         // Misc. special locations (eg. non-humanoids)
 
-        Special1 = 0x100000000000000,
-        Special2 = 0x200000000000000,
-        Special3 = 0x400000000000000,
-        Special4 = 0x800000000000000,
-        Special5 = 0x1000000000000000,
-        Special6 = 0x2000000000000000,
-        Special7 = 0x4000000000000000,
-        Special8 = 0x8000000000000000,
+        Special1        = 0x100000000000000,
+        Special2        = 0x200000000000000,
+        Special3        = 0x400000000000000,
+        Special4        = 0x800000000000000,
+        Special5        = 0x1000000000000000,
+        Special6        = 0x2000000000000000,
+        Special7        = 0x4000000000000000,
+        Special8        = 0x8000000000000000,
 
         // Combinations
 
-        Eyes = LeftEye | RightEye,
-        Ears = LeftEar | RightEar,
-        Shoulders = LeftShoulder | RightShoulder,
-        Arms = LeftArm | RightArm,
-        Elbows = LeftElbow | RightElbow,
-        Forearms = LeftForearm | RightForearm,
-        Wrists = LeftWrist | RightWrist,
-        Hands = LeftHand | RightHand,
-        Fingers = LeftFinger | RightFinger,
-
+        Eyes            = LeftEye | RightEye,
+        Ears            = LeftEar | RightEar,
+        Shoulders       = LeftShoulder | RightShoulder,
+        Arms            = LeftArm | RightArm,
+        Elbows          = LeftElbow | RightElbow,
+        Forearms        = LeftForearm | RightForearm,
+        Wrists          = LeftWrist | RightWrist,
+        Hands           = LeftHand | RightHand,
+        Fingers         = LeftFinger | RightFinger,
+        Legs            = LeftLeg | RightLeg,
+        Knees           = LeftKnee | RightKnee,
+        Shins           = LeftShin | RightShin,
+        Feet            = LeftFoot | RightFoot,
+        HeadArea        = Head | Eyes | Ears | Face | Neck,
+        UpperBodyArea   = Shoulders | Arms | Elbows | Forearms | Wrists | Hands | Fingers | Chest | Back,
+        LowerBodyArea   = Waist | Legs | Knees | Shins | Feet,
     }
 }

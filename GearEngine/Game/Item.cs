@@ -10,6 +10,13 @@ namespace Gear.Game
     /// </summary>
     public class Item
     {
+        #region Properties
+        public string Path
+        {
+            get;
+            set;
+        }
+
         public string Name
         {
             get;
@@ -33,5 +40,11 @@ namespace Gear.Game
             get;
             set;
         }
+        public Uri Identifier
+        {
+            get;
+            set;
+        }
+        #endregion
     }
 }
