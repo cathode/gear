@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gear.Game
+namespace Gear.Assets
 {
     /// <summary>
     /// Enumerates locations of the body.
