@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\release\GearEdit.XML</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Gear.Tools.Editor.GearEdit</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -62,11 +65,26 @@
     <Compile Include="EditorForm.Designer.cs">
       <DependentUpon>EditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GearEdit.cs" />
+    <Compile Include="PackageTreeControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GearEdit.exe.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EditorForm.resx">
+      <DependentUpon>EditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GearEngine\GearEngine.csproj">
+      <Project>{B13E769A-A4B6-466F-9896-7FA30F89CAFF}</Project>
+      <Name>GearEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

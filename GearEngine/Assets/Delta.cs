@@ -29,7 +29,7 @@ namespace Gear.Assets
         public static Delta Calculate(byte[] original, byte[] current)
         {
             throw new NotImplementedException();
-
+            /*
             original = original ?? new byte[0];
             current = current ?? new byte[0];
 
@@ -40,7 +40,7 @@ namespace Gear.Assets
 
             if (original.Length == 0)
 
-            return d;
+            return d;*/
         }
 
         public byte[] Apply(byte[] original)

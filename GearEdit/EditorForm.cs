@@ -21,5 +21,20 @@ namespace Gear.Tools
         {
             Application.Exit();
         }
+
+        private void newModMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void openModMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void closeModMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

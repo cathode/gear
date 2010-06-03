@@ -9,10 +9,22 @@ namespace Gear.Assets
     {
         #region Fields
         private bool isModified;
-        private T currentValue;
-        private T previousValue;
+        private T value;
+        private readonly uint id;
         #endregion
         #region Properties
+        public bool IsModified
+        {
+            get
+            {
+                return this.isModified;
+            }
+            internal set
+            {
+                this.isModified = value;
+            }
+        }
+
         /// <summary>
         /// Gets or sets the value of the current <see cref="AssetField"/>.
         /// </summary>
@@ -20,11 +32,12 @@ namespace Gear.Assets
         {
             get
             {
-                return this.currentValue;
+                return this.value;
             }
             set
             {
-                throw new NotImplementedException();
+                this.isModified = true;
+                this.value = value;
             }
         }
         #endregion
@@ -32,13 +45,19 @@ namespace Gear.Assets
         /// <summary>
         /// Initializes a new instance of the <see cref="AssetField"/> class.
         /// </summary>
-        protected AssetField()
+        protected AssetField(uint id)
         {
-
+            this.id = id;
         }
         #endregion
         #region Methods
-        public abstract Delta GetDelta(T previous, T current);
+        #endregion
+        #region Operators
+        [Obsolete]
+        public static implicit operator T(AssetField<T> field)
+        {
+            return field.Value;
+        }
         #endregion
     }
 }

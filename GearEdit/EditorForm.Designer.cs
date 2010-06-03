@@ -39,6 +39,7 @@ namespace Gear.Tools
             this.closeModMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.packageTreeControl1 = new Gear.Tools.Editor.PackageTreeControl();
             this.mainMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,7 +49,7 @@ namespace Gear.Tools
             this.fileMenu});
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
-            this.mainMenuStrip.Size = new System.Drawing.Size(464, 24);
+            this.mainMenuStrip.Size = new System.Drawing.Size(1264, 24);
             this.mainMenuStrip.TabIndex = 0;
             this.mainMenuStrip.Text = "menuStrip1";
             // 
@@ -68,46 +69,57 @@ namespace Gear.Tools
             // newModMenuItem
             // 
             this.newModMenuItem.Name = "newModMenuItem";
-            this.newModMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.newModMenuItem.Text = "&New Mod...";
+            this.newModMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.newModMenuItem.Text = "&New Package...";
+            this.newModMenuItem.Click += new System.EventHandler(this.newModMenuItem_Click);
             // 
             // openModMenuItem
             // 
             this.openModMenuItem.Name = "openModMenuItem";
-            this.openModMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.openModMenuItem.Text = "&Open Mod...";
+            this.openModMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.openModMenuItem.Text = "&Open Package...";
+            this.openModMenuItem.Click += new System.EventHandler(this.openModMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(156, 6);
             // 
             // closeModMenuItem
             // 
             this.closeModMenuItem.Name = "closeModMenuItem";
-            this.closeModMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.closeModMenuItem.Text = "&Close Mod";
+            this.closeModMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.closeModMenuItem.Text = "&Close Package";
+            this.closeModMenuItem.Click += new System.EventHandler(this.closeModMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(156, 6);
             // 
             // exitMenuItem
             // 
             this.exitMenuItem.Name = "exitMenuItem";
-            this.exitMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitMenuItem.Size = new System.Drawing.Size(159, 22);
             this.exitMenuItem.Text = "E&xit";
             this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
             // 
-            // GearToolsUI
+            // packageTreeControl1
+            // 
+            this.packageTreeControl1.Location = new System.Drawing.Point(12, 27);
+            this.packageTreeControl1.Name = "packageTreeControl1";
+            this.packageTreeControl1.Size = new System.Drawing.Size(250, 643);
+            this.packageTreeControl1.TabIndex = 1;
+            // 
+            // EditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(464, 284);
+            this.ClientSize = new System.Drawing.Size(1264, 682);
+            this.Controls.Add(this.packageTreeControl1);
             this.Controls.Add(this.mainMenuStrip);
             this.MainMenuStrip = this.mainMenuStrip;
-            this.Name = "GearToolsUI";
+            this.Name = "EditorForm";
             this.ShowIcon = false;
             this.Text = "GearTools";
             this.mainMenuStrip.ResumeLayout(false);
@@ -127,6 +139,7 @@ namespace Gear.Tools
         private System.Windows.Forms.ToolStripMenuItem closeModMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem exitMenuItem;
+        private Editor.PackageTreeControl packageTreeControl1;
     }
 }
 

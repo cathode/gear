@@ -68,6 +68,7 @@
     <Compile Include="Assets\Delta.cs" />
     <Compile Include="Assets\DeltaOperation.cs" />
     <Compile Include="Assets\DeltaInstruction.cs" />
+    <Compile Include="Assets\Int32Field.cs" />
     <Compile Include="Assets\Item.cs" />
     <Compile Include="Assets\ItemFlags.cs" />
     <Compile Include="Assets\ItemKind.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Assets\Package.cs" />
     <Compile Include="Assets\PackageIndex.cs" />
     <Compile Include="Assets\PackageIndexEntry.cs" />
+    <Compile Include="Assets\StringField.cs" />
     <Compile Include="Assets\SubStream.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandId.cs" />
