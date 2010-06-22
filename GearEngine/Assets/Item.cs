@@ -22,18 +22,6 @@ namespace Gear.Assets
         
         #endregion
         #region Properties
-        public string Path
-        {
-            get;
-            set;
-        }
-
-        public string Name
-        {
-            get;
-            set;
-        }
-
         public ItemFlags Flags
         {
             get;
@@ -50,21 +38,6 @@ namespace Gear.Assets
         {
             get;
             set;
-        }
-        public Uri Identifier
-        {
-            get;
-            set;
-        }
-        #endregion
-        #region Types
-        internal static class ItemFieldId
-        {
-            internal const uint Name = 0x0;
-            internal const uint Flags = 0x1;
-            internal const uint Kind = 0x2;
-            internal const uint Cost = 0x3;
-            internal const uint Identifier = 0x4;
         }
         #endregion
     }

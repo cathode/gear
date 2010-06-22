@@ -10,6 +10,27 @@ namespace Gear.Assets
     /// </summary>
     public sealed class PackageIndexEntry
     {
-        
+        #region Properties
+        public Guid UniqueId
+        {
+            get;
+            set;
+        }
+        public ulong Offset
+        {
+            get;
+            set;
+        }
+        public string Path
+        {
+            get;
+            set;
+        }
+        public string Name
+        {
+            get;
+            set;
+        }
+        #endregion
     }
 }

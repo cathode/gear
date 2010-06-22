@@ -1,5 +1,5 @@
-﻿/* Copyright © 2009-2010 Will Shelley. All Rights Reserved.
- * See the license.txt file for license information. */
+﻿/* Gear - A Steampunk Action-RPG. http://trac.gearedstudios.com/gear/
+ * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved. */
 using System;
 using System.IO;
 
@@ -83,6 +83,10 @@ namespace Gear.Assets
 
         }
 
+        internal long AllocateBlocks(Guid assetId, int count)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
         #region Properties
         /// <summary>
@@ -97,24 +101,13 @@ namespace Gear.Assets
         }
 
         /// <summary>
-        /// Gets or sets the block size for datablocks in the package.
+        /// Gets the block size for datablocks in the package.
         /// </summary>
-        /// <remarks>
-        /// All asset streams are stored using a number of uniformly sized octet-aligned blocks. This property specifies how big each block is.
-        /// Block size must be between 512 and 16,777,216.
-        /// </remarks>
         public ushort BlockSize
         {
             get
             {
                 return this.blockSize;
-            }
-            set
-            {
-                if (value < Package.BlockSizeMin || value > Package.BlockSizeMax)
-                    throw new ArgumentOutOfRangeException("value");
-
-                this.blockSize = value;
             }
         }
 

@@ -50,7 +50,7 @@
     <Compile Include="CrossThreadNodeInterfaceTests.cs" />
     <Compile Include="EntityTests.cs" />
     <Compile Include="Gear\Assets\AssetTests.cs" />
-    <Compile Include="Gear\Assets\DeltaTests.cs" />
+    <None Include="Gear\Assets\DeltaTests.cs" />
     <Compile Include="Gear\Assets\PackageTests.cs" />
     <Compile Include="NodeInterfaceTests.cs" />
     <Compile Include="NodeTests.cs" />
