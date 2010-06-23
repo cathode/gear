@@ -1,7 +1,8 @@
-﻿/* Gear - A Steampunk Action-RPG. http://trac.gearedstudios.com/gear/
+﻿/* Gear - A Steampunk Action-RPG --- http://trac.gearedstudios.com/gear/
  * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved. */
 using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Gear.Assets
 {
@@ -10,7 +11,23 @@ namespace Gear.Assets
     /// </summary>
     public sealed class Package : IDisposable
     {
+        #region Fields
+        public const int BlockSize = 512;
+        private bool isDisposed;
+
+        private Stream stream;
+
+        /// <summary>
+        /// Backing field for <see cref="PackageHeader.IndexOffset"/> property.
+        /// </summary>
+        private uint indexOffset;
+        private Dictionary<long, Guid> blockAllocationTable;
+        #endregion
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Package"/> class.
+        /// </summary>
+        /// <param name="stream"></param>
         internal Package(Stream stream)
         {
             if (stream == null)
@@ -19,29 +36,10 @@ namespace Gear.Assets
             this.stream = stream;
         }
         #endregion
-        #region Fields
-        public const ushort BlockSizeMin = 512;
-        public const ushort BlockSizeMax = 32768;
-        private bool isDisposed;
-
-        private Stream stream;
-
-        /// <summary>
-        /// Backing field for <see cref="PackageHeader.BlockSize"/> property.
-        /// </summary>
-        private ushort blockSize;
-
-        /// <summary>
-        /// Backing field for <see cref="PackageHeader.IndexOffset"/> property.
-        /// </summary>
-        private uint indexOffset;
-
-        #endregion
         #region Methods
-
         public void Include(Asset asset)
         {
-            this.Count += 1;
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -83,7 +81,7 @@ namespace Gear.Assets
 
         }
 
-        internal long AllocateBlocks(Guid assetId, int count)
+        internal long AllocateBlock(Guid assetId)
         {
             throw new NotImplementedException();
         }
@@ -100,36 +98,10 @@ namespace Gear.Assets
             }
         }
 
-        /// <summary>
-        /// Gets the block size for datablocks in the package.
-        /// </summary>
-        public ushort BlockSize
-        {
-            get
-            {
-                return this.blockSize;
-            }
-        }
-
         public int Count
         {
             get;
             set;
-        }
-
-        /// <summary>
-        /// Gets or sets the block where the package index starts.
-        /// </summary>
-        private uint IndexOffset
-        {
-            get
-            {
-                return this.indexOffset;
-            }
-            set
-            {
-                this.indexOffset = value;
-            }
         }
         #endregion
     }
