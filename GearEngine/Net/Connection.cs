@@ -2,7 +2,7 @@
    See the included license.txt file for details. */
 using System;
 using System.Collections.Generic;
-using System.Linq;
+
 using System.Text;
 
 namespace GearEngine.Net

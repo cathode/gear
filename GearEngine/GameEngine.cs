@@ -1,4 +1,6 @@
-﻿using System;
+﻿/* Gear - A Steampunk Action-RPG --- http://trac.gearedstudios.com/gear/
+ * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved. */
+using System;
 using System.Diagnostics;
 using System.Threading;
 using Gear.Commands;

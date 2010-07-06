@@ -2,21 +2,21 @@
    See the included license.txt file for details. */
 using System;
 using System.Collections.Generic;
-using System.Linq;
+
 using System.Text;
 
 namespace Gear.Assets
 {
-    public static class AssetManager
+    public sealed class AssetManager
     {
         #region Constructors - Static
-        static AssetManager()
+        internal AssetManager()
         {
-            AssetManager.graph = new AssetGraph();
+            this.graph = new AssetGraph();
         }
         #endregion
         #region Fields - Private
-        private static AssetGraph graph;
+        private readonly AssetGraph graph;
         #endregion
         #region Methods
         public static void AddAssetSource(Uri url)

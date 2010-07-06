@@ -12,7 +12,7 @@ namespace Gear.Assets
     public sealed class Package : IDisposable
     {
         #region Fields
-        public const int BlockSize = 512;
+        
         private bool isDisposed;
 
         private Stream stream;
@@ -21,6 +21,7 @@ namespace Gear.Assets
         /// Backing field for <see cref="PackageHeader.IndexOffset"/> property.
         /// </summary>
         private uint indexOffset;
+        private Queue<int> freeBlocks;
         private Dictionary<long, Guid> blockAllocationTable;
         #endregion
         #region Constructors
@@ -80,8 +81,7 @@ namespace Gear.Assets
 
 
         }
-
-        internal long AllocateBlock(Guid assetId)
+        internal Stream OpenAssetStream(Guid assetId)
         {
             throw new NotImplementedException();
         }

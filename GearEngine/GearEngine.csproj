@@ -16,6 +16,7 @@
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,16 +65,19 @@
     <Compile Include="Assets\AssetIdentifier.cs" />
     <Compile Include="Assets\AssetKind.cs" />
     <Compile Include="Assets\AssetManager.cs" />
+    <Compile Include="Assets\AssetStore.cs" />
     <Compile Include="Assets\BodyLocation.cs" />
     <Compile Include="Assets\Delta.cs" />
     <Compile Include="Assets\DeltaOperation.cs" />
     <Compile Include="Assets\DeltaInstruction.cs" />
+    <Compile Include="Assets\GameSchema.cs" />
     <Compile Include="Assets\Int32Field.cs" />
     <Compile Include="Assets\Item.cs" />
     <Compile Include="Assets\ItemFlags.cs" />
     <Compile Include="Assets\ItemKind.cs" />
     <Compile Include="Assets\ItemPartSize.cs" />
     <Compile Include="Assets\Package.cs" />
+    <Compile Include="Assets\PackageAssetStore.cs" />
     <Compile Include="Assets\PackageIndex.cs" />
     <Compile Include="Assets\PackageIndexEntry.cs" />
     <Compile Include="Assets\StringField.cs" />
