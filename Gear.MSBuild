@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project DefaultTargets="CompileSource" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="Prep" ToolsVersion="4.0">
+  <Target Name="Prep">
+    <RemoveDir Directories="bin" />
+    <MakeDir Directories="bin" />
+  </Target>
+  <Target Name="CompileSource" DependsOnTargets="Prep">
+    <MSBuild BuildInParallel="true" Projects="src/Gear.sln" RebaseOutputs="true"/>
+  </Target>
+  <Target Name="CompileEngineAssets" DependsOnTargets="CompileSource">
+    
+  </Target>
+  <Target Name="CompileGameAssets" DependsOnTargets="CompileSource,CompileEngineAssets">
+    
+  </Target>
+  <Target Name="GenerateBinaryArtifacts" DependsOnTargets="CompileSource,CompileEngineAssets,CompileGameAssets">
+    
+  </Target>
+  <Target Name="GenerateSourceArtifacts" DependsOnTargets="CompileSource">
+    
+  </Target>
+</Project>

@@ -1,5 +1,10 @@
-﻿/* Gear - A Steampunk Action-RPG --- http://trac.gearedstudios.com/gear/
- * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved. */
+﻿/************************************************************************
+ * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/   *
+ * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved.   *
+ * -------------------------------------------------------------------- *
+ * Contributors:                                                        *
+ * - Will 'cathode' Shelley <cathode@live.com>                          *
+ ************************************************************************/
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -12,7 +17,14 @@ namespace Gear.Assets
     public sealed class Package : IDisposable
     {
         #region Fields
-        
+        /// <summary>
+        /// Holds the default file extension for package files.
+        /// </summary>
+        public const string DefaultFileExtension = ".g";
+
+        /// <summary>
+        /// Backing field for the <see cref="Package.IsDisposed"/> property.
+        /// </summary>
         private bool isDisposed;
 
         private Stream stream;

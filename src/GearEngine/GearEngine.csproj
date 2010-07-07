@@ -22,7 +22,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\debug\</OutputPath>
+    <OutputPath>bin\debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,11 +32,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\Release\</OutputPath>
+    <OutputPath>bin\release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Release\GearEngine.XML</DocumentationFile>
+    <DocumentationFile>bin\release\GearEngine.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -58,7 +58,10 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Assets\Actor.cs" />
+    <Compile Include="Aspect.cs" />
+    <Compile Include="Aspects\Common\MovementAspect.cs" />
+    <Compile Include="Aspects\Common\PositionAspect.cs" />
+    <Compile Include="Aspects\Common\RenderAspect.cs" />
     <Compile Include="Assets\Asset.cs" />
     <Compile Include="Assets\AssetField.cs" />
     <Compile Include="Assets\AssetGraph.cs" />
@@ -99,11 +102,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EngineResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Entity.cs" />
     <Compile Include="GameEngine.cs" />
     <Compile Include="GameSession.cs" />
     <Compile Include="GameShell.cs" />
     <Compile Include="GameShellParseException.cs" />
-    <None Include="GearEngine.dll.config" />
     <None Include="Net\Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Winforms\GameShellForm.cs">
