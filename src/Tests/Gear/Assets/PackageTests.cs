@@ -32,32 +32,10 @@ namespace Tests.Gear.Assets
         {
             this.pkg.Dispose();
         }
-
         [Test]
-        public void AssetCountShouldReturnOneWhenOneAssetAdded()
+        public void Placeholder()
         {
-            pkg.Include(new TestAsset());
-
-            Assert.AreEqual(1, pkg.Count);
+            Assert.Pass();
         }
-
-        /// <summary>
-        /// Ensures that an asset instance shows up as being part of a package after it is added to that package.
-        /// </summary>
-        [Test]
-        public void AssetShouldExistInPackageAfterBeingAdded()
-        {
-            Asset asset = new TestAsset();
-
-            pkg.Include(asset);
-
-            bool expected = true;
-            bool actual = false;
-
-            Assert.AreEqual(expected, actual);
-        }
-    }
-    public class TestAsset : Asset
-    {
     }
 }

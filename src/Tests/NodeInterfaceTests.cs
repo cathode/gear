@@ -32,5 +32,11 @@ namespace Tests.Intralock
          * When I remove an Update from the Receive queue, I should be able to check the size of the Receive queue and see that it has decreased by 1.
          * 
          */
+
+        [Test]
+        public void Placeholder()
+        {
+            Assert.Pass();
+        }
     }
 }

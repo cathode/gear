@@ -10,6 +10,10 @@ namespace Tests.Gear.Assets
     [TestFixture]
     public class AssetTests
     {
-
+        [Test]
+        public void Placeholder()
+        {
+            Assert.Pass();
+        }
     }
 }

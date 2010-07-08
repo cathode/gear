@@ -9,5 +9,10 @@ namespace Tests.Gear.Assets
     [TestFixture]
     public class PackageIndexTests
     {
+        [Test]
+        public void Placeholder()
+        {
+            Assert.Pass();
+        }
     }
 }

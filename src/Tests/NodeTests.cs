@@ -22,5 +22,11 @@ namespace Tests.Intralock
          * TENATIVE FEATURES:
          * Some way to support licensing on a per-client/per-node basis maybe? ("pay-per-node"?)
          */
+
+        [Test]
+        public void Placeholder()
+        {
+            Assert.Pass();
+        }
     }
 }

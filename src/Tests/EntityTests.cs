@@ -19,5 +19,11 @@ namespace Tests.Intralock
          * The runtime entity fields of an entity are defined by it's schema.
          * Entities are instances of a schema.
          */
+
+        [Test]
+        public void Placeholder()
+        {
+            Assert.Pass();
+        }
     }
 }
