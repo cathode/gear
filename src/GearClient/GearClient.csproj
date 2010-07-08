@@ -57,8 +57,6 @@
     <Compile Include="ClientCommandIds.cs" />
     <Compile Include="ClientEngine.cs" />
     <Compile Include="ClientSession.cs" />
-    <Compile Include="Commands\ConnectCommand.cs" />
-    <Compile Include="Commands\ViewCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

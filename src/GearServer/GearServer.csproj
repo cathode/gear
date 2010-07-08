@@ -61,8 +61,8 @@
     <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="ServerCommandIds.cs" />
-    <Compile Include="ServerEngine.cs" />
-    <Compile Include="ServerSession.cs" />
+    <None Include="ServerEngine.cs" />
+    <None Include="ServerSession.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GearEngine\GearEngine.csproj">

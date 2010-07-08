@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Project DefaultTargets="CompileSource" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="Prep" ToolsVersion="4.0">
+<Project DefaultTargets="GenerateBinaryArtifacts;GenerateSourceArtifacts" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="Prep" ToolsVersion="4.0">
   <Target Name="Prep">
     <RemoveDir Directories="bin" />
     <MakeDir Directories="bin" />
   </Target>
   <Target Name="CompileSource" DependsOnTargets="Prep">
-    <MSBuild BuildInParallel="true" Projects="src/Gear.sln" RebaseOutputs="true"/>
+    <Message Text="Compiling Source Code" />
+    <MSBuild BuildInParallel="true" Projects="src/Gear.sln" RebaseOutputs="true" Properties="Configuration=Release"/>
   </Target>
-  <Target Name="CompileEngineAssets" DependsOnTargets="CompileSource">
-    
+  <Target Name="PackageEngineAssets" DependsOnTargets="CompileSource">
+    <Message Text="Packaging Engine Assets" />
   </Target>
-  <Target Name="CompileGameAssets" DependsOnTargets="CompileSource,CompileEngineAssets">
-    
+  <Target Name="PackageGameAssets" DependsOnTargets="CompileSource;PackageEngineAssets">
+    <Message Text="Packaging Game Assets" />
   </Target>
-  <Target Name="GenerateBinaryArtifacts" DependsOnTargets="CompileSource,CompileEngineAssets,CompileGameAssets">
-    
+  <Target Name="GenerateBinaryArtifacts" DependsOnTargets="CompileSource;PackageEngineAssets;PackageGameAssets">
+    <Message Text="Generating Binary Artifacts" />
   </Target>
   <Target Name="GenerateSourceArtifacts" DependsOnTargets="CompileSource">
-    
+    <Message Text="Generating Source Artifacts..." />
   </Target>
 </Project>

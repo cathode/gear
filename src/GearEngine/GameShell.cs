@@ -1,54 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/************************************************************************
+ * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/   *
+ * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved.   *
+ * -------------------------------------------------------------------- *
+ * Contributors:                                                        *
+ * - Will 'cathode' Shelley <cathode@live.com>                          *
+ ************************************************************************/
+using System;
 using System.IO;
-
-using System.Text;
-using Gear.Commands;
 
 namespace Gear
 {
+    public delegate string GameShellCommandCallback(string[] args);
+
     /// <summary>
     /// Processes commands entered as text by the user into game commands.
     /// </summary>
-    /// <remarks>
-    /// The <see cref="GameShell"/> class must be supplied with a <see cref="CommandQueue"/>
-    /// which is where commands converted from user input are sent.
-    /// </remarks>
     public sealed class GameShell
     {
         #region Fields
-
-        private readonly CommandQueue target;
-
         /// <summary>
         /// Backing field for <see cref="GameShell.Output"/> property.
         /// </summary>
         private StringWriter output = new StringWriter();
 
+        /// <summary>
+        /// Holds the collection of registered <see cref="GameShellCommand"/> items.
+        /// </summary>
+        private readonly GameShellCommandCollection commands;
         #endregion
         #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="GameShell"/> class.
         /// </summary>
         public GameShell()
         {
-            this.target = new CommandQueue();
+            this.commands = new GameShellCommandCollection();
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GameShell"/> class.
-        /// </summary>
-        /// <param name="target">A <see cref="CommandQueue"/> which parsed commands will be added to.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when the target parameter is null.</exception>
-        public GameShell(CommandQueue target)
-        {
-            if (target == null)
-                throw new ArgumentNullException("target");
-
-            this.target = target;
-        }
-
         #endregion
         #region Properties
 
@@ -66,73 +53,20 @@ namespace Gear
 
         #endregion
         #region Methods
-
-        /// <summary>
-        /// Creates and returns a <see cref="ShellCommand"/> by name.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static ShellCommand CreateShellCommand(string name)
+        public GameShellCommand GetRegisteredCommand(string name)
         {
-            if (name == null)
-                throw new ArgumentNullException("name");
-
-            switch (name.ToLower())
-            {
-                case "quit":
-                    return new QuitCommand();
-                case "help":
-                    return new HelpCommand();
-                case "set":
-                    return new SetCommand();
-                case "info":
-                    return new CommentCommand();
-
-                default:
-                    throw new GameShellParseException(string.Format(EngineResources.ShellErrorUnknownCommand, name));
-            }
+            throw new NotImplementedException();
         }
-
-        /// <summary>
-        /// Processes a line of text and attempts to extract a shell command instance from the string.
-        /// </summary>
-        /// <param name="line"></param>
-        /// <returns></returns>
-        public static ShellCommand ParseShellCommand(string line)
+        public void Register(GameShellCommand command)
         {
-            if (line == null || line.Trim() == string.Empty)
-                return null; // Nothing to process
-
-            line = line.Trim();
-            int sp = line.IndexOf(' ');
-            string rawCmd = string.Empty;
-            string rawData = string.Empty;
-
-            if (sp == -1)
-                rawCmd = line;
-            else
-            {
-                rawCmd = line.Substring(0, sp);
-                rawData = line.Substring(sp).Trim();
-            }
-
-            ShellCommand cmd = GameShell.CreateShellCommand(rawCmd);
-            cmd.ParseData(rawData);
-
-            return cmd;
+            if (!this.commands.Contains(command.Name))
+                this.commands.Add(command);
         }
-
-        /// <summary>
-        /// Derives a <see cref="ShellCommand"/> from the specified line of text and enqueues it.
-        /// </summary>
-        /// <param name="line"></param>
-        public void Parse(string line)
+        public void Unregister(GameShellCommand command)
         {
-            var cmd = GameShell.ParseShellCommand(line);
-
-            this.target.Enqueue(cmd);
+            if (this.commands.Contains(command))
+                this.commands.Remove(command);
         }
-
         #endregion
     }
 }

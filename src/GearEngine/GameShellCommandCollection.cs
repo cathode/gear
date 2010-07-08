@@ -5,24 +5,18 @@
  * Contributors:                                                        *
  * - Will 'cathode' Shelley <cathode@live.com>                          *
  ************************************************************************/
+using System.Collections.ObjectModel;
 
-namespace Gear.Client
+namespace Gear
 {
-    internal static class Client
+    /// <summary>
+    /// Represents a collection of <see cref="GameShellCommand"/> items.
+    /// </summary>
+    public sealed class GameShellCommandCollection : KeyedCollection<string, GameShellCommand>
     {
-        #region Fields
-        private static ClientEngine engine;
-        #endregion
-        #region Methods
-        /// <summary>
-        /// GearClient application entry point.
-        /// </summary>
-        /// <param name="args"></param>
-        internal static void Main(string[] args)
+        protected override string GetKeyForItem(GameShellCommand item)
         {
-            // Initialize the client game engine.
-            Client.engine = new ClientEngine();
+            return item.Name;
         }
-        #endregion
     }
 }

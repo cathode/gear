@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Gear;
-using Gear.Winforms;
 
 namespace Gear.Server
 {
@@ -18,9 +17,9 @@ namespace Gear.Server
     internal static class Server
     {
         #region Fields
-        internal static ServerEngine Engine;
-        internal static ServerSession Session;
-        internal static GameShellForm Form;
+        //internal static ServerEngine Engine;
+        //internal static ServerSession Session;
+        //internal static GameShellForm Form;
         internal static GameShell Shell;
         #endregion
         #region Methods
@@ -30,17 +29,17 @@ namespace Gear.Server
         /// <param name="args"></param>
         internal static void Main(string[] args)
         {
-            Server.Engine = new ServerEngine();
+            //Server.Engine = new ServerEngine();
 
-            Server.Session = new ServerSession();
-            Server.Shell = Server.Engine.Shell;
-            Server.Form = new GameShellForm();
-            Server.Form.Shell = Server.Shell;
+            //Server.Session = new ServerSession();
+            //Server.Shell = Server.Engine.Shell;
+            //Server.Form = new GameShellForm();
+            //Server.Form.Shell = Server.Shell;
 
             
 
-            Application.EnableVisualStyles();
-            Application.Run(Server.Form);
+            //Application.EnableVisualStyles();
+            //Application.Run(Server.Form);
         }
         #endregion
     }

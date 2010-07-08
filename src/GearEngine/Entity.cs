@@ -17,13 +17,27 @@ namespace Gear
     public sealed class Entity
     {
         #region Fields
+        /// <summary>
+        /// Backing field for the <see cref="Entity.UniqueId"/> field.
+        /// </summary>
         private readonly Guid uniqueId;
         #endregion
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Entity"/> class.
+        /// </summary>
+        /// <remarks>
+        /// The new instance is given a newly created <see cref="Guid"/>.
+        /// </remarks>
         public Entity()
         {
             this.uniqueId = Guid.NewGuid();
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Entity"/> class.
+        /// </summary>
+        /// <param name="uniqueId"></param>
         public Entity(Guid uniqueId)
         {
             this.uniqueId = uniqueId;
