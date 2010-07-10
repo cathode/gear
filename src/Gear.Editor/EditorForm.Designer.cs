@@ -1,7 +1,7 @@
 ﻿/* Copyright © 2009-2010 Will Shelley. All Rights Reserved.
    See the included license.txt file for details. */
 
-namespace Gear.Tools
+namespace Gear.Editor
 {
     partial class EditorForm
     {
@@ -39,7 +39,6 @@ namespace Gear.Tools
             this.closeModMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.packageTreeControl1 = new Gear.Tools.Editor.PackageTreeControl();
             this.mainMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -104,19 +103,11 @@ namespace Gear.Tools
             this.exitMenuItem.Text = "E&xit";
             this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
             // 
-            // packageTreeControl1
-            // 
-            this.packageTreeControl1.Location = new System.Drawing.Point(12, 27);
-            this.packageTreeControl1.Name = "packageTreeControl1";
-            this.packageTreeControl1.Size = new System.Drawing.Size(250, 643);
-            this.packageTreeControl1.TabIndex = 1;
-            // 
             // EditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 682);
-            this.Controls.Add(this.packageTreeControl1);
             this.Controls.Add(this.mainMenuStrip);
             this.MainMenuStrip = this.mainMenuStrip;
             this.Name = "EditorForm";
@@ -139,7 +130,6 @@ namespace Gear.Tools
         private System.Windows.Forms.ToolStripMenuItem closeModMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem exitMenuItem;
-        private Editor.PackageTreeControl packageTreeControl1;
     }
 }
 

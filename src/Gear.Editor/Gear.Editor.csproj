@@ -8,8 +8,8 @@
     <ProjectGuid>{766C00AC-DE0C-4105-91FE-4CE9B7C65069}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gear.Tools.Editor</RootNamespace>
-    <AssemblyName>GearEdit</AssemblyName>
+    <RootNamespace>Gear.Editor</RootNamespace>
+    <AssemblyName>Gear.Editor</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -37,7 +37,7 @@
     </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Gear.Tools.Editor.GearEdit</StartupObject>
+    <StartupObject>Gear.Editor.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
@@ -73,10 +73,6 @@
     <Compile Include="EditorForm.Designer.cs">
       <DependentUpon>EditorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GearEdit.cs" />
-    <Compile Include="PackageTreeControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -86,16 +82,16 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GearEngine\GearEngine.csproj">
-      <Project>{B13E769A-A4B6-466F-9896-7FA30F89CAFF}</Project>
-      <Name>GearEngine</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="AssetEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Gear\Gear.csproj">
+      <Project>{B13E769A-A4B6-466F-9896-7FA30F89CAFF}</Project>
+      <Name>Gear</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

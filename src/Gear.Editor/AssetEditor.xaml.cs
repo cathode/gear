@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Gear.Tools.Editor
+namespace Gear.Editor
 {
     /// <summary>
     /// Interaction logic for AssetEditor.xaml

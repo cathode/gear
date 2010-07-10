@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Gear.Tools
+namespace Gear.Editor
 {
     public partial class EditorForm : Form
     {

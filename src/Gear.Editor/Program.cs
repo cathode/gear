@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-
-using System.Text;
+﻿/* Copyright © 2009-2010 Will Shelley. All Rights Reserved.
+   See the included license.txt file for details. */
+using System;
 using System.Windows.Forms;
 
-namespace Gear.Tools.Editor
+namespace Gear.Editor
 {
-    public static class GearEdit
+    static class Program
     {
         /// <summary>
         /// The main entry point for the application.

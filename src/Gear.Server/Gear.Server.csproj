@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Gear.Server</RootNamespace>
-    <AssemblyName>GearServer</AssemblyName>
+    <AssemblyName>Gear.Server</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>Gear.Server.Server</StartupObject>
@@ -65,7 +65,7 @@
     <None Include="ServerSession.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GearEngine\GearEngine.csproj">
+    <ProjectReference Include="..\Gear\Gear.csproj">
       <Project>{B13E769A-A4B6-466F-9896-7FA30F89CAFF}</Project>
       <Name>GearEngine</Name>
     </ProjectReference>
