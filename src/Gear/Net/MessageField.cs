@@ -43,7 +43,10 @@ namespace Gear.Net
                 return this.id;
             }
         }
-
+        
+        /// <summary>
+        /// Gets or sets the data length of the current <see cref="MessageField"/>.
+        /// </summary>
         public ushort Length
         {
             get
