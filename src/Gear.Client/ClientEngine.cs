@@ -8,7 +8,7 @@ using Gear;
 
 namespace Gear.Client
 {
-    internal class ClientEngine : GameEngine
+    internal class ClientEngine : EngineBase
     {
     }
 }

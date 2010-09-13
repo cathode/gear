@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Will Shelley")]
+[assembly: AssemblyCompany("Geared Studios")]
 [assembly: AssemblyProduct("Gear")]
 [assembly: AssemblyCopyright("Copyright © 2009-2010 Will Shelley. All Rights Reserved.")]
 [assembly: AssemblyTrademark("")]

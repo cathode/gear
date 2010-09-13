@@ -1,10 +1,10 @@
-﻿/************************************************************************
- * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/   *
- * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved.   *
- * -------------------------------------------------------------------- *
- * Contributors:                                                        *
- * - Will 'cathode' Shelley <cathode@live.com>                          *
- ************************************************************************/
+﻿/******************************************************************************
+ * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
+ * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved.         *
+ * -------------------------------------------------------------------------- *
+ * Contributors:                                                              *
+ * - Will 'cathode' Shelley <cathode@live.com>                                *
+ *****************************************************************************/
 using System;
 using System.IO;
 

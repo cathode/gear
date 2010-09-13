@@ -47,19 +47,18 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="ClientNode.cs" />
-    <Compile Include="CrossThreadNodeInterface.cs" />
-    <Compile Include="Entity.cs" />
-    <Compile Include="EntityField.cs" />
-    <Compile Include="EntitySchema.cs" />
-    <Compile Include="HostNode.cs" />
-    <Compile Include="Node.cs" />
-    <Compile Include="NodeInterface.cs" />
-    <Compile Include="NodeInterfaceStatus.cs" />
+    <None Include="ClientNode.cs" />
+    <None Include="CrossThreadNodeInterface.cs" />
+    <None Include="Entity.cs" />
+    <None Include="EntityField.cs" />
+    <None Include="EntitySchema.cs" />
+    <None Include="HostNode.cs" />
+    <None Include="Node.cs" />
+    <None Include="NodeInterface.cs" />
+    <None Include="NodeInterfaceStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="TcpNodeInterface.cs" />
-    <Compile Include="Update.cs" />
-    <Compile Include="World.cs" />
+    <None Include="Update.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

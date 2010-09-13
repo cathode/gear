@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CrossThreadNodeInterfaceTests.cs" />
+    <None Include="CrossThreadNodeInterfaceTests.cs" />
     <Compile Include="EntityTests.cs" />
     <Compile Include="Gear\Assets\AssetTests.cs" />
     <None Include="Gear\Assets\DeltaTests.cs" />
@@ -58,10 +58,6 @@
     <ProjectReference Include="..\Gear\Gear.csproj">
       <Project>{B13E769A-A4B6-466F-9896-7FA30F89CAFF}</Project>
       <Name>GearEngine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Intralock\Intralock.csproj">
-      <Project>{7FBAB9E0-3B5A-49BD-B03E-F4275084FA42}</Project>
-      <Name>Intralock</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using System.Text;
 
-namespace Gear.Assets
+namespace Gear.ItemSystem
 {
     public enum ItemPartSize
     {

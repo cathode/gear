@@ -29,12 +29,12 @@ namespace Gear.Assets
 
         private Stream stream;
 
-        /// <summary>
-        /// Backing field for <see cref="PackageHeader.IndexOffset"/> property.
-        /// </summary>
-        private uint indexOffset;
-        private Queue<int> freeBlocks;
-        private Dictionary<long, Guid> blockAllocationTable;
+        ///// <summary>
+        ///// Backing field for <see cref="PackageHeader.IndexOffset"/> property.
+        ///// </summary>
+        //private uint indexOffset;
+        //private Queue<int> freeBlocks;
+        //private Dictionary<long, Guid> blockAllocationTable;
         #endregion
         #region Constructors
         /// <summary>

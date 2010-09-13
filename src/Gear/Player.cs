@@ -8,17 +8,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
-namespace Gear.Launcher
+namespace Gear
 {
-    internal static class Program
+    public class Player
     {
-        #region Methods
-        internal static void Main(string[] args)
+        #region Fields
+        private Guid clientID;
+        #endregion
+        #region Properties
+        public Guid ClientID
         {
-            Application.EnableVisualStyles();
-            Application.Run(new LauncherForm());
+            get
+            {
+                return this.clientID;
+            }
+            set
+            {
+                this.clientID = value;
+            }
         }
         #endregion
     }

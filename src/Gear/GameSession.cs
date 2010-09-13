@@ -2,7 +2,6 @@
    See the included license.txt file for details. */
 using System;
 using System.Collections.Generic;
-
 using System.Text;
 
 namespace Gear

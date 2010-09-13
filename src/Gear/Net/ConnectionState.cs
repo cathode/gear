@@ -8,18 +8,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
-namespace Gear.Launcher
+namespace Gear.Net
 {
-    internal static class Program
+    /// <summary>
+    /// Represents states of a client-to-server or server-to-client network connection.
+    /// </summary>
+    public enum ConnectionState
     {
-        #region Methods
-        internal static void Main(string[] args)
-        {
-            Application.EnableVisualStyles();
-            Application.Run(new LauncherForm());
-        }
-        #endregion
+        Disconnected = 0x0,
+        Connecting,
+        Connected,
+        Unresponsive,
+        Closed,
     }
 }

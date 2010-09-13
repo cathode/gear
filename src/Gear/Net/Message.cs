@@ -8,18 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
-namespace Gear.Launcher
+namespace Gear.Net
 {
-    internal static class Program
+    public abstract class Message
     {
-        #region Methods
-        internal static void Main(string[] args)
+        protected abstract MessageId Id
         {
-            Application.EnableVisualStyles();
-            Application.Run(new LauncherForm());
+            get;
         }
-        #endregion
     }
 }

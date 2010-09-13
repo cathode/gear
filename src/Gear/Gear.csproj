@@ -45,10 +45,6 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Aspect.cs" />
-    <Compile Include="Aspects\Common\MovementAspect.cs" />
-    <Compile Include="Aspects\Common\PositionAspect.cs" />
-    <Compile Include="Aspects\Common\RenderAspect.cs" />
     <Compile Include="Assets\Asset.cs" />
     <Compile Include="Assets\AssetField.cs" />
     <Compile Include="Assets\AssetGraph.cs" />
@@ -62,41 +58,46 @@
     <Compile Include="Assets\DeltaInstruction.cs" />
     <Compile Include="Assets\GameSchema.cs" />
     <Compile Include="Assets\Int32Field.cs" />
-    <Compile Include="Assets\Item.cs" />
-    <Compile Include="Assets\ItemFlags.cs" />
-    <Compile Include="Assets\ItemKind.cs" />
-    <Compile Include="Assets\ItemPartSize.cs" />
     <Compile Include="Assets\Package.cs" />
     <Compile Include="Assets\PackageAssetStore.cs" />
     <Compile Include="Assets\PackageIndex.cs" />
     <Compile Include="Assets\PackageIndexEntry.cs" />
     <Compile Include="Assets\StringField.cs" />
     <Compile Include="Assets\SubStream.cs" />
+    <Compile Include="Net\ClientConnection.cs" />
+    <Compile Include="Net\ClientConnectionEventArgs.cs" />
+    <Compile Include="Net\ClientInfoMessage.cs" />
+    <Compile Include="Net\ConnectionListener.cs" />
+    <Compile Include="Net\ConnectionState.cs" />
+    <Compile Include="Net\Message.cs" />
+    <Compile Include="Net\MessageEventArgs.cs" />
+    <Compile Include="Net\MessageId.cs" />
+    <Compile Include="Net\ServerConnection.cs" />
+    <Compile Include="Net\ServerConnectionEventArgs.cs" />
+    <Compile Include="Net\ServerInfoMessage.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="PlayerEventArgs.cs" />
+    <Compile Include="World.cs" />
     <None Include="Command.cs" />
     <None Include="CommandId.cs" />
     <None Include="CommandQueue.cs" />
-    <None Include="Commands\HelpCommand.cs" />
-    <None Include="Commands\CommentCommand.cs" />
-    <None Include="Commands\QuitCommand.cs">
-      <SubType>Code</SubType>
-    </None>
-    <None Include="Commands\SetCommand.cs">
-      <SubType>Code</SubType>
-    </None>
-    <None Include="Commands\ShellCommand.cs" />
+    <Compile Include="EngineBase.cs" />
     <Compile Include="EngineResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EngineResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Entity.cs" />
-    <Compile Include="GameEngine.cs" />
     <Compile Include="GameSession.cs" />
     <Compile Include="GameShell.cs" />
     <Compile Include="GameShellCommand.cs" />
     <Compile Include="GameShellCommandCollection.cs" />
     <Compile Include="GameShellParseException.cs" />
-    <None Include="Net\Connection.cs" />
+    <Compile Include="Net\Connection.cs" />
+    <Compile Include="ItemSystem\Item.cs" />
+    <Compile Include="ItemSystem\ItemFlags.cs" />
+    <Compile Include="ItemSystem\ItemKind.cs" />
+    <Compile Include="ItemSystem\ItemPartSize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Winforms\GameShellForm.cs">
       <SubType>Form</SubType>
@@ -116,6 +117,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

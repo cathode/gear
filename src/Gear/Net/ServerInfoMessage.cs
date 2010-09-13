@@ -8,18 +8,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
-namespace Gear.Launcher
+namespace Gear.Net
 {
-    internal static class Program
+    /// <summary>
+    /// A <see cref="Message"/> implementation that encapsulates information about the server.
+    /// </summary>
+    /// <remarks>
+    /// The server MUST send this message as the FIRST message sent upon accepting a connection from the client.
+    /// </remarks>
+    public sealed class ServerInfoMessage : Message
     {
-        #region Methods
-        internal static void Main(string[] args)
+        protected override MessageId Id
         {
-            Application.EnableVisualStyles();
-            Application.Run(new LauncherForm());
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
-        #endregion
     }
 }

@@ -1,10 +1,10 @@
-﻿/************************************************************************
- * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/   *
- * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved.   *
- * -------------------------------------------------------------------- *
- * Contributors:                                                        *
- * - Will 'cathode' Shelley <cathode@live.com>                          *
- ************************************************************************/
+﻿/******************************************************************************
+ * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
+ * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved.         *
+ * -------------------------------------------------------------------------- *
+ * Contributors:                                                              *
+ * - Will 'cathode' Shelley <cathode@live.com>                                *
+ *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -37,7 +37,7 @@ namespace Gear
         /// <summary>
         /// Initializes a new instance of the <see cref="Entity"/> class.
         /// </summary>
-        /// <param name="uniqueId"></param>
+        /// <param name="uniqueId">The unique id of the new instance.</param>
         public Entity(Guid uniqueId)
         {
             this.uniqueId = uniqueId;

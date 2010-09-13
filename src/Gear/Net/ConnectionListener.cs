@@ -8,17 +8,37 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
+using System.Net;
+using System.Net.Sockets;
 
-namespace Gear.Launcher
+namespace Gear.Net
 {
-    internal static class Program
+    /// <summary>
+    /// Listens for incoming connections over TCP/IP.
+    /// </summary>
+    public class ConnectionListener
     {
+        #region Fields
+        private Socket listener;
+        #endregion
+        #region Constructors
+
+        #endregion
+        #region Events
+
+        #endregion
+        #region Properties
+
+        #endregion
         #region Methods
-        internal static void Main(string[] args)
+        public void Start()
         {
-            Application.EnableVisualStyles();
-            Application.Run(new LauncherForm());
+            Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        }
+
+        public void Stop()
+        {
+
         }
         #endregion
     }
