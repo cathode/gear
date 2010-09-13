@@ -59,6 +59,9 @@ namespace Gear.Net
             }
         }
 
+        /// <summary>
+        /// Gets or sets the data associated with the current <see cref="MessageField"/>.
+        /// </summary>
         public byte[] Data
         {
             get
