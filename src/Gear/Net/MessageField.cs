@@ -43,6 +43,7 @@ namespace Gear.Net
                 return this.id;
             }
         }
+
         public ushort Length
         {
             get
@@ -54,6 +55,7 @@ namespace Gear.Net
                 this.length = value;
             }
         }
+
         public byte[] Data
         {
             get
