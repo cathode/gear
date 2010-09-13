@@ -23,17 +23,27 @@ namespace Gear.Net
         private readonly MessageField clientId;
         #endregion
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClientInfoMessage"/> class.
+        /// </summary>
         public ClientInfoMessage()
         {
             this.clientId = new MessageField();
         }
         #endregion
         #region Properties
+        /// <summary>
+        /// Gets or sets the unique id of the client.
+        /// </summary>
         public Guid ClientId
         {
             get;
             set;
         }
+
+        /// <summary>
+        /// Gets the <see cref="MessageId"/> of the current <see cref="Message"/>.
+        /// </summary>
         protected override MessageId Id
         {
             get
