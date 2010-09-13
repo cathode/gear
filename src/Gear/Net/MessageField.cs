@@ -12,40 +12,44 @@ using System.Text;
 namespace Gear.Net
 {
     /// <summary>
-    /// A <see cref="Message"/> implementation that encapsulates information about the client.
+    /// Represents a serialized field of a <see cref="Message"/>.
     /// </summary>
-    /// <remarks>
-    /// The client MUST send this message as the FIRST message upon establishing a connection with a server.
-    /// </remarks>
-    public sealed class ClientInfoMessage : Message
+    public class MessageField
     {
         #region Fields
-        private readonly MessageField clientId;
-        #endregion
-        #region Constructors
-        public ClientInfoMessage()
-        {
-            this.clientId = new MessageField();
-        }
+        private readonly ushort id;
+        private ushort length;
+        private byte[] data;
         #endregion
         #region Properties
-        public Guid ClientId
-        {
-            get;
-            set;
-        }
-        protected override MessageId Id
+        public ushort Id
         {
             get
             {
-                return MessageId.ClientInfo;
+                return this.id;
             }
         }
-        #endregion
-        #region Methods
-        protected override MessageField[] GetFieldData()
+        public ushort Length
         {
-            throw new NotImplementedException();
+            get
+            {
+                return this.length;
+            }
+            set
+            {
+                this.length = value;
+            }
+        }
+        public byte[] Data
+        {
+            get
+            {
+                return this.data;
+            }
+            set
+            {
+                this.data = value;
+            }
         }
         #endregion
     }

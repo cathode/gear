@@ -38,8 +38,14 @@ namespace Gear.Net
         /// </summary>
         private readonly Queue<Message> receiveQueue;
 
+        /// <summary>
+        /// Backing field for the <see cref="Connection.Socket"/> property.
+        /// </summary>
         private Socket socket;
 
+        /// <summary>
+        /// Backing field for the <see cref="Connection.Mode"/> property.
+        /// </summary>
         private ConnectionMode mode;
         #endregion
         #region Constructors
@@ -63,7 +69,7 @@ namespace Gear.Net
             {
                 var e = new ConnectionStateEventArgs(this.state, value);
                 this.state = value;
-                this.OnStateChanged(this, e);
+                this.OnStateChanged(e);
             }
         }
 
@@ -78,7 +84,7 @@ namespace Gear.Net
                 this.socket = value;
             }
         }
-        
+
         /// <summary>
         /// Gets the number of messages currently waiting in the message send queue.
         /// </summary>
@@ -98,6 +104,18 @@ namespace Gear.Net
             get
             {
                 return this.receiveQueue.Count;
+            }
+        }
+
+        public ConnectionMode Mode
+        {
+            get
+            {
+                return this.mode;
+            }
+            set
+            {
+                this.mode = value;
             }
         }
         #endregion
@@ -128,47 +146,57 @@ namespace Gear.Net
 
         public void Send(Message message)
         {
-
+            this.Send(message, this.Mode);
         }
-
+        public void Send(Message message, ConnectionMode mode)
+        {
+            if (mode == ConnectionMode.Blocking)
+                throw new NotImplementedException();
+            else
+                this.sendQueue.Enqueue(message);
+        }
         public Message Receive()
+        {
+            return this.Receive(this.Mode);
+        }
+        public Message Receive(ConnectionMode mode)
         {
             if (this.ReceiveQueueCount > 0)
                 return this.receiveQueue.Dequeue();
 
-            return null;
+            if (mode == ConnectionMode.Blocking)
+                throw new NotImplementedException();
+            else
+                return null;
         }
         /// <summary>
         /// Raises the <see cref="Connection.StateChanged"/> event.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected virtual void OnStateChanged(object sender, ConnectionStateEventArgs e)
+        /// <param name="e">A <see cref="ConnectionStateEventArgs"/> that contains the event data.</param>
+        protected virtual void OnStateChanged(ConnectionStateEventArgs e)
         {
             if (this.StateChanged != null)
-                this.StateChanged(sender, e);
+                this.StateChanged(this, e);
         }
 
         /// <summary>
         /// Raises the <see cref="Connection.MessageSent"/> event.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected virtual void OnMessageSent(object sender, MessageEventArgs e)
+        /// <param name="e">A <see cref="MessageEventArgs"/> that contains the event data.</param>
+        protected virtual void OnMessageSent(MessageEventArgs e)
         {
             if (this.MessageSent != null)
-                this.MessageSent(sender, e);
+                this.MessageSent(this, e);
         }
 
         /// <summary>
         /// Raises the <see cref="Connection.MessageReceived"/> event.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected virtual void OnMessageReceived(object sender, MessageEventArgs e)
+        /// <param name="e">A <see cref="MessageEventArgs"/> that contains the event data.</param>
+        protected virtual void OnMessageReceived(MessageEventArgs e)
         {
             if (this.MessageReceived != null)
-                this.MessageReceived(sender, e);
+                this.MessageReceived(this, e);
         }
         #endregion
     }

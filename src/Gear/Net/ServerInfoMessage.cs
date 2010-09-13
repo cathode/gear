@@ -26,5 +26,10 @@ namespace Gear.Net
                 throw new NotImplementedException();
             }
         }
+
+        protected override MessageField[] GetFieldData()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
