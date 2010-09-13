@@ -37,6 +37,12 @@ namespace Gear.Net
             return count;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="startIndex"></param>
+        /// <returns></returns>
         public int WriteTo(byte[] buffer, int startIndex)
         {
             var fields = this.GetFieldData();
