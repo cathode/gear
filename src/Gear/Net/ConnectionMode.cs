@@ -8,18 +8,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Net.Sockets;
 
 namespace Gear.Net
 {
-    /// <summary>
-    /// Represents a server-side connection.
-    /// </summary>
-    public class ServerConnection : Connection
+    public enum ConnectionMode
     {
-        public ServerConnection(Socket socket)
-        {
-
-        }
+        Async = 0x0,
+        Blocking,
     }
 }

@@ -2,7 +2,7 @@
  * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
  * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved.         *
  * This software is released under the terms and conditions of the Microsoft  *
- * Reference License (MS-RL). See the 'license.txt' file for details.         *
+ * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -20,9 +20,15 @@ namespace Gear.Net
     {
         #region Fields
         private Socket listener;
+        private bool isListening;
+        private ushort listenPort;
         #endregion
         #region Constructors
-
+        public ConnectionListener()
+        {
+            this.listenPort = Connection.DefaultPort;
+            this.listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        }
         #endregion
         #region Events
 
@@ -33,12 +39,23 @@ namespace Gear.Net
         #region Methods
         public void Start()
         {
-            Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            this.listener.Bind(new IPEndPoint(IPAddress.Any, this.listenPort));
+            this.isListening = true;
+            this.listener.BeginAccept(new AsyncCallback(this.AcceptCallback), null);
         }
 
         public void Stop()
         {
+            this.listener.Close();
+            this.isListening = false;
+        }
 
+        protected virtual void AcceptCallback(IAsyncResult result)
+        {
+            var s = this.listener.EndAccept(result);
+            this.listener.BeginAccept(new AsyncCallback(this.AcceptCallback), null);
+
+            ServerConnection connection = new ServerConnection(s);
         }
         #endregion
     }

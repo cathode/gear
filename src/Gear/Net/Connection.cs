@@ -2,11 +2,13 @@
  * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
  * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved.         *
  * This software is released under the terms and conditions of the Microsoft  *
- * Reference License (MS-RL). See the 'license.txt' file for details.         *
+ * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Net.Sockets;
+using System.Net;
 
 namespace Gear.Net
 {
@@ -35,6 +37,10 @@ namespace Gear.Net
         /// Backing field for the <see cref="Connection.ReceiveQueue"/> property.
         /// </summary>
         private readonly Queue<Message> receiveQueue;
+
+        private Socket socket;
+
+        private ConnectionMode mode;
         #endregion
         #region Constructors
         protected Connection()
@@ -61,19 +67,37 @@ namespace Gear.Net
             }
         }
 
-        public Queue<Message> SendQueue
+        public Socket Socket
         {
             get
             {
-                return this.sendQueue;
+                return this.socket;
+            }
+            protected set
+            {
+                this.socket = value;
+            }
+        }
+        
+        /// <summary>
+        /// Gets the number of messages currently waiting in the message send queue.
+        /// </summary>
+        public int SendQueueCount
+        {
+            get
+            {
+                return this.sendQueue.Count;
             }
         }
 
-        public Queue<Message> ReceiveQueue
+        /// <summary>
+        /// Gets the number of messages currently waiting in the message receive queue.
+        /// </summary>
+        public int ReceiveQueueCount
         {
             get
             {
-                return this.receiveQueue;
+                return this.receiveQueue.Count;
             }
         }
         #endregion
@@ -84,16 +108,36 @@ namespace Gear.Net
         public event EventHandler StateChanged;
 
         /// <summary>
-        /// Raised when a <see cref="Message"/> is received from the remote endpoint, after it has been enqueued to the <see cref="Connection.ReceiveQueue"/>.
+        /// Raised when a <see cref="Message"/> is received from the remote endpoint, after it has been enqueued to the message receive queue.
         /// </summary>
         public event EventHandler<MessageEventArgs> MessageReceived;
 
         /// <summary>
-        /// Raised when a <see cref="Message"/> has been sent to the remote endpoint, after it has been dequeued from the <see cref="Connection.SendQueue"/>.
+        /// Raised when a <see cref="Message"/> has been sent to the remote endpoint, after it has been dequeued from the message send queue.
         /// </summary>
         public event EventHandler<MessageEventArgs> MessageSent;
         #endregion
         #region Methods
+        /// <summary>
+        /// Processes all messages queued for sending and scans any received data to ensure that all fully received messages are parsed and queued in the receive queue.
+        /// </summary>
+        public void Flush()
+        {
+
+        }
+
+        public void Send(Message message)
+        {
+
+        }
+
+        public Message Receive()
+        {
+            if (this.ReceiveQueueCount > 0)
+                return this.receiveQueue.Dequeue();
+
+            return null;
+        }
         /// <summary>
         /// Raises the <see cref="Connection.StateChanged"/> event.
         /// </summary>

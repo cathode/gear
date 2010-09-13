@@ -2,7 +2,7 @@
  * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
  * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved.         *
  * This software is released under the terms and conditions of the Microsoft  *
- * Reference License (MS-RL). See the 'license.txt' file for details.         *
+ * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
 using System;
 
@@ -15,6 +15,7 @@ namespace Gear
     {
         #region Fields
         private bool active = false;
+        private static EngineBase current;
         #endregion
         #region Constructors
         /// <summary>
@@ -22,7 +23,8 @@ namespace Gear
         /// </summary>
         protected EngineBase()
         {
-
+            if (EngineBase.current == null)
+                EngineBase.current = this;
         }
         #endregion
         #region Events
@@ -47,6 +49,17 @@ namespace Gear
         public event EventHandler<PlayerEventArgs> PlayerDisconnected;
         #endregion
         #region Properties
+        public static EngineBase Current
+        {
+            get
+            {
+                return EngineBase.current;
+            }
+            set
+            {
+                EngineBase.current = value;
+            }
+        }
         /// <summary>
         /// Gets a value indicating whether the engine is actively processing the input queue.
         /// </summary>
