@@ -1,5 +1,4 @@
-Microsoft Reference License
-Published: March 8, 2007
+Microsoft Reference Source License (Ms-RSL)
  
 This license governs use of the accompanying software. If you use the
 software, you accept this license. If you do not accept the license, do
