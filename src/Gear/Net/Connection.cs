@@ -25,10 +25,22 @@ namespace Gear.Net
         /// Backing field for the <see cref="Connection.State"/> property.
         /// </summary>
         private ConnectionState state;
+
+        /// <summary>
+        /// Backing field for the <see cref="Connection.SendQueue"/> property.
+        /// </summary>
+        private readonly Queue<Message> sendQueue;
+
+        /// <summary>
+        /// Backing field for the <see cref="Connection.ReceiveQueue"/> property.
+        /// </summary>
+        private readonly Queue<Message> receiveQueue;
         #endregion
         #region Constructors
         protected Connection()
         {
+            this.sendQueue = new Queue<Message>();
+            this.receiveQueue = new Queue<Message>();
         }
         #endregion
         #region Properties
@@ -43,8 +55,25 @@ namespace Gear.Net
             }
             protected set
             {
+                var e = new ConnectionStateEventArgs(this.state, value);
                 this.state = value;
-                this.OnStateChanged(this, EventArgs.Empty);
+                this.OnStateChanged(this, e);
+            }
+        }
+
+        public Queue<Message> SendQueue
+        {
+            get
+            {
+                return this.sendQueue;
+            }
+        }
+
+        public Queue<Message> ReceiveQueue
+        {
+            get
+            {
+                return this.receiveQueue;
             }
         }
         #endregion
@@ -53,6 +82,16 @@ namespace Gear.Net
         /// Raised when the value of the <see cref="Connection.State"/> property changes, indicating a change in the underlying network socket.
         /// </summary>
         public event EventHandler StateChanged;
+
+        /// <summary>
+        /// Raised when a <see cref="Message"/> is received from the remote endpoint, after it has been enqueued to the <see cref="Connection.ReceiveQueue"/>.
+        /// </summary>
+        public event EventHandler<MessageEventArgs> MessageReceived;
+
+        /// <summary>
+        /// Raised when a <see cref="Message"/> has been sent to the remote endpoint, after it has been dequeued from the <see cref="Connection.SendQueue"/>.
+        /// </summary>
+        public event EventHandler<MessageEventArgs> MessageSent;
         #endregion
         #region Methods
         /// <summary>
@@ -60,10 +99,32 @@ namespace Gear.Net
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected virtual void OnStateChanged(object sender, EventArgs e)
+        protected virtual void OnStateChanged(object sender, ConnectionStateEventArgs e)
         {
             if (this.StateChanged != null)
                 this.StateChanged(sender, e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="Connection.MessageSent"/> event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected virtual void OnMessageSent(object sender, MessageEventArgs e)
+        {
+            if (this.MessageSent != null)
+                this.MessageSent(sender, e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="Connection.MessageReceived"/> event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected virtual void OnMessageReceived(object sender, MessageEventArgs e)
+        {
+            if (this.MessageReceived != null)
+                this.MessageReceived(sender, e);
         }
         #endregion
     }

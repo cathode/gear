@@ -17,6 +17,7 @@ namespace Gear.Net
     public enum MessageId : ushort
     {
         Ignore = 0x0,
-
+        ClientInfo,
+        ServerInfo,
     }
 }

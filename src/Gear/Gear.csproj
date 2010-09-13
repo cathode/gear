@@ -69,6 +69,7 @@
     <Compile Include="Net\ClientInfoMessage.cs" />
     <Compile Include="Net\ConnectionListener.cs" />
     <Compile Include="Net\ConnectionState.cs" />
+    <Compile Include="Net\ConnectionStateEventArgs.cs" />
     <Compile Include="Net\Message.cs" />
     <Compile Include="Net\MessageEventArgs.cs" />
     <Compile Include="Net\MessageId.cs" />
