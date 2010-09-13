@@ -33,6 +33,9 @@ namespace Gear.Net
         private byte[] data;
         #endregion
         #region Properties
+        /// <summary>
+        /// Gets the id of the message field.
+        /// </summary>
         public ushort Id
         {
             get
