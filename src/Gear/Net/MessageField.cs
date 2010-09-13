@@ -17,8 +17,19 @@ namespace Gear.Net
     public class MessageField
     {
         #region Fields
+        /// <summary>
+        /// Backing field for the <see cref="MessageField.Id"/> property.
+        /// </summary>
         private readonly ushort id;
+
+        /// <summary>
+        /// Backing field for the <see cref="MessageField.Length"/> property.
+        /// </summary>
         private ushort length;
+
+        /// <summary>
+        /// Backing field for the <see cref="MessageField.Data"/> property.
+        /// </summary>
         private byte[] data;
         #endregion
         #region Properties
