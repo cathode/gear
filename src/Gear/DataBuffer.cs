@@ -8,12 +8,34 @@ using System;
 
 namespace Gear
 {
+    /// <summary>
+    /// Enumerates endianness modes supported by the <see cref="DataBuffer"/> class.
+    /// </summary>
     public enum DataBufferMode
     {
+        /// <summary>
+        /// Indicates the data buffer will use the system's native endianness.
+        /// </summary>
         System = 0x0,
+
+        /// <summary>
+        /// Indicates the data buffer will read/write values as little-endian.
+        /// </summary>
         LittleEndian,
+
+        /// <summary>
+        /// Indicates the data buffer will read/write values as big-endian.
+        /// </summary>
         BigEndian,
+
+        /// <summary>
+        /// Indicates the data buffer will read/write values as network byte order (big-endian).
+        /// </summary>
         NetworkByteOrder = BigEndian,
+
+        /// <summary>
+        /// Indicates the data buffer will read/write values as host byte order (system endianness).
+        /// </summary>
         HostByteOrder = System,
     }
 
@@ -106,7 +128,7 @@ namespace Gear
         /// and advances the current position by two.
         /// </summary>
         /// <returns>The decoded 16-bit signed integer value.</returns>
-        public short DecodeInt16()
+        public short ReadInt16()
         {
             // No bitshift operator for short, have to use int and cast when returning.
             int result;
@@ -127,7 +149,7 @@ namespace Gear
         /// and advances the current position by four.
         /// </summary>
         /// <returns>The decoded 32-bit signed integer value.</returns>
-        public int DecodeInt32()
+        public int ReadInt32()
         {
             int result;
 
@@ -152,7 +174,7 @@ namespace Gear
         /// and advances the current position by eight.
         /// </summary>
         /// <returns>The decoded 64-bit signed integer value.</returns>
-        public long DecodeInt64()
+        public long ReadInt64()
         {
             long result;
 
@@ -184,7 +206,7 @@ namespace Gear
         /// and advances the current position by two.
         /// </summary>
         /// <returns>The decoded 16-bit unsigned integer value.</returns>
-        public ushort DecodeUInt16()
+        public ushort ReadUInt16()
         {
             // No bitshift operators for ushort, have to use uint and cast when returning.
             uint result;
@@ -205,7 +227,7 @@ namespace Gear
         /// and advances the current position by four.
         /// </summary>
         /// <returns>The decoded 32-bit unsigned integer value.</returns>
-        public uint DecodeUInt32()
+        public uint ReadUInt32()
         {
             uint result;
 
@@ -230,7 +252,7 @@ namespace Gear
         /// and advances the current position by eight.
         /// </summary>
         /// <returns>The decoded 64-bit signed integer value.</returns>
-        public ulong DecodeUInt64()
+        public ulong ReadUInt64()
         {
             ulong result;
 
@@ -259,52 +281,57 @@ namespace Gear
         }
 
         /// <summary>
-        /// Encodes the specified 16-bit signed integer value as two bytes and stores
-        /// them in the buffer. The current position is advanced by two.
+        /// Writes the specified 16-bit signed integer to the buffer and advances
+        /// the current position by two.
         /// </summary>
-        /// <param name="value">A 16-bit signed integer value to encode.</param>
-        /// <returns></returns>
-        public void EncodeInt16(short value)
+        /// <param name="value">A 16-bit signed integer value to write to the buffer.</param>
+        public void WriteInt16(short value)
         {
             if (this.Mode == DataBufferMode.BigEndian)
-                throw new NotImplementedException();
+            {
+                contents[position + 0] = (byte)(value << 8);
+                contents[position + 1] = (byte)value;
+            }
             else
-                throw new NotImplementedException();
+            {
+                contents[position + 0] = (byte)value;
+                contents[position + 1] = (byte)(value << 8);
+            }
+
+            position += 2;
         }
 
-        public void EncodeInt32(int value)
+        /// <summary>
+        /// Writes the specified 32-bit signed integer to the buffer and advances
+        /// the current position by four.
+        /// </summary>
+        /// <param name="value">A 32-bit signed integer value to write to the buffer.</param>
+        public void WriteInt32(int value)
         {
             if (this.Mode == DataBufferMode.BigEndian)
-                throw new NotImplementedException();
+            {
+                contents[position + 0] = (byte)(value << 24);
+                contents[position + 1] = (byte)(value << 16);
+                contents[position + 2] = (byte)(value << 8);
+                contents[position + 3] = (byte)value;
+            }
             else
-                throw new NotImplementedException();
+            {
+                contents[position + 0] = (byte)value;
+                contents[position + 1] = (byte)(value << 8);
+                contents[position + 2] = (byte)(value << 16);
+                contents[position + 3] = (byte)(value << 24);
+            }
+
+            position += 4;
         }
 
-        public void EncodeInt64(long value)
-        {
-            if (this.Mode == DataBufferMode.BigEndian)
-                throw new NotImplementedException();
-            else
-                throw new NotImplementedException();
-        }
-
-        public void EncodeUInt16(ushort value)
-        {
-            if (this.Mode == DataBufferMode.BigEndian)
-                throw new NotImplementedException();
-            else
-                throw new NotImplementedException();
-        }
-
-        public void EncodeUInt32(uint value)
-        {
-            if (this.Mode == DataBufferMode.BigEndian)
-                throw new NotImplementedException();
-            else
-                throw new NotImplementedException();
-        }
-
-        public void EncodeUInt64(ulong value)
+        /// <summary>
+        /// Writes the specified 64-bit signed integer to the buffer and advances
+        /// the current position by eight.
+        /// </summary>
+        /// <param name="value">A 64-bit signed integer value to write to the buffer.</param>
+        public void WriteInt64(long value)
         {
             if (this.Mode == DataBufferMode.BigEndian)
             {
@@ -331,19 +358,112 @@ namespace Gear
 
             position += 8;
         }
-        public void EncodeUtf8String(string value)
+
+        /// <summary>
+        /// Writes the specified 16-bit unsigned integer to the buffer and advances
+        /// the current position by two.
+        /// </summary>
+        /// <param name="value">A 16-bit unsigned integer value to write to the buffer.</param>
+        public void WriteUInt16(ushort value)
         {
             if (this.Mode == DataBufferMode.BigEndian)
-                throw new NotImplementedException();
+            {
+                contents[position + 0] = (byte)(value << 8);
+                contents[position + 1] = (byte)value;
+            }
             else
-                throw new NotImplementedException();
+            {
+                contents[position + 0] = (byte)value;
+                contents[position + 1] = (byte)(value << 8);
+            }
+
+            position += 2;
         }
-        public void EncodeAsciiString(string value)
+
+        /// <summary>
+        /// Writes the specified 32-bit unsigned integer to the buffer and advances
+        /// the current position by two.
+        /// </summary>
+        /// <param name="value">A 32-bit unsigned integer value to write to the buffer.</param>
+        public void WriteUInt32(uint value)
         {
             if (this.Mode == DataBufferMode.BigEndian)
-                throw new NotImplementedException();
+            {
+                contents[position + 0] = (byte)(value << 24);
+                contents[position + 1] = (byte)(value << 16);
+                contents[position + 2] = (byte)(value << 8);
+                contents[position + 3] = (byte)value;
+            }
             else
-                throw new NotImplementedException();
+            {
+                contents[position + 0] = (byte)value;
+                contents[position + 1] = (byte)(value << 8);
+                contents[position + 2] = (byte)(value << 16);
+                contents[position + 3] = (byte)(value << 24);
+            }
+
+            position += 4;
+        }
+
+        /// <summary>
+        /// Writes the specified 64-bit unsigned integer to the buffer and advances
+        /// the current position by two.
+        /// </summary>
+        /// <param name="value">A 64-bit unsigned integer value to write to the buffer.</param>
+        public void WriteUInt64(ulong value)
+        {
+            if (this.Mode == DataBufferMode.BigEndian)
+            {
+                contents[position + 0] = (byte)(value << 56);
+                contents[position + 1] = (byte)(value << 48);
+                contents[position + 2] = (byte)(value << 40);
+                contents[position + 3] = (byte)(value << 32);
+                contents[position + 4] = (byte)(value << 24);
+                contents[position + 5] = (byte)(value << 16);
+                contents[position + 6] = (byte)(value << 8);
+                contents[position + 7] = (byte)value;
+            }
+            else
+            {
+                contents[position + 0] = (byte)value;
+                contents[position + 1] = (byte)(value << 8);
+                contents[position + 2] = (byte)(value << 16);
+                contents[position + 3] = (byte)(value << 24);
+                contents[position + 4] = (byte)(value << 32);
+                contents[position + 5] = (byte)(value << 40);
+                contents[position + 6] = (byte)(value << 48);
+                contents[position + 7] = (byte)(value << 56);
+            }
+
+            position += 8;
+        }
+
+        public int WriteStringAscii(string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int WriteStringUtf8(string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int WriteStringUtf16(string value)
+        {
+            throw new NotImplementedException();
+        }
+        public int WriteBytes(byte[] value)
+        {
+            return this.WriteBytes(value, 0, value.Length);
+        }
+        public int WriteBytes(byte[] value, int startIndex, int count)
+        {
+            int n;
+            for (n = 0; n < count; n++)
+                contents[position + n] = value[startIndex + n];
+
+            position += n;
+            return n;
         }
         #endregion
     }

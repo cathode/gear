@@ -46,20 +46,25 @@ namespace Gear.Net
         public int WriteTo(byte[] buffer, int startIndex)
         {
             var fields = this.GetFieldData();
-            int p = startIndex;
-            buffer[p++] = (byte)((ushort)this.Id << 8);
-            buffer[p++] = (byte)this.Id;
+            DataBuffer db = new DataBuffer(buffer, DataBufferMode.NetworkByteOrder);
+            db.Position = startIndex;
             
-            buffer[p++] = 0; // placeholder for message size
-            buffer[p++] = 0;
+            // Write message header
+            db.WriteUInt16((ushort)this.Id);
+            db.WriteUInt16(0);
+            db.WriteUInt16((ushort)fields.Length);
 
+            // Write message fields
             for (int i = 0; i < fields.Length; i++)
             {
                 var f = fields[i];
 
-                throw new NotImplementedException();
+                // Write message field header
+                db.WriteUInt16(f.Id);
+                db.WriteUInt16(f.Length);
+                db.WriteBytes(f.Data);
             }
-            return -1; // Nothing written.
+            return db.Position - startIndex;
         }
 
         public int ReadFrom(byte[] buffer, int startIndex)
