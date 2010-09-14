@@ -23,14 +23,26 @@ namespace Gear.Net
         private readonly ushort id;
 
         /// <summary>
-        /// Backing field for the <see cref="MessageField.Length"/> property.
+        /// Backing field for the <see cref="MessageField.Size"/> property.
         /// </summary>
-        private ushort length;
+        private ushort size;
 
         /// <summary>
         /// Backing field for the <see cref="MessageField.Data"/> property.
         /// </summary>
         private byte[] data;
+        #endregion
+        #region Constructors
+        public MessageField(ushort id)
+        {
+            this.id = id;
+        }
+        public MessageField(ushort id, ushort size)
+        {
+            this.id = id;
+            this.size = size;
+            this.data = new byte[size];
+        }
         #endregion
         #region Properties
         /// <summary>
@@ -45,17 +57,17 @@ namespace Gear.Net
         }
         
         /// <summary>
-        /// Gets or sets the data length of the current <see cref="MessageField"/>.
+        /// Gets or sets the data size of the current <see cref="MessageField"/>.
         /// </summary>
-        public ushort Length
+        public ushort Size
         {
             get
             {
-                return this.length;
+                return this.size;
             }
             set
             {
-                this.length = value;
+                this.size = value;
             }
         }
 

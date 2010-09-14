@@ -33,12 +33,12 @@ namespace Gear.Assets
             original = original ?? new byte[0];
             current = current ?? new byte[0];
 
-            if (original.Length == 0 && current.Length == 0)
+            if (original.Size == 0 && current.Size == 0)
                 return null; // No difference between two empty byte arrays.
 
             Delta d = new Delta();
 
-            if (original.Length == 0)
+            if (original.Size == 0)
 
             return d;*/
         }

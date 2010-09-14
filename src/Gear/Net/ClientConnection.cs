@@ -18,16 +18,45 @@ namespace Gear.Net
     /// </summary>
     public class ClientConnection : Connection
     {
+        #region Fields
+
+        #endregion
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClientConnection"/> class.
+        /// </summary>
+        public ClientConnection()
+        {
+        }
+        #endregion
+        #region Events
+        public event EventHandler ConnectionEstablished;
+        #endregion
+        #region Properties
+
+        #endregion
+        #region Methods
         public void Connect(IPAddress target)
         {
             this.Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             this.Socket.BeginConnect(new IPEndPoint(target, Connection.DefaultPort), new AsyncCallback(this.ConnectCallback), null);
         }
 
+        protected virtual void OnConnectionEstablished(EventArgs e)
+        {
+            if (this.ConnectionEstablished != null)
+                this.ConnectionEstablished(this, e);
+
+            this.Send(new ClientInfoMessage());
+            this.Flush();
+        }
+
         private void ConnectCallback(IAsyncResult result)
         {
             this.Socket.EndConnect(result);
             this.State = ConnectionState.Connected;
+            this.OnConnectionEstablished(EventArgs.Empty);
         }
+        #endregion
     }
 }

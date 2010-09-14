@@ -28,11 +28,11 @@ namespace Gear.Net
         /// <returns>The total number of bytes including all headers, footers, etc.</returns>
         public virtual int GetByteCount()
         {
-            int count = 2; // Message Id
+            int count = 6; // Message header
 
             var fields = this.GetFieldData();
             for (int i = 0; i < fields.Length; i++)
-                count += fields[i].Length + 4;
+                count += fields[i].Size + 4;
 
             return count;
         }
@@ -61,7 +61,7 @@ namespace Gear.Net
 
                 // Write message field header
                 db.WriteUInt16(f.Id);
-                db.WriteUInt16(f.Length);
+                db.WriteUInt16(f.Size);
                 db.WriteBytes(f.Data);
             }
             return db.Position - startIndex;

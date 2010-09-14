@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using Gear.Net;
 
 namespace Gear.Server
 {
@@ -18,14 +19,20 @@ namespace Gear.Server
         {
             Console.WriteLine("Creating ServerEngine");
             ServerEngine engine = new ServerEngine();
-            engine.Listener.ConnectionAccepted += new EventHandler<Net.ConnectionEventArgs>(Listener_ConnectionAccepted);
+            engine.Listener.ConnectionAccepted += new EventHandler<ConnectionEventArgs>(Listener_ConnectionAccepted);
             Console.WriteLine("Starting ServerEngine");
             engine.Run();
         }
 
-        static void Listener_ConnectionAccepted(object sender, Net.ConnectionEventArgs e)
+        static void Listener_ConnectionAccepted(object sender, ConnectionEventArgs e)
         {
             Console.WriteLine("Connection Accepted");
+            e.Connection.MessageReceived += new EventHandler<MessageEventArgs>(Connection_MessageReceived);
+        }
+
+        static void Connection_MessageReceived(object sender, MessageEventArgs e)
+        {
+            Console.WriteLine("Message Received");
         }
     }
 }
