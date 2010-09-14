@@ -135,16 +135,31 @@ namespace Gear.Net
             }
         }
         #endregion
-
         #region Methods
+        /// <summary>
+        /// Binds the connection to trigger a flush each time the attached engine raises the Update event.
+        /// </summary>
+        /// <param name="engine">The engine to attach to.</param>
         public void Attach(EngineBase engine)
         {
-            engine.Update += new EventHandler(this.EngineUpdateCallback);
+            if (this.engine != null)
+                this.Detach();
+
+            this.engine = engine;
+            this.engine.Update += new EventHandler(this.EngineUpdateCallback);
         }
+
+        /// <summary>
+        /// Removes any existing binding to a game engine.
+        /// </summary>
         public void Detach()
         {
-            engine.Update -= new EventHandler(this.EngineUpdateCallback);
+            if (this.engine != null)
+                this.engine.Update -= new EventHandler(this.EngineUpdateCallback);
+
+            this.engine = null;
         }
+
         /// <summary>
         /// Processes all messages queued for sending and scans any received data to ensure that all fully received messages are parsed and queued in the receive queue.
         /// </summary>
@@ -159,40 +174,31 @@ namespace Gear.Net
                 int size = msg.GetByteCount();
                 var buffer = new byte[size];
                 msg.WriteTo(buffer, 0);
-                socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(this.SendAsyncCallback), msg);
-            }
-
-            if (this.receiveQueue.Count > 0)
-            {
-
+                this.socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(this.SendAsyncCallback), msg);
             }
         }
 
-        public void Send(Message message)
-        {
-            this.Send(message, this.Mode);
-        }
-        public void Send(Message message, ConnectionMode mode)
-        {
-            if (mode == ConnectionMode.Blocking)
-                throw new NotImplementedException();
-            else
-                this.sendQueue.Enqueue(message);
-        }
+        /// <summary>
+        /// Dequeues the next <see cref="Message"/> from the receive queue (if any) and returns it.
+        /// </summary>
+        /// <returns>The first message in the receive queue, or null if the receive queue is empty.</returns>
         public Message Receive()
-        {
-            return this.Receive(this.Mode);
-        }
-        public Message Receive(ConnectionMode mode)
         {
             if (this.ReceiveQueueCount > 0)
                 return this.receiveQueue.Dequeue();
 
-            if (mode == ConnectionMode.Blocking)
-                throw new NotImplementedException();
-            else
-                return null;
+            return null;
         }
+
+        /// <summary>
+        /// Queues the specified <see cref="Message"/> for sending.
+        /// </summary>
+        /// <param name="message">The <see cref="Message"/> to be sent.</param>
+        public void Send(Message message)
+        {
+            this.sendQueue.Enqueue(message);
+        }
+
         /// <summary>
         /// Raises the <see cref="Connection.StateChanged"/> event.
         /// </summary>
@@ -223,13 +229,18 @@ namespace Gear.Net
                 this.MessageReceived(this, e);
         }
 
-        private void EngineUpdateCallback(object sender, EventArgs e)
+        /// <summary>
+        /// Invoked each time the attached <see cref="EngineBase"/> raises it's <see cref="EngineBase.Update"/> event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected virtual void EngineUpdateCallback(object sender, EventArgs e)
         {
             if (this.State == ConnectionState.Connected)
                 this.Flush();
         }
 
-        private void SendAsyncCallback(IAsyncResult result)
+        protected virtual void SendAsyncCallback(IAsyncResult result)
         {
             this.socket.EndSend(result);
         }
