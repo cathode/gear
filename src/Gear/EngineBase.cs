@@ -15,7 +15,7 @@ namespace Gear
     {
         #region Fields
         private bool active = false;
-        private static EngineBase current;
+        private bool isLoaded;
         #endregion
         #region Constructors
         /// <summary>
@@ -23,8 +23,6 @@ namespace Gear
         /// </summary>
         protected EngineBase()
         {
-            if (EngineBase.current == null)
-                EngineBase.current = this;
         }
         #endregion
         #region Events
@@ -47,19 +45,13 @@ namespace Gear
         /// Raised when a player disconnects from the game.
         /// </summary>
         public event EventHandler<PlayerEventArgs> PlayerDisconnected;
+
+        /// <summary>
+        /// Raised at regular periodic intervals when repeated tasks should be executed.
+        /// </summary>
+        public event EventHandler Update;
         #endregion
         #region Properties
-        public static EngineBase Current
-        {
-            get
-            {
-                return EngineBase.current;
-            }
-            set
-            {
-                EngineBase.current = value;
-            }
-        }
         /// <summary>
         /// Gets a value indicating whether the engine is actively processing the input queue.
         /// </summary>
@@ -70,25 +62,57 @@ namespace Gear
                 return this.active;
             }
         }
+        public bool IsLoaded
+        {
+            get
+            {
+                return this.isLoaded;
+            }
+        }
         #endregion
         #region Methods
+        public bool Load()
+        {
+            if (this.IsLoaded)
+                return true;
+
+            try
+            {
+                this.OnPreLoad(EventArgs.Empty);
+                this.OnPostLoad(EventArgs.Empty);
+                this.isLoaded = true;
+            }
+            catch
+            {
+                this.isLoaded = false;
+            }
+
+            return this.isLoaded;
+        }
+        /// <summary>
+        /// Runs the engine. This method blocks until the engine is terminated.
+        /// </summary>
+        public void Run()
+        {
+            if (!this.IsLoaded)
+                this.Load();
+            throw new NotImplementedException();
+        }
         /// <summary>
         /// Raises the <see cref="EngineBase.PreLoad"/> event.
         /// </summary>
-        /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected virtual void OnPreLoad(object sender, EventArgs e)
+        protected virtual void OnPreLoad(EventArgs e)
         {
             if (this.PreLoad != null)
-                this.PreLoad(sender, e);
+                this.PreLoad(this, e);
         }
 
         /// <summary>
         /// Raises the <see cref="EngineBase.PostLoad"/> event.
         /// </summary>
-        /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected virtual void OnPostLoad(object sender, EventArgs e)
+        protected virtual void OnPostLoad(EventArgs e)
         {
             if (this.PostLoad != null)
                 this.PostLoad(this, e);
@@ -97,9 +121,8 @@ namespace Gear
         /// <summary>
         /// Raises the <see cref="EngineBase.PlayerConnected"/> event.
         /// </summary>
-        /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected virtual void OnPlayerConnected(object sender, PlayerEventArgs e)
+        protected virtual void OnPlayerConnected(PlayerEventArgs e)
         {
             if (this.PlayerConnected != null)
                 this.PlayerConnected(this, e);
@@ -108,12 +131,21 @@ namespace Gear
         /// <summary>
         /// Raises the <see cref="EngineBase.PlayerDisconnected"/> event.
         /// </summary>
-        /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected virtual void OnPlayerDisconnected(object sender, PlayerEventArgs e)
+        protected virtual void OnPlayerDisconnected(PlayerEventArgs e)
         {
             if (this.PlayerDisconnected != null)
                 this.PlayerDisconnected(this, e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="EngineBase.Update"/> event.
+        /// </summary>
+        /// <param name="e"></param>
+        protected virtual void OnUpdate(EventArgs e)
+        {
+            if (this.Update != null)
+                this.Update(this, e);
         }
         #endregion
     }

@@ -68,6 +68,7 @@
     <Compile Include="Net\ClientConnection.cs" />
     <Compile Include="Net\ClientConnectionEventArgs.cs" />
     <Compile Include="Net\ClientInfoMessage.cs" />
+    <Compile Include="Net\ConnectionEventArgs.cs" />
     <Compile Include="Net\ConnectionListener.cs" />
     <Compile Include="Net\ConnectionMode.cs" />
     <Compile Include="Net\ConnectionState.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Net\ServerInfoMessage.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerEventArgs.cs" />
+    <Compile Include="ServerEngine.cs" />
     <Compile Include="World.cs" />
     <None Include="Command.cs" />
     <None Include="CommandId.cs" />

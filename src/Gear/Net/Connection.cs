@@ -6,9 +6,7 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Net.Sockets;
-using System.Net;
 
 namespace Gear.Net
 {
@@ -24,11 +22,6 @@ namespace Gear.Net
         public const ushort DefaultPort = 10421;
 
         /// <summary>
-        /// Backing field for the <see cref="Connection.State"/> property.
-        /// </summary>
-        private ConnectionState state;
-
-        /// <summary>
         /// Backing field for the <see cref="Connection.SendQueue"/> property.
         /// </summary>
         private readonly Queue<Message> sendQueue;
@@ -39,6 +32,11 @@ namespace Gear.Net
         private readonly Queue<Message> receiveQueue;
 
         /// <summary>
+        /// Backing field for the <see cref="Connection.State"/> property.
+        /// </summary>
+        private ConnectionState state;
+
+        /// <summary>
         /// Backing field for the <see cref="Connection.Socket"/> property.
         /// </summary>
         private Socket socket;
@@ -47,6 +45,8 @@ namespace Gear.Net
         /// Backing field for the <see cref="Connection.Mode"/> property.
         /// </summary>
         private ConnectionMode mode;
+
+        private EngineBase engine;
         #endregion
         #region Constructors
         protected Connection()
@@ -54,6 +54,22 @@ namespace Gear.Net
             this.sendQueue = new Queue<Message>();
             this.receiveQueue = new Queue<Message>();
         }
+        #endregion
+        #region Events
+        /// <summary>
+        /// Raised when the value of the <see cref="Connection.State"/> property changes, indicating a change in the underlying network socket.
+        /// </summary>
+        public event EventHandler StateChanged;
+
+        /// <summary>
+        /// Raised when a <see cref="Message"/> is received from the remote endpoint, after it has been enqueued to the message receive queue.
+        /// </summary>
+        public event EventHandler<MessageEventArgs> MessageReceived;
+
+        /// <summary>
+        /// Raised when a <see cref="Message"/> has been sent to the remote endpoint, after it has been dequeued from the message send queue.
+        /// </summary>
+        public event EventHandler<MessageEventArgs> MessageSent;
         #endregion
         #region Properties
         /// <summary>
@@ -119,29 +135,25 @@ namespace Gear.Net
             }
         }
         #endregion
-        #region Events
-        /// <summary>
-        /// Raised when the value of the <see cref="Connection.State"/> property changes, indicating a change in the underlying network socket.
-        /// </summary>
-        public event EventHandler StateChanged;
 
-        /// <summary>
-        /// Raised when a <see cref="Message"/> is received from the remote endpoint, after it has been enqueued to the message receive queue.
-        /// </summary>
-        public event EventHandler<MessageEventArgs> MessageReceived;
-
-        /// <summary>
-        /// Raised when a <see cref="Message"/> has been sent to the remote endpoint, after it has been dequeued from the message send queue.
-        /// </summary>
-        public event EventHandler<MessageEventArgs> MessageSent;
-        #endregion
         #region Methods
+        public void Attach(EngineBase engine)
+        {
+            engine.Update += new EventHandler(this.EngineUpdateCallback);
+        }
+        public void Detach()
+        {
+            engine.Update -= new EventHandler(this.EngineUpdateCallback);
+        }
         /// <summary>
         /// Processes all messages queued for sending and scans any received data to ensure that all fully received messages are parsed and queued in the receive queue.
         /// </summary>
         public void Flush()
         {
+            if (this.State != ConnectionState.Connected)
+                throw new InvalidOperationException("Connection must be in the 'Connected' state.");
 
+            throw new NotImplementedException();
         }
 
         public void Send(Message message)
@@ -197,6 +209,12 @@ namespace Gear.Net
         {
             if (this.MessageReceived != null)
                 this.MessageReceived(this, e);
+        }
+
+        private void EngineUpdateCallback(object sender, EventArgs e)
+        {
+            if (this.State == ConnectionState.Connected)
+                this.Flush();
         }
         #endregion
     }
