@@ -38,16 +38,27 @@ namespace Gear.Net
         }
 
         /// <summary>
-        /// 
+        /// Writes the message to the buffer.
         /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="startIndex"></param>
-        /// <returns></returns>
+        /// <param name="buffer">The buffer to write to.</param>
+        /// <param name="startIndex">The index in the buffer at which to start writing.</param>
+        /// <returns>The number of bytes written.</returns>
         public int WriteTo(byte[] buffer, int startIndex)
         {
             var fields = this.GetFieldData();
+            int p = startIndex;
+            buffer[p++] = (byte)((ushort)this.Id << 8);
+            buffer[p++] = (byte)this.Id;
+            
+            buffer[p++] = 0; // placeholder for message size
+            buffer[p++] = 0;
 
+            for (int i = 0; i < fields.Length; i++)
+            {
+                var f = fields[i];
 
+                throw new NotImplementedException();
+            }
             return -1; // Nothing written.
         }
 

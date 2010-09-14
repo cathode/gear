@@ -64,6 +64,7 @@
     <Compile Include="Assets\PackageIndexEntry.cs" />
     <Compile Include="Assets\StringField.cs" />
     <Compile Include="Assets\SubStream.cs" />
+    <Compile Include="DataBuffer.cs" />
     <Compile Include="Net\ClientConnection.cs" />
     <Compile Include="Net\ClientConnectionEventArgs.cs" />
     <Compile Include="Net\ClientInfoMessage.cs" />
