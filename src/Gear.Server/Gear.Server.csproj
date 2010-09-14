@@ -59,11 +59,7 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="ServerCommandIds.cs" />
-    <None Include="ServerEngine.cs" />
-    <None Include="ServerSession.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gear\Gear.csproj">

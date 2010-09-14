@@ -51,6 +51,7 @@ namespace Gear.Net
 
             this.listener.Bind(new IPEndPoint(IPAddress.Any, this.listenPort));
             this.isListening = true;
+            this.listener.Listen(10);
             this.listener.BeginAccept(new AsyncCallback(this.AcceptCallback), null);
         }
 
@@ -71,6 +72,7 @@ namespace Gear.Net
             ServerConnection connection = new ServerConnection(s);
             if (this.engine != null)
                 connection.Attach(this.engine);
+            this.OnConnectionAccepted(new ConnectionEventArgs(connection));
         }
 
         /// <summary>

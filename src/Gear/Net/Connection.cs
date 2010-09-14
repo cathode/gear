@@ -153,7 +153,19 @@ namespace Gear.Net
             if (this.State != ConnectionState.Connected)
                 throw new InvalidOperationException("Connection must be in the 'Connected' state.");
 
-            throw new NotImplementedException();
+            while (this.sendQueue.Count > 0)
+            {
+                var msg = this.sendQueue.Dequeue();
+                int size = msg.GetByteCount();
+                var buffer = new byte[size];
+                msg.WriteTo(buffer, 0);
+                socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(this.SendAsyncCallback), msg);
+            }
+
+            if (this.receiveQueue.Count > 0)
+            {
+
+            }
         }
 
         public void Send(Message message)
@@ -215,6 +227,11 @@ namespace Gear.Net
         {
             if (this.State == ConnectionState.Connected)
                 this.Flush();
+        }
+
+        private void SendAsyncCallback(IAsyncResult result)
+        {
+            this.socket.EndSend(result);
         }
         #endregion
     }

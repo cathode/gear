@@ -14,7 +14,7 @@ namespace Gear
     public class ServerEngine : EngineBase
     {
         #region Fields
-        private ConnectionListener listener;
+        private readonly ConnectionListener listener;
         #endregion
         #region Constructors
         public ServerEngine()
@@ -23,10 +23,21 @@ namespace Gear
         }
         #endregion
         #region Properties
-
+        public ConnectionListener Listener
+        {
+            get
+            {
+                return this.listener;
+            }
+        }
         #endregion
         #region Methods
-        
+        protected override void OnStarting(System.EventArgs e)
+        {
+            base.OnStarting(e);
+
+            this.listener.Start();
+        }
         #endregion
     }
 }

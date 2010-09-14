@@ -5,6 +5,7 @@
  * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
 using System;
+using System.Threading;
 
 namespace Gear
 {
@@ -50,6 +51,11 @@ namespace Gear
         /// Raised at regular periodic intervals when repeated tasks should be executed.
         /// </summary>
         public event EventHandler Update;
+
+        /// <summary>
+        /// Raised when the engine is started.
+        /// </summary>
+        public event EventHandler Starting;
         #endregion
         #region Properties
         /// <summary>
@@ -96,7 +102,13 @@ namespace Gear
         {
             if (!this.IsLoaded)
                 this.Load();
-            throw new NotImplementedException();
+
+            this.OnStarting(EventArgs.Empty);
+            while (true)
+            {
+                this.OnUpdate(EventArgs.Empty);
+                Thread.Sleep(1);
+            }
         }
         /// <summary>
         /// Raises the <see cref="EngineBase.PreLoad"/> event.
@@ -146,6 +158,12 @@ namespace Gear
         {
             if (this.Update != null)
                 this.Update(this, e);
+        }
+
+        protected virtual void OnStarting(EventArgs e)
+        {
+            if (this.Starting != null)
+                this.Starting(this, e);
         }
         #endregion
     }

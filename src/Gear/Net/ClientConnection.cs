@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Net;
+using System.Net.Sockets;
 
 namespace Gear.Net
 {
@@ -16,6 +18,16 @@ namespace Gear.Net
     /// </summary>
     public class ClientConnection : Connection
     {
+        public void Connect(IPAddress target)
+        {
+            this.Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            this.Socket.BeginConnect(new IPEndPoint(target, Connection.DefaultPort), new AsyncCallback(this.ConnectCallback), null);
+        }
 
+        private void ConnectCallback(IAsyncResult result)
+        {
+            this.Socket.EndConnect(result);
+            this.State = ConnectionState.Connected;
+        }
     }
 }
