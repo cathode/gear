@@ -21,7 +21,10 @@ namespace Gear.Net
         /// </summary>
         public const ushort DefaultPort = 10421;
 
-        public const int MessagePrefix = 'G' << 24 | 'm' << 16 | 's' << 8 | 'g';
+        /// <summary>
+        /// Holds a specical FourCC that is prefixed to each message prior to sending.
+        /// </summary>
+        public const int MessagePrefix = 'G' << 24 | 'M' << 16 | 'S' << 8 | 'G';
 
         /// <summary>
         /// Backing field for the <see cref="Connection.SendQueue"/> property.
@@ -42,11 +45,6 @@ namespace Gear.Net
         /// Backing field for the <see cref="Connection.Socket"/> property.
         /// </summary>
         private Socket socket;
-
-        /// <summary>
-        /// Backing field for the <see cref="Connection.Mode"/> property.
-        /// </summary>
-        private ConnectionMode mode;
 
         private EngineBase engine;
         #endregion
@@ -91,6 +89,9 @@ namespace Gear.Net
             }
         }
 
+        /// <summary>
+        /// Gets or sets the underlying <see cref="Socket"/>.
+        /// </summary>
         public Socket Socket
         {
             get
@@ -125,17 +126,6 @@ namespace Gear.Net
             }
         }
 
-        public ConnectionMode Mode
-        {
-            get
-            {
-                return this.mode;
-            }
-            set
-            {
-                this.mode = value;
-            }
-        }
         #endregion
         #region Methods
         /// <summary>
@@ -172,9 +162,26 @@ namespace Gear.Net
 
             while (this.sendQueue.Count > 0)
             {
-                var msg = this.sendQueue.Dequeue();
-                byte[] buffer = this.SerializeMessage(msg);
-                this.socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(this.SendAsyncCallback), msg);
+                var message = this.sendQueue.Dequeue();
+
+                int size = 11; // Message header is 11 bytes.
+                foreach (var field in message.Fields)
+                    size += 5 + field.Size; // Field header is 5 bytes (per field)
+
+                DataBuffer buffer = new DataBuffer(size, DataBufferMode.NetworkByteOrder);
+                buffer.WriteInt32(Connection.MessagePrefix);
+                buffer.WriteInt16((short)message.Id);
+                buffer.WriteByte((byte)message.Fields.Length);
+                buffer.WriteInt32(size - 4 - 2 - 1 - 4); // payload size, all fields and field headers.
+
+                foreach (var field in message.Fields)
+                {
+                    buffer.WriteInt16((short)field.Id);
+                    buffer.WriteByte(field.Tag);
+                    buffer.WriteInt16(field.Size);
+                    buffer.Position += field.CopyTo(buffer.Contents, buffer.Position);
+                }
+                this.socket.BeginSend(buffer.Contents, 0, buffer.Contents.Length, SocketFlags.None, new AsyncCallback(this.SendAsyncCallback), message);
             }
         }
 
@@ -243,50 +250,6 @@ namespace Gear.Net
         protected virtual void SendAsyncCallback(IAsyncResult result)
         {
             this.socket.EndSend(result);
-        }
-
-        public byte[] SerializeMessage(Message message)
-        {
-            if (message == null)
-                throw new ArgumentNullException("message");
-
-            int size = this.GetSizeOfMessage(message);
-
-            DataBuffer buffer = new DataBuffer(size, DataBufferMode.NetworkByteOrder);
-            buffer.WriteInt32(Connection.MessagePrefix);
-            buffer.WriteInt16((short)message.Id);
-            buffer.WriteByte((byte)message.Fields.Length);
-            buffer.WriteInt32(size - 4 - 2 - 1 - 4); // payload size, all fields and field headers.
-
-            for (int i = 0; i < message.Fields.Length; i++)
-            {
-                var field = message.Fields[i];
-
-                buffer.WriteInt16((short)field.Id);
-                buffer.WriteByte(field.Tag);
-                buffer.WriteInt16(field.Size);
-                buffer.Position += field.CopyTo(buffer.Contents, buffer.Position);
-            }
-            return buffer.Contents;
-        }
-
-        public int GetSizeOfMessage(Message message)
-        {
-            // Header
-            int size = 4; // message prefix
-            size += 2; // message id
-            size += 1; // field count
-            size += 4; // total length of all fields and field headers
-
-            foreach (var field in message.Fields)
-            {
-                size += 2; // field id
-                size += 1; // field tag
-                size += 2; // field length
-                size += field.Size;
-            }
-
-            return size;
         }
         #endregion
     }

@@ -16,8 +16,18 @@ namespace Gear.Net
     public class ConnectionListener
     {
         #region Fields
+        /// <summary>
+        /// Holds the <see cref="Socket"/> that listens for incoming connections.
+        /// </summary>
         private Socket listener;
+
+        /// <summary>
+        /// Backing field for the <see cref="ConnectionListener.IsListening"/> property.
+        /// </summary>
         private bool isListening;
+        /// <summary>
+        /// 
+        /// </summary>
         private ushort listenPort;
         private EngineBase engine;
         #endregion
@@ -33,10 +43,37 @@ namespace Gear.Net
         }
         #endregion
         #region Events
+        /// <summary>
+        /// Raised when a new <see cref="Connection"/> is accepted.
+        /// </summary>
         public event EventHandler<ConnectionEventArgs> ConnectionAccepted;
         #endregion
         #region Properties
+        /// <summary>
+        /// Gets a value indicating whether the current <see cref="ConnectionListener"/> is actively listening for incoming connections.
+        /// </summary>
+        public bool IsListening
+        {
+            get
+            {
+                return this.isListening;
+            }
+        }
 
+        /// <summary>
+        /// Gets or sets the port number used to listen for connections on.
+        /// </summary>
+        public ushort ListenPort
+        {
+            get
+            {
+                return this.listenPort;
+            }
+            set
+            {
+                this.listenPort = value;
+            }
+        }
         #endregion
         #region Methods
         /// <summary>

@@ -70,7 +70,6 @@
     <Compile Include="Net\Messaging\ClientInfoMessage.cs" />
     <Compile Include="Net\ConnectionEventArgs.cs" />
     <Compile Include="Net\ConnectionListener.cs" />
-    <Compile Include="Net\ConnectionMode.cs" />
     <Compile Include="Net\ConnectionState.cs" />
     <Compile Include="Net\ConnectionStateEventArgs.cs" />
     <Compile Include="Net\Message.cs" />
