@@ -18,6 +18,11 @@ namespace Gear.Net
         /// Backing field for the <see cref="MessageEventArgs.Message"/> property.
         /// </summary>
         private readonly Message message;
+
+        /// <summary>
+        /// Backing field for the <see cref="MessageEventArgs.Handled"/> property.
+        /// </summary>
+        private bool handled;
         #endregion
         #region Constructors
         /// <summary>
@@ -33,6 +38,21 @@ namespace Gear.Net
         }
         #endregion
         #region Properties
+        /// <summary>
+        /// Gets or sets a value indicating whether the message was handled by a subscriber of the event.
+        /// </summary>
+        public bool Handled
+        {
+            get
+            {
+                return this.handled;
+            }
+            set
+            {
+                this.handled = value;
+            }
+        }
+
         /// <summary>
         /// Gets the <see cref="Message"/> that was related to the event which was raised.
         /// </summary>

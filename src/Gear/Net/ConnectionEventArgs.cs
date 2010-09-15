@@ -8,23 +8,57 @@ using System;
 
 namespace Gear.Net
 {
+    /// <summary>
+    /// Represents event data for an event involving a <see cref="Connection"/>.
+    /// </summary>
     public sealed class ConnectionEventArgs : EventArgs
     {
         #region Fields
+        /// <summary>
+        /// Backing field for the <see cref="ConnectionEventArgs.Connection"/> property.
+        /// </summary>
         private readonly Connection connection;
+
+        /// <summary>
+        /// Backing field for the <see cref="ConnectionEventArgs.Handled"/> property.
+        /// </summary>
+        private bool handled;
         #endregion
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectionEventArgs"/> class.
+        /// </summary>
+        /// <param name="connection">The <see cref="Connection"/>.</param>
         public ConnectionEventArgs(Connection connection)
         {
             this.connection = connection;
         }
         #endregion
         #region Properties
+
+        /// <summary>
+        /// Gets the <see cref="Connection"/>.
+        /// </summary>
         public Connection Connection
         {
             get
             {
                 return this.connection;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the connection was handled by a subscriber of the event.
+        /// </summary>
+        public bool Handled
+        {
+            get
+            {
+                return this.handled;
+            }
+            set
+            {
+                this.handled = value;
             }
         }
         #endregion

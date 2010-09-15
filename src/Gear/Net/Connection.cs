@@ -46,9 +46,15 @@ namespace Gear.Net
         /// </summary>
         private Socket socket;
 
+        /// <summary>
+        /// Holds the <see cref="EngineBase"/> that the current <see cref="Connection"/> is attached to.
+        /// </summary>
         private EngineBase engine;
         #endregion
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Connection"/> class.
+        /// </summary>
         protected Connection()
         {
             this.sendQueue = new Queue<Message>();
@@ -65,11 +71,6 @@ namespace Gear.Net
         /// Raised when a <see cref="Message"/> is received from the remote endpoint, after it has been enqueued to the message receive queue.
         /// </summary>
         public event EventHandler<MessageEventArgs> MessageReceived;
-
-        /// <summary>
-        /// Raised when a <see cref="Message"/> has been sent to the remote endpoint, after it has been dequeued from the message send queue.
-        /// </summary>
-        public event EventHandler<MessageEventArgs> MessageSent;
         #endregion
         #region Properties
         /// <summary>
@@ -172,7 +173,7 @@ namespace Gear.Net
                 buffer.WriteInt32(Connection.MessagePrefix);
                 buffer.WriteInt16((short)message.Id);
                 buffer.WriteByte((byte)message.Fields.Length);
-                buffer.WriteInt32(size - 4 - 2 - 1 - 4); // payload size, all fields and field headers.
+                buffer.WriteInt32(size - 11); // payload size, all fields and field headers.
 
                 foreach (var field in message.Fields)
                 {
@@ -217,16 +218,6 @@ namespace Gear.Net
         }
 
         /// <summary>
-        /// Raises the <see cref="Connection.MessageSent"/> event.
-        /// </summary>
-        /// <param name="e">A <see cref="MessageEventArgs"/> that contains the event data.</param>
-        protected virtual void OnMessageSent(MessageEventArgs e)
-        {
-            if (this.MessageSent != null)
-                this.MessageSent(this, e);
-        }
-
-        /// <summary>
         /// Raises the <see cref="Connection.MessageReceived"/> event.
         /// </summary>
         /// <param name="e">A <see cref="MessageEventArgs"/> that contains the event data.</param>
@@ -234,6 +225,9 @@ namespace Gear.Net
         {
             if (this.MessageReceived != null)
                 this.MessageReceived(this, e);
+
+            if (!e.Handled)
+                this.receiveQueue.Enqueue(e.Message);
         }
 
         /// <summary>
@@ -247,6 +241,10 @@ namespace Gear.Net
                 this.Flush();
         }
 
+        /// <summary>
+        /// Callback for async Socket.Send calls.
+        /// </summary>
+        /// <param name="result"></param>
         protected virtual void SendAsyncCallback(IAsyncResult result)
         {
             this.socket.EndSend(result);
