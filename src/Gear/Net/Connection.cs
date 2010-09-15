@@ -170,11 +170,11 @@ namespace Gear.Net
 
             while (this.sendQueue.Count > 0)
             {
-                var msg = this.sendQueue.Dequeue();
-                int size = msg.GetByteCount();
-                var buffer = new byte[size];
-                msg.WriteTo(buffer, 0);
-                this.socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(this.SendAsyncCallback), msg);
+                //var msg = this.sendQueue.Dequeue();
+                //int size = msg.GetByteCount();
+                //var buffer = new byte[size];
+                //msg.WriteTo(buffer, 0);
+                //this.socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(this.SendAsyncCallback), msg);
             }
         }
 
@@ -243,6 +243,11 @@ namespace Gear.Net
         protected virtual void SendAsyncCallback(IAsyncResult result)
         {
             this.socket.EndSend(result);
+        }
+
+        protected void SerializeMessage(byte[] buffer, int startIndex, Message message)
+        {
+
         }
         #endregion
     }

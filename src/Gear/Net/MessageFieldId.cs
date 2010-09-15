@@ -5,22 +5,17 @@
  * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Gear.Net
 {
-    /// <summary>
-    /// Represents a message sent over the network from one endpoint to another.
-    /// </summary>
-    public abstract class Message
+    public enum MessageFieldId : byte
     {
-        #region Properties
-        public abstract MessageId Id
-        {
-            get;
-        }
-        #endregion
-        #region Methods
-
-        #endregion
+        Skip = 0,
+        Guid,
+        String,
+        
     }
 }

@@ -4,87 +4,31 @@
  * This software is released under the terms and conditions of the Microsoft  *
  * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Gear.Net
 {
     /// <summary>
     /// Represents a serialized field of a <see cref="Message"/>.
     /// </summary>
-    public class MessageField
+    public abstract class MessageField
     {
-        #region Fields
-        /// <summary>
-        /// Backing field for the <see cref="MessageField.Id"/> property.
-        /// </summary>
-        private readonly ushort id;
-
-        /// <summary>
-        /// Backing field for the <see cref="MessageField.Size"/> property.
-        /// </summary>
-        private ushort size;
-
-        /// <summary>
-        /// Backing field for the <see cref="MessageField.Data"/> property.
-        /// </summary>
-        private byte[] data;
-        #endregion
-        #region Constructors
-        public MessageField(ushort id)
-        {
-            this.id = id;
-        }
-        public MessageField(ushort id, ushort size)
-        {
-            this.id = id;
-            this.size = size;
-            this.data = new byte[size];
-        }
-        #endregion
         #region Properties
         /// <summary>
         /// Gets the id of the message field.
         /// </summary>
-        public ushort Id
+        public abstract byte Id
         {
-            get
-            {
-                return this.id;
-            }
+            get;
         }
-        
-        /// <summary>
-        /// Gets or sets the data size of the current <see cref="MessageField"/>.
-        /// </summary>
-        public ushort Size
+        public byte Tag
         {
-            get
-            {
-                return this.size;
-            }
-            set
-            {
-                this.size = value;
-            }
+            get;
+            set;
         }
-
-        /// <summary>
-        /// Gets or sets the data associated with the current <see cref="MessageField"/>.
-        /// </summary>
-        public byte[] Data
-        {
-            get
-            {
-                return this.data;
-            }
-            set
-            {
-                this.data = value;
-            }
-        }
+        #endregion
+        #region Methods
+        public abstract int CopyTo(byte[] buffer, int startIndex, int count);
+        public abstract int CopyFrom(byte[] buffer, int startIndex, int count);
         #endregion
     }
 }

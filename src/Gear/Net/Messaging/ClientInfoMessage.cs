@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gear.Net
+namespace Gear.Net.Messaging
 {
     /// <summary>
     /// A <see cref="Message"/> implementation that encapsulates information about the client.
@@ -20,8 +20,6 @@ namespace Gear.Net
     public sealed class ClientInfoMessage : Message
     {
         #region Fields
-        private readonly MessageField clientIdField;
-        private readonly MessageField[] fieldData;
         #endregion
         #region Constructors
         /// <summary>
@@ -29,9 +27,6 @@ namespace Gear.Net
         /// </summary>
         public ClientInfoMessage()
         {
-            this.clientIdField = new MessageField(0, 16);
-            this.fieldData = new MessageField[1];
-            this.fieldData[0] = this.clientIdField;
         }
         #endregion
         #region Properties
@@ -47,19 +42,12 @@ namespace Gear.Net
         /// <summary>
         /// Gets the <see cref="MessageId"/> of the current <see cref="Message"/>.
         /// </summary>
-        protected override MessageId Id
+        public override MessageId Id
         {
             get
             {
                 return MessageId.ClientInfo;
             }
-        }
-        #endregion
-        #region Methods
-        protected override MessageField[] GetFieldData()
-        {
-            this.clientIdField.Data = this.ClientId.ToByteArray();
-            return this.fieldData;
         }
         #endregion
     }

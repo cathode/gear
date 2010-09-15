@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gear.Net
+namespace Gear.Net.Messaging
 {
     /// <summary>
     /// A <see cref="Message"/> implementation that encapsulates information about the server.
@@ -19,17 +19,12 @@ namespace Gear.Net
     /// </remarks>
     public sealed class ServerInfoMessage : Message
     {
-        protected override MessageId Id
+        public override MessageId Id
         {
             get
             {
                 throw new NotImplementedException();
             }
-        }
-
-        protected override MessageField[] GetFieldData()
-        {
-            throw new NotImplementedException();
         }
     }
 }

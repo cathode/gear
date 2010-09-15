@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using Gear.Net.Messaging;
 
 namespace Gear.Net
 {
@@ -19,7 +20,6 @@ namespace Gear.Net
     public class ClientConnection : Connection
     {
         #region Fields
-
         #endregion
         #region Constructors
         /// <summary>
