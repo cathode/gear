@@ -60,6 +60,11 @@ namespace Gear
             this.Mode = DataBufferMode.System;
         }
 
+        public DataBuffer(int capacity, DataBufferMode mode)
+        {
+            this.contents = new byte[capacity];
+            this.Mode = mode;
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="DataBuffer"/> class.
         /// </summary>
@@ -84,7 +89,7 @@ namespace Gear
         {
             get
             {
-                return this.Contents;
+                return this.contents;
             }
             set
             {
@@ -123,6 +128,20 @@ namespace Gear
         }
         #endregion
         #region Methods
+        public byte ReadByte()
+        {
+            byte result = this.contents[this.position];
+            this.position += 1;
+            return result;
+        }
+        public byte[] ReadBytes(int count)
+        {
+            throw new NotImplementedException();
+        }
+        public int readBytes(byte[] buffer, int startIndex, int count)
+        {
+            throw new NotImplementedException();
+        }
         /// <summary>
         /// Decodes the next two bytes from the buffer as a 16-bit signed integer value,
         /// and advances the current position by two.
@@ -280,6 +299,11 @@ namespace Gear
             return result;
         }
 
+        public void WriteByte(byte value)
+        {
+            this.contents[this.position] = value;
+            this.position += 1;
+        }
         /// <summary>
         /// Writes the specified 16-bit signed integer to the buffer and advances
         /// the current position by two.
@@ -289,13 +313,13 @@ namespace Gear
         {
             if (this.Mode == DataBufferMode.BigEndian)
             {
-                contents[position + 0] = (byte)(value << 8);
+                contents[position + 0] = (byte)(value >> 8);
                 contents[position + 1] = (byte)value;
             }
             else
             {
                 contents[position + 0] = (byte)value;
-                contents[position + 1] = (byte)(value << 8);
+                contents[position + 1] = (byte)(value >> 8);
             }
 
             position += 2;
@@ -310,17 +334,17 @@ namespace Gear
         {
             if (this.Mode == DataBufferMode.BigEndian)
             {
-                contents[position + 0] = (byte)(value << 24);
-                contents[position + 1] = (byte)(value << 16);
-                contents[position + 2] = (byte)(value << 8);
+                contents[position + 0] = (byte)(value >> 24);
+                contents[position + 1] = (byte)(value >> 16);
+                contents[position + 2] = (byte)(value >> 8);
                 contents[position + 3] = (byte)value;
             }
             else
             {
                 contents[position + 0] = (byte)value;
-                contents[position + 1] = (byte)(value << 8);
-                contents[position + 2] = (byte)(value << 16);
-                contents[position + 3] = (byte)(value << 24);
+                contents[position + 1] = (byte)(value >> 8);
+                contents[position + 2] = (byte)(value >> 16);
+                contents[position + 3] = (byte)(value >> 24);
             }
 
             position += 4;
@@ -335,25 +359,25 @@ namespace Gear
         {
             if (this.Mode == DataBufferMode.BigEndian)
             {
-                contents[position + 0] = (byte)(value << 56);
-                contents[position + 1] = (byte)(value << 48);
-                contents[position + 2] = (byte)(value << 40);
-                contents[position + 3] = (byte)(value << 32);
-                contents[position + 4] = (byte)(value << 24);
-                contents[position + 5] = (byte)(value << 16);
-                contents[position + 6] = (byte)(value << 8);
+                contents[position + 0] = (byte)(value >> 56);
+                contents[position + 1] = (byte)(value >> 48);
+                contents[position + 2] = (byte)(value >> 40);
+                contents[position + 3] = (byte)(value >> 32);
+                contents[position + 4] = (byte)(value >> 24);
+                contents[position + 5] = (byte)(value >> 16);
+                contents[position + 6] = (byte)(value >> 8);
                 contents[position + 7] = (byte)value;
             }
             else
             {
                 contents[position + 0] = (byte)value;
-                contents[position + 1] = (byte)(value << 8);
-                contents[position + 2] = (byte)(value << 16);
-                contents[position + 3] = (byte)(value << 24);
-                contents[position + 4] = (byte)(value << 32);
-                contents[position + 5] = (byte)(value << 40);
-                contents[position + 6] = (byte)(value << 48);
-                contents[position + 7] = (byte)(value << 56);
+                contents[position + 1] = (byte)(value >> 8);
+                contents[position + 2] = (byte)(value >> 16);
+                contents[position + 3] = (byte)(value >> 24);
+                contents[position + 4] = (byte)(value >> 32);
+                contents[position + 5] = (byte)(value >> 40);
+                contents[position + 6] = (byte)(value >> 48);
+                contents[position + 7] = (byte)(value >> 56);
             }
 
             position += 8;
@@ -368,13 +392,13 @@ namespace Gear
         {
             if (this.Mode == DataBufferMode.BigEndian)
             {
-                contents[position + 0] = (byte)(value << 8);
+                contents[position + 0] = (byte)(value >> 8);
                 contents[position + 1] = (byte)value;
             }
             else
             {
                 contents[position + 0] = (byte)value;
-                contents[position + 1] = (byte)(value << 8);
+                contents[position + 1] = (byte)(value >> 8);
             }
 
             position += 2;
@@ -389,17 +413,17 @@ namespace Gear
         {
             if (this.Mode == DataBufferMode.BigEndian)
             {
-                contents[position + 0] = (byte)(value << 24);
-                contents[position + 1] = (byte)(value << 16);
-                contents[position + 2] = (byte)(value << 8);
+                contents[position + 0] = (byte)(value >> 24);
+                contents[position + 1] = (byte)(value >> 16);
+                contents[position + 2] = (byte)(value >> 8);
                 contents[position + 3] = (byte)value;
             }
             else
             {
                 contents[position + 0] = (byte)value;
-                contents[position + 1] = (byte)(value << 8);
-                contents[position + 2] = (byte)(value << 16);
-                contents[position + 3] = (byte)(value << 24);
+                contents[position + 1] = (byte)(value >> 8);
+                contents[position + 2] = (byte)(value >> 16);
+                contents[position + 3] = (byte)(value >> 24);
             }
 
             position += 4;
@@ -414,25 +438,25 @@ namespace Gear
         {
             if (this.Mode == DataBufferMode.BigEndian)
             {
-                contents[position + 0] = (byte)(value << 56);
-                contents[position + 1] = (byte)(value << 48);
-                contents[position + 2] = (byte)(value << 40);
-                contents[position + 3] = (byte)(value << 32);
-                contents[position + 4] = (byte)(value << 24);
-                contents[position + 5] = (byte)(value << 16);
-                contents[position + 6] = (byte)(value << 8);
+                contents[position + 0] = (byte)(value >> 56);
+                contents[position + 1] = (byte)(value >> 48);
+                contents[position + 2] = (byte)(value >> 40);
+                contents[position + 3] = (byte)(value >> 32);
+                contents[position + 4] = (byte)(value >> 24);
+                contents[position + 5] = (byte)(value >> 16);
+                contents[position + 6] = (byte)(value >> 8);
                 contents[position + 7] = (byte)value;
             }
             else
             {
                 contents[position + 0] = (byte)value;
-                contents[position + 1] = (byte)(value << 8);
-                contents[position + 2] = (byte)(value << 16);
-                contents[position + 3] = (byte)(value << 24);
-                contents[position + 4] = (byte)(value << 32);
-                contents[position + 5] = (byte)(value << 40);
-                contents[position + 6] = (byte)(value << 48);
-                contents[position + 7] = (byte)(value << 56);
+                contents[position + 1] = (byte)(value >> 8);
+                contents[position + 2] = (byte)(value >> 16);
+                contents[position + 3] = (byte)(value >> 24);
+                contents[position + 4] = (byte)(value >> 32);
+                contents[position + 5] = (byte)(value >> 40);
+                contents[position + 6] = (byte)(value >> 48);
+                contents[position + 7] = (byte)(value >> 56);
             }
 
             position += 8;

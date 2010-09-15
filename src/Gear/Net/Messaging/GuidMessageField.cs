@@ -27,10 +27,22 @@ namespace Gear.Net.Messaging
                 return MessageFieldId.Guid;
             }
         }
-
-        public override int CopyTo(byte[] buffer, int startIndex, int count)
+        public Guid Value
         {
-            throw new NotImplementedException();
+            get
+            {
+                return this.value;
+            }
+            set
+            {
+                this.value = value;
+            }
+        }
+
+        public override int CopyTo(byte[] buffer, int startIndex)
+        {
+            this.value.ToByteArray().CopyTo(buffer, startIndex);
+            return 16;
         }
 
         public override int CopyFrom(byte[] buffer, int startIndex, int count)
@@ -38,7 +50,7 @@ namespace Gear.Net.Messaging
             throw new NotImplementedException();
         }
 
-        public override int Size
+        public override short Size
         {
             get
             {

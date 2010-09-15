@@ -25,13 +25,13 @@ namespace Gear.Net
             get;
             set;
         }
-        public abstract int Size
+        public abstract short Size
         {
             get;
         }
         #endregion
         #region Methods
-        public abstract int CopyTo(byte[] buffer, int startIndex, int count);
+        public abstract int CopyTo(byte[] buffer, int startIndex);
         public abstract int CopyFrom(byte[] buffer, int startIndex, int count);
         #endregion
 

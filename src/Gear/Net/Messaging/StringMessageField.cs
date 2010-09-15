@@ -4,6 +4,12 @@
  * This software is released under the terms and conditions of the Microsoft  *
  * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
+/******************************************************************************
+ * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
+ * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved.         *
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
+ *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +22,17 @@ namespace Gear.Net.Messaging
         #region Fields
         private string value;
         #endregion
+        #region Constructors
+        public StringMessageField()
+        {
+            this.value = string.Empty;
+        }
+        public StringMessageField(string value)
+        {
+            this.value = value ?? string.Empty;
+        }
+        #endregion
+        #region Properties
         public override MessageFieldId Id
         {
             get
@@ -31,26 +48,31 @@ namespace Gear.Net.Messaging
             }
             set
             {
-                this.value = value;
+                this.value = value ?? string.Empty;
             }
         }
 
-        public override int CopyTo(byte[] buffer, int startIndex, int count)
+        public override short Size
         {
-            throw new NotImplementedException();
+            get
+            {
+                return (short)Encoding.UTF8.GetByteCount(this.value);
+            }
+        }
+        #endregion
+        #region Methods
+        public override int CopyTo(byte[] buffer, int startIndex)
+        {
+            var bytes = Encoding.UTF8.GetBytes(this.value);
+            bytes.CopyTo(buffer, startIndex);
+            return bytes.Length;
         }
 
         public override int CopyFrom(byte[] buffer, int startIndex, int count)
         {
             throw new NotImplementedException();
         }
-
-        public override int Size
-        {
-            get
-            {
-                return Encoding.UTF8.GetByteCount(this.value);
-            }
-        }
+        #endregion
+        
     }
 }

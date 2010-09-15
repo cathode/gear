@@ -20,6 +20,8 @@ namespace Gear.Net.Messaging
     public sealed class ClientInfoMessage : Message
     {
         #region Fields
+        private readonly GuidMessageField clientId;
+        private readonly StringMessageField name;
         #endregion
         #region Constructors
         /// <summary>
@@ -27,6 +29,22 @@ namespace Gear.Net.Messaging
         /// </summary>
         public ClientInfoMessage()
         {
+            this.clientId = new GuidMessageField()
+            {
+                Tag = 0
+            };
+            this.name = new StringMessageField()
+            {
+                Tag = 1
+            };
+
+            this.Fields = new MessageField[]
+            {
+                this.clientId,
+                this.name,
+            };
+
+            this.ClientId = Guid.NewGuid();
         }
         #endregion
         #region Properties
@@ -35,8 +53,25 @@ namespace Gear.Net.Messaging
         /// </summary>
         public Guid ClientId
         {
-            get;
-            set;
+            get
+            {
+                return this.clientId.Value;
+            }
+            set
+            {
+                this.clientId.Value = value;
+            }
+        }
+        public string Name
+        {
+            get
+            {
+                return this.name.Value;
+            }
+            set
+            {
+                this.name.Value = value;
+            }
         }
 
         /// <summary>

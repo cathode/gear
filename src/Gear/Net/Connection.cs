@@ -21,6 +21,8 @@ namespace Gear.Net
         /// </summary>
         public const ushort DefaultPort = 10421;
 
+        public const int MessagePrefix = 'G' << 24 | 'm' << 16 | 's' << 8 | 'g';
+
         /// <summary>
         /// Backing field for the <see cref="Connection.SendQueue"/> property.
         /// </summary>
@@ -170,11 +172,9 @@ namespace Gear.Net
 
             while (this.sendQueue.Count > 0)
             {
-                //var msg = this.sendQueue.Dequeue();
-                //int size = msg.GetByteCount();
-                //var buffer = new byte[size];
-                //msg.WriteTo(buffer, 0);
-                //this.socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(this.SendAsyncCallback), msg);
+                var msg = this.sendQueue.Dequeue();
+                byte[] buffer = this.SerializeMessage(msg);
+                this.socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(this.SendAsyncCallback), msg);
             }
         }
 
@@ -245,9 +245,48 @@ namespace Gear.Net
             this.socket.EndSend(result);
         }
 
-        protected int SerializeMessage(byte[] buffer, int startIndex, Message message)
+        public byte[] SerializeMessage(Message message)
         {
-            throw new NotImplementedException();
+            if (message == null)
+                throw new ArgumentNullException("message");
+
+            int size = this.GetSizeOfMessage(message);
+
+            DataBuffer buffer = new DataBuffer(size, DataBufferMode.NetworkByteOrder);
+            buffer.WriteInt32(Connection.MessagePrefix);
+            buffer.WriteInt16((short)message.Id);
+            buffer.WriteByte((byte)message.Fields.Length);
+            buffer.WriteInt32(size - 4 - 2 - 1 - 4); // payload size, all fields and field headers.
+
+            for (int i = 0; i < message.Fields.Length; i++)
+            {
+                var field = message.Fields[i];
+
+                buffer.WriteInt16((short)field.Id);
+                buffer.WriteByte(field.Tag);
+                buffer.WriteInt16(field.Size);
+                buffer.Position += field.CopyTo(buffer.Contents, buffer.Position);
+            }
+            return buffer.Contents;
+        }
+
+        public int GetSizeOfMessage(Message message)
+        {
+            // Header
+            int size = 4; // message prefix
+            size += 2; // message id
+            size += 1; // field count
+            size += 4; // total length of all fields and field headers
+
+            foreach (var field in message.Fields)
+            {
+                size += 2; // field id
+                size += 1; // field tag
+                size += 2; // field length
+                size += field.Size;
+            }
+
+            return size;
         }
         #endregion
     }
