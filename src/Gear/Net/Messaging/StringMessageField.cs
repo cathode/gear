@@ -14,13 +14,24 @@ namespace Gear.Net.Messaging
     public sealed class StringMessageField : MessageField
     {
         #region Fields
-
+        private string value;
         #endregion
-        public override byte Id
+        public override MessageFieldId Id
         {
             get
             {
-                throw new NotImplementedException();
+                return MessageFieldId.String;
+            }
+        }
+        public string Value
+        {
+            get
+            {
+                return this.value;
+            }
+            set
+            {
+                this.value = value;
             }
         }
 
@@ -32,6 +43,14 @@ namespace Gear.Net.Messaging
         public override int CopyFrom(byte[] buffer, int startIndex, int count)
         {
             throw new NotImplementedException();
+        }
+
+        public override int Size
+        {
+            get
+            {
+                return Encoding.UTF8.GetByteCount(this.value);
+            }
         }
     }
 }

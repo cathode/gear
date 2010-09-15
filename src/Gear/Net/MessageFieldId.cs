@@ -13,9 +13,8 @@ namespace Gear.Net
 {
     public enum MessageFieldId : byte
     {
-        Skip = 0,
+        Custom = 0,
         Guid,
         String,
-        
     }
 }

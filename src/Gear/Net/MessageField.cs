@@ -16,7 +16,7 @@ namespace Gear.Net
         /// <summary>
         /// Gets the id of the message field.
         /// </summary>
-        public abstract byte Id
+        public abstract MessageFieldId Id
         {
             get;
         }
@@ -25,10 +25,18 @@ namespace Gear.Net
             get;
             set;
         }
+        public abstract int Size
+        {
+            get;
+        }
         #endregion
         #region Methods
         public abstract int CopyTo(byte[] buffer, int startIndex, int count);
         public abstract int CopyFrom(byte[] buffer, int startIndex, int count);
         #endregion
+
+
+
+       
     }
 }

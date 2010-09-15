@@ -245,9 +245,9 @@ namespace Gear.Net
             this.socket.EndSend(result);
         }
 
-        protected void SerializeMessage(byte[] buffer, int startIndex, Message message)
+        protected int SerializeMessage(byte[] buffer, int startIndex, Message message)
         {
-
+            throw new NotImplementedException();
         }
         #endregion
     }

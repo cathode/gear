@@ -13,14 +13,54 @@ namespace Gear.Net
     /// </summary>
     public abstract class Message
     {
+        #region Fields
+        /// <summary>
+        /// Backing field for the <see cref="Message.Fields"/> property.
+        /// </summary>
+        private MessageField[] fields;
+        #endregion
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Message"/> class.
+        /// </summary>
+        protected Message()
+        {
+            this.fields = new MessageField[0];
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Message"/> class.
+        /// </summary>
+        /// <param name="fields">The fields of the new <see cref="Message"/>.</param>
+        protected Message(MessageField[] fields)
+        {
+            // The 'fields' member should never be null.
+            this.fields = fields ?? new MessageField[0];
+        }
+        #endregion
         #region Properties
+        /// <summary>
+        /// Gets the <see cref="MessageId"/> of the current <see cref="Message"/>.
+        /// </summary>
         public abstract MessageId Id
         {
             get;
         }
-        #endregion
-        #region Methods
 
+        /// <summary>
+        /// Gets or sets the fields in the current <see cref="Message"/>.
+        /// </summary>
+        public MessageField[] Fields
+        {
+            get
+            {
+                return this.fields;
+            }
+            protected set
+            {
+                this.fields = value ?? new MessageField[0]; 
+            }
+        }
         #endregion
     }
 }

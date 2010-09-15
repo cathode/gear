@@ -11,17 +11,20 @@ using System.Text;
 
 namespace Gear.Net.Messaging
 {
+    /// <summary>
+    /// Represents a <see cref="MessageField"/> that holds a <see cref="Guid"/> instance.
+    /// </summary>
     public sealed class GuidMessageField : MessageField
     {
         #region Fields
         private Guid value;
         #endregion
 
-        public override byte Id
+        public override MessageFieldId Id
         {
             get
             {
-                throw new NotImplementedException();
+                return MessageFieldId.Guid;
             }
         }
 
@@ -33,6 +36,14 @@ namespace Gear.Net.Messaging
         public override int CopyFrom(byte[] buffer, int startIndex, int count)
         {
             throw new NotImplementedException();
+        }
+
+        public override int Size
+        {
+            get
+            {
+                return 16;
+            }
         }
     }
 }

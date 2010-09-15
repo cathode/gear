@@ -23,8 +23,9 @@ namespace Gear.Net.Messaging
         {
             get
             {
-                throw new NotImplementedException();
+                return MessageId.ServerInfo;
             }
         }
+
     }
 }
