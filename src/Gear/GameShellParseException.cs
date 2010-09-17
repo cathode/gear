@@ -15,14 +15,14 @@ namespace Gear
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="GameShellParseException"/> class.
+        /// Initializes a new current of the <see cref="GameShellParseException"/> class.
         /// </summary>
         public GameShellParseException()
         {
 
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="GameShellParseException"/> class.
+        /// Initializes a new current of the <see cref="GameShellParseException"/> class.
         /// </summary>
         /// <param name="message"></param>
         public GameShellParseException(string message)
@@ -31,7 +31,7 @@ namespace Gear
 
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="GameShellParseException"/> class.
+        /// Initializes a new current of the <see cref="GameShellParseException"/> class.
         /// </summary>
         /// <param name="message"></param>
         /// <param name="inner"></param>

@@ -22,7 +22,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,11 +32,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\release\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\release\Gear.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Gear.XML</DocumentationFile>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -67,6 +68,8 @@
     <Compile Include="DataBuffer.cs" />
     <Compile Include="Net\ClientConnection.cs" />
     <Compile Include="Net\ClientConnectionEventArgs.cs" />
+    <Compile Include="Net\MessageFactory.cs" />
+    <Compile Include="Net\MessageReceiveState.cs" />
     <Compile Include="Net\Messaging\ClientInfoMessage.cs" />
     <Compile Include="Net\ConnectionEventArgs.cs" />
     <Compile Include="Net\ConnectionListener.cs" />

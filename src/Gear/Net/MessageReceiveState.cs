@@ -8,21 +8,40 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Gear.Net;
 
-namespace Gear.Client
+namespace Gear.Net
 {
-    public static class Program
+    public sealed class MessageReceiveState
     {
-        internal static void Main(string[] args)
+        public byte[] Buffer
         {
-            ClientConnection connection = new ClientConnection();
-            connection.Connect(System.Net.IPAddress.Loopback);
-
-            ClientEngine engine = new ClientEngine();
-            engine.Run();
-
-            Console.ReadKey();
+            get;
+            set;
+        }
+        public int ReceivedBytes
+        {
+            get;
+            set;
+        }
+        public Message Message
+        {
+            get;
+            set;
+        }
+        public bool HeaderDone
+        {
+            get;
+            set;
+        }
+        public int Payload
+        {
+            get;
+            set;
+        }
+        public byte FieldCount
+        {
+            get;
+            set;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Gear.Net
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConnectionEventArgs"/> class.
+        /// Initializes a new current of the <see cref="ConnectionEventArgs"/> class.
         /// </summary>
         /// <param name="connection">The <see cref="Connection"/>.</param>
         public ConnectionEventArgs(Connection connection)

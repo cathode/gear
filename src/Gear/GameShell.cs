@@ -30,7 +30,7 @@ namespace Gear
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="GameShell"/> class.
+        /// Initializes a new current of the <see cref="GameShell"/> class.
         /// </summary>
         public GameShell()
         {

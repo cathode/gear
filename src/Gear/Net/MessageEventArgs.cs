@@ -26,7 +26,7 @@ namespace Gear.Net
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessageEventArgs"/> class.
+        /// Initializes a new current of the <see cref="MessageEventArgs"/> class.
         /// </summary>
         /// <param name="message">The <see cref="Message"/> that was related to the event which was raised.</param>
         public MessageEventArgs(Message message)

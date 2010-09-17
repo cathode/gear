@@ -24,10 +24,10 @@ namespace Gear
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Entity"/> class.
+        /// Initializes a new current of the <see cref="Entity"/> class.
         /// </summary>
         /// <remarks>
-        /// The new instance is given a newly created <see cref="Guid"/>.
+        /// The new current is given a newly created <see cref="Guid"/>.
         /// </remarks>
         public Entity()
         {
@@ -35,9 +35,9 @@ namespace Gear
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Entity"/> class.
+        /// Initializes a new current of the <see cref="Entity"/> class.
         /// </summary>
-        /// <param name="uniqueId">The unique id of the new instance.</param>
+        /// <param name="uniqueId">The unique id of the new current.</param>
         public Entity(Guid uniqueId)
         {
             this.uniqueId = uniqueId;

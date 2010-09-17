@@ -20,7 +20,7 @@ namespace Gear
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="EngineBase"/> class.
+        /// Initializes a new current of the <see cref="EngineBase"/> class.
         /// </summary>
         protected EngineBase()
         {

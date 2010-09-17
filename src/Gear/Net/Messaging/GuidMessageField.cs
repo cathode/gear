@@ -12,7 +12,7 @@ using System.Text;
 namespace Gear.Net.Messaging
 {
     /// <summary>
-    /// Represents a <see cref="MessageField"/> that holds a <see cref="Guid"/> instance.
+    /// Represents a <see cref="MessageField"/> that holds a <see cref="Guid"/> current.
     /// </summary>
     public sealed class GuidMessageField : MessageField
     {

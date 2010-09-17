@@ -20,7 +20,7 @@ namespace Gear.Net
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ClientConnection"/> class.
+        /// Initializes a new current of the <see cref="ClientConnection"/> class.
         /// </summary>
         public ClientConnection()
         {
@@ -51,7 +51,6 @@ namespace Gear.Net
         private void ConnectCallback(IAsyncResult result)
         {
             this.Socket.EndConnect(result);
-            this.State = ConnectionState.Connected;
             this.OnConnectionEstablished(EventArgs.Empty);
         }
         #endregion

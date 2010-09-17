@@ -25,7 +25,7 @@ namespace Gear.Net.Messaging
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ClientInfoMessage"/> class.
+        /// Initializes a new current of the <see cref="ClientInfoMessage"/> class.
         /// </summary>
         public ClientInfoMessage()
         {

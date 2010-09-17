@@ -17,7 +17,7 @@ namespace Tests.Intralock
          * One or more servers host a single World, but a server can only host one World at a time.
          * The state of a World should be persistable (to a file or database or another server).
          * The state of a World should support synchronization between servers.
-         * A World instance needs to be thread-safe.
+         * A World current needs to be thread-safe.
          * 
          * Implementation details:
          * When an entity is added to the world, the EntityCount should reflect the added entity.

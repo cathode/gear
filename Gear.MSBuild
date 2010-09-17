@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Project DefaultTargets="GenerateBinaryArtifacts;GenerateSourceArtifacts" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="Prep" ToolsVersion="4.0">
-  <Target Name="Prep">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Target Name="Build">
+    <!-- Delete any existing files -->
     <RemoveDir Directories="bin" />
+    <!-- Recreate directory -->
     <MakeDir Directories="bin" />
-  </Target>
-  <Target Name="CompileSource" DependsOnTargets="Prep">
-    <Message Text="Compiling Source Code" />
-    <MSBuild BuildInParallel="true" Projects="src/Gear.sln" RebaseOutputs="true" Properties="Configuration=Release"/>
-  </Target>
-  <Target Name="PackageEngineAssets" DependsOnTargets="CompileSource">
-    <Message Text="Packaging Engine Assets" />
-  </Target>
-  <Target Name="PackageGameAssets" DependsOnTargets="CompileSource;PackageEngineAssets">
-    <Message Text="Packaging Game Assets" />
-  </Target>
-  <Target Name="GenerateBinaryArtifacts" DependsOnTargets="CompileSource;PackageEngineAssets;PackageGameAssets">
-    <Message Text="Generating Binary Artifacts" />
-  </Target>
-  <Target Name="GenerateSourceArtifacts" DependsOnTargets="CompileSource">
-    <Message Text="Generating Source Artifacts..." />
+    
+    <MSBuild Projects="src/Gear.sln" RebaseOutputs="true" Properties="Configuration=Release" Targets="Clean;Rebuild"/>
+    
+    <ItemGroup Label="BinariesToCopy">
+      <ArtifactBinaries Include="src/*/bin/Release/*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ArtifactBinaries)" DestinationFolder="$(MSBuildProjectDirectory)\bin" />
   </Target>
 </Project>

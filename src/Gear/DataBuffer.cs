@@ -51,7 +51,7 @@ namespace Gear
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataBuffer"/> class.
+        /// Initializes a new current of the <see cref="DataBuffer"/> class.
         /// </summary>
         /// <param name="capacity">The fixed capacity of the buffer.</param>
         public DataBuffer(int capacity)
@@ -66,7 +66,7 @@ namespace Gear
             this.Mode = mode;
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataBuffer"/> class.
+        /// Initializes a new current of the <see cref="DataBuffer"/> class.
         /// </summary>
         /// <param name="contents"></param>
         public DataBuffer(byte[] contents)

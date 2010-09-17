@@ -19,7 +19,7 @@ namespace Gear.Net
     {
         public ServerConnection(Socket socket)
         {
-
+            this.Socket = socket;
         }
     }
 }

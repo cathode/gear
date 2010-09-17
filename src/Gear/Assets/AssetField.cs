@@ -43,7 +43,7 @@ namespace Gear.Assets
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="AssetField"/> class.
+        /// Initializes a new current of the <see cref="AssetField"/> class.
         /// </summary>
         protected AssetField(uint id)
         {

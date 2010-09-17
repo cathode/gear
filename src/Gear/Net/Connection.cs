@@ -27,33 +27,22 @@ namespace Gear.Net
         public const int MessagePrefix = 'G' << 24 | 'M' << 16 | 'S' << 8 | 'G';
 
         /// <summary>
-        /// Backing field for the <see cref="Connection.SendQueue"/> property.
+        /// Holds the size (in bytes) of an encoded message header.
         /// </summary>
-        private readonly Queue<Message> sendQueue;
-
-        /// <summary>
-        /// Backing field for the <see cref="Connection.ReceiveQueue"/> property.
-        /// </summary>
-        private readonly Queue<Message> receiveQueue;
-
-        /// <summary>
-        /// Backing field for the <see cref="Connection.State"/> property.
-        /// </summary>
-        private ConnectionState state;
-
+        public const int MessageHeaderSize = 11;
         /// <summary>
         /// Backing field for the <see cref="Connection.Socket"/> property.
         /// </summary>
         private Socket socket;
 
-        /// <summary>
-        /// Holds the <see cref="EngineBase"/> that the current <see cref="Connection"/> is attached to.
-        /// </summary>
-        private EngineBase engine;
+        private Queue<Message> sendQueue;
+        private Queue<Message> receiveQueue;
+
+        private bool isActive;
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Connection"/> class.
+        /// Initializes a new current of the <see cref="Connection"/> class.
         /// </summary>
         protected Connection()
         {
@@ -74,52 +63,9 @@ namespace Gear.Net
         #endregion
         #region Properties
         /// <summary>
-        /// Gets or sets the <see cref="ConnectionState"/> of the current <see cref="Connection"/>.
-        /// </summary>
-        public ConnectionState State
-        {
-            get
-            {
-                return this.state;
-            }
-            protected set
-            {
-                var e = new ConnectionStateEventArgs(this.state, value);
-                this.state = value;
-                this.OnStateChanged(e);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the underlying <see cref="Socket"/>.
-        /// </summary>
-        public Socket Socket
-        {
-            get
-            {
-                return this.socket;
-            }
-            protected set
-            {
-                this.socket = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets the number of messages currently waiting in the message send queue.
-        /// </summary>
-        public int SendQueueCount
-        {
-            get
-            {
-                return this.sendQueue.Count;
-            }
-        }
-
-        /// <summary>
         /// Gets the number of messages currently waiting in the message receive queue.
         /// </summary>
-        public int ReceiveQueueCount
+        public int ReceivedMessageCount
         {
             get
             {
@@ -127,40 +73,27 @@ namespace Gear.Net
             }
         }
 
+        /// <summary>
+        /// Gets or sets the underlying <see cref="Socket"/>.
+        /// </summary>
+        protected Socket Socket
+        {
+            get
+            {
+                return this.socket;
+            }
+            set
+            {
+                this.socket = value;
+            }
+        }
         #endregion
         #region Methods
-        /// <summary>
-        /// Binds the connection to trigger a flush each time the attached engine raises the Update event.
-        /// </summary>
-        /// <param name="engine">The engine to attach to.</param>
-        public void Attach(EngineBase engine)
-        {
-            if (this.engine != null)
-                this.Detach();
-
-            this.engine = engine;
-            this.engine.Update += new EventHandler(this.EngineUpdateCallback);
-        }
-
-        /// <summary>
-        /// Removes any existing binding to a game engine.
-        /// </summary>
-        public void Detach()
-        {
-            if (this.engine != null)
-                this.engine.Update -= new EventHandler(this.EngineUpdateCallback);
-
-            this.engine = null;
-        }
-
         /// <summary>
         /// Processes all messages queued for sending and scans any received data to ensure that all fully received messages are parsed and queued in the receive queue.
         /// </summary>
         public void Flush()
         {
-            if (this.State != ConnectionState.Connected)
-                throw new InvalidOperationException("Connection must be in the 'Connected' state.");
-
             while (this.sendQueue.Count > 0)
             {
                 var message = this.sendQueue.Dequeue();
@@ -182,7 +115,7 @@ namespace Gear.Net
                     buffer.WriteInt16(field.Size);
                     buffer.Position += field.CopyTo(buffer.Contents, buffer.Position);
                 }
-                this.socket.BeginSend(buffer.Contents, 0, buffer.Contents.Length, SocketFlags.None, new AsyncCallback(this.SendAsyncCallback), message);
+                this.socket.BeginSend(buffer.Contents, 0, buffer.Contents.Length, SocketFlags.None, this.SendCallback, message);
             }
         }
 
@@ -192,7 +125,7 @@ namespace Gear.Net
         /// <returns>The first message in the receive queue, or null if the receive queue is empty.</returns>
         public Message Receive()
         {
-            if (this.ReceiveQueueCount > 0)
+            if (this.ReceivedMessageCount > 0)
                 return this.receiveQueue.Dequeue();
 
             return null;
@@ -205,49 +138,60 @@ namespace Gear.Net
         public void Send(Message message)
         {
             this.sendQueue.Enqueue(message);
+            this.Flush();
         }
 
-        /// <summary>
-        /// Raises the <see cref="Connection.StateChanged"/> event.
-        /// </summary>
-        /// <param name="e">A <see cref="ConnectionStateEventArgs"/> that contains the event data.</param>
-        protected virtual void OnStateChanged(ConnectionStateEventArgs e)
+        public bool Start()
         {
-            if (this.StateChanged != null)
-                this.StateChanged(this, e);
-        }
+            if (!this.socket.Connected)
+                return false;
 
-        /// <summary>
-        /// Raises the <see cref="Connection.MessageReceived"/> event.
-        /// </summary>
-        /// <param name="e">A <see cref="MessageEventArgs"/> that contains the event data.</param>
-        protected virtual void OnMessageReceived(MessageEventArgs e)
-        {
-            if (this.MessageReceived != null)
-                this.MessageReceived(this, e);
+            MessageReceiveState state = new MessageReceiveState();
+            state.Buffer = new byte[Connection.MessageHeaderSize];
+            this.socket.BeginReceive(state.Buffer, 0, state.Buffer.Length, SocketFlags.None, this.ReceiveAsyncCallbck, state);
 
-            if (!e.Handled)
-                this.receiveQueue.Enqueue(e.Message);
-        }
-
-        /// <summary>
-        /// Invoked each time the attached <see cref="EngineBase"/> raises it's <see cref="EngineBase.Update"/> event.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected virtual void EngineUpdateCallback(object sender, EventArgs e)
-        {
-            if (this.State == ConnectionState.Connected)
-                this.Flush();
+            return true;
         }
 
         /// <summary>
         /// Callback for async Socket.Send calls.
         /// </summary>
         /// <param name="result"></param>
-        protected virtual void SendAsyncCallback(IAsyncResult result)
+        protected virtual void SendCallback(IAsyncResult result)
         {
             this.socket.EndSend(result);
+
+
+        }
+
+        protected virtual void ReceiveAsyncCallbck(IAsyncResult result)
+        {
+            var state = result.AsyncState as MessageReceiveState;
+            state.ReceivedBytes += this.socket.EndReceive(result);
+            if (!state.HeaderDone)
+            {
+                if (state.ReceivedBytes < Connection.MessageHeaderSize)
+                    this.socket.BeginReceive(state.Buffer, state.ReceivedBytes, Connection.MessageHeaderSize - state.ReceivedBytes, SocketFlags.None, this.ReceiveAsyncCallbck, state);
+
+                DataBuffer buffer = new DataBuffer(state.Buffer, DataBufferMode.NetworkByteOrder);
+
+                var prefix = buffer.ReadInt32();
+                if (prefix != Connection.MessagePrefix)
+                    throw new NotImplementedException();
+
+                MessageId id = (MessageId)buffer.ReadInt16();
+                state.Message = MessageFactory.Current.Create(id);
+                state.FieldCount = buffer.ReadByte();
+                state.Payload = buffer.ReadInt32();
+                state.HeaderDone = true;
+                state.Buffer = new byte[state.Payload];
+            }
+            if (socket.Available < state.Payload)
+            {
+
+            }
+
+            return;
         }
         #endregion
     }

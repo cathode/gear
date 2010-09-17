@@ -38,7 +38,7 @@ namespace Gear.Assets
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Package"/> class.
+        /// Initializes a new current of the <see cref="Package"/> class.
         /// </summary>
         /// <param name="stream"></param>
         internal Package(Stream stream)

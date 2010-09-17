@@ -23,7 +23,7 @@ namespace Gear.Assets
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Asset"/> class.
+        /// Initializes a new current of the <see cref="Asset"/> class.
         /// </summary>
         protected Asset()
         {
@@ -31,7 +31,7 @@ namespace Gear.Assets
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Asset"/> class.
+        /// Initializes a new current of the <see cref="Asset"/> class.
         /// </summary>
         /// <param name="uniqueId"></param>
         protected Asset(Guid uniqueId)

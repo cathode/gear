@@ -21,7 +21,7 @@ namespace Gear.Net
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Message"/> class.
+        /// Initializes a new current of the <see cref="Message"/> class.
         /// </summary>
         protected Message()
         {
@@ -29,7 +29,7 @@ namespace Gear.Net
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Message"/> class.
+        /// Initializes a new current of the <see cref="Message"/> class.
         /// </summary>
         /// <param name="fields">The fields of the new <see cref="Message"/>.</param>
         protected Message(MessageField[] fields)

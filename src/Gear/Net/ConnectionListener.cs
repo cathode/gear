@@ -7,6 +7,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using Gear.Net.Messaging;
 
 namespace Gear.Net
 {
@@ -25,21 +26,20 @@ namespace Gear.Net
         /// Backing field for the <see cref="ConnectionListener.IsListening"/> property.
         /// </summary>
         private bool isListening;
-        /// <summary>
-        /// 
-        /// </summary>
         private ushort listenPort;
         private EngineBase engine;
+        private ServerInfoMessage serverInfoMessage;
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConnectionListener"/> class.
+        /// Initializes a new current of the <see cref="ConnectionListener"/> class.
         /// </summary>
         /// <param name="engine">The <see cref="EngineBase"/> which the new <see cref="ConnectionListener"/> belongs to.</param>
         public ConnectionListener(EngineBase engine)
         {
             this.engine = engine;
             this.listenPort = Connection.DefaultPort;
+            this.serverInfoMessage = new ServerInfoMessage();
         }
         #endregion
         #region Events
@@ -107,9 +107,9 @@ namespace Gear.Net
             this.listener.BeginAccept(new AsyncCallback(this.AcceptCallback), null);
 
             ServerConnection connection = new ServerConnection(s);
-            if (this.engine != null)
-                connection.Attach(this.engine);
+            connection.Send(this.serverInfoMessage);
             this.OnConnectionAccepted(new ConnectionEventArgs(connection));
+            connection.Start();
         }
 
         /// <summary>
