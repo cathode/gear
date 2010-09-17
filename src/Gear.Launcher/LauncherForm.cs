@@ -25,18 +25,20 @@ namespace Gear.Launcher
 
         private void launchClientButton_Click(object sender, EventArgs e)
         {
-            Process.Start("Launcher.exe", "--client");
+            Process.Start("Gear.Client.exe");
             Application.Exit();
         }
 
         private void launchServerButton_Click(object sender, EventArgs e)
         {
-
+            Process.Start("Gear.Server.exe");
+            Application.Exit();
         }
 
         private void launchEditorButton_Click(object sender, EventArgs e)
         {
-
+            Process.Start("Gear.Editor.exe");
+            Application.Exit();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
