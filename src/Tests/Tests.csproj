@@ -46,17 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CrossThreadNodeInterfaceTests.cs" />
-    <Compile Include="EntityTests.cs" />
     <Compile Include="Gear\Assets\AssetTests.cs" />
     <None Include="Gear\Assets\DeltaTests.cs" />
     <Compile Include="Gear\Assets\PackageIndexTests.cs" />
     <Compile Include="Gear\Assets\PackageTests.cs" />
     <Compile Include="Gear\Net\Messaging\VersionFieldTests.cs" />
-    <Compile Include="NodeInterfaceTests.cs" />
-    <Compile Include="NodeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WorldTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gear\Gear.csproj">

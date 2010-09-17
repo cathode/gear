@@ -5,9 +5,6 @@
  * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Gear.Net.Messaging;
 using NUnit.Framework;
 
