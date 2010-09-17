@@ -186,11 +186,25 @@ namespace Gear.Net
                 state.HeaderDone = true;
                 state.Buffer = new byte[state.Payload];
             }
+
             if (socket.Available < state.Payload)
+
+                this.socket.BeginReceive(state.Buffer, state.ReceivedBytes - 11, socket.Available, SocketFlags.None, this.ReceiveAsyncCallbck, state);
+
+            else
             {
+                state.ReceivedBytes += this.socket.Receive(state.Buffer, state.Buffer.Length, SocketFlags.None);
 
+                DataBuffer buffer = new DataBuffer(state.Buffer, DataBufferMode.NetworkByteOrder);
+                for (int i = 0; i < state.FieldCount; i++)
+                {
+                    var fieldId = (MessageFieldId)buffer.ReadInt16();
+                    byte tag = buffer.ReadByte();
+                    short length = buffer.ReadInt16();
+                    var field = state.Message.GetField(fieldId, tag);
+                    buffer.Position += field.CopyFrom(state.Buffer, buffer.Position, length);
+                }
             }
-
             return;
         }
         #endregion

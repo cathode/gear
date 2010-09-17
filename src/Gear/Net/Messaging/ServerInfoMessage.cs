@@ -27,5 +27,10 @@ namespace Gear.Net.Messaging
             }
         }
 
+
+        public override MessageField GetField(MessageFieldId id, byte tag)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

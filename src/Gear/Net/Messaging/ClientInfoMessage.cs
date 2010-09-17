@@ -29,14 +29,8 @@ namespace Gear.Net.Messaging
         /// </summary>
         public ClientInfoMessage()
         {
-            this.clientId = new GuidMessageField()
-            {
-                Tag = 0
-            };
-            this.name = new StringMessageField()
-            {
-                Tag = 1
-            };
+            this.clientId = new GuidMessageField();
+            this.name = new StringMessageField();
 
             this.Fields = new MessageField[]
             {
@@ -85,5 +79,15 @@ namespace Gear.Net.Messaging
             }
         }
         #endregion
+
+        public override MessageField GetField(MessageFieldId id, byte tag)
+        {
+            if (id == MessageFieldId.Guid)
+                return this.clientId;
+            else if (id == MessageFieldId.String)
+                return this.name;
+
+            return null;
+        }
     }
 }

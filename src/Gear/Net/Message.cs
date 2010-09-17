@@ -62,5 +62,8 @@ namespace Gear.Net
             }
         }
         #endregion
+        #region Methods
+        public abstract MessageField GetField(MessageFieldId id, byte tag);
+        #endregion
     }
 }

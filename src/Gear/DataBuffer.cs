@@ -138,7 +138,7 @@ namespace Gear
         {
             throw new NotImplementedException();
         }
-        public int readBytes(byte[] buffer, int startIndex, int count)
+        public int ReadBytes(byte[] buffer, int startIndex, int count)
         {
             throw new NotImplementedException();
         }

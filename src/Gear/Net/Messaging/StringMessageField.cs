@@ -70,7 +70,8 @@ namespace Gear.Net.Messaging
 
         public override int CopyFrom(byte[] buffer, int startIndex, int count)
         {
-            throw new NotImplementedException();
+            this.value = Encoding.UTF8.GetString(buffer, startIndex, count);
+            return count;
         }
         #endregion
         

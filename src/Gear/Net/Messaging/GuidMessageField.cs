@@ -47,7 +47,13 @@ namespace Gear.Net.Messaging
 
         public override int CopyFrom(byte[] buffer, int startIndex, int count)
         {
-            throw new NotImplementedException();
+            if (count < 16)
+                throw new NotImplementedException();
+
+            byte[] guid = new byte[16];
+            Array.Copy(buffer, startIndex, guid, 0, 16);
+            this.value = new Guid(guid);
+            return 16;
         }
 
         public override short Size

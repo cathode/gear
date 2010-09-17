@@ -21,7 +21,17 @@ namespace Gear.Server
             ServerEngine engine = new ServerEngine();
             engine.Listener.ConnectionAccepted += new EventHandler<ConnectionEventArgs>(Listener_ConnectionAccepted);
             Console.WriteLine("Starting ServerEngine");
+#if DEBUG
+            engine.PostLoad += new EventHandler(engine_PostLoad);
+#endif
             engine.Run();
+        }
+
+        static void engine_PostLoad(object sender, EventArgs e)
+        {
+            ClientConnection connection = new ClientConnection();
+            connection.Connect(System.Net.IPAddress.Loopback);
+         
         }
 
         static void Listener_ConnectionAccepted(object sender, ConnectionEventArgs e)

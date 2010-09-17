@@ -51,6 +51,7 @@ namespace Gear.Net
         private void ConnectCallback(IAsyncResult result)
         {
             this.Socket.EndConnect(result);
+            this.Start();
             this.OnConnectionEstablished(EventArgs.Empty);
         }
         #endregion
