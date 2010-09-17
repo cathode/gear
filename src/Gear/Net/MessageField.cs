@@ -20,11 +20,16 @@ namespace Gear.Net
         {
             get;
         }
-        public byte Tag
+
+        public short Tag
         {
             get;
             set;
         }
+
+        /// <summary>
+        /// Gets the size in bytes required to serialize the <see cref="MessageField"/> in it's current state.
+        /// </summary>
         public abstract short Size
         {
             get;
@@ -34,9 +39,5 @@ namespace Gear.Net
         public abstract int CopyTo(byte[] buffer, int startIndex);
         public abstract int CopyFrom(byte[] buffer, int startIndex, int count);
         #endregion
-
-
-
-       
     }
 }

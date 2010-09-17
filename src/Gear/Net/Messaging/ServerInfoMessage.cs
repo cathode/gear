@@ -19,6 +19,30 @@ namespace Gear.Net.Messaging
     /// </remarks>
     public sealed class ServerInfoMessage : Message
     {
+        #region Fields
+        public const string DefaultMotd = "Message of the Day";
+        private StringField motd;
+        private VersionField version;
+        #endregion
+        #region Constructors
+        public ServerInfoMessage()
+        {
+            this.motd = new StringField(ServerInfoMessage.DefaultMotd);
+        }
+        #endregion
+        #region Properties
+        public string Motd
+        {
+            get
+            {
+                return this.motd.Value;
+            }
+            set
+            {
+                this.motd.Value = value;
+            }
+        }
+
         public override MessageId Id
         {
             get
@@ -26,11 +50,12 @@ namespace Gear.Net.Messaging
                 return MessageId.ServerInfo;
             }
         }
-
-
-        public override MessageField GetField(MessageFieldId id, byte tag)
+        #endregion
+        #region Methods
+        public override MessageField GetField(MessageFieldId id, short tag)
         {
             throw new NotImplementedException();
         }
+        #endregion
     }
 }

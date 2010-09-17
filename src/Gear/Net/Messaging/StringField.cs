@@ -17,17 +17,17 @@ using System.Text;
 
 namespace Gear.Net.Messaging
 {
-    public sealed class StringMessageField : MessageField
+    public sealed class StringField : MessageField
     {
         #region Fields
         private string value;
         #endregion
         #region Constructors
-        public StringMessageField()
+        public StringField()
         {
             this.value = string.Empty;
         }
-        public StringMessageField(string value)
+        public StringField(string value)
         {
             this.value = value ?? string.Empty;
         }

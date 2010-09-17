@@ -16,5 +16,6 @@ namespace Gear.Net
         Custom = 0,
         Guid,
         String,
+        Version,
     }
 }

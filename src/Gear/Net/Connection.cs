@@ -100,7 +100,7 @@ namespace Gear.Net
 
                 int size = 11; // Message header is 11 bytes.
                 foreach (var field in message.Fields)
-                    size += 5 + field.Size; // Field header is 5 bytes (per field)
+                    size += 6 + field.Size; // Field header is 5 bytes (per field)
 
                 DataBuffer buffer = new DataBuffer(size, DataBufferMode.NetworkByteOrder);
                 buffer.WriteInt32(Connection.MessagePrefix);
@@ -111,7 +111,7 @@ namespace Gear.Net
                 foreach (var field in message.Fields)
                 {
                     buffer.WriteInt16((short)field.Id);
-                    buffer.WriteByte(field.Tag);
+                    buffer.WriteInt16(field.Tag);
                     buffer.WriteInt16(field.Size);
                     buffer.Position += field.CopyTo(buffer.Contents, buffer.Position);
                 }
@@ -199,7 +199,7 @@ namespace Gear.Net
                 for (int i = 0; i < state.FieldCount; i++)
                 {
                     var fieldId = (MessageFieldId)buffer.ReadInt16();
-                    byte tag = buffer.ReadByte();
+                    short tag = buffer.ReadInt16();
                     short length = buffer.ReadInt16();
                     var field = state.Message.GetField(fieldId, tag);
                     buffer.Position += field.CopyFrom(state.Buffer, buffer.Position, length);

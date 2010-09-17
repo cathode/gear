@@ -52,6 +52,7 @@
     <None Include="Gear\Assets\DeltaTests.cs" />
     <Compile Include="Gear\Assets\PackageIndexTests.cs" />
     <Compile Include="Gear\Assets\PackageTests.cs" />
+    <Compile Include="Gear\Net\Messaging\VersionFieldTests.cs" />
     <Compile Include="NodeInterfaceTests.cs" />
     <Compile Include="NodeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
