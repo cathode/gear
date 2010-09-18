@@ -116,5 +116,15 @@ namespace Gear.Assets
             set;
         }
         #endregion
+
+        public bool Add(Asset asset)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove(Asset asset)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

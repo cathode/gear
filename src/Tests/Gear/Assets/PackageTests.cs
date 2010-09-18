@@ -1,4 +1,10 @@
-﻿using System;
+﻿/******************************************************************************
+ * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
+ * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved.         *
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
+ *****************************************************************************/
+using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -36,6 +42,55 @@ namespace Tests.Gear.Assets
         public void Placeholder()
         {
             Assert.Pass();
+        }
+
+        [Test]
+        public void NewPackageIsEmpty()
+        {
+            Package pkg = Package.CreateInMemory();
+            Assert.AreEqual(pkg.Count, 0);
+        }
+
+        [Test]
+        public void CanAddAssetToPackage()
+        {
+            try
+            {
+                Package pkg = Package.CreateInMemory();
+                Asset asset = new ExampleAsset();
+                pkg.Add(asset);
+                Assert.Pass();
+            }
+            catch
+            {
+                Assert.Fail("The operation should have run without throwing an exception.");
+            }
+        }
+        public void CanRemoveAssets()
+        {
+            try
+            {
+                Package pkg = Package.CreateInMemory();
+                Asset asset = new ExampleAsset();
+                pkg.Add(asset);
+                pkg.Remove(asset);
+            }
+            catch
+            {
+                Assert.Fail("The operation should have run without throwing an exception.");
+            }
+        }
+        public void RemoveNonExistingAssetFails()
+        {
+            Package pkg = Package.CreateInMemory();
+            Asset asset = new ExampleAsset();
+            bool actual = pkg.Remove(asset);
+
+            Assert.AreEqual(false, actual);
+        }
+
+        public sealed class ExampleAsset : Asset
+        {
         }
     }
 }
