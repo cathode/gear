@@ -104,6 +104,29 @@ namespace Tests.Gear.Assets
             Assert.AreEqual(true, actual);
         }
 
+        [Test(Description = "Ensures that an asset cannot be added to the same package twice.")]
+        public void AddingExistingAssetFails()
+        {
+            var pkg = Package.CreateInMemory();
+            var asset = new ExampleAsset();
+            bool actual = true;
+            bool expected = false;
+            if (pkg.Add(asset))
+                actual = pkg.Add(asset);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void AddingNullAssetFails()
+        {
+            var pkg = Package.CreateInMemory();
+            bool actual = pkg.Add(null);
+            bool expected = false;
+
+            Assert.AreEqual(expected, actual);
+        }
+
         public sealed class ExampleAsset : Asset
         {
         }
