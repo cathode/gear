@@ -66,6 +66,8 @@ namespace Tests.Gear.Assets
                 Assert.Fail("The operation should have run without throwing an exception.");
             }
         }
+
+        [Test]
         public void CanRemoveAssets()
         {
             try
@@ -80,6 +82,8 @@ namespace Tests.Gear.Assets
                 Assert.Fail("The operation should have run without throwing an exception.");
             }
         }
+
+        [Test]
         public void RemoveNonExistingAssetFails()
         {
             Package pkg = Package.CreateInMemory();
@@ -87,6 +91,17 @@ namespace Tests.Gear.Assets
             bool actual = pkg.Remove(asset);
 
             Assert.AreEqual(false, actual);
+        }
+
+        [Test]
+        public void RemoveExistingAssetSucceeds()
+        {
+            Package pkg = Package.CreateInMemory();
+            Asset asset = new ExampleAsset();
+            pkg.Add(asset);
+            bool actual = pkg.Remove(asset);
+
+            Assert.AreEqual(true, actual);
         }
 
         public sealed class ExampleAsset : Asset
