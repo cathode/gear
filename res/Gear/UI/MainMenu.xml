@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Asset Name="MainMenu" Type="Image" Comment="Gear client main menu background graphic.">
+  <Bitmap Width="2560" Height="1600" Import="MainMenu-2560x1600.tga" />
+  <Bitmap Width="1920" Height="1200" Import="MainMenu-1920x1200.tga" />
+  <Bitmap Width="1920" Height="1080" Import="MainMenu-1920x1080.tga" />
+  <Bitmap Width="1680" Height="1050" Import="MainMenu-1680x1050.tga" />
+  <Bitmap Width="1600" Height="1200" Import="MainMenu-1600x1200.tga" />
+  <Bitmap Width="1600" Height="1024" Import="MainMenu-1600x1024.tga" />
+  <Bitmap Width="1600" Height="900" Import="MainMenu-1600x900.tga" />
+  <Bitmap Width="1280" Height="1024" Import="MainMenu-1280x1024.tga" />
+  <Bitmap Width="1280" Height="800" Import="MainMenu-1280x800.tga" />
+  <Bitmap Width="1280" Height="720" Import="MainMenu-1280x720.tga" />
+  <Bitmap Width="1024" Height="768" Import="MainMenu-1024x768.tga" />
+  <Bitmap Width="800" Height="600" Import="MainMenu-800x600.tga" />
+  <Bitmap Width="640" Height="480" Import="MainMenu-640x480.tga" />
+</Asset>
