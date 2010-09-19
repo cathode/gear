@@ -4,40 +4,43 @@
  * This software is released under the terms and conditions of the Microsoft  *
  * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
+/******************************************************************************
+ * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
+ * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved.         *
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
+ *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gear.Net.Messaging
+namespace Gear
 {
-    /// <summary>
-    /// Represents a <see cref="MessageField"/> that holds a <see cref="Guid"/> current.
-    /// </summary>
-    public sealed class GuidField : MessageField
+    public sealed class StringField : Field
     {
         #region Fields
-        private Guid value;
+        private string value;
         #endregion
         #region Constructors
-        public GuidField()
+        public StringField()
         {
-            this.value = default(Guid);
+            this.value = string.Empty;
         }
-        public GuidField(Guid value)
+        public StringField(string value)
         {
-            this.value = value;
+            this.value = value ?? string.Empty;
         }
         #endregion
         #region Properties
-        public override MessageFieldId Id
+        public override FieldKind Id
         {
             get
             {
-                return MessageFieldId.Guid;
+                return FieldKind.String;
             }
         }
-        public Guid Value
+        public string Value
         {
             get
             {
@@ -45,34 +48,32 @@ namespace Gear.Net.Messaging
             }
             set
             {
-                this.value = value;
+                this.value = value ?? string.Empty;
             }
         }
+
         public override short Size
         {
             get
             {
-                return 16;
+                return (short)Encoding.UTF8.GetByteCount(this.value);
             }
         }
         #endregion
         #region Methods
         public override int CopyTo(byte[] buffer, int startIndex)
         {
-            this.value.ToByteArray().CopyTo(buffer, startIndex);
-            return 16;
+            var bytes = Encoding.UTF8.GetBytes(this.value);
+            bytes.CopyTo(buffer, startIndex);
+            return bytes.Length;
         }
 
         public override int CopyFrom(byte[] buffer, int startIndex, int count)
         {
-            if (count < 16)
-                throw new NotImplementedException();
-
-            byte[] guid = new byte[16];
-            Array.Copy(buffer, startIndex, guid, 0, 16);
-            this.value = new Guid(guid);
-            return 16;
+            this.value = Encoding.UTF8.GetString(buffer, startIndex, count);
+            return count;
         }
         #endregion
+        
     }
 }

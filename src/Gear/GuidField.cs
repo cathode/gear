@@ -9,52 +9,57 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gear.Net.Messaging
+namespace Gear
 {
     /// <summary>
-    /// A <see cref="Message"/> implementation that encapsulates information about the server.
+    /// Represents a <see cref="Field"/> that holds a <see cref="Guid"/> value.
     /// </summary>
-    /// <remarks>
-    /// The server MUST send this message as the FIRST message sent upon accepting a connection from the client.
-    /// </remarks>
-    public sealed class ServerInfoMessage : Message
+    public sealed class GuidField : Field.FieldBase<Guid>
     {
         #region Fields
-        public const string DefaultMotd = "Message of the Day";
-        private StringField motd;
-        private VersionField version;
+
         #endregion
         #region Constructors
-        public ServerInfoMessage()
+        public GuidField()
         {
-            this.motd = new StringField(ServerInfoMessage.DefaultMotd);
+        }
+        public GuidField(Guid value)
+            : base(value)
+        {
         }
         #endregion
         #region Properties
-        public string Motd
+        public override FieldKind Id
         {
             get
             {
-                return this.motd.Value;
-            }
-            set
-            {
-                this.motd.Value = value;
+                return FieldKind.Guid;
             }
         }
-
-        public override MessageId Id
+        public override short Size
         {
             get
             {
-                return MessageId.ServerInfo;
+                return 16;
             }
         }
         #endregion
         #region Methods
-        public override Field GetField(FieldKind id, short tag)
+        public override int CopyTo(byte[] buffer, int startIndex)
         {
-            throw new NotImplementedException();
+            this.Value.ToByteArray().CopyTo(buffer, startIndex);
+            return 16;
+        }
+
+        public override int CopyFrom(byte[] buffer, int startIndex, int count)
+        {
+            if (count < 16)
+                throw new NotImplementedException();
+
+            byte[] guid = new byte[16];
+            Array.Copy(buffer, startIndex, guid, 0, 16);
+            this.Value = new Guid(guid);
+            return 16;
         }
         #endregion
     }

@@ -17,7 +17,7 @@ namespace Gear.Net
         /// <summary>
         /// Backing field for the <see cref="Message.Fields"/> property.
         /// </summary>
-        private MessageField[] fields;
+        private Field[] fields;
         #endregion
         #region Constructors
         /// <summary>
@@ -25,17 +25,17 @@ namespace Gear.Net
         /// </summary>
         protected Message()
         {
-            this.fields = new MessageField[0];
+            this.fields = new Field[0];
         }
 
         /// <summary>
         /// Initializes a new current of the <see cref="Message"/> class.
         /// </summary>
         /// <param name="fields">The fields of the new <see cref="Message"/>.</param>
-        protected Message(MessageField[] fields)
+        protected Message(Field[] fields)
         {
             // The 'fields' member should never be null.
-            this.fields = fields ?? new MessageField[0];
+            this.fields = fields ?? new Field[0];
         }
         #endregion
         #region Properties
@@ -50,7 +50,7 @@ namespace Gear.Net
         /// <summary>
         /// Gets or sets the fields in the current <see cref="Message"/>.
         /// </summary>
-        public MessageField[] Fields
+        public Field[] Fields
         {
             get
             {
@@ -58,12 +58,12 @@ namespace Gear.Net
             }
             protected set
             {
-                this.fields = value ?? new MessageField[0]; 
+                this.fields = value ?? new Field[0]; 
             }
         }
         #endregion
         #region Methods
-        public abstract MessageField GetField(MessageFieldId id, short tag);
+        public abstract Field GetField(FieldKind id, short tag);
         #endregion
     }
 }

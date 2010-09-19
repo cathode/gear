@@ -7,6 +7,7 @@
 using System;
 using Gear.Net.Messaging;
 using NUnit.Framework;
+using Gear;
 
 namespace Tests.Gear.Net.Messaging
 {

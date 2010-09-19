@@ -9,12 +9,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gear.Net.Messaging
+namespace Gear
 {
     /// <summary>
-    /// Represents a <see cref="MessageField"/> that holds a <see cref="Version"/>.
+    /// Represents a <see cref="Field"/> that holds a <see cref="Version"/>.
     /// </summary>
-    public class VersionField : MessageField
+    public class VersionField : Field
     {
         #region Fields
         private Version value;
@@ -30,11 +30,11 @@ namespace Gear.Net.Messaging
         }
         #endregion
         #region Properties
-        public override MessageFieldId Id
+        public override FieldKind Id
         {
             get
             {
-                return MessageFieldId.Version;
+                return FieldKind.Version;
             }
         }
 

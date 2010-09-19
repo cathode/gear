@@ -198,7 +198,7 @@ namespace Gear.Net
                 DataBuffer buffer = new DataBuffer(state.Buffer, DataBufferMode.NetworkByteOrder);
                 for (int i = 0; i < state.FieldCount; i++)
                 {
-                    var fieldId = (MessageFieldId)buffer.ReadInt16();
+                    var fieldId = (FieldKind)buffer.ReadInt16();
                     short tag = buffer.ReadInt16();
                     short length = buffer.ReadInt16();
                     var field = state.Message.GetField(fieldId, tag);

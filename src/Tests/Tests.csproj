@@ -48,11 +48,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Gear\Assets\AssetTests.cs" />
+    <Compile Include="Gear\GuidFieldTests.cs" />
     <Compile Include="TestMessages.cs" />
     <None Include="Gear\Assets\DeltaTests.cs" />
     <Compile Include="Gear\Assets\PackageIndexTests.cs" />
     <Compile Include="Gear\Assets\PackageTests.cs" />
-    <Compile Include="Gear\Net\Messaging\VersionFieldTests.cs" />
+    <Compile Include="Gear\VersionFieldTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +61,9 @@
       <Project>{B13E769A-A4B6-466F-9896-7FA30F89CAFF}</Project>
       <Name>Gear</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Gear\Net\Messaging\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

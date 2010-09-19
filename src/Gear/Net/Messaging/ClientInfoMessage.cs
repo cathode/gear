@@ -32,7 +32,7 @@ namespace Gear.Net.Messaging
             this.clientId = new GuidField();
             this.name = new StringField();
 
-            this.Fields = new MessageField[]
+            this.Fields = new Field[]
             {
                 this.clientId,
                 this.name,
@@ -80,11 +80,11 @@ namespace Gear.Net.Messaging
         }
         #endregion
         #region Methods
-        public override MessageField GetField(MessageFieldId id, short tag)
+        public override Field GetField(FieldKind id, short tag)
         {
-            if (id == MessageFieldId.Guid)
+            if (id == FieldKind.Guid)
                 return this.clientId;
-            else if (id == MessageFieldId.String)
+            else if (id == FieldKind.String)
                 return this.name;
 
             return null;
