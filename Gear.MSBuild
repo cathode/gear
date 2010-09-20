@@ -12,7 +12,6 @@
   </ItemGroup>
   
   <Target Name="CompileSource">
-    <Delete Files="@(ProjectBinaries)" />
     <MSBuild Projects="src/Gear.sln" RebaseOutputs="true" Properties="Configuration=Release" Targets="Clean;Rebuild"/>
   </Target>
   
@@ -21,7 +20,7 @@
     <RemoveDir Directories="$(MSBuildProjectDirectory)\artifact" ContinueOnError="false" />
     <!-- Recreate directory -->
     <MakeDir Directories="$(MSBuildProjectDirectory)\artifact" ContinueOnError="false" />
-    <Copy SourceFiles="@(ProjectBinaries)" DestinationFolder="$(MSBuildProjectDirectory)\artifact" />
+    <Copy SourceFiles="@(ProjectBinaries)" DestinationFolder="$(MSBuildProjectDirectory)\artifact" ContinueOnError="false" />
     <ItemGroup>
       <FilesToZip Include="$(MSBuildProjectDirectory)\artifact\*" Exclude="*.zip" />
     </ItemGroup>
