@@ -17,19 +17,15 @@
   </Target>
   
   <Target Name="PackageBinaries" DependsOnTargets="CompileSource">
-    <ItemGroup>
-      <TempDirs Include="bin" />
-      <TempDirs Include="artifact" />
-    </ItemGroup>
     <!-- Delete any existing files -->
-    <RemoveDir Directories="@(TempDirs)" />
+    <RemoveDir Directories="$(MSBuildProjectDirectory)\artifact" ContinueOnError="false" />
     <!-- Recreate directory -->
-    <MakeDir Directories="@(TempDirs)" />
-    <Copy SourceFiles="@(ProjectBinaries)" DestinationFolder="bin" />
+    <MakeDir Directories="$(MSBuildProjectDirectory)\artifact" ContinueOnError="false" />
+    <Copy SourceFiles="@(ProjectBinaries)" DestinationFolder="$(MSBuildProjectDirectory)\artifact" />
     <ItemGroup>
-      <FilesToZip Include="$(MSBuildProjectDirectory)\bin\*" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\artifact\*" Exclude="*.zip" />
     </ItemGroup>
-    <Zip Files="@(FilesToZip)" WorkingDirectory="$(MSBuildProjectDirectory)\bin\" ZipFileName="artifact\Gear.zip" ZipLevel="9" />
+    <Zip Files="@(FilesToZip)" WorkingDirectory="$(MSBuildProjectDirectory)\artifact" ZipFileName="$(MSBuildProjectDirectory)\artifact\Gear.zip" ZipLevel="9" />
   </Target>
 
   <Target Name="PackageGameAssets" DependsOnTargets="PackageBinaries">

@@ -9,6 +9,15 @@
       <Image Name="Background">
         <Bitmap Import="Background.tga" />
       </Image>
+      <Image Name="NewGame">
+        <Bitmap Import="NewGame.tga" />
+      </Image>
+      <Image Name="LoadGame">
+        <Bitmap Import="LoadGame.tga" />
+      </Image>
+      <Image Name="JoinServer">
+        <Bitmap Import="JoinServer.tga" />
+      </Image>
     </AssetGroup>
   </AssetGroup>
 </Package>
