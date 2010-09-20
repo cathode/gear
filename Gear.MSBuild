@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Project DefaultTargets="FullBuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <Import Project="$(MSBuildExtensionsPath)/MSBuildCommunityTasks/MSBuild.Community.Tasks.Targets" />
-  
-  <ItemGroup>
-    <ProjectBinaries Include="src/Gear/bin/Release/*" />
-    <ProjectBinaries Include="src/Gear.Client/bin/Release/*" />
-    <ProjectBinaries Include="src/Gear.Editor/bin/Release/*" />
-    <ProjectBinaries Include="src/Gear.Launcher/bin/Release/*" />
-    <ProjectBinaries Include="src/Gear.Server/bin/Release/*" />
-    <ProjectBinaries Include="src/Gear.Utilities.Compiler/bin/Release/*" />
-  </ItemGroup>
-  
+
   <Target Name="CompileSource">
     <MSBuild Projects="src/Gear.sln" RebaseOutputs="true" Properties="Configuration=Release" Targets="Clean;Rebuild"/>
   </Target>
   
   <Target Name="PackageBinaries" DependsOnTargets="CompileSource">
     <!-- Delete any existing files -->
-    <RemoveDir Directories="$(MSBuildProjectDirectory)\artifact" ContinueOnError="false" />
+    <RemoveDir Directories="$(MSBuildProjectDirectory)/artifact" ContinueOnError="false" />
     <!-- Recreate directory -->
-    <MakeDir Directories="$(MSBuildProjectDirectory)\artifact" ContinueOnError="false" />
-    <Copy SourceFiles="@(ProjectBinaries)" DestinationFolder="$(MSBuildProjectDirectory)\artifact" ContinueOnError="false" />
+    <MakeDir Directories="$(MSBuildProjectDirectory)/artifact" ContinueOnError="false" />
     <ItemGroup>
-      <FilesToZip Include="$(MSBuildProjectDirectory)\artifact\*" Exclude="*.zip" />
+      <ProjectBinaries Include="$(MSBuildProjectDirectory)/src/Gear/bin/Release/*" />
+      <ProjectBinaries Include="$(MSBuildProjectDirectory)/src/Gear.Client/bin/Release/*" />
+      <ProjectBinaries Include="$(MSBuildProjectDirectory)/src/Gear.Editor/bin/Release/*" />
+      <ProjectBinaries Include="$(MSBuildProjectDirectory)/src/Gear.Launcher/bin/Release/*" />
+      <ProjectBinaries Include="$(MSBuildProjectDirectory)/src/Gear.Server/bin/Release/*" />
+      <ProjectBinaries Include="$(MSBuildProjectDirectory)/src/Gear.Utilities.Compiler/bin/Release/*" />
     </ItemGroup>
-    <Zip Files="@(FilesToZip)" WorkingDirectory="$(MSBuildProjectDirectory)\artifact" ZipFileName="$(MSBuildProjectDirectory)\artifact\Gear.zip" ZipLevel="9" />
+    <Copy SourceFiles="@(ProjectBinaries)" DestinationFolder="$(MSBuildProjectDirectory)/artifact" ContinueOnError="false" />
+    <ItemGroup>
+      <FilesToZip Include="$(MSBuildProjectDirectory)/artifact/*" Exclude="*.zip" />
+    </ItemGroup>
+    <Zip Files="@(FilesToZip)" WorkingDirectory="$(MSBuildProjectDirectory)/artifact" ZipFileName="$(MSBuildProjectDirectory)/artifact/Gear.zip" ZipLevel="9" />
   </Target>
 
   <Target Name="PackageGameAssets" DependsOnTargets="PackageBinaries">
