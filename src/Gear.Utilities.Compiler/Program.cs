@@ -20,13 +20,12 @@ namespace Gear.Utilities.Compiler
                 Console.WriteLine("Invalid number of arguments.\r\nUsage: Gear.Utilities.PackageCompiler.exe <path-to-package-xml-file>");
             else
             {
-                var compiler = new PackageCompiler();
-
                 string path = Path.GetFullPath(args[0]);
                 bool result = false;
+                var compiler = new PackageCompiler(path);
                 try
                 {
-                    result = compiler.CompilePackage(path);
+                    result = compiler.Compile();
                 }
                 finally
                 {

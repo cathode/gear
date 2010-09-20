@@ -19,7 +19,7 @@ namespace Gear.Assets
         /// <summary>
         /// Holds the default file extension for package files.
         /// </summary>
-        public const string DefaultFileExtension = ".g";
+        public const string DefaultFileExtension = ".gpk";
 
         /// <summary>
         /// Backing field for the <see cref="Package.IsDisposed"/> property.

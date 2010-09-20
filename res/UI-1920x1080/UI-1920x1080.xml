@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package Version="0.1.0.0" Id="{14B2744B-C9D6-4405-B053-DA2E938D18FE}">
+  <RequirePackage>{857BDB35-02C8-4ABD-9155-95B1F24441E3}</RequirePackage>
+  <Build>
+    <OutputFile>UI-1920x1080.gpk</OutputFile>
+  </Build>
+  <AssetGroup Name="UI">
+    <AssetGroup Name="MainMenu">
+      <Image Name="Background">
+        <Bitmap Import="Background.tga" />
+      </Image>
+    </AssetGroup>
+  </AssetGroup>
+</Package>
