@@ -6,27 +6,15 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
-
 using System.Text;
 
-namespace Gear.Assets
+namespace Gear.Assets.Items
 {
-    public sealed class AssetManager
+    [Flags]
+    public enum ItemFlags
     {
-        #region Constructors - Static
-        internal AssetManager()
-        {
-            this.graph = new AssetGraph();
-        }
-        #endregion
-        #region Fields - Private
-        private readonly AssetGraph graph;
-        #endregion
-        #region Methods
-        public static void AddAssetSource(Uri url)
-        {
-
-        }
-        #endregion
+        None = 0x0,
+        Equippable = 0x1,
+        Upgradable = 0x2,
     }
 }

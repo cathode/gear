@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="PackageSchema"
+    targetNamespace="http://schemas.gearedstudios.com/GearPackage.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://schemas.gearedstudios.com/GearPackage.xsd"
+    xmlns:mstns="http://schemas.gearedstudios.com/GearPackage.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Package">
+    
+  </xs:element>
+</xs:schema>

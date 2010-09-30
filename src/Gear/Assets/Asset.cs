@@ -8,11 +8,11 @@ namespace Gear.Assets
     /// <summary>
     /// Represents a game asset.
     /// </summary>
-    public abstract class Asset : IDisposable
+    public abstract class Asset : IDisposable, IFieldSerializable
     {
         #region Fields
         /// <summary>
-        /// Backing field for the <see cref="Asset.UniqueId"/> property.
+        /// Backing field for the <see cref="Asset.Id"/> property.
         /// </summary>
         private readonly Guid uniqueId;
 
@@ -86,5 +86,15 @@ namespace Gear.Assets
             return true;
         }
         #endregion
+
+        public IEnumerable<Field> GetFields()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Field GetField(FieldKind id, short tag)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

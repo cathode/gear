@@ -9,24 +9,13 @@ using System.Collections.Generic;
 
 using System.Text;
 
-namespace Gear.Assets
+namespace Gear.Assets.Items
 {
-    public sealed class AssetManager
+    public enum ItemPartSize
     {
-        #region Constructors - Static
-        internal AssetManager()
-        {
-            this.graph = new AssetGraph();
-        }
-        #endregion
-        #region Fields - Private
-        private readonly AssetGraph graph;
-        #endregion
-        #region Methods
-        public static void AddAssetSource(Uri url)
-        {
-
-        }
-        #endregion
+        Small,
+        Medium,
+        Large,
+        Structure,
     }
 }

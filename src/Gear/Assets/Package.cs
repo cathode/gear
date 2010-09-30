@@ -7,6 +7,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace Gear.Assets
 {
@@ -19,7 +20,9 @@ namespace Gear.Assets
         /// <summary>
         /// Holds the default file extension for package files.
         /// </summary>
-        public const string DefaultFileExtension = ".gpk";
+        public const string DefaultFileExtension = ".gpak";
+
+        public const int FourCC = 'G' << 24 | 'P' << 16 | 'A' << 8 | 'K';
 
         /// <summary>
         /// Backing field for the <see cref="Package.IsDisposed"/> property.
@@ -27,13 +30,6 @@ namespace Gear.Assets
         private bool isDisposed;
 
         private Stream stream;
-
-        ///// <summary>
-        ///// Backing field for <see cref="PackageHeader.IndexOffset"/> property.
-        ///// </summary>
-        //private uint indexOffset;
-        //private Queue<int> freeBlocks;
-        //private Dictionary<long, Guid> blockAllocationTable;
         #endregion
         #region Constructors
         /// <summary>
@@ -46,55 +42,6 @@ namespace Gear.Assets
                 throw new ArgumentNullException("stream");
 
             this.stream = stream;
-        }
-        #endregion
-        #region Methods
-        public void Include(Asset asset)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Releases any unmanaged resources held by the current <see cref="Package"/>.
-        /// </summary>
-        public void Dispose()
-        {
-            if (this.IsDisposed)
-                return;
-
-            this.isDisposed = true;
-        }
-
-        public static Package CreateInMemory()
-        {
-            MemoryStream ms = new MemoryStream();
-            return new Package(ms);
-        }
-
-        public static Package Open(Stream stream)
-        {
-            if (stream == null)
-                throw new ArgumentNullException("stream");
-
-            return new Package(stream);
-        }
-
-        public static Package Open(string path)
-        {
-            return Package.Open(File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite));
-        }
-
-        private void ReadPackageHeader()
-        {
-            stream.Position = 0;
-
-            BinaryReader reader = new BinaryReader(stream, System.Text.Encoding.UTF8);
-
-
-        }
-        internal Stream OpenAssetStream(Guid assetId)
-        {
-            throw new NotImplementedException();
         }
         #endregion
         #region Properties
@@ -115,15 +62,52 @@ namespace Gear.Assets
             set;
         }
         #endregion
+        #region Methods
+        /// <summary>
+        /// Releases any unmanaged resources held by the current <see cref="Package"/>.
+        /// </summary>
+        public void Dispose()
+        {
+            if (this.IsDisposed)
+                return;
 
-        public bool Add(Asset asset)
+            this.isDisposed = true;
+        }
+
+        public static Package Open(Stream stream)
+        {
+            if (stream == null)
+                throw new ArgumentNullException("stream");
+
+            return new Package(stream);
+        }
+
+        public static Package Open(string path)
+        {
+            return Package.Open(File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite));
+        }
+
+        private void ReadPackageHeader()
+        {
+
+        }
+
+        internal Stream OpenAssetStream(Guid assetId)
         {
             throw new NotImplementedException();
         }
+        #endregion
 
-        public bool Remove(Asset asset)
+        [StructLayout(LayoutKind.Explicit)]
+        internal unsafe struct PackageHeader
         {
-            throw new NotImplementedException();
+            internal const int CorrectFourCC = 'G' << 24 | 'P' << 16 | 'A' << 8 | 'K';
+            [FieldOffset(0)]
+            internal fixed byte Buffer[20];
+            [FieldOffset(0)]
+            internal int FourCC;
+            [FieldOffset(4)]
+            internal Version Version;
         }
     }
 }

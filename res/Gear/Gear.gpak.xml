@@ -10,18 +10,6 @@
     <OutputFile>Gear.gpk</OutputFile>
   </Build>
   
-  <AssetGroup Name="Items">
-    <AssetGroup Name="Weapons">
-      <AssetGroup Name="Swords">
-        <Asset Name="ShortSword" Variations="1">
-          <Model>ShortSword001.model</Model>
-          <Material>ShortSword001.material</Material>
-          
-        </Asset>
-      </AssetGroup>
-    </AssetGroup>
-  </AssetGroup>
-  
   <AssetGroup Name="UI">
     <AssetGroup Name="MainMenu">
       <Image Name="Background" />

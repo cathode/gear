@@ -1,24 +1,20 @@
 ﻿/******************************************************************************
  * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
  * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved.         *
- * -------------------------------------------------------------------------- *
- * Contributors:                                                              *
- * - Will 'cathode' Shelley <cathode@live.com>                                *
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Gear.ItemSystem
+namespace Gear.Assets.Items
 {
     /// <summary>
     /// Represents a game item.
     /// </summary>
     public class Item 
     {
-        #region Fields
-        private Guid target;
-        #endregion
         #region Properties
         public ItemFlags Flags
         {
@@ -36,17 +32,6 @@ namespace Gear.ItemSystem
         {
             get;
             set;
-        }
-        public Guid Target
-        {
-            get
-            {
-                return this.target;
-            }
-            set
-            {
-                this.target = value;
-            }
         }
         #endregion
     }

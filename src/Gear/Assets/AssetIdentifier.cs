@@ -1,10 +1,10 @@
-﻿/* Copyright © 2009-2010 Will Shelley. All Rights Reserved.
-   See the included license.txt file for details. */
+﻿/******************************************************************************
+ * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
+ * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved.         *
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
+ *****************************************************************************/
 using System;
-using System.Collections.Generic;
-
-using System.Text;
-using System.Security.Cryptography;
 
 namespace Gear.Assets
 {
@@ -13,71 +13,53 @@ namespace Gear.Assets
     /// </summary>
     public sealed class AssetIdentifier
     {
-        #region Constructors - Private
-        private AssetIdentifier(Guid uniqueId, AssetKind kind)
-        {
-            this.kind = kind;
-            this.uniqueId = uniqueId;
-        }
-        #endregion
-        #region Fields - Private
-        private readonly AssetKind kind;
+        #region Fields
+        private AssetKind kind;
         private string name;
-        private Version version = new Version(-1, -1, -1, -1);
-        private readonly Guid uniqueId;
+        private Version version;
+        private Guid id;
+        private string group;
         #endregion
-        #region Methods - Private
-        public static AssetIdentifier NewIdentifier(AssetKind kind)
-        {
-            return AssetIdentifier.NewIdentifier(kind, null);
-        }
-        public static AssetIdentifier NewIdentifier(AssetKind kind, string name)
-        {
-            return new AssetIdentifier(Guid.NewGuid(), kind)
-            {
-                Name = name,
-            };
-        }
-        private byte[] Serialize()
-        {
-            var buffer = new List<byte>();
-
-            if (BitConverter.IsLittleEndian)
-            {
-                throw new NotImplementedException();
-            }
-            else
-            {
-                buffer.AddRange(BitConverter.GetBytes((ushort)this.Kind));
-                buffer.AddRange(this.uniqueId.ToByteArray());
-                buffer.AddRange(BitConverter.GetBytes(this.Version.Major));
-                buffer.AddRange(BitConverter.GetBytes(this.Version.Minor));
-                buffer.AddRange(BitConverter.GetBytes(this.Version.Build));
-                buffer.AddRange(BitConverter.GetBytes(this.Version.Revision));
-                var nameBytes = Encoding.UTF8.GetBytes(this.Name);
-                buffer.AddRange(BitConverter.GetBytes((ushort)nameBytes.Length));
-                buffer.AddRange(nameBytes);
-            }
-
-            return buffer.ToArray();
-        }
-        #endregion
-        #region Methods
+        #region Constructors
         /// <summary>
-        /// Calculates the MD5 checksum of the current <see cref="AssetIdentifier"/>.
+        /// Initializes a new instance of the <see cref="AssetIdentifier"/> class.
         /// </summary>
-        /// <returns></returns>
-        public byte[] GetChecksum()
+        public AssetIdentifier()
         {
-            return MD5.Create().ComputeHash(this.Serialize());
+            this.Kind = AssetKind.Binary;
+            this.Id = Guid.NewGuid();
+            this.Name = string.Empty;
+            this.Version = new Version();
+            this.Group = "/";
+        }
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AssetIdentifier"/> class.
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <param name="id"></param>
+        /// <param name="version"></param>
+        /// <param name="name"></param>
+        /// <param name="group"></param>
+        public AssetIdentifier(AssetKind kind, Guid id, Version version, string name, string group)
+        {
+            this.Kind = kind;
+            this.Id = id;
+            this.Version = version;
+            this.Name = name;
+            this.Group = group;
         }
         #endregion
-        #region Properties - Public
+        #region Properties
         public AssetKind Kind
         {
             get
             {
                 return this.kind;
+            }
+            set
+            {
+                this.kind = value;
             }
         }
         public Version Version
@@ -99,14 +81,29 @@ namespace Gear.Assets
             }
             set
             {
-                this.name = value;
+                this.name = value ?? string.Empty;
             }
         }
-        public Guid UniqueId
+        public Guid Id
         {
             get
             {
-                return this.uniqueId;
+                return this.id;
+            }
+            set
+            {
+                this.id = value;
+            }
+        }
+        public string Group
+        {
+            get
+            {
+                return this.group;
+            }
+            set
+            {
+                this.group = value ?? "/";
             }
         }
         #endregion

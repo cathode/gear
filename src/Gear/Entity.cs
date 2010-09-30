@@ -18,7 +18,7 @@ namespace Gear
     {
         #region Fields
         /// <summary>
-        /// Backing field for the <see cref="Entity.UniqueId"/> field.
+        /// Backing field for the <see cref="Entity.Id"/> field.
         /// </summary>
         private readonly Guid uniqueId;
         #endregion

@@ -5,6 +5,7 @@
  * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
 using System;
+using System.Text;
 
 namespace Gear
 {
@@ -469,7 +470,11 @@ namespace Gear
 
         public int WriteStringUtf8(string value)
         {
-            throw new NotImplementedException();
+            var bytes = Encoding.UTF8.GetBytes(value);
+
+            bytes.CopyTo(this.contents, this.position);
+            this.position += bytes.Length;
+            return bytes.Length;
         }
 
         public int WriteStringUtf16(string value)
@@ -490,5 +495,23 @@ namespace Gear
             return n;
         }
         #endregion
+
+        internal int WriteGuid(Guid id)
+        {
+            var bytes = id.ToByteArray();
+            bytes.CopyTo(this.contents, this.position);
+            this.position += bytes.Length;
+            return bytes.Length;
+        }
+
+        internal int WriteVersion(Version version)
+        {
+            this.WriteInt32(version.Major);
+            this.WriteInt32(version.Minor);
+            this.WriteInt32(version.Build);
+            this.WriteInt32(version.Revision);
+
+            return 16;
+        }
     }
 }
