@@ -61,6 +61,7 @@
     <Compile Include="Assets\Int32Field.cs" />
     <Compile Include="Assets\Package.cs" />
     <Compile Include="Assets\PackageCompiler.cs" />
+    <Compile Include="Assets\PackageFlags.cs" />
     <Compile Include="Assets\PackageIndex.cs" />
     <Compile Include="Assets\PackageIndexEntry.cs" />
     <Compile Include="Assets\StringField.cs" />

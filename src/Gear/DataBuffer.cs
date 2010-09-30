@@ -300,6 +300,16 @@ namespace Gear
             return result;
         }
 
+        public Guid ReadGuid()
+        {
+            return new Guid(this.ReadInt32(), this.ReadInt16(), this.ReadInt16(), this.ReadBytes(8));
+        }
+
+        public Version ReadVersion()
+        {
+            return new Version(this.ReadInt32(), this.ReadInt32(), this.ReadInt32(), this.ReadInt32());
+        }
+
         public void WriteByte(byte value)
         {
             this.contents[this.position] = value;
@@ -481,10 +491,12 @@ namespace Gear
         {
             throw new NotImplementedException();
         }
+
         public int WriteBytes(byte[] value)
         {
             return this.WriteBytes(value, 0, value.Length);
         }
+
         public int WriteBytes(byte[] value, int startIndex, int count)
         {
             int n;
@@ -494,17 +506,21 @@ namespace Gear
             position += n;
             return n;
         }
-        #endregion
 
-        internal int WriteGuid(Guid id)
+        public int WriteGuid(Guid id)
         {
-            var bytes = id.ToByteArray();
-            bytes.CopyTo(this.contents, this.position);
-            this.position += bytes.Length;
-            return bytes.Length;
+            // Create a sub-buffer to decode the platform-specific result of Guid.ToByteArray()
+            DataBuffer db = new DataBuffer(id.ToByteArray(), DataBufferMode.System);
+
+            this.WriteInt32(db.ReadInt32());
+            this.WriteInt16(db.ReadInt16());
+            this.WriteInt16(db.ReadInt16());
+            this.WriteBytes(db.ReadBytes(8));
+
+            return 16;
         }
 
-        internal int WriteVersion(Version version)
+        public int WriteVersion(Version version)
         {
             this.WriteInt32(version.Major);
             this.WriteInt32(version.Minor);
@@ -513,5 +529,6 @@ namespace Gear
 
             return 16;
         }
+        #endregion
     }
 }
