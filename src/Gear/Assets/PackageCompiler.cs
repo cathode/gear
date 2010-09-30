@@ -5,11 +5,11 @@
  * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
 using System;
-using System.Linq;
-using System.Xml.Linq;
-using System.IO;
-using System.Text;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Xml.Linq;
 
 namespace Gear.Assets
 {
