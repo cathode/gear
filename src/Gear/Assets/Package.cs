@@ -21,7 +21,7 @@ namespace Gear.Assets
         /// <summary>
         /// Holds the default file extension for package files.
         /// </summary>
-        public const string DefaultFileExtension = ".gpak";
+        public const string DefaultFileExtension = ".GPak";
 
         /// <summary>
         /// Holds the four-character-code that is the first four bytes of a valid package stream.
@@ -114,8 +114,8 @@ namespace Gear.Assets
              *   0x00 | FourCC              | 4
              *   0x04 | Id (GUID)           | 16
              *   0x14 | Version             | 16
-             *   0x24 | Block table offset  | 8
-             *   0x2C | Block Size          | 4
+             *   0x24 | Index table offset  | 8
+             *   0x2C | Package flags       | 4
              *   0x30 | Signature SerialID  | 4
              *   0x3C | Header CRC32        | 4
              */

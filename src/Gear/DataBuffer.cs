@@ -137,6 +137,7 @@ namespace Gear
         }
         public byte[] ReadBytes(int count)
         {
+            //int read = this.contents.Length - (
             throw new NotImplementedException();
         }
         public int ReadBytes(byte[] buffer, int startIndex, int count)

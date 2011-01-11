@@ -190,8 +190,7 @@ namespace Gear.Assets
             }
             state.Group = workingGroup;
 
-            // Pre-scan items in current group.
-
+            // == Pre-scan items in current group ==
             var kinds = Enum.GetValues(typeof(AssetKind));
 
             foreach (var kind in kinds.Cast<AssetKind>())
@@ -201,8 +200,6 @@ namespace Gear.Assets
                             Guid.Parse((node.Attribute("Id") ?? new XAttribute("Version", Guid.Empty.ToString())).Value),
                             Version.Parse((node.Attribute("Version") ?? new XAttribute("Version", "0.0.0.0")).Value),
                             node.Attribute("Name").Value, state.Path));
-
-
         }
         #endregion
         #region Types
