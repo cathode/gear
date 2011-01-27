@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Rust.Assets
 {
-    public interface IGameAsset
+    public interface IAsset
     {
         
     }

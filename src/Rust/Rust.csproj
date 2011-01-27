@@ -38,6 +38,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SlimDX, Version=2.0.10.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9, processorArchitecture=AMD64" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -49,13 +50,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Field.cs" />
     <Compile Include="Assets\IAssetField.cs" />
-    <Compile Include="Assets\IGameAsset.cs" />
+    <Compile Include="Assets\IAsset.cs" />
+    <Compile Include="Assets\IFieldValue.cs" />
+    <Compile Include="Assets\Package.cs" />
+    <Compile Include="Assets\PackageFlags.cs" />
+    <Compile Include="Assets\PackageReference.cs" />
+    <Compile Include="ByteOrder.cs" />
+    <Compile Include="DataBuffer.cs" />
+    <Compile Include="GamePlugin.cs" />
     <Compile Include="GamePluginLauncherDataAttribute.cs" />
-    <Compile Include="LauncherUI.cs">
+    <Compile Include="GamePluginManager.cs" />
+    <Compile Include="Graphics\Material.cs" />
+    <Compile Include="Launcher\LauncherUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LauncherUI.Designer.cs">
+    <Compile Include="Launcher\LauncherUI.Designer.cs">
       <DependentUpon>LauncherUI.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -69,7 +80,7 @@
     <Compile Include="RustGamePluginAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="LauncherUI.resx">
+    <EmbeddedResource Include="Launcher\LauncherUI.resx">
       <DependentUpon>LauncherUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -77,6 +88,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

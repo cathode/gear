@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Rust.Assets;
 
 namespace Rust
 {
@@ -19,6 +20,11 @@ namespace Rust
         private void exitButton_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void testButton_Click(object sender, EventArgs e)
+        {
+            Package pkg = Package.Create("test.package");
         }
     }
 }

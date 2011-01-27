@@ -1,9 +1,17 @@
-﻿using System;
+﻿/******************************************************************************
+ * Rust: A Managed Game Engine - http://trac.gearedstudios.com/rust/          *
+ * Copyright © 2009-2010 Will 'cathode' Shelley. All Rights Reserved.         *
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
+ *****************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime;
 using System.IO;
+using SlimDX;
+using System.Diagnostics;
 
 namespace Rust
 {
@@ -13,50 +21,46 @@ namespace Rust
     public static class Engine
     {
         #region Fields
-        private static readonly List<string> pluginSearchPaths = new List<string>();
-        private static readonly Dictionary<Guid, string> scannedPlugins = new Dictionary<Guid, string>();
+        private static double deltaTime;
+        private static Stopwatch stopwatch = new Stopwatch();
+        private static volatile bool running = false;
+        #endregion
+        #region Events
+        public static event EventHandler Tick;
         #endregion
         #region Properties
-
+        public static double TickRate
+        {
+            get;
+            set;
+        }
         #endregion
         #region Methods
-        /// <summary>
-        /// Loads the game plugin assembly given a unique game ID.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static System.Reflection.Assembly LoadGamePlugin(Guid gameID)
+        public static void Initialize()
         {
-            throw new NotImplementedException();
+            Engine.TickRate = 0.0;
         }
-
-        public static Guid[] ScanForGamePlugins()
+        public static void Start()
         {
-            Engine.scannedPlugins.Clear();
-
-            return new Guid[0];
+            Console.WriteLine("Frequency: {0} (High-resolution: {1})", Stopwatch.Frequency, Stopwatch.IsHighResolution);
+            Engine.running = true;
+            Engine.stopwatch.Start();
+            while (Engine.running)
+                Engine.OnTick();
         }
-
-        /// <summary>
-        /// Registers the specified path as a location where game plugins will be scanned/loaded from.
-        /// </summary>
-        /// <param name="path"></param>
-        public static void RegisterGamePluginSearchPath(string path)
+        public static void Stop()
         {
-            string fullPath = Path.GetFullPath(path);
-            if (!Directory.Exists(path))
-                throw new DirectoryNotFoundException(fullPath);
-            if (!Engine.pluginSearchPaths.Contains(fullPath))
-                Engine.pluginSearchPaths.Add(fullPath);
+            Engine.running = false;
         }
-
-        /// <summary>
-        /// Unregisters a previously registered plugin search path.
-        /// </summary>
-        /// <param name="path"></param>
-        public static void UnregisterGamePluginSearchPath(string path)
+        private static void OnTick()
         {
-            Engine.pluginSearchPaths.Remove(path);
+            Engine.stopwatch.Stop();
+            Engine.deltaTime = 1.0 / (Engine.stopwatch.ElapsedTicks % Stopwatch.Frequency);
+
+            if (Engine.Tick != null)
+                Engine.Tick(null, EventArgs.Empty);
+
+            Engine.stopwatch.Restart();
         }
         #endregion
     }

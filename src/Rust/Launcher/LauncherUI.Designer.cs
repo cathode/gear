@@ -33,6 +33,7 @@
             this.playButton = new System.Windows.Forms.Button();
             this.exitButton = new System.Windows.Forms.Button();
             this.descriptionBox = new System.Windows.Forms.TextBox();
+            this.testButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.gameBannerPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -84,6 +85,16 @@
             this.descriptionBox.TabIndex = 4;
             this.descriptionBox.Text = "Description of Game Plugin";
             // 
+            // testButton
+            // 
+            this.testButton.Location = new System.Drawing.Point(436, 354);
+            this.testButton.Name = "testButton";
+            this.testButton.Size = new System.Drawing.Size(75, 23);
+            this.testButton.TabIndex = 5;
+            this.testButton.Text = "Test";
+            this.testButton.UseVisualStyleBackColor = true;
+            this.testButton.Click += new System.EventHandler(this.testButton_Click);
+            // 
             // LauncherUI
             // 
             this.AcceptButton = this.playButton;
@@ -91,6 +102,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.exitButton;
             this.ClientSize = new System.Drawing.Size(800, 400);
+            this.Controls.Add(this.testButton);
             this.Controls.Add(this.descriptionBox);
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.playButton);
@@ -118,5 +130,6 @@
         private System.Windows.Forms.Button playButton;
         private System.Windows.Forms.Button exitButton;
         private System.Windows.Forms.TextBox descriptionBox;
+        private System.Windows.Forms.Button testButton;
     }
 }

@@ -17,13 +17,24 @@ namespace Rust
         {
             // Hardcoded engine set-up.
             //Engine.RegisterGamePluginSearchPath("./plugins/");
-            Engine.RegisterGamePluginSearchPath("./");
+            //GamePluginManager.RegisterGamePluginSearchPath("./");
 
-            var ids = Engine.ScanForGamePlugins();
+            //var ids = GamePluginManager.ScanForGamePlugins();
 
             var launcherUI = new LauncherUI();
             Application.EnableVisualStyles();
             Application.Run(launcherUI);
+
+            //int adapterOrdinal = SlimDX.DXGI.
+
+            //Engine.Tick += new EventHandler(Engine_Tick);
+            //Engine.Start();
+
+        }
+
+        static void Engine_Tick(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
