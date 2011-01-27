@@ -13,11 +13,7 @@
     <MakeDir Directories="$(MSBuildProjectDirectory)/artifact" ContinueOnError="false" />
     <ItemGroup>
       <ProjectBinaries Include="$(MSBuildProjectDirectory)/src/Gear/bin/Release/*" />
-      <ProjectBinaries Include="$(MSBuildProjectDirectory)/src/Gear.Client/bin/Release/*" />
-      <ProjectBinaries Include="$(MSBuildProjectDirectory)/src/Gear.Editor/bin/Release/*" />
-      <ProjectBinaries Include="$(MSBuildProjectDirectory)/src/Gear.Launcher/bin/Release/*" />
-      <ProjectBinaries Include="$(MSBuildProjectDirectory)/src/Gear.Server/bin/Release/*" />
-      <ProjectBinaries Include="$(MSBuildProjectDirectory)/src/Gear.Utilities.Compiler/bin/Release/*" />
+      <ProjectBinaries Include="$(MSBuildProjectDirectory)/src/Rust/bin/Release/*" />
     </ItemGroup>
     <Copy SourceFiles="@(ProjectBinaries)" DestinationFolder="$(MSBuildProjectDirectory)/artifact" ContinueOnError="false" />
     <ItemGroup>

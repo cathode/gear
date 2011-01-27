@@ -60,7 +60,7 @@ namespace Rust
             if (Engine.Tick != null)
                 Engine.Tick(null, EventArgs.Empty);
 
-            Engine.stopwatch.Restart();
+            //Engine.stopwatch.Restart();
         }
         #endregion
     }
