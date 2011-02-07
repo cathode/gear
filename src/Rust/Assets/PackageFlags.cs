@@ -12,7 +12,7 @@ namespace Rust.Assets
     /// Represents flags associated with a game package.
     /// </summary>
     [Flags]
-    public enum PackageFlags
+    public enum PackageFlags : ushort
     {
         /// <summary>
         /// Indicates no flags are set.

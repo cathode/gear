@@ -24,6 +24,7 @@ namespace Rust
         private static double deltaTime;
         private static Stopwatch stopwatch = new Stopwatch();
         private static volatile bool running = false;
+        private static double tickRate;
         #endregion
         #region Events
         public static event EventHandler Tick;
@@ -31,8 +32,14 @@ namespace Rust
         #region Properties
         public static double TickRate
         {
-            get;
-            set;
+            get
+            {
+                return Engine.tickRate;
+            }
+            set
+            {
+                Engine.tickRate = value;
+            }
         }
         #endregion
         #region Methods

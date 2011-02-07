@@ -56,6 +56,7 @@
     <Compile Include="Assets\IAsset.cs" />
     <Compile Include="Assets\IFieldValue.cs" />
     <Compile Include="Assets\Package.cs" />
+    <Compile Include="Assets\PackageCompiler.cs" />
     <Compile Include="Assets\PackageFlags.cs" />
     <Compile Include="Assets\PackageReference.cs" />
     <Compile Include="ByteOrder.cs" />
@@ -93,6 +94,11 @@
     <None Include="Shaders\sample.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SamplePackage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

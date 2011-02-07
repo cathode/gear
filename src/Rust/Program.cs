@@ -16,6 +16,7 @@ using SlimDX.Windows;
 using Buffer = SlimDX.Direct3D11.Buffer;
 using Device = SlimDX.Direct3D11.Device;
 using Resource = SlimDX.Direct3D11.Resource;
+using Rust.Assets;
 
 namespace Rust
 {
@@ -38,8 +39,20 @@ namespace Rust
             //Engine.Tick += new EventHandler(Engine_Tick);
             //Engine.Start();
 
-            GameEngine engine = new GameEngine();
-            engine.Run();
+            //GameEngine engine = new GameEngine();
+            //engine.Run();
+
+            Console.WriteLine("Compiling SamplePackage.xml...");
+            var compiler = new PackageCompiler();
+            compiler.Compile("SamplePackage.xml", "Sample.package");
+
+            Console.WriteLine("Compilation done.");
+
+            Console.WriteLine("Verifying Package...");
+            var package = Package.Open("Sample.package");
+
+            Console.WriteLine("Verification done.");
+            Console.Read();
         }
 
         static void Engine_Tick(object sender, EventArgs e)
