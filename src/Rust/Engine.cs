@@ -24,7 +24,6 @@ namespace Rust
         private static double deltaTime;
         private static Stopwatch stopwatch = new Stopwatch();
         private static volatile bool running = false;
-        private static double tickRate;
         #endregion
         #region Events
         public static event EventHandler Tick;
@@ -32,14 +31,8 @@ namespace Rust
         #region Properties
         public static double TickRate
         {
-            get
-            {
-                return Engine.tickRate;
-            }
-            set
-            {
-                Engine.tickRate = value;
-            }
+            get;
+            set;
         }
         #endregion
         #region Methods
@@ -49,7 +42,9 @@ namespace Rust
         }
         public static void Start()
         {
+#if DEBUG
             Console.WriteLine("Frequency: {0} (High-resolution: {1})", Stopwatch.Frequency, Stopwatch.IsHighResolution);
+#endif
             Engine.running = true;
             Engine.stopwatch.Start();
             while (Engine.running)
@@ -67,7 +62,7 @@ namespace Rust
             if (Engine.Tick != null)
                 Engine.Tick(null, EventArgs.Empty);
 
-            //Engine.stopwatch.Restart();
+            Engine.stopwatch.Restart();
         }
         #endregion
     }

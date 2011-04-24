@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Rust.Assets
 {
@@ -22,7 +21,7 @@ namespace Rust.Assets
         /// <summary>
         /// Holds the default file extension for package files.
         /// </summary>
-        public const string DefaultFileExtension = ".rust";
+        public const string DefaultFileExtension = ".rp";
 
         /// <summary>
         /// Holds the four-character-code that is the first four bytes of a valid package stream.
@@ -32,11 +31,7 @@ namespace Rust.Assets
         /// <summary>
         /// Holds the size in bytes of the file header.
         /// </summary>
-        public const int HeaderSize = 80;
-
-        public static readonly byte FormatVersion = 1;
-
-        public static readonly byte CommonApplicationCode = 0;
+        public const int HeaderSize = 128;
 
         /// <summary>
         /// Holds the list of other packages that the current package depends on.
@@ -49,7 +44,7 @@ namespace Rust.Assets
         private Version version;
 
         /// <summary>
-        /// Backing field for the <see cref="Package.UniqueID"/> property.
+        /// Backing field for the <see cref="Package.Id"/> property.
         /// </summary>
         private Guid id;
 
@@ -61,26 +56,13 @@ namespace Rust.Assets
         /// <summary>
         /// Holds the absolute offset in the data stream that marks the first byte of the metadata block.
         /// </summary>
-        private long metadataOffset;
+        private long metaBlockOffset;
 
         /// <summary>
         /// Holds the absolute offset in the data stream that marks the first byte of the index table.
         /// </summary>
         private long indexTableOffset;
-        private long referenceListOffset;
-        private readonly Queue<PendingWrite> pendingWrites = new Queue<PendingWrite>();
-
-        private bool headerModified = true;
-        private bool referenceListModified = true;
-        private bool metadataModified = true;
-        private bool indexTableModified = true;
-        private Uri homepage;
-        private string author;
-        private string name;
-        private string copyright;
-        private string company;
-        private string summary;
-        private PackageFlags flags;
+        
         #endregion
         #region Constructors
         /// <summary>
@@ -94,7 +76,7 @@ namespace Rust.Assets
         /// <summary>
         /// Gets or sets  the unique identifier of the current <see cref="Package"/>.
         /// </summary>
-        public Guid UniqueID
+        public Guid Id
         {
             get
             {
@@ -103,7 +85,6 @@ namespace Rust.Assets
             set
             {
                 this.id = value;
-                this.headerModified = true;
             }
         }
 
@@ -112,15 +93,8 @@ namespace Rust.Assets
         /// </summary>
         public PackageFlags Flags
         {
-            get
-            {
-                return this.flags;
-            }
-            set
-            {
-                this.flags = value;
-                this.headerModified = true;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -135,7 +109,6 @@ namespace Rust.Assets
             set
             {
                 this.version = value;
-                this.headerModified = true;
             }
         }
 
@@ -153,31 +126,17 @@ namespace Rust.Assets
         /// </summary>
         public string Name
         {
-            get
-            {
-                return this.name ?? string.Empty;
-            }
-            set
-            {
-                this.name = value;
-                this.metadataModified = true;
-            }
+            get;
+            set;
         }
 
         /// <summary>
         /// Gets or sets the human-readable description or summary of the contents of the current <see cref="Package"/>.
         /// </summary>
-        public string Summary
+        public string Description
         {
-            get
-            {
-                return this.summary ?? string.Empty;
-            }
-            set
-            {
-                this.summary = value;
-                this.metadataModified = true;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -185,15 +144,8 @@ namespace Rust.Assets
         /// </summary>
         public string Copyright
         {
-            get
-            {
-                return this.copyright ?? string.Empty;
-            }
-            set
-            {
-                this.copyright = value;
-                this.metadataModified = true;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -201,15 +153,8 @@ namespace Rust.Assets
         /// </summary>
         public string Author
         {
-            get
-            {
-                return this.author ?? string.Empty;
-            }
-            set
-            {
-                this.author = value;
-                this.metadataModified = true;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -217,15 +162,8 @@ namespace Rust.Assets
         /// </summary>
         public string Company
         {
-            get
-            {
-                return this.company ?? string.Empty;
-            }
-            set
-            {
-                this.company = value;
-                this.metadataModified = true;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -233,54 +171,8 @@ namespace Rust.Assets
         /// </summary>
         public Uri Homepage
         {
-            get
-            {
-                return this.homepage;
-            }
-            set
-            {
-                this.homepage = value;
-                this.metadataModified = true;
-            }
-        }
-
-        public long MetadataOffset
-        {
-            get
-            {
-                return this.metadataOffset;
-            }
-            private set
-            {
-                this.metadataOffset = value;
-                this.metadataModified = true;
-            }
-        }
-
-        public long IndexTableOffset
-        {
-            get
-            {
-                return this.indexTableOffset;
-            }
-            private set
-            {
-                this.indexTableOffset = value;
-                this.indexTableModified = true;
-            }
-        }
-
-        public long ReferenceListOffset
-        {
-            get
-            {
-                return this.referenceListOffset;
-            }
-            private set
-            {
-                this.referenceListOffset = value;
-                this.referenceListModified = true;
-            }
+            get;
+            set;
         }
         #endregion
         #region Methods
@@ -289,47 +181,10 @@ namespace Rust.Assets
             Package pkg = new Package();
             pkg.id = Guid.NewGuid();
             pkg.stream = File.Open(path, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
-            pkg.WriteHeader();
-            pkg.Flush();
+            //pkg.WriteHeader();
 
             return pkg;
         }
-
-        /// <summary>
-        /// Causes all pending writes to be executed. Ensures that the header, metadata, and index blocks are updated.
-        /// </summary>
-        public void Flush()
-        {
-
-
-            // Execute pending writes
-            while (this.pendingWrites.Count > 0)
-                this.ExecuteWrite(this.pendingWrites.Dequeue());
-
-            if (this.indexTableModified)
-                this.WriteIndexTable(true);
-
-            this.indexTableModified = false;
-
-            if (this.metadataModified)
-                this.WriteMetadata(true);
-
-            this.metadataModified = false;
-
-            if (this.referenceListModified)
-                this.WriteReferenceList(true);
-
-            this.referenceListModified = false;
-
-            if (this.headerModified)
-                this.WriteHeader(true);
-
-            this.headerModified = false;
-
-            // Flush underlying stream.
-            this.stream.Flush();
-        }
-
         public static Package Open(Stream stream)
         {
             if (stream == null)
@@ -350,71 +205,71 @@ namespace Rust.Assets
 
         public void Close()
         {
-            this.Flush();
+            this.WriteHeader();
+            this.WriteReferenceList();
+
+            this.stream.Flush();
             this.stream.Close();
         }
-        private void ExecuteWrite(PendingWrite write)
-        {
-            long offset;
-            if (write.Offset < 0)
-                offset = this.stream.Seek(0, SeekOrigin.End);
-            else
-                offset = this.stream.Seek(write.Offset, SeekOrigin.Begin);
-            this.stream.Write(write.Data, 0, write.Data.Length);
 
-            if (write.Callback != null)
-                write.Callback(offset);
+        private void ReadHeader()
+        {
+            /* Package header (big-endian):
+             * 
+             * Offset | Field Name          | Size
+             * -------+---------------------+------
+             *   0x00 | FourCC              | 4
+             *   0x04 | Format Version      | 1
+             *   0x05 | Reserved            | 3
+             *   0x08 | Id (GUID)           | 16
+             *   0x18 | Version             | 16
+             *   0x28 | Index table offset  | 8
+             *   0x30 | Package flags       | 4
+             *   0x34 | Reserved            | 72
+             *   0x3C | Header CRC32        | 4
+             */
+
+            var buffer = new DataBuffer(Package.HeaderSize, ByteOrder.BigEndian);
+
+            this.stream.Read(buffer.Contents, 0, Package.HeaderSize);
+
+            var fourCC = buffer.ReadInt32();
+            var format = buffer.ReadByte();
+            buffer.Position += 3;
+            var id = buffer.ReadGuid();
+            var version = buffer.ReadVersion();
+            var indexTableOffset = buffer.ReadInt64();
+            var metaBlockOffset = buffer.ReadInt64();
+            buffer.Position = 124;
+            var crc32 = buffer.ReadInt32();
+
+            if (fourCC != Package.FourCC)
+                throw new NotImplementedException("FourCC Mismatch");
+            if (format != 1)
+                throw new NotImplementedException("Format Mismatch");
+            this.Id = id;
+            this.Version = version;
+            this.indexTableOffset = indexTableOffset;
+            this.metaBlockOffset = metaBlockOffset;
+            
         }
 
-        /// <summary>
-        /// Returns the absolute offset where a block of the specified length can be written to without overwriting any existing data.
-        /// </summary>
-        /// <param name="length"></param>
-        /// <returns></returns>
-        private long GetNextContiguousBlock(long length)
-        {
-            return stream.Length;
-        }
-
-        public void ReadHeader()
+        private void WriteHeader()
         {
             DataBuffer buffer = new DataBuffer(Package.HeaderSize, ByteOrder.BigEndian);
-            this.stream.Seek(0, SeekOrigin.Begin);
-            this.stream.Read(buffer.Bytes, 0, buffer.Length);
 
-            // Offset | Field Name          | Size
-            // -------+---------------------+------
-            //   0x00 | FourCC              | 4
-            var fourCC = buffer.ReadInt32();
-            //   0x04 | Format Version      | 1
-            var formatVersion = buffer.ReadByte();
-            //   0x05 | Application Code    | 1
-            var applicationCode = buffer.ReadByte();
-            //   0x06 | Package Flags       | 2
-            var flags = (PackageFlags)buffer.ReadUInt16();
-            //   0x08 | Package UniqueID    | 16
-            var uniqueID = buffer.ReadGuid();
-            //   0x18 | Version             | 16
-            var version = buffer.ReadVersion();
-            //  0x28 | Index Offset         | 8
-            var indexOffset = buffer.ReadInt64();
-            //  0x30 | Metadata Offset      | 8
-            var metaOffset = buffer.ReadInt64();
-            //  0x38 | Ref List Offset      | 8
-            var refListOffset = buffer.ReadInt64();
-            //  0x40 | Package MD5          | 16
-            var md5sum = buffer.ReadBytes(16);
+            buffer.WriteInt32(Package.FourCC);
+            buffer.WriteByte(1); // Package format 1
+            buffer.Position += 3; // Reserved 3 bytes
+            buffer.WriteGuid(this.id);
+            buffer.WriteVersion(this.version);
+            buffer.WriteInt64(this.indexTableOffset); // absolute offset to the start of the index table.
+            buffer.WriteInt64(this.metaBlockOffset); // absolute offset to the start of the package metadata.
+            buffer.Position = 124; // Skip reserved space.
+            buffer.WriteInt32(0); // CRC calculated after remaining values are written.
 
-            // TODO: validate decoded values.
-        }
-
-        private void ReadIndex()
-        {
-
-        }
-
-        private void ReadMetadata()
-        {
+            this.stream.Write(buffer.Contents, 0, buffer.Contents.Length);
+            this.stream.Flush();
         }
 
         private void ReadReferenceList()
@@ -431,189 +286,20 @@ namespace Rust.Assets
              * -------+---------------------+------
              *   0x00 | GUID (Target)       | 16
              *   0x10 | Version (Target)    | 16
-             *   0x20 | Flags               | 2
+             *   0x20 | Flags               | 1
              *   0x21 | Name (length)       | 1
-             *   0x22 | Name                | 0-255
+             *   0x22 | Name                | 0-224
              * 0x22+N | Signature (length)  | 1
-             * 0x23+N | Signature           | 0-255
+             * 0x23+N | Signature           | 0-224
+             *  
+             * Version and signature are optional.
              */
-        }
-
-        private void WriteHeader()
-        {
-            this.WriteHeader(false);
-        }
-
-        private void WriteHeader(bool immediate)
-        {
-            DataBuffer buffer = new DataBuffer(Package.HeaderSize, ByteOrder.BigEndian);
-
-            // Offset | Field Name          | Size
-            // -------+---------------------+------
-            //   0x00 | FourCC              | 4
-            buffer.WriteInt32(Package.FourCC);
-            //   0x04 | Format Version      | 1
-            buffer.WriteByte(1);
-            //   0x05 | Application Code    | 1
-            buffer.WriteByte(0);
-            //   0x06 | Package Flags       | 2
-            buffer.WriteUInt16((ushort)this.Flags);
-            //   0x08 | Package UniqueID    | 16
-            buffer.WriteGuid(this.id);
-            //   0x18 | Package Version     | 16
-            buffer.WriteVersion(this.version);
-            //   0x28 | Offset to Index     | 8
-            buffer.WriteInt64(this.indexTableOffset);
-            //   0x30 | Offset to Metadata  | 8
-            buffer.WriteInt64(this.metadataOffset);
-            //   0x38 | Ref List Offset     | 8
-            buffer.WriteInt64(this.referenceListOffset);
-            //   0x40 | Package MD5         | 16
-            buffer.WriteBytes(new byte[16]);
-
-            var write = new PendingWrite(buffer.Bytes, 0);
-            if (immediate)
-                this.ExecuteWrite(write);
-            else
-                this.pendingWrites.Enqueue(write);
-        }
-
-        private void WriteIndexTable()
-        {
-            this.WriteIndexTable(false);
-        }
-
-        private void WriteIndexTable(bool immediate)
-        {
-
-
-            var header = new DataBuffer(8, ByteOrder.BigEndian);
-            header.WriteInt64(this.indexTableOffset);
-
-            var write = new PendingWrite(header.Bytes, 0x28);
-            if (immediate)
-                this.ExecuteWrite(write);
-            else
-                this.pendingWrites.Enqueue(write);
-        }
-
-        private void WriteMetadata()
-        {
-            this.WriteMetadata(false);
-        }
-
-        private void WriteMetadata(bool immediate)
-        {
-            var nameBytes = Encoding.UTF8.GetBytes(this.Name);
-            var authorBytes = Encoding.UTF8.GetBytes(this.Author);
-            var copyrightBytes = Encoding.UTF8.GetBytes(this.Copyright);
-            var companyBytes = Encoding.UTF8.GetBytes(this.Company);
-            var summaryBytes = Encoding.UTF8.GetBytes(this.Summary);
-            byte[] homepageBytes;
-            if (this.Homepage != null)
-                homepageBytes = Encoding.UTF8.GetBytes(this.Homepage.ToString());
-            else
-                homepageBytes = new byte[0];
-
-            var length = 8;
-
-            length += Math.Min(nameBytes.Length, 255);
-            length += Math.Min(authorBytes.Length, 255);
-            length += Math.Min(copyrightBytes.Length, 255);
-            length += Math.Min(companyBytes.Length, 255);
-
-            length += Math.Min(summaryBytes.Length, 65535);
-            length += Math.Min(homepageBytes.Length, 65535);
-
-            DataBuffer buffer = new DataBuffer(length, ByteOrder.BigEndian);
-
-            buffer.WriteByte((byte)nameBytes.Length);
-            buffer.WriteBytes(nameBytes, 0, (byte)nameBytes.Length);
-
-            buffer.WriteByte((byte)authorBytes.Length);
-            buffer.WriteBytes(authorBytes, 0, (byte)authorBytes.Length);
-
-            buffer.WriteByte((byte)copyrightBytes.Length);
-            buffer.WriteBytes(copyrightBytes, 0, (byte)copyrightBytes.Length);
-
-            buffer.WriteByte((byte)companyBytes.Length);
-            buffer.WriteBytes(companyBytes, 0, (byte)companyBytes.Length);
-
-            buffer.WriteUInt16((ushort)summaryBytes.Length);
-            buffer.WriteBytes(summaryBytes, 0, (ushort)summaryBytes.Length);
-
-            buffer.WriteUInt16((ushort)homepageBytes.Length);
-            buffer.WriteBytes(homepageBytes, 0, (ushort)homepageBytes.Length);
-
-            var write = new PendingWrite(buffer.Bytes, -1);
-            write.Callback = delegate(long offset)
-            {
-                this.MetadataOffset = offset;
-            };
-
-            if (immediate)
-                this.ExecuteWrite(write);
-            else
-                this.pendingWrites.Enqueue(write);
         }
 
         private void WriteReferenceList()
         {
-            this.WriteReferenceList(false);
+
         }
-
-        private void WriteReferenceList(bool immediate)
-        {
-            // TODO: Add support for package references/dependencies.
-            //var length = 0;
-
-            //foreach (var entry in this.references)
-            //    length += 36 + Encoding.UTF8.GetByteCount(entry.Name) + entry.Signature.Length;
-
-            //var buffer = new DataBuffer(length, ByteOrder.BigEndian);
-        }
-
-
-        #endregion
-        #region Types
-        internal struct Block
-        {
-            internal Block(long offset, long length)
-            {
-
-            }
-        }
-
-        internal sealed class PendingWrite
-        {
-            internal PendingWrite(byte[] data)
-                : this(data, -1)
-            {
-
-            }
-            internal PendingWrite(byte[] data, long offset)
-            {
-                this.Data = data;
-                this.Offset = offset;
-            }
-            public byte[] Data
-            {
-                get;
-                set;
-            }
-            public long Offset
-            {
-                get;
-                set;
-            }
-            public WriteCallback Callback
-            {
-                get;
-                set;
-            }
-        }
-
-        internal delegate void WriteCallback(long offset);
         #endregion
     }
 }

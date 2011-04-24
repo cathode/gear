@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Package Name="Sample Package" Description="A sample of a package XML file." Id="{97C76736-73B2-4A38-8114-3BB2F965FFAB}" Version="1.0.0.0">
+  <Group Name="Group1">
+    <Group Name="SubGroup1">
+      <Text Name="InlineText">This text is stored inline in the package XML file.</Text>
+      <Text Name="ImportedText" Import="imported.txt" />
+    </Group>
+    <Group Name="SubGroup2">
+      <Text Name="InlineText">This text is inline, but is part of a second SubGroup.</Text>
+    </Group>
+  </Group>
+  <Group Name="Group2">
+    <Text Name="MoreInline">More inline text, part of group 2.</Text>
+  </Group>
+  <Group Name="Group3">
+    <Group Name="SubGroup3.1" />
+    <Group Name="SubGroup3.2" />
+    <Group Name="SubGroup3.3">
+      <Group Name="SubGroup3.3.1" />
+      <Group Name="SubGroup3.3.2">
+        <Group Name="SubGroup3.3.2.1" />
+      </Group>
+    </Group>
+    <Text Name="SideBySide">This text is a sibling of a SubGroup.</Text>
+  </Group>
+</Package>

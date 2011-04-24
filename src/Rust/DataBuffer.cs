@@ -18,7 +18,7 @@ namespace Rust
         /// <summary>
         /// Holds the underlying byte array.
         /// </summary>
-        private byte[] bytes;
+        private byte[] data;
         private int position;
         private ByteOrder mode;
         #endregion
@@ -26,37 +26,37 @@ namespace Rust
         /// <summary>
         /// Initializes a new instance of the <see cref="DataBuffer"/> class.
         /// </summary>
-        /// <param name="length">The length of the buffer.</param>
-        public DataBuffer(int length)
+        /// <param name="capacity">The fixed capacity of the buffer.</param>
+        public DataBuffer(int capacity)
         {
-            this.bytes = new byte[length];
+            this.data = new byte[capacity];
             this.Mode = ByteOrder.System;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataBuffer"/> class.
         /// </summary>
-        /// <param name="length">The fixed capacity of the buffer.</param>
+        /// <param name="capacity">The fixed capacity of the buffer.</param>
         /// <param name="mode">The endianness mode of the new instance.</param>
-        public DataBuffer(int length, ByteOrder mode)
+        public DataBuffer(int capacity, ByteOrder mode)
         {
-            this.bytes = new byte[length];
+            this.data = new byte[capacity];
             this.Mode = mode;
         }
 
         /// <summary>
         /// Initializes a new current of the <see cref="DataBuffer"/> class.
         /// </summary>
-        /// <param name="bytes"></param>
-        public DataBuffer(byte[] bytes)
+        /// <param name="contents"></param>
+        public DataBuffer(byte[] contents)
         {
-            this.bytes = bytes;
+            this.data = contents;
             this.Mode = ByteOrder.System;
         }
 
-        public DataBuffer(byte[] bytes, ByteOrder mode)
+        public DataBuffer(byte[] contents, ByteOrder mode)
         {
-            this.bytes = bytes;
+            this.data = contents;
             this.Mode = mode;
         }
         #endregion
@@ -64,15 +64,15 @@ namespace Rust
         /// <summary>
         /// Gets or sets the underlying byte array of the current data buffer.
         /// </summary>
-        public byte[] Bytes
+        public byte[] Contents
         {
             get
             {
-                return this.bytes;
+                return this.data;
             }
             set
             {
-                this.bytes = value ?? new byte[0];
+                this.data = value ?? new byte[0];
             }
         }
 
@@ -105,16 +105,6 @@ namespace Rust
                 this.position = value;
             }
         }
-        /// <summary>
-        /// Gets the length of the <see cref="DataBuffer"/>.
-        /// </summary>
-        public int Length
-        {
-            get
-            {
-                return this.bytes.Length;
-            }
-        }
         #endregion
         #region Methods
         /// <summary>
@@ -123,7 +113,7 @@ namespace Rust
         /// <returns></returns>
         public byte ReadByte()
         {
-            byte result = this.bytes[this.position];
+            byte result = this.data[this.position];
             this.position += 1;
             return result;
         }
@@ -135,9 +125,11 @@ namespace Rust
         /// <returns>A new byte[] containing the bytes read from the buffer.</returns>
         public byte[] ReadBytes(int count)
         {
-            int c = Math.Min(count, this.Length - this.Position);
-            var bytes = new byte[c];
-            this.ReadBytes(bytes, 0, c);
+            int read = count;
+            var bytes = new byte[read];
+            Array.Copy(this.data, this.position, bytes, 0, read);
+
+            this.position += read;
             return bytes;
         }
 
@@ -150,10 +142,7 @@ namespace Rust
         /// <returns>The number of bytes read.</returns>
         public int ReadBytes(byte[] buffer, int startIndex, int count)
         {
-            int c = Math.Min(count, this.Length - this.Position);
-            Array.Copy(this.bytes, this.position, buffer, startIndex, c);
-
-            return count;
+            throw new NotImplementedException();
         }
         /// <summary>
         /// Decodes the next two bytes from the buffer as a 16-bit signed integer value,
@@ -166,11 +155,11 @@ namespace Rust
             int result;
 
             if (this.Mode == ByteOrder.BigEndian)
-                result = this.bytes[this.position] << 8
-                       | this.bytes[this.position + 1];
+                result = this.data[this.position] << 8
+                       | this.data[this.position + 1];
             else
-                result = this.bytes[this.position]
-                       | this.bytes[this.position + 1] << 8;
+                result = this.data[this.position]
+                       | this.data[this.position + 1] << 8;
 
             this.position += 2;
             return (short)result;
@@ -186,16 +175,16 @@ namespace Rust
             int result;
 
             if (this.Mode == ByteOrder.BigEndian)
-                result = this.bytes[this.position + 0] << 24
-                       | this.bytes[this.position + 1] << 16
-                       | this.bytes[this.position + 2] << 8
-                       | this.bytes[this.position + 3];
+                result = this.data[this.position + 0] << 24
+                       | this.data[this.position + 1] << 16
+                       | this.data[this.position + 2] << 8
+                       | this.data[this.position + 3];
 
             else
-                result = this.bytes[this.position + 0]
-                       | this.bytes[this.position + 1] << 8
-                       | this.bytes[this.position + 2] << 16
-                       | this.bytes[this.position + 3] << 24;
+                result = this.data[this.position + 0]
+                       | this.data[this.position + 1] << 8
+                       | this.data[this.position + 2] << 16
+                       | this.data[this.position + 3] << 24;
 
             this.position += 4;
             return result;
@@ -211,23 +200,23 @@ namespace Rust
             long result;
 
             if (this.Mode == ByteOrder.BigEndian)
-                result = this.bytes[this.position + 0] << 56
-                       | this.bytes[this.position + 1] << 48
-                       | this.bytes[this.position + 2] << 40
-                       | this.bytes[this.position + 3] << 32
-                       | this.bytes[this.position + 4] << 24
-                       | this.bytes[this.position + 5] << 16
-                       | this.bytes[this.position + 6] << 8
-                       | this.bytes[this.position + 7];
+                result = this.data[this.position + 0] << 56
+                       | this.data[this.position + 1] << 48
+                       | this.data[this.position + 2] << 40
+                       | this.data[this.position + 3] << 32
+                       | this.data[this.position + 4] << 24
+                       | this.data[this.position + 5] << 16
+                       | this.data[this.position + 6] << 8
+                       | this.data[this.position + 7];
             else
-                result = this.bytes[this.position + 0]
-                       | this.bytes[this.position + 1] << 8
-                       | this.bytes[this.position + 2] << 16
-                       | this.bytes[this.position + 3] << 24
-                       | this.bytes[this.position + 4] << 32
-                       | this.bytes[this.position + 5] << 40
-                       | this.bytes[this.position + 6] << 48
-                       | this.bytes[this.position + 7] << 56;
+                result = this.data[this.position + 0]
+                       | this.data[this.position + 1] << 8
+                       | this.data[this.position + 2] << 16
+                       | this.data[this.position + 3] << 24
+                       | this.data[this.position + 4] << 32
+                       | this.data[this.position + 5] << 40
+                       | this.data[this.position + 6] << 48
+                       | this.data[this.position + 7] << 56;
 
             this.position += 8;
             return result;
@@ -244,11 +233,11 @@ namespace Rust
             int result;
 
             if (this.Mode == ByteOrder.BigEndian)
-                result = (int)this.bytes[this.position + 0] << 8
-                       | (int)this.bytes[this.position + 1];
+                result = (int)this.data[this.position + 0] << 8
+                       | (int)this.data[this.position + 1];
             else
-                result = (int)this.bytes[this.position + 0]
-                       | (int)this.bytes[this.position + 1] << 8;
+                result = (int)this.data[this.position + 0]
+                       | (int)this.data[this.position + 1] << 8;
 
             this.position += 2;
             return (ushort)result;
@@ -264,16 +253,16 @@ namespace Rust
             uint result;
 
             if (this.Mode == ByteOrder.BigEndian)
-                result = (uint)this.bytes[this.position + 0] << 24
-                       | (uint)this.bytes[this.position + 1] << 16
-                       | (uint)this.bytes[this.position + 2] << 8
-                       | (uint)this.bytes[this.position + 3];
+                result = (uint)this.data[this.position + 0] << 24
+                       | (uint)this.data[this.position + 1] << 16
+                       | (uint)this.data[this.position + 2] << 8
+                       | (uint)this.data[this.position + 3];
 
             else
-                result = (uint)this.bytes[this.position + 0]
-                       | (uint)this.bytes[this.position + 1] << 8
-                       | (uint)this.bytes[this.position + 2] << 16
-                       | (uint)this.bytes[this.position + 3] << 24;
+                result = (uint)this.data[this.position + 0]
+                       | (uint)this.data[this.position + 1] << 8
+                       | (uint)this.data[this.position + 2] << 16
+                       | (uint)this.data[this.position + 3] << 24;
 
             this.position += 4;
             return result;
@@ -289,24 +278,24 @@ namespace Rust
             ulong result;
 
             if (this.Mode == ByteOrder.BigEndian)
-                result = (ulong)this.bytes[this.position + 0] << 56
-                       | (ulong)this.bytes[this.position + 1] << 48
-                       | (ulong)this.bytes[this.position + 2] << 40
-                       | (ulong)this.bytes[this.position + 3] << 32
-                       | (ulong)this.bytes[this.position + 4] << 24
-                       | (ulong)this.bytes[this.position + 5] << 16
-                       | (ulong)this.bytes[this.position + 6] << 8
-                       | (ulong)this.bytes[this.position + 7];
+                result = (ulong)this.data[this.position + 0] << 56
+                       | (ulong)this.data[this.position + 1] << 48
+                       | (ulong)this.data[this.position + 2] << 40
+                       | (ulong)this.data[this.position + 3] << 32
+                       | (ulong)this.data[this.position + 4] << 24
+                       | (ulong)this.data[this.position + 5] << 16
+                       | (ulong)this.data[this.position + 6] << 8
+                       | (ulong)this.data[this.position + 7];
 
             else
-                result = (ulong)this.bytes[this.position + 0]
-                       | (ulong)this.bytes[this.position + 1] << 8
-                       | (ulong)this.bytes[this.position + 2] << 16
-                       | (ulong)this.bytes[this.position + 3] << 24
-                       | (ulong)this.bytes[this.position + 4] << 32
-                       | (ulong)this.bytes[this.position + 5] << 40
-                       | (ulong)this.bytes[this.position + 6] << 48
-                       | (ulong)this.bytes[this.position + 7] << 56;
+                result = (ulong)this.data[this.position + 0]
+                       | (ulong)this.data[this.position + 1] << 8
+                       | (ulong)this.data[this.position + 2] << 16
+                       | (ulong)this.data[this.position + 3] << 24
+                       | (ulong)this.data[this.position + 4] << 32
+                       | (ulong)this.data[this.position + 5] << 40
+                       | (ulong)this.data[this.position + 6] << 48
+                       | (ulong)this.data[this.position + 7] << 56;
 
             this.position += 8;
             return result;
@@ -319,12 +308,16 @@ namespace Rust
 
         public Version ReadVersion()
         {
-            return new Version(this.ReadInt32(), this.ReadInt32(), this.ReadInt32(), this.ReadInt32());
+            var major = this.ReadInt32();
+            var minor = this.ReadInt32();
+            var build = this.ReadInt32();
+            var revision = this.ReadInt32();
+            return new Version(major, minor, build, revision);
         }
 
         public void WriteByte(byte value)
         {
-            this.bytes[this.position] = value;
+            this.data[this.position] = value;
             this.position += 1;
         }
         /// <summary>
@@ -336,13 +329,13 @@ namespace Rust
         {
             if (this.Mode == ByteOrder.BigEndian)
             {
-                this.bytes[this.position + 0] = (byte)(value >> 8);
-                this.bytes[this.position + 1] = (byte)value;
+                this.data[this.position + 0] = (byte)(value >> 8);
+                this.data[this.position + 1] = (byte)value;
             }
             else
             {
-                this.bytes[this.position + 0] = (byte)value;
-                this.bytes[this.position + 1] = (byte)(value >> 8);
+                this.data[this.position + 0] = (byte)value;
+                this.data[this.position + 1] = (byte)(value >> 8);
             }
 
             this.position += 2;
@@ -357,17 +350,17 @@ namespace Rust
         {
             if (this.Mode == ByteOrder.BigEndian)
             {
-                this.bytes[this.position + 0] = (byte)(value >> 24);
-                this.bytes[this.position + 1] = (byte)(value >> 16);
-                this.bytes[this.position + 2] = (byte)(value >> 8);
-                this.bytes[this.position + 3] = (byte)value;
+                this.data[this.position + 0] = (byte)(value >> 24);
+                this.data[this.position + 1] = (byte)(value >> 16);
+                this.data[this.position + 2] = (byte)(value >> 8);
+                this.data[this.position + 3] = (byte)value;
             }
             else
             {
-                this.bytes[this.position + 0] = (byte)value;
-                this.bytes[this.position + 1] = (byte)(value >> 8);
-                this.bytes[this.position + 2] = (byte)(value >> 16);
-                this.bytes[this.position + 3] = (byte)(value >> 24);
+                this.data[this.position + 0] = (byte)value;
+                this.data[this.position + 1] = (byte)(value >> 8);
+                this.data[this.position + 2] = (byte)(value >> 16);
+                this.data[this.position + 3] = (byte)(value >> 24);
             }
 
             this.position += 4;
@@ -382,25 +375,25 @@ namespace Rust
         {
             if (this.Mode == ByteOrder.BigEndian)
             {
-                this.bytes[this.position + 0] = (byte)(value >> 56);
-                this.bytes[this.position + 1] = (byte)(value >> 48);
-                this.bytes[this.position + 2] = (byte)(value >> 40);
-                this.bytes[this.position + 3] = (byte)(value >> 32);
-                this.bytes[this.position + 4] = (byte)(value >> 24);
-                this.bytes[this.position + 5] = (byte)(value >> 16);
-                this.bytes[this.position + 6] = (byte)(value >> 8);
-                this.bytes[this.position + 7] = (byte)value;
+                this.data[this.position + 0] = (byte)(value >> 56);
+                this.data[this.position + 1] = (byte)(value >> 48);
+                this.data[this.position + 2] = (byte)(value >> 40);
+                this.data[this.position + 3] = (byte)(value >> 32);
+                this.data[this.position + 4] = (byte)(value >> 24);
+                this.data[this.position + 5] = (byte)(value >> 16);
+                this.data[this.position + 6] = (byte)(value >> 8);
+                this.data[this.position + 7] = (byte)value;
             }
             else
             {
-                this.bytes[this.position + 0] = (byte)value;
-                this.bytes[this.position + 1] = (byte)(value >> 8);
-                this.bytes[this.position + 2] = (byte)(value >> 16);  
-                this.bytes[this.position + 3] = (byte)(value >> 24);
-                this.bytes[this.position + 4] = (byte)(value >> 32);
-                this.bytes[this.position + 5] = (byte)(value >> 40);
-                this.bytes[this.position + 6] = (byte)(value >> 48);
-                this.bytes[this.position + 7] = (byte)(value >> 56);
+                this.data[this.position + 0] = (byte)value;
+                this.data[this.position + 1] = (byte)(value >> 8);
+                this.data[this.position + 2] = (byte)(value >> 16);
+                this.data[this.position + 3] = (byte)(value >> 24);
+                this.data[this.position + 4] = (byte)(value >> 32);
+                this.data[this.position + 5] = (byte)(value >> 40);
+                this.data[this.position + 6] = (byte)(value >> 48);
+                this.data[this.position + 7] = (byte)(value >> 56);
             }
 
             this.position += 8;
@@ -415,13 +408,13 @@ namespace Rust
         {
             if (this.Mode == ByteOrder.BigEndian)
             {
-                this.bytes[this.position + 0] = (byte)(value >> 8);
-                this.bytes[this.position + 1] = (byte)value;
+                this.data[this.position + 0] = (byte)(value >> 8);
+                this.data[this.position + 1] = (byte)value;
             }
             else
             {
-                this.bytes[this.position + 0] = (byte)value;
-                this.bytes[this.position + 1] = (byte)(value >> 8);
+                this.data[this.position + 0] = (byte)value;
+                this.data[this.position + 1] = (byte)(value >> 8);
             }
 
             this.position += 2;
@@ -436,17 +429,17 @@ namespace Rust
         {
             if (this.Mode == ByteOrder.BigEndian)
             {
-                this.bytes[this.position + 0] = (byte)(value >> 24);
-                this.bytes[this.position + 1] = (byte)(value >> 16);
-                this.bytes[this.position + 2] = (byte)(value >> 8);
-                this.bytes[this.position + 3] = (byte)value;
+                this.data[this.position + 0] = (byte)(value >> 24);
+                this.data[this.position + 1] = (byte)(value >> 16);
+                this.data[this.position + 2] = (byte)(value >> 8);
+                this.data[this.position + 3] = (byte)value;
             }
             else
             {
-                this.bytes[this.position + 0] = (byte)value;
-                this.bytes[this.position + 1] = (byte)(value >> 8);
-                this.bytes[this.position + 2] = (byte)(value >> 16);
-                this.bytes[this.position + 3] = (byte)(value >> 24);
+                this.data[this.position + 0] = (byte)value;
+                this.data[this.position + 1] = (byte)(value >> 8);
+                this.data[this.position + 2] = (byte)(value >> 16);
+                this.data[this.position + 3] = (byte)(value >> 24);
             }
 
             this.position += 4;
@@ -461,25 +454,25 @@ namespace Rust
         {
             if (this.Mode == ByteOrder.BigEndian)
             {
-                this.bytes[this.position + 0] = (byte)(value >> 56);
-                this.bytes[this.position + 1] = (byte)(value >> 48);
-                this.bytes[this.position + 2] = (byte)(value >> 40);
-                this.bytes[this.position + 3] = (byte)(value >> 32);
-                this.bytes[this.position + 4] = (byte)(value >> 24);
-                this.bytes[this.position + 5] = (byte)(value >> 16);
-                this.bytes[this.position + 6] = (byte)(value >> 8);
-                this.bytes[this.position + 7] = (byte)value;
+                this.data[this.position + 0] = (byte)(value >> 56);
+                this.data[this.position + 1] = (byte)(value >> 48);
+                this.data[this.position + 2] = (byte)(value >> 40);
+                this.data[this.position + 3] = (byte)(value >> 32);
+                this.data[this.position + 4] = (byte)(value >> 24);
+                this.data[this.position + 5] = (byte)(value >> 16);
+                this.data[this.position + 6] = (byte)(value >> 8);
+                this.data[this.position + 7] = (byte)value;
             }
             else
             {
-                this.bytes[this.position + 0] = (byte)value;
-                this.bytes[this.position + 1] = (byte)(value >> 8);
-                this.bytes[this.position + 2] = (byte)(value >> 16);
-                this.bytes[this.position + 3] = (byte)(value >> 24);
-                this.bytes[this.position + 4] = (byte)(value >> 32);
-                this.bytes[this.position + 5] = (byte)(value >> 40);
-                this.bytes[this.position + 6] = (byte)(value >> 48);
-                this.bytes[this.position + 7] = (byte)(value >> 56);
+                this.data[this.position + 0] = (byte)value;
+                this.data[this.position + 1] = (byte)(value >> 8);
+                this.data[this.position + 2] = (byte)(value >> 16);
+                this.data[this.position + 3] = (byte)(value >> 24);
+                this.data[this.position + 4] = (byte)(value >> 32);
+                this.data[this.position + 5] = (byte)(value >> 40);
+                this.data[this.position + 6] = (byte)(value >> 48);
+                this.data[this.position + 7] = (byte)(value >> 56);
             }
 
             this.position += 8;
@@ -494,12 +487,12 @@ namespace Rust
         {
             var bytes = Encoding.UTF8.GetBytes(value);
 
-            if (this.position + this.bytes.Length > this.bytes.Length)
+            if (this.position + bytes.Length > this.data.Length)
                 throw new NotImplementedException();
 
-            this.bytes.CopyTo(this.bytes, this.position);
-            this.position += this.bytes.Length;
-            return this.bytes.Length;
+            bytes.CopyTo(this.data, this.position);
+            this.position += bytes.Length;
+            return bytes.Length;
         }
 
         public int WriteStringUtf16(string value)
@@ -516,7 +509,7 @@ namespace Rust
         {
             int n;
             for (n = 0; n < count; n++)
-                this.bytes[this.position + n] = value[startIndex + n];
+                this.data[this.position + n] = value[startIndex + n];
 
             this.position += n;
             return n;
@@ -537,17 +530,14 @@ namespace Rust
 
         public int WriteVersion(Version version)
         {
-            if (version != null)
+            if (version == null)
+                this.WriteBytes(new byte[16]);
+            else
             {
                 this.WriteInt32(version.Major);
                 this.WriteInt32(version.Minor);
                 this.WriteInt32(version.Build);
                 this.WriteInt32(version.Revision);
-            }
-            else
-            {
-                this.WriteUInt64(0);
-                this.WriteUInt64(0);
             }
 
             return 16;
