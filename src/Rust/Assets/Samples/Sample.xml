@@ -1,5 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Package Name="Sample Package" Description="A sample of a package XML file." Id="{97C76736-73B2-4A38-8114-3BB2F965FFAB}" Version="1.0.0.0">
+<Package>
+  <Meta>
+    <Name>Sample Package</Name>
+    <Description>A sample of a package XML file.</Description>
+    <Id>{97C76736-73B2-4A38-8114-3BB2F965FFAB}</Id>
+    <Version>1.0.0.0</Version>
+  </Meta>
   <Group Name="Group1">
     <Group Name="SubGroup1">
       <Text Name="InlineText">This text is stored inline in the package XML file.</Text>

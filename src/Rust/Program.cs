@@ -51,8 +51,8 @@ namespace Rust
 #if DEBUG
         private static void CompileSamplePackages()
         {
-            var pc = new PackageCompiler("./Assets/Samples/Sample.xml", "./Assets/Sample.rp");
-            if (pc.Compile())
+            var pc = new PackageCompiler();
+            if (pc.Compile("./Assets/Samples/Sample.xml", "./Assets/Sample.rp"))
                 Console.WriteLine("Sample compilation OK");
             else
                 Console.WriteLine("Sample compilation FAIL");

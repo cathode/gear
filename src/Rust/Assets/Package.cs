@@ -181,7 +181,7 @@ namespace Rust.Assets
             Package pkg = new Package();
             pkg.id = Guid.NewGuid();
             pkg.stream = File.Open(path, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
-            //pkg.WriteHeader();
+            pkg.WriteHeader();
 
             return pkg;
         }

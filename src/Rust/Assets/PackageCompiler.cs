@@ -15,13 +15,13 @@ namespace Rust.Assets
     /// <summary>
     /// Compiles a package XML file into a binary package file that can be accessed at runtime.
     /// </summary>
-    internal sealed class PackageCompiler
+    public sealed class PackageCompiler
     {
-        internal PackageCompiler()
+        public PackageCompiler()
         {
         }
 
-        internal void Compile(string source, string target)
+        public bool Compile(string source, string target)
         {
             var doc = XDocument.Load(source, LoadOptions.PreserveWhitespace);
             var package = Package.Create(target);
@@ -35,7 +35,7 @@ namespace Rust.Assets
                 if (meta.Element("Name") != null)
                     package.Name = meta.Element("Name").Value;
                 if (meta.Element("Summary") != null)
-                    package.Summary = meta.Element("Summary").Value;
+                    package.Description = meta.Element("Summary").Value;
                 if (meta.Element("Author") != null)
                     package.Author = meta.Element("Author").Value;
                 if (meta.Element("Company") != null)
@@ -43,10 +43,12 @@ namespace Rust.Assets
                 if (meta.Element("Copyright") != null)
                 package.Copyright = meta.Element("Copyright").Value;
 
-                package.UniqueID = new Guid(meta.Element("UniqueID").Value);
+                package.Id = new Guid(meta.Element("UniqueID").Value);
                 package.Version = new Version(meta.Element("Version").Value);
             }
             package.Close();
+
+            return true;
         }
     }
 }
