@@ -64,7 +64,6 @@
     <Compile Include="Assets\PackageReference.cs" />
     <Compile Include="ByteOrder.cs" />
     <Compile Include="DataBuffer.cs" />
-    <Compile Include="EventLog.cs" />
     <Compile Include="GamePlugin.cs" />
     <Compile Include="GamePluginLauncherDataAttribute.cs" />
     <Compile Include="GamePluginManager.cs" />
@@ -75,6 +74,10 @@
     <Compile Include="Launcher\LauncherUI.Designer.cs">
       <DependentUpon>LauncherUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="Log.cs" />
+    <Compile Include="LogMessage.cs" />
+    <Compile Include="LogMessageGroup.cs" />
+    <Compile Include="LogOutput.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Engine.cs" />

@@ -21,8 +21,12 @@ namespace Rust
             // == Engine Setup ==
 
             // Log to console.
-            Engine.Log.BindOutput(Console.OpenStandardOutput());
-            Engine.Log.Record("EventLog Initialized");
+            Log.BindOutput(Console.OpenStandardOutput());
+
+            if (true)
+                Log.BindOutput(File.OpenWrite("rust.log"));
+
+            Log.Write("Message log initialized", "system", LogMessageGroup.Info);
 
             // Built-in path for game plugins.
             if (!Directory.Exists("./Plugins/"))
@@ -46,7 +50,7 @@ namespace Rust
             //int adapterOrdinal = SlimDX.DXGI.
 
             //Engine.Tick += new EventHandler(Engine_Tick);
-            //Engine.Start();
+            Engine.Start();
             Console.WriteLine("Done...");
             Console.Read();
         }
@@ -60,7 +64,7 @@ namespace Rust
                 Console.WriteLine("Sample compilation FAIL");
         }
 #endif
-        
+
         static void Engine_Tick(object sender, EventArgs e)
         {
             throw new NotImplementedException();

@@ -19,7 +19,6 @@ namespace Rust
     public static class Engine
     {
         #region Fields
-        public static readonly EventLog Log = new EventLog(1);
         private static double deltaTime;
         private static Stopwatch stopwatch = new Stopwatch();
         private static volatile bool running = false;
@@ -42,9 +41,9 @@ namespace Rust
         }
         public static void Start()
         {
-#if DEBUG
-            Console.WriteLine("Frequency: {0} (High-resolution: {1})", Stopwatch.Frequency, Stopwatch.IsHighResolution);
-#endif
+            Log.Write("Engine start", "engine", LogMessageGroup.Info);
+            Log.Write(string.Format("Ticks/sec: {0} (High-res: {1})", Stopwatch.Frequency, Stopwatch.IsHighResolution), "engine", LogMessageGroup.Info);
+
             Engine.running = true;
             Engine.stopwatch.Start();
             while (Engine.running)
