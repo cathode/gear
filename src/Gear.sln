@@ -3,12 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gear", "Gear\Gear.csproj", "{B13E769A-A4B6-466F-9896-7FA30F89CAFF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other Files", "Other Files", "{81ECD03C-2F21-4C24-9C61-A6FCC732E313}"
-	ProjectSection(SolutionItems) = preProject
-		..\res\Gear\Gear.gpak.xml = ..\res\Gear\Gear.gpak.xml
-		..\Gear.MSBuild = ..\Gear.MSBuild
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rust", "Rust\Rust.csproj", "{D046861C-15A6-4F85-9B8E-58BCED45D46E}"
 EndProject
 Global

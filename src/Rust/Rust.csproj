@@ -64,6 +64,7 @@
     <Compile Include="Assets\PackageReference.cs" />
     <Compile Include="ByteOrder.cs" />
     <Compile Include="DataBuffer.cs" />
+    <Compile Include="EventLog.cs" />
     <Compile Include="GamePlugin.cs" />
     <Compile Include="GamePluginLauncherDataAttribute.cs" />
     <Compile Include="GamePluginManager.cs" />
@@ -83,6 +84,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RustGamePluginAttribute.cs" />
+    <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Launcher\LauncherUI.resx">
