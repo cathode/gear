@@ -6,10 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using Rust.Assets;
+using Gear.Assets;
 using System.IO;
 
-namespace Rust
+namespace Gear
 {
     public static class Program
     {

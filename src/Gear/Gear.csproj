@@ -6,7 +6,7 @@
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B13E769A-A4B6-466F-9896-7FA30F89CAFF}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Gear</RootNamespace>
     <AssemblyName>Gear</AssemblyName>
@@ -42,8 +42,13 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SlimDX, Version=2.0.10.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9" />
     <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -58,16 +63,32 @@
     <Compile Include="Assets\AssetKind.cs" />
     <Compile Include="Assets\AssetManager.cs" />
     <Compile Include="Assets\BodyLocation.cs" />
+    <Compile Include="Assets\Field.cs" />
+    <Compile Include="Assets\IAsset.cs" />
+    <Compile Include="Assets\IAssetField.cs" />
+    <Compile Include="Assets\IFieldValue.cs" />
     <Compile Include="Assets\Int32Field.cs" />
     <Compile Include="Assets\Package.cs" />
     <Compile Include="Assets\PackageCompiler.cs" />
     <Compile Include="Assets\PackageFlags.cs" />
+    <Compile Include="Assets\PackageHeader.cs" />
     <Compile Include="Assets\PackageIndex.cs" />
     <Compile Include="Assets\PackageIndexEntry.cs" />
+    <Compile Include="Assets\PackageManager.cs" />
+    <Compile Include="Assets\PackageReference.cs" />
     <Compile Include="Assets\StringField.cs" />
     <Compile Include="Assets\SubStream.cs" />
+    <Compile Include="ByteOrder.cs" />
     <Compile Include="DataBuffer.cs" />
+    <Compile Include="Engine.cs" />
+    <Compile Include="GamePlugin.cs" />
+    <Compile Include="GamePluginLauncherDataAttribute.cs" />
+    <Compile Include="GamePluginManager.cs" />
     <Compile Include="IFieldSerializable.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="LogMessage.cs" />
+    <Compile Include="LogMessageGroup.cs" />
+    <Compile Include="LogOutput.cs" />
     <Compile Include="Net\ClientConnection.cs" />
     <Compile Include="Net\ClientConnectionEventArgs.cs" />
     <Compile Include="Net\MessageFactory.cs" />
@@ -83,6 +104,8 @@
     <Compile Include="Net\MessageId.cs" />
     <Compile Include="GuidField.cs" />
     <Compile Include="FieldKind.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="RustGamePluginAttribute.cs" />
     <Compile Include="StringField.cs" />
     <Compile Include="VersionField.cs" />
     <Compile Include="Net\ServerConnection.cs" />
@@ -92,9 +115,6 @@
     <Compile Include="PlayerEventArgs.cs" />
     <Compile Include="ServerEngine.cs" />
     <Compile Include="World.cs" />
-    <None Include="Assets\GearPackage.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Command.cs" />
     <None Include="CommandId.cs" />
     <None Include="CommandQueue.cs" />
@@ -111,10 +131,6 @@
     <Compile Include="GameShellCommandCollection.cs" />
     <Compile Include="GameShellParseException.cs" />
     <Compile Include="Net\Connection.cs" />
-    <Compile Include="Assets\Items\Item.cs" />
-    <Compile Include="Assets\Items\ItemFlags.cs" />
-    <Compile Include="Assets\Items\ItemKind.cs" />
-    <Compile Include="Assets\Items\ItemPartSize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Winforms\GameShellForm.cs">
       <SubType>Form</SubType>
@@ -135,10 +151,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Rust\Rust.csproj">
-      <Project>{D046861C-15A6-4F85-9B8E-58BCED45D46E}</Project>
-      <Name>Rust</Name>
-    </ProjectReference>
+    <Content Include="Assets\Samples\Group1\SubGroup1\imported.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Samples\Sample.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gear", "Gear\Gear.csproj", "{B13E769A-A4B6-466F-9896-7FA30F89CAFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rust", "Rust\Rust.csproj", "{D046861C-15A6-4F85-9B8E-58BCED45D46E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,16 +23,6 @@ Global
 		{B13E769A-A4B6-466F-9896-7FA30F89CAFF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B13E769A-A4B6-466F-9896-7FA30F89CAFF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B13E769A-A4B6-466F-9896-7FA30F89CAFF}.Release|x86.ActiveCfg = Release|Any CPU
-		{D046861C-15A6-4F85-9B8E-58BCED45D46E}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{D046861C-15A6-4F85-9B8E-58BCED45D46E}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{D046861C-15A6-4F85-9B8E-58BCED45D46E}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{D046861C-15A6-4F85-9B8E-58BCED45D46E}.Debug|x86.ActiveCfg = Debug|x86
-		{D046861C-15A6-4F85-9B8E-58BCED45D46E}.Debug|x86.Build.0 = Debug|x86
-		{D046861C-15A6-4F85-9B8E-58BCED45D46E}.Release|Any CPU.ActiveCfg = Release|x86
-		{D046861C-15A6-4F85-9B8E-58BCED45D46E}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{D046861C-15A6-4F85-9B8E-58BCED45D46E}.Release|Mixed Platforms.Build.0 = Release|x86
-		{D046861C-15A6-4F85-9B8E-58BCED45D46E}.Release|x86.ActiveCfg = Release|x86
-		{D046861C-15A6-4F85-9B8E-58BCED45D46E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -102,7 +102,7 @@ namespace Gear.Net
                 foreach (var field in message.Fields)
                     size += 6 + field.Size; // Field header is 5 bytes (per field)
 
-                DataBuffer buffer = new DataBuffer(size, DataBufferMode.NetworkByteOrder);
+                DataBuffer buffer = new DataBuffer(size, ByteOrder.NetworkByteOrder);
                 buffer.WriteInt32(Connection.MessagePrefix);
                 buffer.WriteInt16((short)message.Id);
                 buffer.WriteByte((byte)message.Fields.Length);
@@ -173,7 +173,7 @@ namespace Gear.Net
                 if (state.ReceivedBytes < Connection.MessageHeaderSize)
                     this.socket.BeginReceive(state.Buffer, state.ReceivedBytes, Connection.MessageHeaderSize - state.ReceivedBytes, SocketFlags.None, this.ReceiveAsyncCallbck, state);
 
-                DataBuffer buffer = new DataBuffer(state.Buffer, DataBufferMode.NetworkByteOrder);
+                DataBuffer buffer = new DataBuffer(state.Buffer, ByteOrder.NetworkByteOrder);
 
                 var prefix = buffer.ReadInt32();
                 if (prefix != Connection.MessagePrefix)
@@ -195,7 +195,7 @@ namespace Gear.Net
             {
                 state.ReceivedBytes += this.socket.Receive(state.Buffer, state.Buffer.Length, SocketFlags.None);
 
-                DataBuffer buffer = new DataBuffer(state.Buffer, DataBufferMode.NetworkByteOrder);
+                DataBuffer buffer = new DataBuffer(state.Buffer, ByteOrder.NetworkByteOrder);
                 for (int i = 0; i < state.FieldCount; i++)
                 {
                     var fieldId = (FieldKind)buffer.ReadInt16();

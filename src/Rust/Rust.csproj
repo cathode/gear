@@ -68,6 +68,9 @@
     <Compile Include="GamePluginLauncherDataAttribute.cs" />
     <Compile Include="GamePluginManager.cs" />
     <Compile Include="Graphics\Material.cs" />
+    <Compile Include="Graphics\Renderer.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Launcher\LauncherUI.cs">
       <SubType>Form</SubType>
     </Compile>

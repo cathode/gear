@@ -1,8 +1,6 @@
 ﻿/******************************************************************************
- * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
+ * Rust: A Managed Game Engine - http://trac.gearedstudios.com/rust/          *
  * Copyright © 2009-2011 Will 'cathode' Shelley. All Rights Reserved.         *
- * This software is released under the terms and conditions of the Microsoft  *
- * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
 using System;
 using System.Text;
@@ -10,95 +8,76 @@ using System.Text;
 namespace Gear
 {
     /// <summary>
-    /// Enumerates endianness modes supported by the <see cref="DataBuffer"/> class.
-    /// </summary>
-    public enum DataBufferMode
-    {
-        /// <summary>
-        /// Indicates the data buffer will use the system's native endianness.
-        /// </summary>
-        System = 0x0,
-
-        /// <summary>
-        /// Indicates the data buffer will read/write values as little-endian.
-        /// </summary>
-        LittleEndian,
-
-        /// <summary>
-        /// Indicates the data buffer will read/write values as big-endian.
-        /// </summary>
-        BigEndian,
-
-        /// <summary>
-        /// Indicates the data buffer will read/write values as network byte order (big-endian).
-        /// </summary>
-        NetworkByteOrder = BigEndian,
-
-        /// <summary>
-        /// Indicates the data buffer will read/write values as host byte order (system endianness).
-        /// </summary>
-        HostByteOrder = System,
-    }
-
-    /// <summary>
     /// Represents a buffer that primitive types can be decoded from/encoded to.
     /// </summary>
     public sealed class DataBuffer
     {
         #region Fields
-        private byte[] contents;
+        /// <summary>
+        /// Holds the underlying byte array.
+        /// </summary>
+        private byte[] data;
         private int position;
-        private DataBufferMode mode;
+        private ByteOrder mode;
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new current of the <see cref="DataBuffer"/> class.
+        /// Initializes a new instance of the <see cref="DataBuffer"/> class.
         /// </summary>
         /// <param name="capacity">The fixed capacity of the buffer.</param>
         public DataBuffer(int capacity)
         {
-            this.contents = new byte[capacity];
-            this.Mode = DataBufferMode.System;
+            this.data = new byte[capacity];
+            this.Mode = ByteOrder.System;
         }
 
-        public DataBuffer(int capacity, DataBufferMode mode)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataBuffer"/> class.
+        /// </summary>
+        /// <param name="capacity">The fixed capacity of the buffer.</param>
+        /// <param name="mode">The endianness mode of the new instance.</param>
+        public DataBuffer(int capacity, ByteOrder mode)
         {
-            this.contents = new byte[capacity];
+            this.data = new byte[capacity];
             this.Mode = mode;
         }
+
         /// <summary>
         /// Initializes a new current of the <see cref="DataBuffer"/> class.
         /// </summary>
         /// <param name="contents"></param>
         public DataBuffer(byte[] contents)
         {
-            this.contents = contents;
-            this.Mode = DataBufferMode.System;
+            this.data = contents;
+            this.Mode = ByteOrder.System;
         }
 
-        public DataBuffer(byte[] contents, DataBufferMode mode)
+        public DataBuffer(byte[] contents, ByteOrder mode)
         {
-            this.contents = contents;
+            this.data = contents;
             this.Mode = mode;
         }
         #endregion
         #region Properties
         /// <summary>
-        /// Gets the underlying byte array of the current data buffer.
+        /// Gets or sets the underlying byte array of the current data buffer.
         /// </summary>
         public byte[] Contents
         {
             get
             {
-                return this.contents;
+                return this.data;
             }
             set
             {
-                this.contents = value;
+                this.data = value ?? new byte[0];
             }
         }
 
-        public DataBufferMode Mode
+        /// <summary>
+        /// Gets or sets the <see cref="ByteOrder"/> that determines the endianness of the data buffer.
+        /// </summary>
+        public ByteOrder Mode
         {
             get
             {
@@ -106,10 +85,7 @@ namespace Gear
             }
             set
             {
-                if (value == DataBufferMode.System)
-                    this.mode = (BitConverter.IsLittleEndian) ? DataBufferMode.LittleEndian : DataBufferMode.BigEndian;
-                else
-                    this.mode = value;
+                this.mode = (value == ByteOrder.System) ? (BitConverter.IsLittleEndian ? ByteOrder.LittleEndian : ByteOrder.BigEndian) : value;
             }
         }
 
@@ -129,17 +105,39 @@ namespace Gear
         }
         #endregion
         #region Methods
+        /// <summary>
+        /// Reads the next byte from the buffer and advances the position by 1.
+        /// </summary>
+        /// <returns></returns>
         public byte ReadByte()
         {
-            byte result = this.contents[this.position];
+            byte result = this.data[this.position];
             this.position += 1;
             return result;
         }
+
+        /// <summary>
+        /// Reads the specified number of bytes from the buffer and returns them as a new array.
+        /// </summary>
+        /// <param name="count">The number of bytes to read.</param>
+        /// <returns>A new byte[] containing the bytes read from the buffer.</returns>
         public byte[] ReadBytes(int count)
         {
-            //int read = this.contents.Length - (
-            throw new NotImplementedException();
+            int read = count;
+            var bytes = new byte[read];
+            Array.Copy(this.data, this.position, bytes, 0, read);
+
+            this.position += read;
+            return bytes;
         }
+
+        /// <summary>
+        /// Reads the specified number of bytes from the buffer, and writes them to the specified byte array.
+        /// </summary>
+        /// <param name="buffer">The byte[] where the bytes which are read will be written to.</param>
+        /// <param name="startIndex">The index in <paramref name="buffer"/> at which to start writing to.</param>
+        /// <param name="count">The number of bytes to read.</param>
+        /// <returns>The number of bytes read.</returns>
         public int ReadBytes(byte[] buffer, int startIndex, int count)
         {
             throw new NotImplementedException();
@@ -154,14 +152,14 @@ namespace Gear
             // No bitshift operator for short, have to use int and cast when returning.
             int result;
 
-            if (this.Mode == DataBufferMode.BigEndian)
-                result = contents[position] << 8
-                       | contents[position + 1];
+            if (this.Mode == ByteOrder.BigEndian)
+                result = this.data[this.position] << 8
+                       | this.data[this.position + 1];
             else
-                result = contents[position]
-                       | contents[position + 1] << 8;
+                result = this.data[this.position]
+                       | this.data[this.position + 1] << 8;
 
-            position += 2;
+            this.position += 2;
             return (short)result;
         }
 
@@ -174,19 +172,19 @@ namespace Gear
         {
             int result;
 
-            if (this.Mode == DataBufferMode.BigEndian)
-                result = contents[position + 0] << 24
-                       | contents[position + 1] << 16
-                       | contents[position + 2] << 8
-                       | contents[position + 3];
+            if (this.Mode == ByteOrder.BigEndian)
+                result = this.data[this.position + 0] << 24
+                       | this.data[this.position + 1] << 16
+                       | this.data[this.position + 2] << 8
+                       | this.data[this.position + 3];
 
             else
-                result = contents[position + 0]
-                       | contents[position + 1] << 8
-                       | contents[position + 2] << 16
-                       | contents[position + 3] << 24;
+                result = this.data[this.position + 0]
+                       | this.data[this.position + 1] << 8
+                       | this.data[this.position + 2] << 16
+                       | this.data[this.position + 3] << 24;
 
-            position += 4;
+            this.position += 4;
             return result;
         }
 
@@ -199,26 +197,26 @@ namespace Gear
         {
             long result;
 
-            if (this.Mode == DataBufferMode.BigEndian)
-                result = contents[position + 0] << 56
-                       | contents[position + 1] << 48
-                       | contents[position + 2] << 40
-                       | contents[position + 3] << 32
-                       | contents[position + 4] << 24
-                       | contents[position + 5] << 16
-                       | contents[position + 6] << 8
-                       | contents[position + 7];
+            if (this.Mode == ByteOrder.BigEndian)
+                result = this.data[this.position + 0] << 56
+                       | this.data[this.position + 1] << 48
+                       | this.data[this.position + 2] << 40
+                       | this.data[this.position + 3] << 32
+                       | this.data[this.position + 4] << 24
+                       | this.data[this.position + 5] << 16
+                       | this.data[this.position + 6] << 8
+                       | this.data[this.position + 7];
             else
-                result = contents[position + 0]
-                       | contents[position + 1] << 8
-                       | contents[position + 2] << 16
-                       | contents[position + 3] << 24
-                       | contents[position + 4] << 32
-                       | contents[position + 5] << 40
-                       | contents[position + 6] << 48
-                       | contents[position + 7] << 56;
+                result = this.data[this.position + 0]
+                       | this.data[this.position + 1] << 8
+                       | this.data[this.position + 2] << 16
+                       | this.data[this.position + 3] << 24
+                       | this.data[this.position + 4] << 32
+                       | this.data[this.position + 5] << 40
+                       | this.data[this.position + 6] << 48
+                       | this.data[this.position + 7] << 56;
 
-            position += 8;
+            this.position += 8;
             return result;
         }
 
@@ -229,17 +227,17 @@ namespace Gear
         /// <returns>The decoded 16-bit unsigned integer value.</returns>
         public ushort ReadUInt16()
         {
-            // No bitshift operators for ushort, have to use uint and cast when returning.
-            uint result;
+            // No bitshift operators for ushort, have to use int and cast when returning.
+            int result;
 
-            if (this.Mode == DataBufferMode.BigEndian)
-                result = (uint)contents[position + 0] << 8
-                       | (uint)contents[position + 1];
+            if (this.Mode == ByteOrder.BigEndian)
+                result = (int)this.data[this.position + 0] << 8
+                       | (int)this.data[this.position + 1];
             else
-                result = (uint)contents[position + 0]
-                       | (uint)contents[position + 1] << 8;
+                result = (int)this.data[this.position + 0]
+                       | (int)this.data[this.position + 1] << 8;
 
-            position += 2;
+            this.position += 2;
             return (ushort)result;
         }
 
@@ -252,19 +250,19 @@ namespace Gear
         {
             uint result;
 
-            if (this.Mode == DataBufferMode.BigEndian)
-                result = (uint)contents[position + 0] << 24
-                       | (uint)contents[position + 1] << 16
-                       | (uint)contents[position + 2] << 8
-                       | (uint)contents[position + 3];
+            if (this.Mode == ByteOrder.BigEndian)
+                result = (uint)this.data[this.position + 0] << 24
+                       | (uint)this.data[this.position + 1] << 16
+                       | (uint)this.data[this.position + 2] << 8
+                       | (uint)this.data[this.position + 3];
 
             else
-                result = (uint)contents[position + 0]
-                       | (uint)contents[position + 1] << 8
-                       | (uint)contents[position + 2] << 16
-                       | (uint)contents[position + 3] << 24;
+                result = (uint)this.data[this.position + 0]
+                       | (uint)this.data[this.position + 1] << 8
+                       | (uint)this.data[this.position + 2] << 16
+                       | (uint)this.data[this.position + 3] << 24;
 
-            position += 4;
+            this.position += 4;
             return result;
         }
 
@@ -277,27 +275,27 @@ namespace Gear
         {
             ulong result;
 
-            if (this.Mode == DataBufferMode.BigEndian)
-                result = (ulong)contents[position + 0] << 56
-                       | (ulong)contents[position + 1] << 48
-                       | (ulong)contents[position + 2] << 40
-                       | (ulong)contents[position + 3] << 32
-                       | (ulong)contents[position + 4] << 24
-                       | (ulong)contents[position + 5] << 16
-                       | (ulong)contents[position + 6] << 8
-                       | (ulong)contents[position + 7];
+            if (this.Mode == ByteOrder.BigEndian)
+                result = (ulong)this.data[this.position + 0] << 56
+                       | (ulong)this.data[this.position + 1] << 48
+                       | (ulong)this.data[this.position + 2] << 40
+                       | (ulong)this.data[this.position + 3] << 32
+                       | (ulong)this.data[this.position + 4] << 24
+                       | (ulong)this.data[this.position + 5] << 16
+                       | (ulong)this.data[this.position + 6] << 8
+                       | (ulong)this.data[this.position + 7];
 
             else
-                result = (ulong)contents[position + 0]
-                       | (ulong)contents[position + 1] << 8
-                       | (ulong)contents[position + 2] << 16
-                       | (ulong)contents[position + 3] << 24
-                       | (ulong)contents[position + 4] << 32
-                       | (ulong)contents[position + 5] << 40
-                       | (ulong)contents[position + 6] << 48
-                       | (ulong)contents[position + 7] << 56;
+                result = (ulong)this.data[this.position + 0]
+                       | (ulong)this.data[this.position + 1] << 8
+                       | (ulong)this.data[this.position + 2] << 16
+                       | (ulong)this.data[this.position + 3] << 24
+                       | (ulong)this.data[this.position + 4] << 32
+                       | (ulong)this.data[this.position + 5] << 40
+                       | (ulong)this.data[this.position + 6] << 48
+                       | (ulong)this.data[this.position + 7] << 56;
 
-            position += 8;
+            this.position += 8;
             return result;
         }
 
@@ -308,12 +306,16 @@ namespace Gear
 
         public Version ReadVersion()
         {
-            return new Version(this.ReadInt32(), this.ReadInt32(), this.ReadInt32(), this.ReadInt32());
+            var major = this.ReadInt32();
+            var minor = this.ReadInt32();
+            var build = this.ReadInt32();
+            var revision = this.ReadInt32();
+            return new Version(major, minor, build, revision);
         }
 
         public void WriteByte(byte value)
         {
-            this.contents[this.position] = value;
+            this.data[this.position] = value;
             this.position += 1;
         }
         /// <summary>
@@ -323,18 +325,18 @@ namespace Gear
         /// <param name="value">A 16-bit signed integer value to write to the buffer.</param>
         public void WriteInt16(short value)
         {
-            if (this.Mode == DataBufferMode.BigEndian)
+            if (this.Mode == ByteOrder.BigEndian)
             {
-                contents[position + 0] = (byte)(value >> 8);
-                contents[position + 1] = (byte)value;
+                this.data[this.position + 0] = (byte)(value >> 8);
+                this.data[this.position + 1] = (byte)value;
             }
             else
             {
-                contents[position + 0] = (byte)value;
-                contents[position + 1] = (byte)(value >> 8);
+                this.data[this.position + 0] = (byte)value;
+                this.data[this.position + 1] = (byte)(value >> 8);
             }
 
-            position += 2;
+            this.position += 2;
         }
 
         /// <summary>
@@ -344,22 +346,22 @@ namespace Gear
         /// <param name="value">A 32-bit signed integer value to write to the buffer.</param>
         public void WriteInt32(int value)
         {
-            if (this.Mode == DataBufferMode.BigEndian)
+            if (this.Mode == ByteOrder.BigEndian)
             {
-                contents[position + 0] = (byte)(value >> 24);
-                contents[position + 1] = (byte)(value >> 16);
-                contents[position + 2] = (byte)(value >> 8);
-                contents[position + 3] = (byte)value;
+                this.data[this.position + 0] = (byte)(value >> 24);
+                this.data[this.position + 1] = (byte)(value >> 16);
+                this.data[this.position + 2] = (byte)(value >> 8);
+                this.data[this.position + 3] = (byte)value;
             }
             else
             {
-                contents[position + 0] = (byte)value;
-                contents[position + 1] = (byte)(value >> 8);
-                contents[position + 2] = (byte)(value >> 16);
-                contents[position + 3] = (byte)(value >> 24);
+                this.data[this.position + 0] = (byte)value;
+                this.data[this.position + 1] = (byte)(value >> 8);
+                this.data[this.position + 2] = (byte)(value >> 16);
+                this.data[this.position + 3] = (byte)(value >> 24);
             }
 
-            position += 4;
+            this.position += 4;
         }
 
         /// <summary>
@@ -369,30 +371,30 @@ namespace Gear
         /// <param name="value">A 64-bit signed integer value to write to the buffer.</param>
         public void WriteInt64(long value)
         {
-            if (this.Mode == DataBufferMode.BigEndian)
+            if (this.Mode == ByteOrder.BigEndian)
             {
-                contents[position + 0] = (byte)(value >> 56);
-                contents[position + 1] = (byte)(value >> 48);
-                contents[position + 2] = (byte)(value >> 40);
-                contents[position + 3] = (byte)(value >> 32);
-                contents[position + 4] = (byte)(value >> 24);
-                contents[position + 5] = (byte)(value >> 16);
-                contents[position + 6] = (byte)(value >> 8);
-                contents[position + 7] = (byte)value;
+                this.data[this.position + 0] = (byte)(value >> 56);
+                this.data[this.position + 1] = (byte)(value >> 48);
+                this.data[this.position + 2] = (byte)(value >> 40);
+                this.data[this.position + 3] = (byte)(value >> 32);
+                this.data[this.position + 4] = (byte)(value >> 24);
+                this.data[this.position + 5] = (byte)(value >> 16);
+                this.data[this.position + 6] = (byte)(value >> 8);
+                this.data[this.position + 7] = (byte)value;
             }
             else
             {
-                contents[position + 0] = (byte)value;
-                contents[position + 1] = (byte)(value >> 8);
-                contents[position + 2] = (byte)(value >> 16);
-                contents[position + 3] = (byte)(value >> 24);
-                contents[position + 4] = (byte)(value >> 32);
-                contents[position + 5] = (byte)(value >> 40);
-                contents[position + 6] = (byte)(value >> 48);
-                contents[position + 7] = (byte)(value >> 56);
+                this.data[this.position + 0] = (byte)value;
+                this.data[this.position + 1] = (byte)(value >> 8);
+                this.data[this.position + 2] = (byte)(value >> 16);
+                this.data[this.position + 3] = (byte)(value >> 24);
+                this.data[this.position + 4] = (byte)(value >> 32);
+                this.data[this.position + 5] = (byte)(value >> 40);
+                this.data[this.position + 6] = (byte)(value >> 48);
+                this.data[this.position + 7] = (byte)(value >> 56);
             }
 
-            position += 8;
+            this.position += 8;
         }
 
         /// <summary>
@@ -402,18 +404,18 @@ namespace Gear
         /// <param name="value">A 16-bit unsigned integer value to write to the buffer.</param>
         public void WriteUInt16(ushort value)
         {
-            if (this.Mode == DataBufferMode.BigEndian)
+            if (this.Mode == ByteOrder.BigEndian)
             {
-                contents[position + 0] = (byte)(value >> 8);
-                contents[position + 1] = (byte)value;
+                this.data[this.position + 0] = (byte)(value >> 8);
+                this.data[this.position + 1] = (byte)value;
             }
             else
             {
-                contents[position + 0] = (byte)value;
-                contents[position + 1] = (byte)(value >> 8);
+                this.data[this.position + 0] = (byte)value;
+                this.data[this.position + 1] = (byte)(value >> 8);
             }
 
-            position += 2;
+            this.position += 2;
         }
 
         /// <summary>
@@ -423,22 +425,22 @@ namespace Gear
         /// <param name="value">A 32-bit unsigned integer value to write to the buffer.</param>
         public void WriteUInt32(uint value)
         {
-            if (this.Mode == DataBufferMode.BigEndian)
+            if (this.Mode == ByteOrder.BigEndian)
             {
-                contents[position + 0] = (byte)(value >> 24);
-                contents[position + 1] = (byte)(value >> 16);
-                contents[position + 2] = (byte)(value >> 8);
-                contents[position + 3] = (byte)value;
+                this.data[this.position + 0] = (byte)(value >> 24);
+                this.data[this.position + 1] = (byte)(value >> 16);
+                this.data[this.position + 2] = (byte)(value >> 8);
+                this.data[this.position + 3] = (byte)value;
             }
             else
             {
-                contents[position + 0] = (byte)value;
-                contents[position + 1] = (byte)(value >> 8);
-                contents[position + 2] = (byte)(value >> 16);
-                contents[position + 3] = (byte)(value >> 24);
+                this.data[this.position + 0] = (byte)value;
+                this.data[this.position + 1] = (byte)(value >> 8);
+                this.data[this.position + 2] = (byte)(value >> 16);
+                this.data[this.position + 3] = (byte)(value >> 24);
             }
 
-            position += 4;
+            this.position += 4;
         }
 
         /// <summary>
@@ -448,30 +450,30 @@ namespace Gear
         /// <param name="value">A 64-bit unsigned integer value to write to the buffer.</param>
         public void WriteUInt64(ulong value)
         {
-            if (this.Mode == DataBufferMode.BigEndian)
+            if (this.Mode == ByteOrder.BigEndian)
             {
-                contents[position + 0] = (byte)(value >> 56);
-                contents[position + 1] = (byte)(value >> 48);
-                contents[position + 2] = (byte)(value >> 40);
-                contents[position + 3] = (byte)(value >> 32);
-                contents[position + 4] = (byte)(value >> 24);
-                contents[position + 5] = (byte)(value >> 16);
-                contents[position + 6] = (byte)(value >> 8);
-                contents[position + 7] = (byte)value;
+                this.data[this.position + 0] = (byte)(value >> 56);
+                this.data[this.position + 1] = (byte)(value >> 48);
+                this.data[this.position + 2] = (byte)(value >> 40);
+                this.data[this.position + 3] = (byte)(value >> 32);
+                this.data[this.position + 4] = (byte)(value >> 24);
+                this.data[this.position + 5] = (byte)(value >> 16);
+                this.data[this.position + 6] = (byte)(value >> 8);
+                this.data[this.position + 7] = (byte)value;
             }
             else
             {
-                contents[position + 0] = (byte)value;
-                contents[position + 1] = (byte)(value >> 8);
-                contents[position + 2] = (byte)(value >> 16);
-                contents[position + 3] = (byte)(value >> 24);
-                contents[position + 4] = (byte)(value >> 32);
-                contents[position + 5] = (byte)(value >> 40);
-                contents[position + 6] = (byte)(value >> 48);
-                contents[position + 7] = (byte)(value >> 56);
+                this.data[this.position + 0] = (byte)value;
+                this.data[this.position + 1] = (byte)(value >> 8);
+                this.data[this.position + 2] = (byte)(value >> 16);
+                this.data[this.position + 3] = (byte)(value >> 24);
+                this.data[this.position + 4] = (byte)(value >> 32);
+                this.data[this.position + 5] = (byte)(value >> 40);
+                this.data[this.position + 6] = (byte)(value >> 48);
+                this.data[this.position + 7] = (byte)(value >> 56);
             }
 
-            position += 8;
+            this.position += 8;
         }
 
         public int WriteStringAscii(string value)
@@ -483,7 +485,10 @@ namespace Gear
         {
             var bytes = Encoding.UTF8.GetBytes(value);
 
-            bytes.CopyTo(this.contents, this.position);
+            if (this.position + bytes.Length > this.data.Length)
+                throw new NotImplementedException();
+
+            bytes.CopyTo(this.data, this.position);
             this.position += bytes.Length;
             return bytes.Length;
         }
@@ -502,16 +507,16 @@ namespace Gear
         {
             int n;
             for (n = 0; n < count; n++)
-                contents[position + n] = value[startIndex + n];
+                this.data[this.position + n] = value[startIndex + n];
 
-            position += n;
+            this.position += n;
             return n;
         }
 
         public int WriteGuid(Guid id)
         {
             // Create a sub-buffer to decode the platform-specific result of Guid.ToByteArray()
-            DataBuffer db = new DataBuffer(id.ToByteArray(), DataBufferMode.System);
+            DataBuffer db = new DataBuffer(id.ToByteArray(), ByteOrder.System);
 
             this.WriteInt32(db.ReadInt32());
             this.WriteInt16(db.ReadInt16());
@@ -523,10 +528,15 @@ namespace Gear
 
         public int WriteVersion(Version version)
         {
-            this.WriteInt32(version.Major);
-            this.WriteInt32(version.Minor);
-            this.WriteInt32(version.Build);
-            this.WriteInt32(version.Revision);
+            if (version == null)
+                this.WriteBytes(new byte[16]);
+            else
+            {
+                this.WriteInt32(version.Major);
+                this.WriteInt32(version.Minor);
+                this.WriteInt32(version.Build);
+                this.WriteInt32(version.Revision);
+            }
 
             return 16;
         }

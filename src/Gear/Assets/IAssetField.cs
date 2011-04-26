@@ -1,20 +1,18 @@
 ﻿/******************************************************************************
- * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
+ * Rust: A Managed Game Engine - http://trac.gearedstudios.com/rust/          *
  * Copyright © 2009-2011 Will 'cathode' Shelley. All Rights Reserved.         *
  * This software is released under the terms and conditions of the Microsoft  *
  * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace Gear.Assets.Items
+namespace Gear.Assets
 {
-    [Flags]
-    public enum ItemFlags
+    public interface IAssetField
     {
-        None = 0x0,
-        Equippable = 0x1,
-        Upgradable = 0x2,
+
     }
 }

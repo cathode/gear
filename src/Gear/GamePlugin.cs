@@ -1,38 +1,41 @@
 ﻿/******************************************************************************
- * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
+ * Rust: A Managed Game Engine - http://trac.gearedstudios.com/rust/          *
  * Copyright © 2009-2011 Will 'cathode' Shelley. All Rights Reserved.         *
- * This software is released under the terms and conditions of the Microsoft  *
- * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace Gear.Assets.Items
+namespace Gear
 {
-    /// <summary>
-    /// Represents a game item.
-    /// </summary>
-    public class Item 
+    public sealed class GamePlugin
     {
-        #region Properties
-        public ItemFlags Flags
+        public string Name
         {
             get;
             set;
         }
-
-        public ItemKind Kind
+        public string LauncherBannerResourcePath
         {
             get;
             set;
         }
-
-        public int Cost
+        public string LauncherIconResourcePath
         {
             get;
             set;
         }
-        #endregion
+        public string LauncherDetailText
+        {
+            get;
+            set;
+        }
+        public Version Version
+        {
+            get;
+            set;
+        }
+       
     }
 }

@@ -64,7 +64,7 @@ namespace Gear
             if ((buffer.Length - startIndex) < 16)
                 throw new NotImplementedException();
 
-            DataBuffer db = new DataBuffer(buffer, DataBufferMode.NetworkByteOrder);
+            DataBuffer db = new DataBuffer(buffer, ByteOrder.NetworkByteOrder);
             db.Position = startIndex;
             db.WriteInt32(this.value.Major);
             db.WriteInt32(this.value.Minor);
@@ -79,7 +79,7 @@ namespace Gear
             if ((buffer.Length - startIndex) < 16)
                 throw new NotImplementedException();
 
-            DataBuffer db = new DataBuffer(buffer, DataBufferMode.NetworkByteOrder);
+            DataBuffer db = new DataBuffer(buffer, ByteOrder.NetworkByteOrder);
             db.Position = startIndex;
 
             var major = db.ReadInt32();
