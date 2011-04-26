@@ -81,9 +81,6 @@
     <Compile Include="ByteOrder.cs" />
     <Compile Include="DataBuffer.cs" />
     <Compile Include="Engine.cs" />
-    <Compile Include="GamePlugin.cs" />
-    <Compile Include="GamePluginLauncherDataAttribute.cs" />
-    <Compile Include="GamePluginManager.cs" />
     <Compile Include="IFieldSerializable.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogMessage.cs" />
@@ -105,7 +102,6 @@
     <Compile Include="GuidField.cs" />
     <Compile Include="FieldKind.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="RustGamePluginAttribute.cs" />
     <Compile Include="StringField.cs" />
     <Compile Include="VersionField.cs" />
     <Compile Include="Net\ServerConnection.cs" />

@@ -1,5 +1,5 @@
 ﻿/******************************************************************************
- * Rust: A Managed Game Engine - http://trac.gearedstudios.com/rust/          *
+ * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
  * Copyright © 2009-2011 Will 'cathode' Shelley. All Rights Reserved.         *
  *****************************************************************************/
 using System;
@@ -27,7 +27,7 @@ namespace Gear
         public const string DefaultSource = "General";
 
         private static readonly Queue<LogMessage> buffer = new Queue<LogMessage>();
-        private static readonly List<EventLogOutput> outputs = new List<EventLogOutput>();
+        private static readonly List<LogOutput> outputs = new List<LogOutput>();
         private static int threshold = 0;
         #endregion
         #region Methods
@@ -87,7 +87,7 @@ namespace Gear
             lock (Log.outputs)
             {
                 if (!Log.outputs.Any(op => op.Stream == stream))
-                    Log.outputs.Add(new EventLogOutput(stream, format, filter));
+                    Log.outputs.Add(new LogOutput(stream, format, filter));
             }
         }
 

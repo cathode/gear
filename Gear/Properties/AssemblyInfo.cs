@@ -1,5 +1,7 @@
-﻿// Gear - Copyright © 2009-2011 Will Shelley. All Rights Reserved.
-// Released under the Microsoft Reference License - see license.txt for details.
+﻿/******************************************************************************
+ * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
+ * Copyright © 2009-2011 Will 'cathode' Shelley. All Rights Reserved.         *
+ *****************************************************************************/
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -10,4 +12,3 @@ using Gear;
 // associated with an assembly.
 [assembly: AssemblyTitle("GearEngine")]
 [assembly: AssemblyDescription("Main Game Engine Class Library")]
-[assembly: RustGamePlugin("B80F2BF2-3350-4BFB-85BD-E11ABA65A465", "Gear")]

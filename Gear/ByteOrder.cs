@@ -1,5 +1,5 @@
 ﻿/******************************************************************************
- * Rust: A Managed Game Engine - http://trac.gearedstudios.com/rust/          *
+ * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
  * Copyright © 2009-2011 Will 'cathode' Shelley. All Rights Reserved.         *
  *****************************************************************************/
 

@@ -1,4 +1,8 @@
-﻿using Gear.Commands;
+﻿/******************************************************************************
+ * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
+ * Copyright © 2009-2011 Will 'cathode' Shelley. All Rights Reserved.         *
+ *****************************************************************************/
+using Gear.Commands;
 
 namespace Gear
 {

@@ -1,13 +1,13 @@
 ﻿/******************************************************************************
- * Rust: A Managed Game Engine - http://trac.gearedstudios.com/rust/          *
+ * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
  * Copyright © 2009-2011 Will 'cathode' Shelley. All Rights Reserved.         *
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using Gear.Assets;
-using System.IO;
 
 namespace Gear
 {
@@ -25,14 +25,9 @@ namespace Gear
             Log.BindOutput(Console.OpenStandardOutput());
 
             if (true)
-                Log.BindOutput(File.Open("rust.log", FileMode.Append, FileAccess.Write, FileShare.None));
+                Log.BindOutput(File.Open("Gear.log", FileMode.Append, FileAccess.Write, FileShare.None));
 
             Log.Write("Message log initialized", "system", LogMessageGroup.Info);
-
-            // Built-in path for game plugins.
-            if (!Directory.Exists("./Plugins/"))
-                Directory.CreateDirectory("./Plugins/");
-            GamePluginManager.RegisterGamePluginSearchPath("./Plugins/");
 
             // Built-in path for asset packages.
             if (!Directory.Exists("./Assets/"))
