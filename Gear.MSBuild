@@ -12,8 +12,7 @@
     <!-- Recreate directory -->
     <MakeDir Directories="$(MSBuildProjectDirectory)/artifact" ContinueOnError="false" />
     <ItemGroup>
-      <ProjectBinaries Include="$(MSBuildProjectDirectory)/src/Gear/bin/Release/*" />
-      <ProjectBinaries Include="$(MSBuildProjectDirectory)/src/Rust/bin/Release/*" />
+      <ProjectBinaries Include="$(MSBuildProjectDirectory)/Gear/bin/Release/*" />
     </ItemGroup>
     <Copy SourceFiles="@(ProjectBinaries)" DestinationFolder="$(MSBuildProjectDirectory)/artifact" ContinueOnError="false" />
     <ItemGroup>
