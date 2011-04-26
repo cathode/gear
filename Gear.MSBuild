@@ -3,7 +3,7 @@
   <Import Project="$(MSBuildExtensionsPath)/MSBuildCommunityTasks/MSBuild.Community.Tasks.Targets" />
 
   <Target Name="CompileSource">
-    <MSBuild Projects="src/Gear.sln" RebaseOutputs="true" Properties="Configuration=Release" Targets="Clean;Rebuild"/>
+    <MSBuild Projects="Gear.sln" RebaseOutputs="true" Properties="Configuration=Release" Targets="Clean;Rebuild"/>
   </Target>
   
   <Target Name="PackageBinaries" DependsOnTargets="CompileSource">
