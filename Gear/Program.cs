@@ -5,9 +5,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Gear.Assets;
+using Gear.Net;
 
 namespace Gear
 {
@@ -29,33 +31,53 @@ namespace Gear
 
             Log.Write("Message log initialized", "system", LogMessageGroup.Info);
 
+            if (args.Contains("-dedicated") || args.Contains("-d"))
+                Program.DedicatedServerMain(args);
+            else
+                Program.ClientMain(args);
+
+        }
+
+        private static void DedicatedServerMain(string[] args)
+        {
+            ConnectionListener listener = new ConnectionListener();
+            listener.ConnectionAccepted += new EventHandler<ConnectionEventArgs>(listener_ConnectionAccepted);
+            listener.Start();
+
+            //while (listener.IsListening)
+                System.Threading.Thread.Sleep(1000);
+        }
+
+        private static void ClientMain(string[] args)
+        {
             // Built-in path for asset packages.
             if (!Directory.Exists("./Assets/"))
                 Directory.CreateDirectory("./Assets/");
             PackageManager.RegisterPackageSearchPath("./Assets/");
             var pkgs = PackageManager.LoadAllPackages();
 
-            //GamePluginManager.RegisterGamePluginSearchPath("./");
+            //ClientConnection conn = new ClientConnection();
+            //conn.Connect(System.Net.IPAddress.Loopback);
 
-            //var ids = GamePluginManager.ScanForGamePlugins();
+            var clientEngine = new ClientEngine();
+            clientEngine.Initialize();
+            clientEngine.Run();
 
-            //var launcherUI = new LauncherUI();
-            //Application.EnableVisualStyles();
-            //Application.Run(launcherUI);
 
-            //int adapterOrdinal = SlimDX.DXGI.
-
-            Engine.TickRate = 4.0;
-            Engine.Tick += new EventHandler(Engine_Tick);
-            Engine.Start();
             Console.WriteLine("Done...");
             Console.Read();
+            
+        }
+
+        static void listener_ConnectionAccepted(object sender, ConnectionEventArgs e)
+        {
+
         }
 #if DEBUG
         private static void CompileSamplePackages()
         {
             var pc = new PackageCompiler();
-            if (pc.Compile("./Assets/Samples/Sample.xml", "./Assets/Sample.rp"))
+            if (pc.Compile("./Assets/Samples/Sample.xml", "./Assets/Sample.gp"))
                 Console.WriteLine("Sample compilation OK");
             else
                 Console.WriteLine("Sample compilation FAIL");
@@ -64,7 +86,7 @@ namespace Gear
 
         static void Engine_Tick(object sender, EventArgs e)
         {
-            Log.Write(string.Format("Tick #{0}", Program.ticks++), "program", LogMessageGroup.Debug);
+            //Log.Write(string.Format("Tick #{0}", Program.ticks++), "program", LogMessageGroup.Debug);
         }
     }
 }

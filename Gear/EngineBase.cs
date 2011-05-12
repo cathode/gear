@@ -13,8 +13,20 @@ namespace Gear
     public abstract class EngineBase
     {
         #region Fields
-        private bool active = false;
-        private bool isLoaded;
+        /// <summary>
+        /// Backing field for the <see cref="EngineBase.IsRunning"/> property.
+        /// </summary>
+        private bool isRunning = false;
+
+        /// <summary>
+        /// Backing field for the <see cref="EngineBase.IsInitialized"/> property.
+        /// </summary>
+        private bool isInitialized;
+
+        /// <summary>
+        /// Backing field for the <see cref="EngineBase.Shell"/> property.
+        /// </summary>
+        private GShell shell;
         #endregion
         #region Constructors
         /// <summary>
@@ -22,18 +34,14 @@ namespace Gear
         /// </summary>
         protected EngineBase()
         {
+
         }
         #endregion
         #region Events
         /// <summary>
         /// Raised before the engine performs loading tasks.
         /// </summary>
-        public event EventHandler PreLoad;
-
-        /// <summary>
-        /// Raised after the engine performs loading tasks.
-        /// </summary>
-        public event EventHandler PostLoad;
+        public event EventHandler Initializing;
 
         /// <summary>
         /// Raised when a player connects to the game.
@@ -57,49 +65,70 @@ namespace Gear
         #endregion
         #region Properties
         /// <summary>
-        /// Gets a value indicating whether the engine is actively processing the input queue.
+        /// Gets a value indicating whether the engine is running.
         /// </summary>
-        public bool Active
+        public bool IsRunning
         {
             get
             {
-                return this.active;
+                return this.isRunning;
             }
         }
-        public bool IsLoaded
+
+        /// <summary>
+        /// Gets a value indicating whether the current <see cref="EngineBase"/> has been initialized and is ready to be run.
+        /// </summary>
+        public bool IsInitialized
         {
             get
             {
-                return this.isLoaded;
+                return this.isInitialized;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="GShell"/> instance that processes player-input commands for the current <see cref="EngineBase"/>.
+        /// </summary>
+        public GShell Shell
+        {
+            get
+            {
+                return this.shell;
             }
         }
         #endregion
         #region Methods
-        public bool Load()
+        /// <summary>
+        /// Initializes the <see cref="EngineBase"/> instance.
+        /// </summary>
+        /// <returns>true if the initialization succeeded; otherwise false.</returns>
+        public bool Initialize()
         {
-            if (this.IsLoaded)
+            if (this.IsInitialized)
                 return true;
+
+            this.shell = new GShell(this);
 
             try
             {
-                this.OnPreLoad(EventArgs.Empty);
-                this.OnPostLoad(EventArgs.Empty);
-                this.isLoaded = true;
+                this.OnInitializing(EventArgs.Empty);
+                this.isInitialized = true;
             }
             catch
             {
-                this.isLoaded = false;
+                this.isInitialized = false;
             }
 
-            return this.isLoaded;
+            return this.isInitialized;
         }
+
         /// <summary>
         /// Runs the engine. This method blocks until the engine is terminated.
         /// </summary>
         public void Run()
         {
-            if (!this.IsLoaded)
-                this.Load();
+            if (!this.IsInitialized)
+                this.Initialize();
 
             this.OnStarting(EventArgs.Empty);
             while (true)
@@ -108,40 +137,31 @@ namespace Gear
                 Thread.Sleep(1);
             }
         }
-        /// <summary>
-        /// Raises the <see cref="EngineBase.PreLoad"/> event.
-        /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnPreLoad(EventArgs e)
-        {
-            if (this.PreLoad != null)
-                this.PreLoad(this, e);
-        }
 
         /// <summary>
-        /// Raises the <see cref="EngineBase.PostLoad"/> event.
+        /// Raises the <see cref="EngineBase.Initializing"/> event.
         /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnPostLoad(EventArgs e)
+        /// <param name="e">Event data associated with the event.</param>
+        protected virtual void OnInitializing(EventArgs e)
         {
-            if (this.PostLoad != null)
-                this.PostLoad(this, e);
+            if (this.Initializing != null)
+                this.Initializing(this, e);
         }
 
         /// <summary>
         /// Raises the <see cref="EngineBase.PlayerConnected"/> event.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">Event data associated with the event.</param>
         protected virtual void OnPlayerConnected(PlayerEventArgs e)
         {
             if (this.PlayerConnected != null)
                 this.PlayerConnected(this, e);
-        }
+        } 
 
         /// <summary>
         /// Raises the <see cref="EngineBase.PlayerDisconnected"/> event.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">Event data associated with the event.</param>
         protected virtual void OnPlayerDisconnected(PlayerEventArgs e)
         {
             if (this.PlayerDisconnected != null)
@@ -151,13 +171,17 @@ namespace Gear
         /// <summary>
         /// Raises the <see cref="EngineBase.Update"/> event.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">Event data associated with the event.</param>
         protected virtual void OnUpdate(EventArgs e)
         {
             if (this.Update != null)
                 this.Update(this, e);
         }
 
+        /// <summary>
+        /// Raises the <see cref="EngineBase.Starting"/> event.
+        /// </summary>
+        /// <param name="e">Event data associated with the event.</param>
         protected virtual void OnStarting(EventArgs e)
         {
             if (this.Starting != null)

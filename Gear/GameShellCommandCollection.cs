@@ -7,11 +7,11 @@ using System.Collections.ObjectModel;
 namespace Gear
 {
     /// <summary>
-    /// Represents a collection of <see cref="GameShellCommand"/> items.
+    /// Represents a collection of <see cref="GShellCommand"/> items.
     /// </summary>
-    public sealed class GameShellCommandCollection : KeyedCollection<string, GameShellCommand>
+    public sealed class GameShellCommandCollection : KeyedCollection<string, GShellCommand>
     {
-        protected override string GetKeyForItem(GameShellCommand item)
+        protected override string GetKeyForItem(GShellCommand item)
         {
             return item.Name;
         }

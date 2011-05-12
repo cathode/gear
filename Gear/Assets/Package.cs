@@ -21,7 +21,7 @@ namespace Gear.Assets
         /// <summary>
         /// Holds the default file extension for package files.
         /// </summary>
-        public const string DefaultFileExtension = ".rp";
+        public const string DefaultFileExtension = ".gp";
 
         /// <summary>
         /// Holds the four-character-code that is the first four bytes of a valid package stream.
@@ -70,6 +70,7 @@ namespace Gear.Assets
         /// </summary>
         private Package()
         {
+            this.references = new List<PackageReference>();
         }
         #endregion
         #region Properties

@@ -27,7 +27,6 @@ namespace Gear.Net
         /// </summary>
         private bool isListening;
         private ushort listenPort;
-        private EngineBase engine;
         private ServerInfoMessage serverInfoMessage;
         #endregion
         #region Constructors
@@ -35,10 +34,14 @@ namespace Gear.Net
         /// Initializes a new current of the <see cref="ConnectionListener"/> class.
         /// </summary>
         /// <param name="engine">The <see cref="EngineBase"/> which the new <see cref="ConnectionListener"/> belongs to.</param>
-        public ConnectionListener(EngineBase engine)
+        public ConnectionListener()
         {
-            this.engine = engine;
             this.listenPort = Connection.DefaultPort;
+            this.serverInfoMessage = new ServerInfoMessage();
+        }
+        public ConnectionListener(ushort listenPort)
+        {
+            this.listenPort = listenPort;
             this.serverInfoMessage = new ServerInfoMessage();
         }
         #endregion
@@ -77,12 +80,12 @@ namespace Gear.Net
         #endregion
         #region Methods
         /// <summary>
-        /// Starts listening for connections.
+        /// Starts listening for connections. Returns immediately.
         /// </summary>
         public void Start()
         {
-            if (this.listener != null)
-                this.listener.Close();
+            if (this.IsListening)
+                this.Stop();
 
             this.listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
@@ -90,14 +93,20 @@ namespace Gear.Net
             this.isListening = true;
             this.listener.Listen(10);
             this.listener.BeginAccept(new AsyncCallback(this.AcceptCallback), null);
+            Log.Write(string.Format("Listening for connections on {0}", this.listener.LocalEndPoint), "network", LogMessageGroup.Info);
         }
 
         /// <summary>
-        /// Stops listening for connections.
+        /// Stops listening for connections. Returns immediately.
         /// </summary>
         public void Stop()
         {
-            this.listener.Close();
+            if (!this.IsListening)
+                return;
+
+            if (this.listener != null)
+                this.listener.Close();
+
             this.isListening = false;
         }
 
@@ -105,7 +114,7 @@ namespace Gear.Net
         {
             var s = this.listener.EndAccept(result);
             this.listener.BeginAccept(new AsyncCallback(this.AcceptCallback), null);
-
+            Log.Write(string.Format("Accepted connection from {0}", s.RemoteEndPoint), "network");
             ServerConnection connection = new ServerConnection(s);
             connection.Send(this.serverInfoMessage);
             this.OnConnectionAccepted(new ConnectionEventArgs(connection));

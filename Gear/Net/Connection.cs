@@ -94,6 +94,9 @@ namespace Gear.Net
         /// </summary>
         public void Flush()
         {
+            if (!this.isActive)
+                return;
+
             while (this.sendQueue.Count > 0)
             {
                 var message = this.sendQueue.Dequeue();
@@ -204,6 +207,7 @@ namespace Gear.Net
                     var field = state.Message.GetField(fieldId, tag);
                     buffer.Position += field.CopyFrom(state.Buffer, buffer.Position, length);
                 }
+                this.receiveQueue.Enqueue(state.Message);
             }
             return;
         }

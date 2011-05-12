@@ -17,7 +17,9 @@ namespace Gear
         #region Constructors
         public ServerEngine()
         {
-            this.listener = new ConnectionListener(this);
+            this.listener = new ConnectionListener();
+
+            this.InitGShell();
         }
         #endregion
         #region Properties
@@ -35,6 +37,14 @@ namespace Gear
             base.OnStarting(e);
 
             this.listener.Start();
+        }
+
+        /// <summary>
+        /// Initializes the <see cref="GShell"/> used by the <see cref="ServerEngine"/>.
+        /// </summary>
+        private void InitGShell()
+        {
+            //this.Shell.Register(new GShellCommand("sv_maxplayers", this.
         }
         #endregion
     }

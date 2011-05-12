@@ -79,8 +79,8 @@
     <Compile Include="Assets\StringField.cs" />
     <Compile Include="Assets\SubStream.cs" />
     <Compile Include="ByteOrder.cs" />
+    <Compile Include="ClientEngine.cs" />
     <Compile Include="DataBuffer.cs" />
-    <Compile Include="Engine.cs" />
     <Compile Include="IFieldSerializable.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogMessage.cs" />
@@ -122,12 +122,13 @@
     </Compile>
     <Compile Include="Entity.cs" />
     <Compile Include="GameSession.cs" />
-    <Compile Include="GameShell.cs" />
-    <Compile Include="GameShellCommand.cs" />
+    <Compile Include="GShell.cs" />
+    <Compile Include="GShellCommand.cs" />
     <Compile Include="GameShellCommandCollection.cs" />
     <Compile Include="GameShellParseException.cs" />
     <Compile Include="Net\Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Configuration\Engine.cfg" />
     <None Include="Winforms\GameShellForm.cs">
       <SubType>Form</SubType>
     </None>

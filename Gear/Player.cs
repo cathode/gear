@@ -9,22 +9,31 @@ using System.Text;
 
 namespace Gear
 {
+    /// <summary>
+    /// Represents a player.
+    /// </summary>
     public class Player
     {
-        #region Fields
-        private Guid clientID;
-        #endregion
         #region Properties
+        public string Name
+        {
+            get;
+            set;
+        }
+        public bool IsLocalPlayer
+        {
+            get;
+            set;
+        }
+        public bool IsBot
+        {
+            get;
+            set;
+        }
         public Guid ClientID
         {
-            get
-            {
-                return this.clientID;
-            }
-            set
-            {
-                this.clientID = value;
-            }
+            get;
+            set;
         }
         #endregion
     }

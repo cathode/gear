@@ -28,6 +28,7 @@ namespace Gear.Net.Messaging
         public ServerInfoMessage()
         {
             this.motd = new StringField(ServerInfoMessage.DefaultMotd);
+            this.version = new VersionField();
         }
         #endregion
         #region Properties
@@ -48,6 +49,18 @@ namespace Gear.Net.Messaging
             get
             {
                 return MessageId.ServerInfo;
+            }
+        }
+
+        public Version Version
+        {
+            get
+            {
+                return this.version.Value;
+            }
+            set
+            {
+                this.version.Value = value;
             }
         }
         #endregion

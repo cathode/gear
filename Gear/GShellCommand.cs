@@ -6,35 +6,41 @@
 namespace Gear
 {
     /// <summary>
-    /// Defines a game shell command.
+    /// Represents a command processed by the game engine CLI shell.
     /// </summary>
-    public sealed class GameShellCommand
+    public sealed class GShellCommand
     {
         #region Fields
         /// <summary>
-        /// Backing field for the <see cref="GameShellCommand.Name"/> property.
+        /// Backing field for the <see cref="GShellCommand.Name"/> property.
         /// </summary>
         private string name;
         
         /// <summary>
-        /// Backing field for the <see cref="GameShellCommand.MinArgs"/> property.
+        /// Backing field for the <see cref="GShellCommand.MinArgs"/> property.
         /// </summary>
         private int minArgs;
 
         /// <summary>
-        /// Backing field for the <see cref="GameShellCommand.MaxArgs"/> property.
+        /// Backing field for the <see cref="GShellCommand.MaxArgs"/> property.
         /// </summary>
         private int maxArgs;
 
         /// <summary>
-        /// Backing field for the <see cref="GameShellCommand.Callback"/> property.
+        /// Backing field for the <see cref="GShellCommand.Callback"/> property.
         /// </summary>
         private GameShellCommandCallback callback;
 
         /// <summary>
-        /// Backing field for the <see cref="GameShellCommand.Description"/> property.
+        /// Backing field for the <see cref="GShellCommand.Description"/> property.
         /// </summary>
         private string description;
+        #endregion
+        #region Constructors
+        public GShellCommand(string name, GameShellCommandCallback callback)
+        {
+
+        }
         #endregion
         #region Properties
         /// <summary>
@@ -53,7 +59,7 @@ namespace Gear
         }
 
         /// <summary>
-        /// Gets or sets a string that provides a description of the current <see cref="GameShellCommand"/>, which is displayed when the user requests help for the command.
+        /// Gets or sets a string that provides a description of the current <see cref="GShellCommand"/>, which is displayed when the user requests help for the command.
         /// </summary>
         public string Description
         {
@@ -98,7 +104,7 @@ namespace Gear
         }
 
         /// <summary>
-        /// Gets or sets the human-readable name of the current <see cref="GameShellCommand"/>. This is what is typed to invoke the command from the shell.
+        /// Gets or sets the human-readable name of the current <see cref="GShellCommand"/>. This is what is typed to invoke the command from the shell.
         /// </summary>
         public string Name
         {

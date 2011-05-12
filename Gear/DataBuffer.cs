@@ -142,6 +142,7 @@ namespace Gear
         {
             throw new NotImplementedException();
         }
+
         /// <summary>
         /// Decodes the next two bytes from the buffer as a 16-bit signed integer value,
         /// and advances the current position by two.
@@ -177,13 +178,11 @@ namespace Gear
                        | this.data[this.position + 1] << 16
                        | this.data[this.position + 2] << 8
                        | this.data[this.position + 3];
-
             else
                 result = this.data[this.position + 0]
                        | this.data[this.position + 1] << 8
                        | this.data[this.position + 2] << 16
                        | this.data[this.position + 3] << 24;
-
             this.position += 4;
             return result;
         }
@@ -255,13 +254,11 @@ namespace Gear
                        | (uint)this.data[this.position + 1] << 16
                        | (uint)this.data[this.position + 2] << 8
                        | (uint)this.data[this.position + 3];
-
             else
                 result = (uint)this.data[this.position + 0]
                        | (uint)this.data[this.position + 1] << 8
                        | (uint)this.data[this.position + 2] << 16
                        | (uint)this.data[this.position + 3] << 24;
-
             this.position += 4;
             return result;
         }
@@ -318,6 +315,7 @@ namespace Gear
             this.data[this.position] = value;
             this.position += 1;
         }
+
         /// <summary>
         /// Writes the specified 16-bit signed integer to the buffer and advances
         /// the current position by two.
@@ -478,7 +476,14 @@ namespace Gear
 
         public int WriteStringAscii(string value)
         {
-            throw new NotImplementedException();
+            var bytes = Encoding.ASCII.GetBytes(value);
+
+            if (this.position + bytes.Length > this.data.Length)
+                throw new NotImplementedException();
+
+            bytes.CopyTo(this.data, this.position);
+            this.position += bytes.Length;
+            return bytes.Length;
         }
 
         public int WriteStringUtf8(string value)
@@ -493,16 +498,18 @@ namespace Gear
             return bytes.Length;
         }
 
-        public int WriteStringUtf16(string value)
-        {
-            throw new NotImplementedException();
-        }
-
         public int WriteBytes(byte[] value)
         {
             return this.WriteBytes(value, 0, value.Length);
         }
 
+        /// <summary>
+        /// Writes bytes to the buffer.
+        /// </summary>
+        /// <param name="value">The array of bytes to write to the buffer.</param>
+        /// <param name="startIndex">The index of the first byte in <paramref name="value"/> to start writing.</param>
+        /// <param name="count">The number of bytes to write.</param>
+        /// <returns></returns>
         public int WriteBytes(byte[] value, int startIndex, int count)
         {
             int n;
@@ -513,10 +520,15 @@ namespace Gear
             return n;
         }
 
-        public int WriteGuid(Guid id)
+        /// <summary>
+        /// Writes the specified <see cref="Guid"/> to the buffer.
+        /// </summary>
+        /// <param name="value">The <see cref="Guid"/> value to write to the buffer.</param>
+        /// <returns></returns>
+        public int WriteGuid(Guid value)
         {
             // Create a sub-buffer to decode the platform-specific result of Guid.ToByteArray()
-            DataBuffer db = new DataBuffer(id.ToByteArray(), ByteOrder.System);
+            DataBuffer db = new DataBuffer(value.ToByteArray(), ByteOrder.System);
 
             this.WriteInt32(db.ReadInt32());
             this.WriteInt16(db.ReadInt16());
@@ -526,16 +538,16 @@ namespace Gear
             return 16;
         }
 
-        public int WriteVersion(Version version)
+        public int WriteVersion(Version value)
         {
-            if (version == null)
+            if (value == null)
                 this.WriteBytes(new byte[16]);
             else
             {
-                this.WriteInt32(version.Major);
-                this.WriteInt32(version.Minor);
-                this.WriteInt32(version.Build);
-                this.WriteInt32(version.Revision);
+                this.WriteInt32(value.Major);
+                this.WriteInt32(value.Minor);
+                this.WriteInt32(value.Build);
+                this.WriteInt32(value.Revision);
             }
 
             return 16;
