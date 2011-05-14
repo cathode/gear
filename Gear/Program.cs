@@ -10,6 +10,7 @@ using System.Text;
 using System.Windows.Forms;
 using Gear.Assets;
 using Gear.Net;
+using Gear.Winforms;
 
 namespace Gear
 {
@@ -61,8 +62,13 @@ namespace Gear
 
             var clientEngine = new ClientEngine();
             clientEngine.Initialize();
-            clientEngine.Run();
-
+            clientEngine.Shell.Parse("set sv_name Demo Server");
+            //clientEngine.Run();
+            var form = new GameShellForm()
+            {
+                Shell = clientEngine.Shell
+            };
+            Application.Run(form);
 
             Console.WriteLine("Done...");
             Console.Read();

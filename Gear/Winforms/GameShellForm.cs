@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 
 using System.Text;
@@ -29,7 +28,7 @@ namespace Gear.Winforms
         }
         #endregion
         #region Fields
-        private GameShell shell;
+        private GShell shell;
         private StringBuilder outputBuilder = new StringBuilder();
         #endregion
         #region Methods - Private
@@ -56,6 +55,8 @@ namespace Gear.Winforms
                 this.output.AppendText(this.outputBuilder.ToString());
                 this.outputBuilder.Length = 0;
                 this.outputBuilder.Capacity = 0;
+
+                this.Invalidate();
             }
         }
 
@@ -81,7 +82,7 @@ namespace Gear.Winforms
         /// <summary>
         /// Gets or sets the active <see cref="GameShell"/>.
         /// </summary>
-        public GameShell Shell
+        public GShell Shell
         {
             get
             {

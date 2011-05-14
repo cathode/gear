@@ -4,6 +4,8 @@
  *****************************************************************************/
 using System;
 using System.IO;
+using Gear.ShellCommands;
+using System.Collections.Generic;
 
 namespace Gear
 {
@@ -53,23 +55,46 @@ namespace Gear
             }
         }
 
+        public System.Collections.ObjectModel.ReadOnlyCollection<GShellCommand> RegisteredCommands
+        {
+            get
+            {
+                return new System.Collections.ObjectModel.ReadOnlyCollection<GShellCommand>(this.commands);
+            }
+        }
         #endregion
         #region Methods
         /// <summary>
         /// Executes a line (or lines) of input text.
         /// </summary>
         /// <param name="input"></param>
-        public void Execute(string input)
+        public void Parse(string input)
         {
             input = input.Trim();
-            var cmdWord = input.Substring(0, input.IndexOf(' '));
-
+            var i = input.IndexOf(' ');
+            string cmdWord = string.Empty;
+            string cmdData = string.Empty;
+            if (i < 0)
+            {
+                cmdWord = input;
+            }
+            else
+            {
+                cmdWord = input.Substring(0, i);
+                cmdData = input.Substring(i);
+            }
             var cmd = this.GetRegisteredCommand(cmdWord);
+
+            if (cmd != null)
+                cmd.Execute(this, cmdData, null);
         }
 
         public GShellCommand GetRegisteredCommand(string name)
         {
-            throw new NotImplementedException();
+            if (this.commands.Contains(name))
+                return this.commands[name];
+            else
+                return null;
         }
 
         /// <summary>
@@ -99,7 +124,21 @@ namespace Gear
 
         private void RegisterBuiltinCommands()
         {
-            var setCmd = new GShellCommand("set", null);
+            try
+            {
+                this.Register(new HelpCommand(),
+                    new ListCommand(),
+                    new SetCommand());
+            }
+            catch
+            {
+                Log.Write("Failed registering one or more builtin commands.");
+            }
+        }
+
+        public void Write(string message)
+        {
+            this.output.WriteLine(message);
         }
         #endregion
     }
