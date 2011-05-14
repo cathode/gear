@@ -61,6 +61,33 @@ namespace Gear.ShellCommands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exits the game..
+        /// </summary>
+        internal static string ExitCommand_description {
+            get {
+                return ResourceManager.GetString("ExitCommand_description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to exit.
+        /// </summary>
+        internal static string ExitCommand_name {
+            get {
+                return ResourceManager.GetString("ExitCommand_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to exit.
+        /// </summary>
+        internal static string ExitCommand_usage {
+            get {
+                return ResourceManager.GetString("ExitCommand_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Displays help for a command..
         /// </summary>
         internal static string HelpCommand_description {
@@ -111,6 +138,33 @@ namespace Gear.ShellCommands {
         internal static string ListCommand_usage {
             get {
                 return ResourceManager.GetString("ListCommand_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sends a chat message to other players..
+        /// </summary>
+        internal static string SayCommand_description {
+            get {
+                return ResourceManager.GetString("SayCommand_description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to say.
+        /// </summary>
+        internal static string SayCommand_name {
+            get {
+                return ResourceManager.GetString("SayCommand_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to say [#destination] &lt;message&gt;.
+        /// </summary>
+        internal static string SayCommand_usage {
+            get {
+                return ResourceManager.GetString("SayCommand_usage", resourceCulture);
             }
         }
         

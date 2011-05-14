@@ -103,8 +103,10 @@
     <Compile Include="GuidField.cs" />
     <Compile Include="FieldKind.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ShellCommands\ExitCommand.cs" />
     <Compile Include="ShellCommands\HelpCommand.cs" />
     <Compile Include="ShellCommands\ListCommand.cs" />
+    <Compile Include="ShellCommands\SayCommand.cs" />
     <Compile Include="ShellCommands\SetCommand.cs" />
     <Compile Include="ShellCommands\ShellResources.Designer.cs">
       <AutoGen>True</AutoGen>

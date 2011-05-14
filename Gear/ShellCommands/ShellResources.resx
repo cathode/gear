@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ExitCommand_description" xml:space="preserve">
+    <value>Exits the game.</value>
+  </data>
+  <data name="ExitCommand_name" xml:space="preserve">
+    <value>exit</value>
+  </data>
+  <data name="ExitCommand_usage" xml:space="preserve">
+    <value>exit</value>
+  </data>
   <data name="HelpCommand_description" xml:space="preserve">
     <value>Displays help for a command.</value>
   </data>
@@ -134,6 +143,15 @@
   </data>
   <data name="ListCommand_usage" xml:space="preserve">
     <value>list [search_filter]</value>
+  </data>
+  <data name="SayCommand_description" xml:space="preserve">
+    <value>Sends a chat message to other players.</value>
+  </data>
+  <data name="SayCommand_name" xml:space="preserve">
+    <value>say</value>
+  </data>
+  <data name="SayCommand_usage" xml:space="preserve">
+    <value>say [#destination] &lt;message&gt;</value>
   </data>
   <data name="SetCommand_description" xml:space="preserve">
     <value>Sets a runtime engine variable.</value>

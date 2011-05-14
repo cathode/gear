@@ -128,7 +128,9 @@ namespace Gear
             {
                 this.Register(new HelpCommand(),
                     new ListCommand(),
-                    new SetCommand());
+                    new SetCommand(),
+                    new SayCommand(),
+                    new ExitCommand());
             }
             catch
             {
