@@ -27,7 +27,7 @@ namespace Gear.ShellCommands
             }
         }
 
-        public override bool Execute(GShell shell, string data, UserCredentials credentials)
+        public override bool Execute(GShell shell, string data, PlayerCredentials credentials)
         {
             return false;
         }

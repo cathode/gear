@@ -30,11 +30,10 @@ namespace Gear
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new current of the <see cref="EngineBase"/> class.
+        /// Initializes a new instance of the <see cref="EngineBase"/> class.
         /// </summary>
         protected EngineBase()
         {
-
         }
         #endregion
         #region Events
@@ -125,7 +124,7 @@ namespace Gear
         /// <summary>
         /// Runs the engine. This method blocks until the engine is terminated.
         /// </summary>
-        public void Run()
+        public virtual void Run()
         {
             if (!this.IsInitialized)
                 this.Initialize();
@@ -133,8 +132,9 @@ namespace Gear
             this.OnStarting(EventArgs.Empty);
             while (true)
             {
+                //Log.Write("Update.", "engine", LogMessageGroup.Debug);
                 this.OnUpdate(EventArgs.Empty);
-                Thread.Sleep(1);
+                Thread.Sleep(100);
             }
         }
 

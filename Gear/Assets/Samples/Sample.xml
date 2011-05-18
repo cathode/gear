@@ -29,4 +29,29 @@
     </Group>
     <Text Name="SideBySide">This text is a sibling of a SubGroup.</Text>
   </Group>
+  <Group Name="Gear">
+    <World>
+      <Heightmap W="4" H="4" Scale="1.0">
+        <Point Z="1.0" />
+        <Point Z="0.9" />
+        <Point Z="0.4" />
+        <Point Z="0.3" />
+
+        <Point Z="1.1" />
+        <Point Z="0.8" />
+        <Point Z="0.4" />
+        <Point Z="0.4" />
+
+        <Point Z="0.9" />
+        <Point Z="0.6" />
+        <Point Z="0.3" />
+        <Point Z="0.2" />
+
+        <Point Z="0.8" />
+        <Point Z="0.5" />
+        <Point Z="0.3" />
+        <Point Z="0.3" />
+      </Heightmap>
+    </World>
+  </Group>
 </Package>

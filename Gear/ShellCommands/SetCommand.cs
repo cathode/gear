@@ -54,7 +54,7 @@ namespace Gear.ShellCommands
         /// </summary>
         /// <param name="data">Data relevant to the execution of the command.</param>
         /// <returns>true if the shell command executed successfully; otherwise false.</returns>
-        public override bool Execute(GShell shell, string data, UserCredentials credentials)
+        public override bool Execute(GShell shell, string data, PlayerCredentials credentials)
         {
             Log.Write(string.Format("Set {0} to {1}", "placeholder", "placeholder"));
 

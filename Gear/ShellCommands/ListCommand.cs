@@ -29,7 +29,7 @@ namespace Gear.ShellCommands
                 throw new NotImplementedException();
             }
         }
-        public override bool Execute(GShell shell, string data, UserCredentials credentials)
+        public override bool Execute(GShell shell, string data, PlayerCredentials credentials)
         {
             var filter = data.Trim();
             if (filter == string.Empty)

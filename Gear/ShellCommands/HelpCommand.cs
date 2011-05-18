@@ -47,7 +47,7 @@ namespace Gear.ShellCommands
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public override bool Execute(GShell shell, string data, UserCredentials credentials)
+        public override bool Execute(GShell shell, string data, PlayerCredentials credentials)
         {
             var cmdName = (data ?? string.Empty).Trim();
             

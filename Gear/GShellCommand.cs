@@ -2,8 +2,8 @@
  * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
  * Copyright © 2009-2011 Will 'cathode' Shelley. All Rights Reserved.         *
  *****************************************************************************/
-using Gear.ShellCommands;
 using System;
+using Gear.ShellCommands;
 
 namespace Gear
 {
@@ -13,11 +13,25 @@ namespace Gear
     public abstract class GShellCommand
     {
         #region Fields
+        /// <summary>
+        /// Backing field for the <see cref="GShellCommand.Name"/> property.
+        /// </summary>
         private readonly string name;
+
+        /// <summary>
+        /// Backing field for the <see cref="GShellCommand.Usage"/> property.
+        /// </summary>
         private readonly string usage;
+
+        /// <summary>
+        /// Backing field for the <see cref="GShellCommand.Description"/> property.
+        /// </summary>
         private readonly string description;
         #endregion
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GShellCommand"/> class.
+        /// </summary>
         public GShellCommand()
         {
             var name = ShellResources.ResourceManager.GetString(string.Format("{0}_name", this.GetType().Name));
@@ -32,7 +46,7 @@ namespace Gear
         #endregion
         #region Properties
         /// <summary>
-        /// Gets or sets a string that provides a description of the current <see cref="GShellCommand"/>, which is displayed when the user requests help for the command.
+        /// Gets a string that provides a description of what the command does. This property is localized.
         /// </summary>
         public virtual string Description
         {
@@ -43,7 +57,7 @@ namespace Gear
         }
 
         /// <summary>
-        /// Gets or sets the maximum number of arguments that can be present for a successful invocation of the command.
+        /// Gets the maximum number of arguments that can be present for a successful invocation of the command.
         /// </summary>
         public abstract int MaxArgs
         {
@@ -51,7 +65,7 @@ namespace Gear
         }
 
         /// <summary>
-        /// Gets or sets the minimum number of arguments that must be present for a successful invocation of the command.
+        /// Gets the minimum number of arguments that must be present for a successful invocation of the command.
         /// </summary>
         public abstract int MinArgs
         {
@@ -59,7 +73,7 @@ namespace Gear
         }
 
         /// <summary>
-        /// Gets or sets the human-readable name of the current <see cref="GShellCommand"/>. This is what is typed to invoke the command from the shell.
+        /// Gets the name of the command, which is what is used to invoke the command via the command-line engine shell. This property is localized.
         /// </summary>
         public virtual string Name
         {
@@ -69,6 +83,9 @@ namespace Gear
             }
         }
 
+        /// <summary>
+        /// Gets the message that is displayed to the player which describes how the command and it's arguments are used. This property is localized.
+        /// </summary>
         public virtual string Usage
         {
             get
@@ -78,7 +95,14 @@ namespace Gear
         }
         #endregion
         #region Methods
-        public abstract bool Execute(GShell shell, string data, UserCredentials credentials);
+        /// <summary>
+        /// Executes the command.
+        /// </summary>
+        /// <param name="shell">The <see cref="GShell"/> instance to execute against.</param>
+        /// <param name="data">Any arguments or data provided by the player.</param>
+        /// <param name="credentials">The credentials of the player that invoked the command.</param>
+        /// <returns>true if the command executed without any errors; otherwise false.</returns>
+        public abstract bool Execute(GShell shell, string data, PlayerCredentials credentials);
         #endregion
     }
 }

@@ -9,7 +9,10 @@ using System.Text;
 
 namespace Gear
 {
-    public class World
+    /// <summary>
+    /// Placedholder class.
+    /// </summary>
+    public sealed class PlayerCredentials
     {
     }
 }
