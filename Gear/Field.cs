@@ -10,7 +10,14 @@ namespace Gear
     /// </summary>
     public abstract class Field
     {
-        #region Properties
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Field"/> class.
+        /// </summary>
+        protected Field()
+        {
+            this.Tag = 0;
+            this.Name = null;
+        }
         /// <summary>
         /// Gets the id of the message field.
         /// </summary>
@@ -25,6 +32,14 @@ namespace Gear
             set;
         }
 
+        public string Name
+        {
+            get;
+            set;
+        }
+
+
+
         /// <summary>
         /// Gets the size in bytes required to serialize the <see cref="Field"/> in it's current state.
         /// </summary>
@@ -32,8 +47,12 @@ namespace Gear
         {
             get;
         }
-        #endregion
-        #region Methods
+
+
+
+
+        public abstract bool Assign(object value);
+
         public virtual int CopyTo(byte[] buffer)
         {
             return this.CopyTo(buffer, 0);
@@ -45,7 +64,7 @@ namespace Gear
             return this.CopyFrom(buffer, 0, buffer.Length);
         }
         public abstract int CopyFrom(byte[] buffer, int startIndex, int count);
-        #endregion
+
         #region Types
         public abstract class FieldBase<T> : Field
         {

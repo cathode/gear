@@ -4,6 +4,10 @@
  *****************************************************************************/
 using System;
 using System.Threading;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Diagnostics.Contracts;
 
 namespace Gear
 {
@@ -27,6 +31,18 @@ namespace Gear
         /// Backing field for the <see cref="EngineBase.Shell"/> property.
         /// </summary>
         private GShell shell;
+
+        /// <summary>
+        /// Backing field for the <see cref="ResourceSearchPaths"/> property.
+        /// </summary>
+        private readonly HashSet<string> resourceSearchPaths;
+
+        /// <summary>
+        /// Backing field for the <see cref="PluginSearchPaths"/> property.
+        /// </summary>
+        private readonly HashSet<string> pluginSearchPaths;
+
+        private readonly HashSet<BlockDefinition> blocks;
         #endregion
         #region Constructors
         /// <summary>
@@ -34,6 +50,18 @@ namespace Gear
         /// </summary>
         protected EngineBase()
         {
+            this.resourceSearchPaths = new HashSet<string>();
+            this.pluginSearchPaths = new HashSet<string>();
+            this.blocks = new HashSet<BlockDefinition>();
+            this.shell = new GShell(this);
+
+            this.WorkingDirectory = Environment.CurrentDirectory;
+
+            if (true) // TODO: evaluate whether we should always do this
+            {
+                this.RegisterAssetSearchPaths("./Assets/");
+                this.RegisterPluginSearchPaths("./Plugins/");
+            }
         }
         #endregion
         #region Events
@@ -92,8 +120,62 @@ namespace Gear
         {
             get
             {
+                Contract.Ensures(Contract.Result<GShell>() != null);
+
                 return this.shell;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the path to the current working directory.
+        /// </summary>
+        public string WorkingDirectory
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets a collection of paths on the local filesystem that are searched for plugins to load into the engine.
+        /// </summary>
+        public IEnumerable<string> PluginSearchPaths
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<IEnumerable<string>>() != null);
+
+                return this.pluginSearchPaths;
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of paths on the local filesystem taht are searched for resources / assets to load into the engine.
+        /// </summary>
+        public IEnumerable<string> ResourceSearchPaths
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<IEnumerable<string>>() != null);
+                return this.resourceSearchPaths;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the active <see cref="World"/> that the engine will run against.
+        /// </summary>
+        public World ActiveWorld
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to use built-in block definitions for basic types of blocks (air, dirt, stone).
+        /// </summary>
+        public bool UseBuiltinBlocks
+        {
+            get;
+            set;
         }
         #endregion
         #region Methods
@@ -106,7 +188,7 @@ namespace Gear
             if (this.IsInitialized)
                 return true;
 
-            this.shell = new GShell(this);
+            
 
             try
             {
@@ -119,6 +201,42 @@ namespace Gear
             }
 
             return this.isInitialized;
+        }
+
+        /// <summary>
+        /// Adds one or more paths to the engine which are searched for load-able plugins when the engine is initialized.
+        /// </summary>
+        /// <param name="paths"></param>
+        public virtual void RegisterPluginSearchPaths(params string[] paths)
+        {
+            Contract.Requires(paths != null);
+
+            foreach (var path in paths.Where(p => p != null).Select(p => System.IO.Path.GetFullPath(p)))
+                this.pluginSearchPaths.Add(path);
+        }
+
+        /// <summary>
+        /// Adds one or more paths to the engine which are searched for load-able assets when the engine is initialized.
+        /// </summary>
+        /// <param name="paths"></param>
+        public virtual void RegisterAssetSearchPaths(params string[] paths)
+        {
+            Contract.Requires(paths != null);
+
+            foreach (var path in paths.Where(p => p != null).Select(p => System.IO.Path.GetFullPath(p)))
+                this.resourceSearchPaths.Add(path);
+        }
+
+        /// <summary>
+        /// Registers a block definition with the engine.
+        /// </summary>
+        /// <param name="blocks"></param>
+        public virtual void RegisterBlock(params BlockDefinition[] blocks)
+        {
+            Contract.Requires(blocks != null);
+
+            foreach (var block in blocks.Where(b => b != null))
+                this.blocks.Add(block);
         }
 
         /// <summary>
@@ -146,6 +264,21 @@ namespace Gear
         {
             if (this.Initializing != null)
                 this.Initializing(this, e);
+
+            if (this.UseBuiltinBlocks)
+            {
+                this.RegisterBlock(new BlockDefinition
+                {
+                    Name = "air",
+                    TypeId = 0x0000
+                },
+                new BlockDefinition
+                {
+                    Name = "dirt",
+                    TypeId = 0x0001
+                }
+                );
+            }
         }
 
         /// <summary>
@@ -156,7 +289,7 @@ namespace Gear
         {
             if (this.PlayerConnected != null)
                 this.PlayerConnected(this, e);
-        } 
+        }
 
         /// <summary>
         /// Raises the <see cref="EngineBase.PlayerDisconnected"/> event.
@@ -186,6 +319,15 @@ namespace Gear
         {
             if (this.Starting != null)
                 this.Starting(this, e);
+        }
+
+        [ContractInvariantMethod]
+        private void ContractInvariants()
+        {
+            Contract.Invariant(this.blocks != null);
+            Contract.Invariant(this.pluginSearchPaths != null);
+            Contract.Invariant(this.resourceSearchPaths != null);
+            Contract.Invariant(this.shell != null);
         }
         #endregion
     }

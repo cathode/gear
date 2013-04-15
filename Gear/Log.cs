@@ -10,6 +10,9 @@ using System.Text;
 
 namespace Gear
 {
+
+    public delegate void LogMessageHandler(LogMessage message);
+
     /// <summary>
     /// Provides method of recording runtime-generated events.
     /// </summary>
@@ -28,6 +31,7 @@ namespace Gear
 
         private static readonly Queue<LogMessage> buffer = new Queue<LogMessage>();
         private static readonly List<LogOutput> outputs = new List<LogOutput>();
+        private static readonly List<LogMessageHandler> handlers = new List<LogMessageHandler>();
         private static int threshold = 0;
         #endregion
         #region Methods
@@ -91,6 +95,15 @@ namespace Gear
             }
         }
 
+        public static void BindOutput(LogMessageHandler callback)
+        {
+            lock (Log.handlers)
+            {
+                if (!Log.handlers.Contains(callback))
+                    Log.handlers.Add(callback);
+            }
+        }
+
         /// <summary>
         /// Flushes any queued messages to bound output streams.
         /// </summary>
@@ -101,6 +114,15 @@ namespace Gear
                 while (Log.buffer.Count > 0)
                 {
                     var data = Log.buffer.Dequeue();
+
+#if !DEBUG
+                    if (data.Level == LogMessageGroup.Debug)
+                   
+                        continue;
+#endif
+
+                    foreach (var handler in Log.handlers)
+                        handler(data);
 
                     foreach (var output in Log.outputs)
                     {

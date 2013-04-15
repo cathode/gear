@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using Gear.ShellCommands;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace Gear
 {
@@ -70,6 +71,9 @@ namespace Gear
         /// <param name="input"></param>
         public void Parse(string input)
         {
+            if (string.IsNullOrEmpty(input))
+                return;
+
             input = input.Trim();
             var i = input.IndexOf(' ');
             string cmdWord = string.Empty;
@@ -91,6 +95,9 @@ namespace Gear
 
         public GShellCommand GetRegisteredCommand(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                return null;
+
             if (this.commands.Contains(name))
                 return this.commands[name];
             else
@@ -141,6 +148,14 @@ namespace Gear
         public void Write(string message)
         {
             this.output.WriteLine(message);
+        }
+
+        [ContractInvariantMethod]
+        private void Invariants()
+        {
+            Contract.Invariant(this.commands != null);
+            Contract.Invariant(this.engine != null);
+            Contract.Invariant(this.output != null);
         }
         #endregion
     }

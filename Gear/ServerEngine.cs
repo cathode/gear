@@ -3,6 +3,8 @@
  * Copyright © 2009-2011 Will 'cathode' Shelley. All Rights Reserved.         *
  *****************************************************************************/
 using Gear.Net;
+using System.Net;
+using System.Net.Sockets;
 
 namespace Gear
 {
@@ -12,31 +14,46 @@ namespace Gear
     public class ServerEngine : EngineBase
     {
         #region Fields
-        private readonly ConnectionListener listener;
+        //private readonly ConnectionListener listener;
+        private UdpClient udpClient;
         #endregion
         #region Constructors
         public ServerEngine()
         {
-            this.listener = new ConnectionListener();
+            //this.listener = new ConnectionListener();
 
-            this.InitGShell();
+           // this.InitGShell();
         }
         #endregion
         #region Properties
-        public ConnectionListener Listener
-        {
-            get
-            {
-                return this.listener;
-            }
-        }
+     
         #endregion
         #region Methods
         protected override void OnStarting(System.EventArgs e)
         {
             base.OnStarting(e);
 
-            this.listener.Start();
+            if (this.udpClient != null)
+                this.udpClient.Close();
+
+            var client = new UdpClient(new IPEndPoint(IPAddress.Any, 21073));
+            client.EnableBroadcast = true;
+
+            client.BeginReceive(new System.AsyncCallback(this.ReceiveCallback), client);
+            //this.listener.Start();
+        }
+
+        private void ReceiveCallback(System.IAsyncResult ar)
+        {
+            var client = ar.AsyncState as UdpClient;
+
+            if (client == null)
+                return;
+            var ep = new IPEndPoint(IPAddress.Any, 21073);
+
+            var rec = client.EndReceive(ar, ref ep);
+
+            Log.Write("Received broadcast from client");
         }
 
         /// <summary>

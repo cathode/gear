@@ -5,6 +5,7 @@
  * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
 using System;
+using System.Diagnostics.Contracts;
 
 namespace Gear.Assets
 {
@@ -59,6 +60,8 @@ namespace Gear.Assets
         [Obsolete]
         public static implicit operator T(AssetField<T> field)
         {
+            Contract.Requires(field != null);
+
             return field.Value;
         }
         #endregion

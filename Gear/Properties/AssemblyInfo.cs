@@ -12,3 +12,6 @@ using Gear;
 // associated with an assembly.
 [assembly: AssemblyTitle("GearEngine")]
 [assembly: AssemblyDescription("Main Game Engine Class Library")]
+
+[assembly: InternalsVisibleTo("Gear.Client"),
+           InternalsVisibleTo("Gear.Server")]

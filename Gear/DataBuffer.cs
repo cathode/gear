@@ -4,19 +4,21 @@
  *****************************************************************************/
 using System;
 using System.Text;
+using System.Diagnostics.Contracts;
 
 namespace Gear
 {
     /// <summary>
     /// Represents a buffer that primitive types can be decoded from/encoded to.
     /// </summary>
+    [ContractVerification(false)]
     public sealed class DataBuffer
     {
         #region Fields
         /// <summary>
         /// Holds the underlying byte array.
         /// </summary>
-        private byte[] data;
+        private readonly byte[] data;
         private int position;
         private ByteOrder mode;
         #endregion
@@ -24,9 +26,13 @@ namespace Gear
         /// <summary>
         /// Initializes a new instance of the <see cref="DataBuffer"/> class.
         /// </summary>
-        /// <param name="capacity">The fixed capacity of the buffer.</param>
+        /// <param name="capacity">The capacity of the new instance.</param>
         public DataBuffer(int capacity)
         {
+            Contract.Requires(capacity > 0);
+            Contract.Ensures(this.Position == 0);
+            Contract.Ensures(this.Available == capacity);
+
             this.data = new byte[capacity];
             this.Mode = ByteOrder.System;
         }
@@ -34,10 +40,13 @@ namespace Gear
         /// <summary>
         /// Initializes a new instance of the <see cref="DataBuffer"/> class.
         /// </summary>
-        /// <param name="capacity">The fixed capacity of the buffer.</param>
+        /// <param name="capacity">The capacity of the new instance.</param>
         /// <param name="mode">The endianness mode of the new instance.</param>
         public DataBuffer(int capacity, ByteOrder mode)
         {
+            Contract.Requires(capacity > 0);
+            Contract.Ensures(this.Position == 0);
+
             this.data = new byte[capacity];
             this.Mode = mode;
         }
@@ -45,32 +54,41 @@ namespace Gear
         /// <summary>
         /// Initializes a new current of the <see cref="DataBuffer"/> class.
         /// </summary>
-        /// <param name="contents"></param>
+        /// <param name="contents">The byte array to initialize the new instance with.</param>
         public DataBuffer(byte[] contents)
         {
+            Contract.Requires(contents != null);
+            Contract.Requires(contents.Length > 0);
+            Contract.Ensures(this.Position == 0);
+
             this.data = contents;
             this.Mode = ByteOrder.System;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataBuffer"/> class.
+        /// </summary>
+        /// <param name="contents">The byte array to initialize the new instance with.</param>
+        /// <param name="mode">The endianness mode of the new instance.</param>
         public DataBuffer(byte[] contents, ByteOrder mode)
         {
+            Contract.Requires(contents != null);
+            Contract.Requires(contents.Length > 0);
+            Contract.Ensures(this.Position == 0);
+
             this.data = contents;
             this.Mode = mode;
         }
         #endregion
         #region Properties
         /// <summary>
-        /// Gets or sets the underlying byte array of the current data buffer.
+        /// Gets a value that indicates how many bytes are available to be written to in the buffer.
         /// </summary>
-        public byte[] Contents
+        public int Available
         {
             get
             {
-                return this.data;
-            }
-            set
-            {
-                this.data = value ?? new byte[0];
+                return this.Capacity - this.Position;
             }
         }
 
@@ -96,15 +114,43 @@ namespace Gear
         {
             get
             {
+                Contract.Ensures(Contract.Result<int>() <= this.data.Length);
                 return this.position;
             }
             set
             {
+                Contract.Requires(value <= this.Capacity);
+                Contract.Requires(value >= 0);
                 this.position = value;
             }
         }
+
+        /// <summary>
+        /// Gets the capacity of the current <see cref="DataBuffer"/>.
+        /// </summary>
+        public int Capacity
+        {
+            get
+            {
+                return this.data.Length;
+            }
+        }
+
+        public byte[] Contents
+        {
+            get
+            {
+                return this.data;
+            }
+        }
+
         #endregion
         #region Methods
+
+        public byte[] GetUnderlyingByteArray()
+        {
+            return this.data;
+        }
         /// <summary>
         /// Reads the next byte from the buffer and advances the position by 1.
         /// </summary>
@@ -123,12 +169,13 @@ namespace Gear
         /// <returns>A new byte[] containing the bytes read from the buffer.</returns>
         public byte[] ReadBytes(int count)
         {
-            int read = count;
-            var bytes = new byte[read];
-            Array.Copy(this.data, this.position, bytes, 0, read);
+            Contract.Requires(count > 0);
+            Contract.Ensures(Contract.Result<byte[]>() != null);
 
-            this.position += read;
-            return bytes;
+            int n = Math.Min(count, this.Capacity - this.Position);
+            byte[] read = new byte[n];
+            this.ReadBytes(read, 0, read.Length);
+            return read;
         }
 
         /// <summary>
@@ -140,9 +187,19 @@ namespace Gear
         /// <returns>The number of bytes read.</returns>
         public int ReadBytes(byte[] buffer, int startIndex, int count)
         {
-            throw new NotImplementedException();
-        }
+            Contract.Requires(buffer != null);
+            Contract.Requires(startIndex >= 0);
 
+            if (count > 0)
+            {
+                int n = Math.Min(count, this.Capacity - this.Position);
+                Array.Copy(this.data, this.position, buffer, startIndex, n);
+                this.position += n;
+                return n;
+            }
+            else
+                return 0;
+        }
         /// <summary>
         /// Decodes the next two bytes from the buffer as a 16-bit signed integer value,
         /// and advances the current position by two.
@@ -178,11 +235,13 @@ namespace Gear
                        | this.data[this.position + 1] << 16
                        | this.data[this.position + 2] << 8
                        | this.data[this.position + 3];
+
             else
                 result = this.data[this.position + 0]
                        | this.data[this.position + 1] << 8
                        | this.data[this.position + 2] << 16
                        | this.data[this.position + 3] << 24;
+
             this.position += 4;
             return result;
         }
@@ -226,6 +285,7 @@ namespace Gear
         /// <returns>The decoded 16-bit unsigned integer value.</returns>
         public ushort ReadUInt16()
         {
+            Contract.Ensures(this.Position == Contract.OldValue<long>(this.Position) + 2);
             // No bitshift operators for ushort, have to use int and cast when returning.
             int result;
 
@@ -254,11 +314,13 @@ namespace Gear
                        | (uint)this.data[this.position + 1] << 16
                        | (uint)this.data[this.position + 2] << 8
                        | (uint)this.data[this.position + 3];
+
             else
                 result = (uint)this.data[this.position + 0]
                        | (uint)this.data[this.position + 1] << 8
                        | (uint)this.data[this.position + 2] << 16
                        | (uint)this.data[this.position + 3] << 24;
+
             this.position += 4;
             return result;
         }
@@ -298,24 +360,23 @@ namespace Gear
 
         public Guid ReadGuid()
         {
-            return new Guid(this.ReadInt32(), this.ReadInt16(), this.ReadInt16(), this.ReadBytes(8));
+            var bytes = this.ReadBytes(16);
+            var guid = new Guid(bytes);
+            return guid;
         }
 
         public Version ReadVersion()
         {
-            var major = this.ReadInt32();
-            var minor = this.ReadInt32();
-            var build = this.ReadInt32();
-            var revision = this.ReadInt32();
-            return new Version(major, minor, build, revision);
+            return new Version(this.ReadInt32(), this.ReadInt32(), this.ReadInt32(), this.ReadInt32());
         }
 
         public void WriteByte(byte value)
         {
+            Contract.Requires(this.Capacity - this.Position >= 1);
+            Contract.Ensures(this.Position == Contract.OldValue<int>(this.Position) + 1);
             this.data[this.position] = value;
-            this.position += 1;
+            this.Position += 1;
         }
-
         /// <summary>
         /// Writes the specified 16-bit signed integer to the buffer and advances
         /// the current position by two.
@@ -323,6 +384,9 @@ namespace Gear
         /// <param name="value">A 16-bit signed integer value to write to the buffer.</param>
         public void WriteInt16(short value)
         {
+            Contract.Requires(this.Capacity - this.Position >= 2);
+            Contract.Ensures(this.Position == Contract.OldValue<int>(this.Position) + 2);
+
             if (this.Mode == ByteOrder.BigEndian)
             {
                 this.data[this.position + 0] = (byte)(value >> 8);
@@ -334,7 +398,7 @@ namespace Gear
                 this.data[this.position + 1] = (byte)(value >> 8);
             }
 
-            this.position += 2;
+            this.Position += 2;
         }
 
         /// <summary>
@@ -344,6 +408,9 @@ namespace Gear
         /// <param name="value">A 32-bit signed integer value to write to the buffer.</param>
         public void WriteInt32(int value)
         {
+            Contract.Requires(this.Available >= 4);
+            Contract.Ensures(this.Position == Contract.OldValue<int>(this.Position) + 4);
+
             if (this.Mode == ByteOrder.BigEndian)
             {
                 this.data[this.position + 0] = (byte)(value >> 24);
@@ -359,7 +426,7 @@ namespace Gear
                 this.data[this.position + 3] = (byte)(value >> 24);
             }
 
-            this.position += 4;
+            this.Position += 4;
         }
 
         /// <summary>
@@ -369,6 +436,9 @@ namespace Gear
         /// <param name="value">A 64-bit signed integer value to write to the buffer.</param>
         public void WriteInt64(long value)
         {
+            Contract.Requires(this.Capacity - this.Position >= 8);
+            Contract.Ensures(this.Position == Contract.OldValue<int>(this.Position) + 8);
+
             if (this.Mode == ByteOrder.BigEndian)
             {
                 this.data[this.position + 0] = (byte)(value >> 56);
@@ -392,7 +462,7 @@ namespace Gear
                 this.data[this.position + 7] = (byte)(value >> 56);
             }
 
-            this.position += 8;
+            this.Position += 8;
         }
 
         /// <summary>
@@ -402,6 +472,9 @@ namespace Gear
         /// <param name="value">A 16-bit unsigned integer value to write to the buffer.</param>
         public void WriteUInt16(ushort value)
         {
+            Contract.Requires(this.Capacity - this.Position >= 2);
+            Contract.Ensures(this.Position == Contract.OldValue<int>(this.Position) + 2);
+
             if (this.Mode == ByteOrder.BigEndian)
             {
                 this.data[this.position + 0] = (byte)(value >> 8);
@@ -413,7 +486,7 @@ namespace Gear
                 this.data[this.position + 1] = (byte)(value >> 8);
             }
 
-            this.position += 2;
+            this.Position += 2;
         }
 
         /// <summary>
@@ -423,6 +496,9 @@ namespace Gear
         /// <param name="value">A 32-bit unsigned integer value to write to the buffer.</param>
         public void WriteUInt32(uint value)
         {
+            Contract.Requires(this.Capacity - this.Position >= 4);
+            Contract.Ensures(this.Position == Contract.OldValue<int>(this.Position) + 4);
+
             if (this.Mode == ByteOrder.BigEndian)
             {
                 this.data[this.position + 0] = (byte)(value >> 24);
@@ -438,7 +514,7 @@ namespace Gear
                 this.data[this.position + 3] = (byte)(value >> 24);
             }
 
-            this.position += 4;
+            this.Position += 4;
         }
 
         /// <summary>
@@ -448,6 +524,7 @@ namespace Gear
         /// <param name="value">A 64-bit unsigned integer value to write to the buffer.</param>
         public void WriteUInt64(ulong value)
         {
+
             if (this.Mode == ByteOrder.BigEndian)
             {
                 this.data[this.position + 0] = (byte)(value >> 56);
@@ -471,87 +548,108 @@ namespace Gear
                 this.data[this.position + 7] = (byte)(value >> 56);
             }
 
-            this.position += 8;
+            this.Position += 8;
         }
 
         public int WriteStringAscii(string value)
         {
-            var bytes = Encoding.ASCII.GetBytes(value);
+            Contract.Requires(value != null);
 
-            if (this.position + bytes.Length > this.data.Length)
-                throw new NotImplementedException();
-
-            bytes.CopyTo(this.data, this.position);
-            this.position += bytes.Length;
-            return bytes.Length;
+            throw new NotImplementedException();
         }
 
         public int WriteStringUtf8(string value)
         {
+            Contract.Requires(value != null);
+
             var bytes = Encoding.UTF8.GetBytes(value);
 
-            if (this.position + bytes.Length > this.data.Length)
+            if (this.position + this.data.Length > this.data.Length)
                 throw new NotImplementedException();
 
             bytes.CopyTo(this.data, this.position);
             this.position += bytes.Length;
-            return bytes.Length;
+            return this.data.Length;
         }
 
-        public int WriteBytes(byte[] value)
+        public int WriteStringUtf16(string value)
         {
-            return this.WriteBytes(value, 0, value.Length);
+            Contract.Requires(value != null);
+
+            throw new NotImplementedException();
+        }
+
+        public int WriteBytes(byte[] array)
+        {
+            Contract.Requires(array != null);
+
+            return this.WriteBytes(array, 0, array.Length);
         }
 
         /// <summary>
-        /// Writes bytes to the buffer.
+        /// Writes a sequence of bytes from 'array' to the buffer.
         /// </summary>
-        /// <param name="value">The array of bytes to write to the buffer.</param>
-        /// <param name="startIndex">The index of the first byte in <paramref name="value"/> to start writing.</param>
-        /// <param name="count">The number of bytes to write.</param>
+        /// <param name="array"></param>
+        /// <param name="startIndex"></param>
+        /// <param name="count"></param>
         /// <returns></returns>
-        public int WriteBytes(byte[] value, int startIndex, int count)
+        public int WriteBytes(byte[] array, int startIndex, int count)
         {
+            Contract.Requires(array != null);
+            Contract.Requires(startIndex >= 0);
+            Contract.Requires(count >= 0);
+            Contract.Requires(array.Length >= (startIndex + count));
+            Contract.Requires(count >= this.Available);
+
             int n;
             for (n = 0; n < count; n++)
-                this.data[this.position + n] = value[startIndex + n];
+                this.data[this.position + n] = array[startIndex + n];
 
             this.position += n;
             return n;
         }
 
         /// <summary>
-        /// Writes the specified <see cref="Guid"/> to the buffer.
+        /// Writes a <see cref="System.Guid"/> to the buffer.
         /// </summary>
-        /// <param name="value">The <see cref="Guid"/> value to write to the buffer.</param>
-        /// <returns></returns>
-        public int WriteGuid(Guid value)
+        /// <param name="id">The guid to write.</param>
+        /// <returns>The number of bytes written, which is always 16 for this operation.</returns>
+        public int WriteGuid(Guid id)
         {
-            // Create a sub-buffer to decode the platform-specific result of Guid.ToByteArray()
-            DataBuffer db = new DataBuffer(value.ToByteArray(), ByteOrder.System);
+            Contract.Ensures(this.Position == Contract.OldValue<int>(this.Position) + 16);
 
-            this.WriteInt32(db.ReadInt32());
-            this.WriteInt16(db.ReadInt16());
-            this.WriteInt16(db.ReadInt16());
-            this.WriteBytes(db.ReadBytes(8));
+            var bytes = id.ToByteArray();
+            this.WriteBytes(bytes);
 
             return 16;
         }
 
-        public int WriteVersion(Version value)
+        /// <summary>
+        /// Writes a <see cref="System.Version"/> to the buffer. The parts are written in the traditional order (Major, Minor, Build, Revision).
+        /// </summary>
+        /// <param name="version">The version to write.</param>
+        /// <returns>The number of bytes written, which is always 16 for this operation.</returns>
+        public int WriteVersion(Version version)
         {
-            if (value == null)
-                this.WriteBytes(new byte[16]);
-            else
-            {
-                this.WriteInt32(value.Major);
-                this.WriteInt32(value.Minor);
-                this.WriteInt32(value.Build);
-                this.WriteInt32(value.Revision);
-            }
+            Contract.Requires(version != null);
+
+            this.WriteInt32(version.Major);
+            this.WriteInt32(version.Minor);
+            this.WriteInt32(version.Build);
+            this.WriteInt32(version.Revision);
 
             return 16;
+        }
+
+        [ContractInvariantMethod]
+        private void ObjectInvariant()
+        {
+            Contract.Invariant(this.Capacity > 0);
+            Contract.Invariant(this.Position >= 0);
+            Contract.Invariant(this.Position <= this.Capacity);
         }
         #endregion
+
+     
     }
 }
