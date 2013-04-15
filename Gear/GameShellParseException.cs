@@ -1,6 +1,6 @@
 ﻿/******************************************************************************
- * Gear: A Steampunk Action-RPG - http://trac.gearedstudios.com/gear/         *
- * Copyright © 2009-2011 Will 'cathode' Shelley. All Rights Reserved.         *
+ * Gear: A game of block-based sandbox fun. http://github.com/cathode/gear/   *
+ * Copyright © 2009-2013 William 'cathode' Shelley. All Rights Reserved.      *
  *****************************************************************************/
 using System;
 using System.Collections.Generic;

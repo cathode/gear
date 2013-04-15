@@ -1,4 +1,10 @@
-﻿using System;
+﻿/******************************************************************************
+ * Gear: A game of block-based sandbox fun. http://github.com/cathode/gear/   *
+ * Copyright © 2009-2013 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the Microsoft  *
+ * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
+ *****************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -96,11 +102,30 @@ namespace Gear
         }
     }
 
+    /// <summary>
+    /// Represents the state of an individual block.
+    /// </summary>
     public struct BlockState
     {
         public ushort TypeId;
-        public byte Metadata;
+        public BlockFlags Flags;
         public byte Lighting;
+    }
+
+    [Flags]
+    public enum BlockFlags : byte
+    {
+        /// <summary>
+        /// Indicates the block has no flags specified.
+        /// </summary>
+        None = 0x00,
+
+        /// <summary>
+        /// Indicates the b
+        /// </summary>
+        SmoothX = 0x01,
+        SmoothY = 0x02,
+        SmoothZ = 0x04,
     }
 
     /// <summary>
@@ -121,6 +146,12 @@ namespace Gear
         /// Gets or sets the name of the block.
         /// </summary>
         public string Name
+        {
+            get;
+            set;
+        }
+
+        public string Script
         {
             get;
             set;
