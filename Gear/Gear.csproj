@@ -119,6 +119,9 @@
     <Compile Include="ByteOrder.cs" />
     <Compile Include="ClientEngine.cs" />
     <Compile Include="DataBuffer.cs" />
+    <Compile Include="Model\Block.cs" />
+    <Compile Include="Model\Compound.cs" />
+    <Compile Include="Model\Material.cs" />
     <Compile Include="Serialization\GPacket.cs" />
     <Compile Include="IFieldSerializable.cs" />
     <Compile Include="Log.cs" />
@@ -207,6 +210,16 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ref\Managed3D\Managed3D.Modeling.Parametrics\Managed3D.Modeling.Parametrics.csproj">
+      <Project>{cf445d21-9e1f-4d66-a36d-ccd8d54314a1}</Project>
+      <Name>Managed3D.Modeling.Parametrics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ref\Managed3D\Managed3D\Managed3D.csproj">
+      <Project>{4d281c09-1c91-4c84-b0dc-aaff8839264e}</Project>
+      <Name>Managed3D</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
