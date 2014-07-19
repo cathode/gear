@@ -13,7 +13,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Gear.Net;
 
 namespace Gear.Client.UI
 {
@@ -37,7 +36,7 @@ namespace Gear.Client.UI
 
         private void button2_Click(object sender, EventArgs e)
         {
-            LanServerScanner.BeginDiscovery(5);
+            //LanServerScanner.BeginDiscovery(5);
         }
     }
 }

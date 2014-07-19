@@ -97,102 +97,27 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Assets\Asset.cs" />
-    <Compile Include="Assets\AssetField.cs" />
-    <Compile Include="Assets\AssetGraph.cs" />
-    <Compile Include="Assets\AssetIdentifier.cs" />
-    <Compile Include="Assets\AssetKind.cs" />
-    <Compile Include="Assets\AssetManager.cs" />
-    <Compile Include="Assets\BodyLocation.cs" />
-    <Compile Include="Assets\Field.cs" />
-    <Compile Include="Assets\IAsset.cs" />
-    <Compile Include="Assets\IAssetField.cs" />
-    <Compile Include="Assets\IFieldValue.cs" />
-    <Compile Include="Assets\Int32Field.cs" />
-    <Compile Include="Assets\Package.cs" />
-    <Compile Include="Assets\PackageCompiler.cs" />
-    <Compile Include="Assets\PackageFlags.cs" />
-    <Compile Include="Assets\PackageHeader.cs" />
-    <Compile Include="Assets\PackageIndex.cs" />
-    <Compile Include="Assets\PackageIndexEntry.cs" />
-    <Compile Include="Assets\PackageManager.cs" />
-    <Compile Include="Assets\PackageReference.cs" />
-    <Compile Include="Assets\StringField.cs" />
-    <Compile Include="Assets\SubStream.cs" />
-    <Compile Include="ByteOrder.cs" />
     <Compile Include="ClientEngine.cs" />
-    <Compile Include="DataBuffer.cs" />
     <Compile Include="Model\Block.cs" />
     <Compile Include="Model\Compound.cs" />
     <Compile Include="Model\Material.cs" />
-    <Compile Include="Serialization\GPacket.cs" />
-    <Compile Include="IFieldSerializable.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogMessage.cs" />
     <Compile Include="LogMessageGroup.cs" />
     <Compile Include="LogOutput.cs" />
-    <Compile Include="Net\ClientConnection.cs" />
-    <Compile Include="Net\ClientConnectionEventArgs.cs" />
-    <Compile Include="Net\LanServerScanner.cs" />
-    <Compile Include="Net\MessageFactory.cs" />
-    <Compile Include="Net\MessageReceiveState.cs" />
-    <Compile Include="Net\Messaging\ClientInfoMessage.cs" />
-    <Compile Include="Net\ConnectionEventArgs.cs" />
-    <Compile Include="Net\ConnectionListener.cs" />
-    <Compile Include="Net\ConnectionState.cs" />
-    <Compile Include="Net\ConnectionStateEventArgs.cs" />
-    <Compile Include="Net\Message.cs" />
-    <Compile Include="Net\MessageEventArgs.cs" />
-    <Compile Include="Field.cs" />
-    <Compile Include="Net\MessageId.cs" />
-    <Compile Include="GuidField.cs" />
-    <Compile Include="FieldKind.cs" />
-    <Compile Include="Serialization\PacketField.cs" />
-    <Compile Include="ShellCommands\ExitCommand.cs" />
-    <Compile Include="ShellCommands\HelpCommand.cs" />
-    <Compile Include="ShellCommands\ListCommand.cs" />
-    <Compile Include="ShellCommands\SayCommand.cs" />
-    <Compile Include="ShellCommands\SetCommand.cs" />
-    <Compile Include="ShellCommands\ShellResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShellResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="StringField.cs" />
-    <Compile Include="PlayerCredentials.cs" />
-    <Compile Include="VersionField.cs" />
-    <Compile Include="Net\ServerConnection.cs" />
-    <Compile Include="Net\ServerConnectionEventArgs.cs" />
-    <Compile Include="Net\Messaging\ServerInfoMessage.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerEventArgs.cs" />
     <Compile Include="ServerEngine.cs" />
     <Compile Include="World.cs" />
     <None Include="app.config" />
-    <None Include="Command.cs" />
-    <None Include="CommandId.cs" />
-    <None Include="CommandQueue.cs" />
     <Compile Include="EngineBase.cs" />
     <Compile Include="EngineResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EngineResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Entity.cs" />
     <Compile Include="GameSession.cs" />
-    <Compile Include="GShell.cs" />
-    <Compile Include="GShellCommand.cs" />
-    <Compile Include="GameShellCommandCollection.cs" />
-    <Compile Include="GameShellParseException.cs" />
-    <Compile Include="Net\Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Configuration\Engine.cfg" />
-    <Compile Include="Winforms\GameShellForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Winforms\GameShellForm.Designer.cs">
-      <DependentUpon>GameShellForm.cs</DependentUpon>
-    </Compile>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -201,19 +126,6 @@
       <LastGenOutput>EngineResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ShellCommands\ShellResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ShellResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\Samples\Group1\SubGroup1\imported.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Samples\Sample.xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ref\Managed3D\Managed3D.Modeling.Parametrics\Managed3D.Modeling.Parametrics.csproj">
@@ -224,6 +136,10 @@
       <Project>{4d281c09-1c91-4c84-b0dc-aaff8839264e}</Project>
       <Name>Managed3D</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\" />
+    <Folder Include="Net\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

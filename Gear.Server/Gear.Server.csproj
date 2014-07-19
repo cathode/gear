@@ -44,16 +44,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClusterManagerService.cs" />
-    <Compile Include="ConnectionBrokerService.cs" />
+    <Compile Include="NetServices\ClusterManagerService.cs" />
+    <Compile Include="NetServices\ConnectionBrokerService.cs" />
     <Compile Include="DefaultPorts.cs" />
+    <Compile Include="NetServices\MetadataRequest.cs" />
+    <Compile Include="NetServices\ServiceAnnouncement.cs" />
+    <Compile Include="NetServices\ServiceDetail.cs" />
+    <Compile Include="NetServices\ServiceInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerService.cs" />
-    <Compile Include="ServiceAnnouncer.cs" />
-    <Compile Include="ServiceFinder.cs" />
-    <Compile Include="ServiceManager.cs" />
-    <Compile Include="ZoneNodeService.cs" />
+    <Compile Include="NetServices\ServerService.cs" />
+    <Compile Include="NetServices\ServiceAnnouncer.cs" />
+    <Compile Include="NetServices\ServiceFinder.cs" />
+    <Compile Include="NetServices\ServiceManager.cs" />
+    <Compile Include="NetServices\ZoneNodeService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gear\Gear.csproj">
@@ -63,6 +67,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NetServices\Messages\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

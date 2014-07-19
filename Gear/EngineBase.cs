@@ -30,11 +30,6 @@ namespace Gear
         private bool isInitialized;
 
         /// <summary>
-        /// Backing field for the <see cref="EngineBase.Shell"/> property.
-        /// </summary>
-        private GShell shell;
-
-        /// <summary>
         /// Backing field for the <see cref="ResourceSearchPaths"/> property.
         /// </summary>
         private readonly HashSet<string> resourceSearchPaths;
@@ -55,7 +50,7 @@ namespace Gear
             this.resourceSearchPaths = new HashSet<string>();
             this.pluginSearchPaths = new HashSet<string>();
             this.blocks = new HashSet<BlockDefinition>();
-            this.shell = new GShell(this);
+         
 
             this.WorkingDirectory = Environment.CurrentDirectory;
 
@@ -112,19 +107,6 @@ namespace Gear
             get
             {
                 return this.isInitialized;
-            }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="GShell"/> instance that processes player-input commands for the current <see cref="EngineBase"/>.
-        /// </summary>
-        public GShell Shell
-        {
-            get
-            {
-                Contract.Ensures(Contract.Result<GShell>() != null);
-
-                return this.shell;
             }
         }
 
@@ -329,7 +311,6 @@ namespace Gear
             Contract.Invariant(this.blocks != null);
             Contract.Invariant(this.pluginSearchPaths != null);
             Contract.Invariant(this.resourceSearchPaths != null);
-            Contract.Invariant(this.shell != null);
         }
         #endregion
     }

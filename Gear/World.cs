@@ -20,6 +20,11 @@ namespace Gear
     {
 
         /// <summary>
+        /// Gets or sets the unique id of the world.
+        /// </summary>
+        public Guid WorldId { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the world.
         /// </summary>
         public string Name
@@ -27,7 +32,6 @@ namespace Gear
             get;
             set;
         }
-
 
         public WorldDimension GetDimension(string name)
         {

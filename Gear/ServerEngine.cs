@@ -4,7 +4,6 @@
  * This software is released under the terms and conditions of the Microsoft  *
  * Reference Source License (MS-RSL). See the 'license.txt' file for details. *
  *****************************************************************************/
-using Gear.Net;
 using System.Net;
 using System.Net.Sockets;
 
