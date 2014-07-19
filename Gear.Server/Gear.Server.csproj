@@ -52,6 +52,7 @@
     <Compile Include="ServerService.cs" />
     <Compile Include="ServiceAnnouncer.cs" />
     <Compile Include="ServiceFinder.cs" />
+    <Compile Include="ServiceManager.cs" />
     <Compile Include="ZoneNodeService.cs" />
   </ItemGroup>
   <ItemGroup>

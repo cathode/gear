@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Threading;
 
 namespace Gear.Server
 {
@@ -17,7 +18,7 @@ namespace Gear.Server
     {
         public static void Main(string[] args)
         {
-          
+
             // Log to console.
             Log.BindOutput(Console.OpenStandardOutput());
 
@@ -26,8 +27,23 @@ namespace Gear.Server
 
             Log.Write("Message log initialized", "system", LogMessageGroup.Info);
 
-            var engine = new ServerEngine();
-            engine.Run();
+            //var engine = new ServerEngine();
+            //engine.Run();
+            var clusterId = Guid.NewGuid();
+
+            var manager = new ServiceManager(clusterId);
+
+            manager.StartService(ServerService.ConnectionBroker, 4122);
+
+            while (true)
+            {
+                var k = Console.ReadKey();
+
+                if (k.KeyChar == 'q')
+                {
+                    return;
+                }
+            }
         }
     }
 }
