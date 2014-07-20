@@ -47,7 +47,6 @@
     <Compile Include="NetServices\ClusterManagerService.cs" />
     <Compile Include="NetServices\ConnectionBrokerService.cs" />
     <Compile Include="DefaultPorts.cs" />
-    <Compile Include="NetServices\MetadataRequest.cs" />
     <Compile Include="NetServices\ServiceAnnouncement.cs" />
     <Compile Include="NetServices\ServiceDetail.cs" />
     <Compile Include="NetServices\ServiceInfo.cs" />

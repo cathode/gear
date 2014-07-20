@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 namespace Gear.Model
 {
     /// <summary>
-    /// Represents a material; something that a block or component is made from.
+    /// Represents a volume of blocks.
     /// </summary>
-    public class Material
+    public class Segment
     {
-        public Guid MaterialId { get; set; }
-        public string Name { get; set; }
+
     }
 }

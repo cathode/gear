@@ -84,6 +84,12 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
+    </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
@@ -105,10 +111,17 @@
     <Compile Include="LogMessage.cs" />
     <Compile Include="LogMessageGroup.cs" />
     <Compile Include="LogOutput.cs" />
+    <Compile Include="Model\Region.cs" />
+    <Compile Include="Model\Segment.cs" />
+    <Compile Include="Model\SegmentMetadata.cs" />
+    <Compile Include="Model\Zone.cs" />
+    <Compile Include="Model\ZoneMetadata.cs" />
+    <Compile Include="Net\Messages\EndpointGreetingMessage.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerEventArgs.cs" />
     <Compile Include="ServerEngine.cs" />
-    <Compile Include="World.cs" />
+    <Compile Include="Model\World.cs" />
+    <Compile Include="ServiceCapabilities.cs" />
     <None Include="app.config" />
     <Compile Include="EngineBase.cs" />
     <Compile Include="EngineResources.Designer.cs">
@@ -139,7 +152,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\" />
-    <Folder Include="Net\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

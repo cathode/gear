@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics.Contracts;
 
-namespace Gear
+namespace Gear.Model
 {
     /// <summary>
     /// A game world.
@@ -155,10 +155,5 @@ namespace Gear
             set;
         }
 
-        public string Script
-        {
-            get;
-            set;
-        }
     }
 }
