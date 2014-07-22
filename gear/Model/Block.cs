@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace Gear.Model
 {
-    public class Block
+    /// <summary>
+    /// Represents an individual block.
+    /// </summary>
+    public struct Block
     {
-
+        public ushort TypeId;
+        public BlockFlags Flags;
+        public byte Lighting;
     }
 }

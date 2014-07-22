@@ -105,6 +105,7 @@
     </Compile>
     <Compile Include="ClientEngine.cs" />
     <Compile Include="Model\Block.cs" />
+    <Compile Include="Model\BlockFlags.cs" />
     <Compile Include="Model\Compound.cs" />
     <Compile Include="Model\Material.cs" />
     <Compile Include="Log.cs" />
@@ -112,8 +113,8 @@
     <Compile Include="LogMessageGroup.cs" />
     <Compile Include="LogOutput.cs" />
     <Compile Include="Model\Region.cs" />
-    <Compile Include="Model\Segment.cs" />
-    <Compile Include="Model\SegmentMetadata.cs" />
+    <Compile Include="Model\Chunk.cs" />
+    <Compile Include="Model\ChunkMetadata.cs" />
     <Compile Include="Model\Zone.cs" />
     <Compile Include="Model\ZoneMetadata.cs" />
     <Compile Include="Net\Messages\EndpointGreetingMessage.cs" />

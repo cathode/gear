@@ -23,7 +23,7 @@ namespace Gear.Client
             //launcher.Shown += delegate { Log.Write("test"); };
             //Application.Run(launcher);
 
-            var chunk = new Chunk();
+            //var chunk = new Chunk();
 
             Console.Write("Press any key...");
             Console.Read();

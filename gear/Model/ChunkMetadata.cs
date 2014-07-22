@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Gear.Model
 {
-    public class SegmentMetadata
+    public class ChunkMetadata
     {
 
     }

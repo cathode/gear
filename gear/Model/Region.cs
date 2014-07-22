@@ -13,6 +13,6 @@ namespace Gear.Model
     {
         public Guid RegionId { get; set; }
 
-        public List<Segment> Segments { get; set; }
+        public List<Chunk> Segments { get; set; }
     }
 }
