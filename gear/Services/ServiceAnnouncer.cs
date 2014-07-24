@@ -8,7 +8,7 @@ using System.Threading;
 using ProtoBuf;
 using System.IO;
 
-namespace Gear.Server.NetServices
+namespace Gear.Services
 {
     /// <summary>
     /// Provides LAN service broadcast announcement to enable runtime discovery of available services.

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ProtoBuf;
 
-namespace Gear.Server.NetServices
+namespace Gear.Services
 {
     /// <summary>
     /// Represents the data in a service announcement which is broadcast over the LAN.

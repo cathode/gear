@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gear.Server.NetServices
+namespace Gear.Net
 {
-    public class ClusterManagerService
+    public class MessageSerializationHelper
     {
 
     }

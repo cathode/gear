@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 
-namespace Gear.Server.NetServices
+namespace Gear.Services
 {
     public class ServiceFinder
     {

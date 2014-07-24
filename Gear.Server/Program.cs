@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Threading;
-using Gear.Server.NetServices;
+using Gear.Services;
 
 namespace Gear.Server
 {

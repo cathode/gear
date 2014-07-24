@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics.Contracts;
 
-namespace Gear.Server.NetServices
+namespace Gear.Services
 {
     public class ServiceManager
     {
@@ -33,6 +34,14 @@ namespace Gear.Server.NetServices
             this.finderTask.Start();
             Thread.Sleep(100);
             this.announcerTask.Start();
+        }
+
+        [ContractInvariantMethod]
+        private void Invariants()
+        {
+            Contract.Invariant(this.announcer != null);
+            Contract.Invariant(this.finder != null);
+
         }
     }
 }

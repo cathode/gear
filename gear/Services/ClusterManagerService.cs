@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gear.Server.NetServices
+namespace Gear.Services
 {
-    public enum ServerService
+    public class ClusterManagerService
     {
-        ClusterManager,
-        ZoneNode,
-        ConnectionBroker,
+
     }
 }

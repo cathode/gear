@@ -8,19 +8,13 @@ using ProtoBuf;
 namespace Gear.Net.Messages
 {
     [ProtoContract]
-    public class EndpointGreetingMessage
+    public class EndPointGreetingMessage
     {
         [ProtoMember(0)]
-        public Guid EndpointId { get; set; }
+        public Guid EndPointId { get; set; }
 
         [ProtoMember(1)]
-        public EndpointKind Kind { get; set; }
+        public EndPointKind Kind { get; set; }
         //public 
-    }
-
-    public enum EndpointKind
-    {
-        Client,
-        Service,
     }
 }

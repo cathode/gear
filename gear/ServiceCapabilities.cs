@@ -8,13 +8,13 @@ using ProtoBuf;
 namespace Gear
 {
     /// <summary>
-    /// Represents the hardware or host resources of a service endpoint.
+    /// Represents the hardware or host resources of a service EndPoint.
     /// </summary>
     [ProtoContract]
     public class ServiceCapabilities
     {
         [ProtoMember(0)]
-        public Guid ServiceEndpointId { get; set; }
+        public Guid ServiceEndPointId { get; set; }
 
         [ProtoMember(1)]
         public ushort CoreCount { get; set; }
