@@ -32,9 +32,12 @@ namespace Gear.Server
             //engine.Run();
             var clusterId = Guid.NewGuid();
 
-            var manager = new ServiceManager(clusterId);
+            //var manager = new ServiceManager(clusterId);
+            
+            var listener = new Gear.Net.ConnectionListener(8820);
+            listener.Start();
 
-            manager.StartService(ServerService.ConnectionBroker, 4122);
+            //manager.StartService(ServerService.ConnectionBroker, 4122);
 
             while (true)
             {

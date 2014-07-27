@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Gear.Services
 {
-    public class ClusterManagerService
+    public class ClusterManagerService : ServiceBase
     {
+        public ClusterManagerService()
+        {
 
+        }
     }
 }

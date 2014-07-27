@@ -20,6 +20,8 @@ namespace Gear.Net
         {
             Contract.Requires(port > 1024);
 
+            this.ListenPort = port;
+
             this.Allowed = new NetworkList();
             this.Denied = new NetworkList();
         }
@@ -34,18 +36,39 @@ namespace Gear.Net
         /// </summary>
         public NetworkList Denied { get; set; }
 
+        public ushort ListenPort { get; private set; }
+
+        public event EventHandler ChannelConnected;
+
         public void Start()
         {
             if (this.listener != null)
                 return;
 
             this.listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
+            this.listener.Bind(new IPEndPoint(IPAddress.Any, this.ListenPort));
             this.listener.Listen(32);
 
-            //this.listener.AcceptAsync(SocketAsyncEventArgs.Empty);
 
+            while (true)
+            {
+                try
+                {
+                    var sock = this.listener.Accept();
+
+                    var channel = new Channel(sock);
+
+                    channel.SetUp();
+
+                }
+                catch (TimeoutException ex)
+                {
+                    // TODO: Add logging.
+                    break;
+                }
+            }
         }
+
 
         public object StartInBackground()
         {

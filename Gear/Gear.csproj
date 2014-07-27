@@ -160,6 +160,7 @@
     <Compile Include="Net\Channel.cs" />
     <Compile Include="Net\ConnectionListener.cs" />
     <Compile Include="Net\EndPointKind.cs" />
+    <Compile Include="Net\IMessagePublisher.cs" />
     <Compile Include="Net\MessageQueue.cs" />
     <Compile Include="Net\MessageSerializationHelper.cs" />
     <Compile Include="Net\Messages\EndpointGreetingMessage.cs" />
