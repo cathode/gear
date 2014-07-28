@@ -21,6 +21,6 @@ namespace Gear.Net
 
     public class MessageEventArgs : EventArgs
     {
-        public object Message { get; set; }
+        public IMessage Message { get; set; }
     }
 }

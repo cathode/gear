@@ -8,7 +8,7 @@ using ProtoBuf;
 namespace Gear.Net.Messages
 {
     [ProtoContract]
-    public class EndPointGreetingMessage
+    public class EndPointGreetingMessage : IMessage
     {
         [ProtoMember(0)]
         public Guid EndPointId { get; set; }

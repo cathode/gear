@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.Diagnostics.Contracts;
+using System.Threading;
 
 namespace Gear.Net
 {
@@ -17,8 +18,12 @@ namespace Gear.Net
         private readonly Socket socket;
         private NetworkStream ns;
 
-        private MessageQueue outgoing;
-        private MessageQueue incoming;
+        private Queue<IMessage> outgoingInactive;
+        private Queue<IMessage> outgoingActive;
+
+        private Queue<IMessage> incomingInactive;
+        private Queue<IMessage> incomingActive;
+
 
         internal Channel(Socket socket)
         {
@@ -26,6 +31,11 @@ namespace Gear.Net
 
             this.socket = socket;
             this.ns = new NetworkStream(socket, false);
+
+            this.outgoingActive = new Queue<IMessage>();
+            this.outgoingInactive = new Queue<IMessage>();
+            this.incomingActive = new Queue<IMessage>();
+            this.incomingInactive = new Queue<IMessage>();
         }
 
         public Guid RemoteEndPointId { get; set; }
@@ -55,9 +65,12 @@ namespace Gear.Net
         {
             var publisher = (IMessagePublisher)sender;
 
-            // Remove event bindings
-            publisher.ShuttingDown -= publisher_ShuttingDown;
-            publisher.MessageAvailable -= publisher_MessageAvailable;
+            if (publisher != null)
+            {
+                // Remove event bindings
+                publisher.ShuttingDown -= publisher_ShuttingDown;
+                publisher.MessageAvailable -= publisher_MessageAvailable;
+            }
         }
 
         void publisher_MessageAvailable(object sender, MessageEventArgs e)
@@ -73,18 +86,71 @@ namespace Gear.Net
         /// Queues an individual message on the channel, to be sent to the remote endpoint.
         /// </summary>
         /// <param name="message"></param>
-        public void QueueMessage(object message)
+        public void QueueMessage(IMessage message)
         {
             this.QueueMessageThreadSafe(message);
         }
 
-        private void QueueMessageThreadSafe(object message)
+        private void QueueMessageThreadSafe(IMessage message)
         {
+            Contract.Requires(message != null);
 
+            // TODO: ensure that locking against the queue itself is correct.
+            lock (this.outgoingInactive)
+            {
+                this.outgoingInactive.Enqueue(message);
+            }
         }
 
         private void FlushMessages()
         {
+
+        }
+
+        private void FlipBuffersIncoming()
+        {
+            // Swap the buffers used for incoming messages.
+
+            // Always lock inactive->active
+            lock (this.incomingInactive)
+            {
+                lock (this.incomingInactive)
+                {
+                    if (this.incomingActive.Count > 0)
+                        return;
+
+                    var q = this.incomingInactive;
+                    this.incomingInactive = this.incomingActive;
+                    this.incomingActive = q;
+                }
+            }
+        }
+
+        private void FlipBuffersOutgoing()
+        {
+            // Swap the buffers used for outgoing messages.
+            lock (this.outgoingInactive)
+            {
+                lock (this.outgoingActive)
+                {
+                    if (this.outgoingActive.Count > 0)
+                        return;
+
+                    // TODO: Evaluate the need for locking on the individual buffers.
+                    var q = this.outgoingInactive;
+                    this.outgoingInactive = this.outgoingActive;
+                    this.outgoingActive = q;
+                }
+            }
+        }
+
+        [ContractInvariantMethod]
+        private void Invariants()
+        {
+            Contract.Invariant(this.outgoingActive != null);
+            Contract.Invariant(this.outgoingInactive != null);
+            Contract.Invariant(this.incomingActive != null);
+            Contract.Invariant(this.incomingInactive != null);
 
         }
     }
