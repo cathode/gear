@@ -1,1 +1,9 @@
-Readme to follow...
+! Gear - An infinite creative landscap at your fingertips.
+
+Welcome, everyone, to the Gear source code project page. Gear is an in-progress game designed with a target audience of STEM (Science, Technology, Engineering, and Mathematics) students and enthusiasts. Gear is a dynamic world simulation that is yours to explore. Please view the wiki pages for details on specific topics, and keep in mind that updates will be frequent to the content on this project.
+
+!! Infinite world
+Like other games in it's genre, Gear provides worlds for a player to explore that are generated randomly using techniques similar to fractal noise. Terrain, resources, and locations are different with each world you explore. With Gear, the world extends infinitely in *all* directions; not just north, south, east, and west, but up and down as well.
+
+!! Parametric crafting
+Gear will feature items that the player crafts not with arbitrary pre-defined recipes, but instead with designs straight from their imagination right to the game. A parametric solid modeling engine is planned to allow players to have true freeform design over everything they make. The game will faithfully incorporate your design and determine it's effectiveness based on a system of rules.
