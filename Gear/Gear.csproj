@@ -162,6 +162,7 @@
     <Compile Include="Net\EndPointKind.cs" />
     <Compile Include="Net\IMessage.cs" />
     <Compile Include="Net\IMessagePublisher.cs" />
+    <Compile Include="Net\MessageContainer.cs" />
     <Compile Include="Net\MessageQueue.cs" />
     <Compile Include="Net\MessageSerializationHelper.cs" />
     <Compile Include="Net\Messages\EndpointGreetingMessage.cs" />

@@ -16,5 +16,10 @@ namespace Gear.Net.Messages
         [ProtoMember(1)]
         public EndPointKind Kind { get; set; }
         //public 
+
+        public int DispatchId
+        {
+            get { return 0; }
+        }
     }
 }

@@ -24,6 +24,9 @@ namespace Gear.Net
         private Queue<IMessage> incomingInactive;
         private Queue<IMessage> incomingActive;
 
+        private bool hasSentGreeting;
+
+        private bool hasReceivedGreeting;
 
         internal Channel(Socket socket)
         {
@@ -42,10 +45,35 @@ namespace Gear.Net
 
         public EndPointKind RemoteEndPointKind { get; set; }
 
+
+        public static Channel ConnectTo(IPEndPoint remoteEP)
+        {
+            var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IPv4);
+
+            try
+            {
+                sock.Connect(remoteEP);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
+
+            var channel = new Channel(sock);
+            //channel.SetUp();
+            var msg = new Gear.Net.Messages.EndPointGreetingMessage();
+            msg.EndPointId = Guid.NewGuid();
+            msg.Kind = EndPointKind.Client;
+
+            channel.QueueMessage(msg);
+
+            return channel;
+        }
+
         public void SetUp()
         {
 
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -88,6 +116,8 @@ namespace Gear.Net
         /// <param name="message"></param>
         public void QueueMessage(IMessage message)
         {
+            Contract.Requires(message != null);
+
             this.QueueMessageThreadSafe(message);
         }
 
@@ -100,47 +130,79 @@ namespace Gear.Net
             {
                 this.outgoingInactive.Enqueue(message);
             }
+
+            this.FlushMessages();
         }
 
         private void FlushMessages()
         {
+            var ws = this.ns;
 
-        }
+            var ser = ProtoBuf.Serializer.CreateFormatter<MessageContainer>();
 
-        private void FlipBuffersIncoming()
-        {
-            // Swap the buffers used for incoming messages.
-
-            // Always lock inactive->active
-            lock (this.incomingInactive)
+            lock (this.outgoingActive)
             {
-                lock (this.incomingInactive)
-                {
-                    if (this.incomingActive.Count > 0)
-                        return;
-
-                    var q = this.incomingInactive;
-                    this.incomingInactive = this.incomingActive;
-                    this.incomingActive = q;
-                }
+                var msg = this.outgoingActive.Dequeue();
+                ser.Serialize(ws, new MessageContainer(msg));
             }
         }
 
-        private void FlipBuffersOutgoing()
+        private void SwapBuffersIncoming()
+        {
+            // Swap the buffers used for incoming messages.
+            try
+            {
+                // Attempt to grab the active queue. If this fails it probably means that
+                // it has messages and they're being processed still.
+                if (Monitor.TryEnter(this.incomingActive, 1))
+                {
+                    // Always lock active first, then inactive.
+                    lock (this.incomingInactive)
+                    {
+                        // Only swap if the active buffer is empty (all the messages in it were processed)
+                        // Otherwise, the queue would become out-of-order very quickly.
+                        if (this.incomingActive.Count > 0)
+                            return;
+
+                        var q = this.incomingInactive;
+                        this.incomingInactive = this.incomingActive;
+                        this.incomingActive = q;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (Monitor.IsEntered(this.incomingActive))
+                    Monitor.Exit(this.incomingActive);
+
+                throw ex;
+            }
+        }
+
+        private void SwapBuffersOutgoing()
         {
             // Swap the buffers used for outgoing messages.
-            lock (this.outgoingInactive)
+            try
             {
-                lock (this.outgoingActive)
+                if (Monitor.TryEnter(this.outgoingActive, 1))
                 {
-                    if (this.outgoingActive.Count > 0)
-                        return;
+                    lock (this.outgoingInactive)
+                    {
+                        if (outgoingActive.Count > 0)
+                            return;
 
-                    // TODO: Evaluate the need for locking on the individual buffers.
-                    var q = this.outgoingInactive;
-                    this.outgoingInactive = this.outgoingActive;
-                    this.outgoingActive = q;
+                        var q = this.outgoingInactive;
+                        this.outgoingInactive = this.outgoingActive;
+                        this.outgoingActive = q;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                if (Monitor.IsEntered(this.outgoingActive))
+                    Monitor.Exit(this.outgoingActive);
+
+                throw ex;
             }
         }
 
