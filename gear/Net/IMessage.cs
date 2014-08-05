@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Gear.Net
 {
+    
     public interface IMessage
     {
         int DispatchId { get; }

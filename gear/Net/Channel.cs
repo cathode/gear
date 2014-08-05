@@ -48,7 +48,7 @@ namespace Gear.Net
 
         public static Channel ConnectTo(IPEndPoint remoteEP)
         {
-            var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IPv4);
+            var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             try
             {
@@ -142,8 +142,14 @@ namespace Gear.Net
 
             lock (this.outgoingActive)
             {
-                var msg = this.outgoingActive.Dequeue();
-                ser.Serialize(ws, new MessageContainer(msg));
+                if (this.outgoingActive.Count == 0)
+                    this.SwapBuffersOutgoing();
+
+                if (this.outgoingActive.Count > 0)
+                {
+                    var msg = this.outgoingActive.Dequeue();
+                    ser.Serialize(ws, new MessageContainer(msg));
+                }
             }
         }
 

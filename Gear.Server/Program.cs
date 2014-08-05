@@ -33,9 +33,13 @@ namespace Gear.Server
             var clusterId = Guid.NewGuid();
 
             //var manager = new ServiceManager(clusterId);
-            
+
             var listener = new Gear.Net.ConnectionListener(8820);
-            listener.Start();
+            listener.StartInBackground();
+
+            Thread.Sleep(2000);
+
+            var client = Gear.Net.Channel.ConnectTo(new System.Net.IPEndPoint(System.Net.IPAddress.Loopback, 8820));
 
             //manager.StartService(ServerService.ConnectionBroker, 4122);
 

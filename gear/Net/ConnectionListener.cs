@@ -72,7 +72,9 @@ namespace Gear.Net
 
         public object StartInBackground()
         {
-            this.Start();
+            Task.Run(() => this.Start());
+
+            //this.Start();
             return null;
         }
 
