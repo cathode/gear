@@ -7,6 +7,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Diagnostics.Contracts;
 using System.Threading;
+using ProtoBuf.Meta;
+using ProtoBuf;
 
 namespace Gear.Net
 {
@@ -28,9 +30,17 @@ namespace Gear.Net
 
         private bool hasReceivedGreeting;
 
+        static Channel()
+        {
+            RuntimeTypeModel.Default.Add(typeof(IMessage), false);
+        }
+
         internal Channel(Socket socket)
         {
             Contract.Requires(socket != null);
+
+
+
 
             this.socket = socket;
             this.ns = new NetworkStream(socket, false);
@@ -149,6 +159,23 @@ namespace Gear.Net
                 {
                     var msg = this.outgoingActive.Dequeue();
                     ser.Serialize(ws, new MessageContainer(msg));
+                }
+            }
+
+            // Receive data for pending messages
+            lock (this.incomingInactive)
+            {
+                try
+                {
+                    while (ws.DataAvailable)
+                    {
+                        var msg = ser.Deserialize(ws) as MessageContainer;
+                        this.incomingInactive.Enqueue(msg.Contents);
+                    }
+                }
+                catch
+                {
+
                 }
             }
         }

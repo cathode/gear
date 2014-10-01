@@ -15,10 +15,10 @@ namespace Gear.Net
             this.DispatchId = contents.DispatchId;
         }
 
-        [ProtoMember(0)]
+        [ProtoMember(1)]
         public int DispatchId { get; set; }
 
-        [ProtoMember(1)]
+        [ProtoMember(2)]
         public IMessage Contents { get; set; }
     }
 }

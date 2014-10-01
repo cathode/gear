@@ -19,9 +19,9 @@ namespace Gear.Client
         static void Main(string[] args)
         {
 
-            //var launcher = new GearLauncher();
-            //launcher.Shown += delegate { Log.Write("test"); };
-            //Application.Run(launcher);
+            var launcher = new GearLauncher();
+            launcher.Shown += delegate { Log.Write("test"); };
+            Application.Run(launcher);
 
             //var chunk = new Chunk();
 

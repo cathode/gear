@@ -10,10 +10,10 @@ namespace Gear.Net.Messages
     [ProtoContract]
     public class EndPointGreetingMessage : IMessage
     {
-        [ProtoMember(0)]
+        [ProtoMember(1)]
         public Guid EndPointId { get; set; }
 
-        [ProtoMember(1)]
+        [ProtoMember(2)]
         public EndPointKind Kind { get; set; }
         //public 
 
