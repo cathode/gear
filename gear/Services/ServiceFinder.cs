@@ -46,5 +46,7 @@ namespace Gear.Services
     public class ServiceDiscoveredEventArgs : EventArgs
     {
         public Guid ClusterId { get; set; }
+
+
     }
 }

@@ -17,32 +17,33 @@ namespace Gear.Services
     {
         public static readonly ushort AnnouncePort = 31900;
 
-        private List<ServiceInfo> announcements;
+        private ServiceManager manager;
 
 
-        public ServiceAnnouncer(Guid clusterId)
+        public ServiceAnnouncer(ServiceManager manager)
         {
-            this.announcements = new List<ServiceInfo>();
-            this.ClusterId = clusterId;
+            this.manager = manager;
+            //this.announcements = new List<ServiceInfo>();
+            //this.ClusterId = manager.ClusterId; 
         }
 
         public bool Running { get; set; }
 
-        public Guid ClusterId { get; private set; }
+       
         /// <summary>
         /// Adds a service announcement to the current announcer.
         /// </summary>
         /// <param name="announcement"></param>
         public void AddServiceAnnouncement(ServiceInfo announcement)
         {
-            lock (this.announcements)
-            {
-                // Only allow one subscription per port
-                if (!this.announcements.Any(e => e.LocalPort == announcement.LocalPort))
-                {
-                    this.announcements.Add(announcement);
-                }
-            }
+            //lock (this.announcements)
+            //{
+            //    // Only allow one subscription per port
+            //    if (!this.announcements.Any(e => e.ListenPort == announcement.ListenPort))
+            //    {
+            //        this.announcements.Add(announcement);
+            //    }
+            //}
         }
 
         public void Run()
@@ -63,9 +64,9 @@ namespace Gear.Services
                 var anc = new ServiceAnnouncement()
                 {
                     Version = "1.0-alpha",
-                    ClusterId = this.ClusterId,
+                    ClusterId = this.manager.ClusterId,
                     AnnounceId = n++,
-                    Services = this.announcements.ToArray()
+                    Services = this.manager.LocalServices.ToArray()
                 };
 
                 using (var ms = new MemoryStream())

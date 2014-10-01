@@ -13,16 +13,28 @@ namespace Gear.Services
     [ProtoContract]
     public class ServiceInfo
     {
+        /// <summary>
+        /// Gets or sets the instance id of the service.
+        /// </summary>
         [ProtoMember(1, IsRequired = true)]
         public Guid ServiceInstanceId { get; set; }
 
+        /// <summary>
+        /// Gets or sets the service identifier.
+        /// </summary>
         [ProtoMember(2, IsRequired = true)]
         public ServerService Service { get; set; }
 
         [ProtoMember(3, IsRequired = true)]
-        public ushort LocalPort { get; set; }
+        public string ListenAddress { get; set; }
 
-        [ProtoMember(4, IsRequired = false)]
+        [ProtoMember(4, IsRequired = true)]
+        public ushort ListenPort { get; set; }
+
+        [ProtoMember(5, IsRequired = false)]
         public string ServiceName { get; set; }
+
+        [ProtoMember(6, IsRequired = false)]
+        public ServiceDetail Detail { get; set; }
     }
 }

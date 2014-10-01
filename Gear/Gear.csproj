@@ -165,6 +165,7 @@
     <Compile Include="Net\MessageContainer.cs" />
     <Compile Include="Net\MessageQueue.cs" />
     <Compile Include="Net\MessageSerializationHelper.cs" />
+    <Compile Include="Net\Messages\ConfigurationMessage.cs" />
     <Compile Include="Net\Messages\EndpointGreetingMessage.cs" />
     <Compile Include="Net\NetworkList.cs" />
     <Compile Include="Player.cs" />
@@ -172,7 +173,7 @@
     <Compile Include="ServerEngine.cs" />
     <Compile Include="Model\World.cs" />
     <Compile Include="ServiceCapabilities.cs" />
-    <Compile Include="Services\ClusterManagerService.cs" />
+    <Compile Include="Services\ClusterSupervisorService.cs" />
     <Compile Include="Services\ConnectionBrokerService.cs" />
     <Compile Include="Services\ServerService.cs" />
     <Compile Include="Services\ServiceAnnouncement.cs" />

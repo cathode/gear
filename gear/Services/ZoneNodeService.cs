@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Gear.Services
 {
-    public class ZoneNodeService
+    public class ZoneNodeService : ServiceBase
     {
+
     }
 }
