@@ -20,7 +20,13 @@ namespace Gear.Server
     {
         public static void Main(string[] args)
         {
-
+#if DEBUG
+            // Fixed cluster id for debugging/testing
+            var clusterId = new Guid("{FC000000-0000-0000-0000-000000000000}");
+#else
+            // TODO: Read cluster id from configuration file
+            var clusterId = Guid.NewGuid();
+#endif
             // Log to console.
             Log.BindOutput(Console.OpenStandardOutput());
 
@@ -31,18 +37,13 @@ namespace Gear.Server
 
             //var engine = new ServerEngine();
             //engine.Run();
-            var clusterId = Guid.NewGuid();
 
-            //var manager = new ServiceManager(clusterId);
 
-            var listener = new Gear.Net.ConnectionListener(8820);
-            listener.StartInBackground();
+            var manager = new ServiceManager(clusterId);
 
-            Thread.Sleep(2000);
-
-            var client = Gear.Net.Channel.ConnectTo(new System.Net.IPEndPoint(System.Net.IPAddress.Loopback, 8820));
-
-            //manager.StartService(ServerService.ConnectionBroker, 4122);
+            manager.StartService(ServerService.ConnectionBroker, 4122);
+            manager.StartService(ServerService.ClusterManager, 4123);
+            manager.StartService(ServerService.ZoneNode, 4124);
 
             while (true)
             {

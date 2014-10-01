@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Geared Studios")]
 [assembly: AssemblyProduct("Gear")]
-[assembly: AssemblyCopyright("Copyright © 2009-2011 Will Shelley. All Rights Reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2009-2014 William Shelley. All Rights Reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
