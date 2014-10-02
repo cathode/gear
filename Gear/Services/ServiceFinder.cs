@@ -11,6 +11,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
+using System.IO;
+using ProtoBuf;
 
 namespace Gear.Services
 {
@@ -32,21 +34,42 @@ namespace Gear.Services
             this.Running = true;
             var ep = new IPEndPoint(IPAddress.Broadcast, ServiceAnnouncer.AnnouncePort);
 
+
             //.Client.Bind(ep);
 
             while (this.Running)
             {
                 var buffer = client.Receive(ref ep);
 
-                Log.Write("Received broadcast: " + Encoding.ASCII.GetString(buffer));
+                try
+                {
+                    using (var stream = new MemoryStream(buffer))
+                    {
+                        var obj = Serializer.Deserialize<ServiceAnnouncement>(stream);
+                        Log.Write("Received announcement from node in cluster: " + obj.ClusterId.ToString());
 
+                        
 
+                        if (obj.Services != null)
+                        {
+                            foreach (var service in obj.Services)
+                            {
+                                this.OnServiceDiscovered(new ServiceDiscoveredEventArgs { ClusterId = obj.ClusterId, Info = service });
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Write("Exception while decoding broadcast message: " + ex.ToString());
+                }
             }
         }
 
         protected virtual void OnServiceDiscovered(ServiceDiscoveredEventArgs e)
         {
-            this.ServiceDiscovered(this, e);
+            if (this.ServiceDiscovered != null)
+                this.ServiceDiscovered(this, e);
         }
     }
 
@@ -54,6 +77,6 @@ namespace Gear.Services
     {
         public Guid ClusterId { get; set; }
 
-
+        public ServiceInfo Info { get; set; }
     }
 }

@@ -71,14 +71,55 @@ namespace Gear.Services
 
         public void StartService(ServerService serviceType, ushort port)
         {
-            this.announcer.AddServiceAnnouncement(new ServiceInfo { ListenPort = port, Service = serviceType });
+            if (this.LocalServices.Any(e => e.ListenPort == port))
+                return;
 
-            this.announcerTask = new Task(this.announcer.Run, CancellationToken.None, TaskCreationOptions.LongRunning);
-            this.finderTask = new Task(this.finder.Run, CancellationToken.None, TaskCreationOptions.LongRunning);
-            this.finder.ServiceDiscovered += finder_ServiceDiscovered;
-            this.finderTask.Start();
-            Thread.Sleep(100);
-            this.announcerTask.Start();
+            ServiceBase svc = null;
+
+            switch (serviceType)
+            {
+                case ServerService.ClusterManager:
+                    svc = new ClusterSupervisorService();
+                    break;
+
+                case ServerService.ConnectionBroker:
+                    svc = new ClusterSupervisorService();
+                    break;
+
+                case ServerService.ZoneNode:
+                    svc = new ZoneNodeService();
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
+
+            this.localServices.Add(new ServiceInfo { ServiceType = serviceType, ListenPort = port });
+
+            this.EnsureServiceAnnouncerIsRunning();
+        }
+
+        public void EnsureServiceFinderIsRunning()
+        {
+            if (!this.finder.Running)
+                lock (this.finder)
+                    if (!this.finder.Running)
+                    {
+                        this.finderTask = new Task(this.finder.Run, CancellationToken.None, TaskCreationOptions.LongRunning);
+                        this.finder.ServiceDiscovered += finder_ServiceDiscovered;
+                        this.finderTask.Start();
+                    }
+        }
+
+        public void EnsureServiceAnnouncerIsRunning()
+        {
+            if (!this.announcer.Running)
+                lock (this.announcer)
+                    if (!this.announcer.Running)
+                    {
+                        this.announcerTask = new Task(this.announcer.Run, CancellationToken.None, TaskCreationOptions.LongRunning);
+                        this.announcerTask.Start();
+                    }
         }
 
         void finder_ServiceDiscovered(object sender, ServiceDiscoveredEventArgs e)

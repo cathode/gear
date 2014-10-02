@@ -15,7 +15,7 @@ using ProtoBuf;
 namespace Gear.Services
 {
     [ProtoContract]
-    public class ServiceAnnouncement
+    public class ServiceAnnouncement 
     {
         [ProtoMember(1)]
         public ulong AnnounceId { get; set; }

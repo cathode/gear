@@ -41,6 +41,8 @@ namespace Gear.Server
 
             var manager = new ServiceManager(clusterId);
 
+            manager.EnsureServiceFinderIsRunning();
+
             manager.StartService(ServerService.ConnectionBroker, 4122);
             manager.StartService(ServerService.ClusterManager, 4123);
             manager.StartService(ServerService.ZoneNode, 4124);

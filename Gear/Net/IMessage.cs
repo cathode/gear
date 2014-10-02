@@ -13,9 +13,10 @@ using System.Threading.Tasks;
 
 namespace Gear.Net
 {
-    
+    [ProtoBuf.ProtoContract]
     public interface IMessage
     {
+
         int DispatchId { get; }
     }
 }

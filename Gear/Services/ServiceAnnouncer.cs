@@ -26,6 +26,7 @@ namespace Gear.Services
 
         private ServiceManager manager;
 
+        private ulong packetSeq;
 
         public ServiceAnnouncer(ServiceManager manager)
         {
@@ -67,12 +68,12 @@ namespace Gear.Services
             ulong n = 0;
             while (this.Running)
             {
-                Log.Write("Sending announce packet #" + (n++).ToString(), "ServiceAnnouncer", LogMessageGroup.Debug);
+                //Log.Write("Sending announce packet #" + (n++).ToString(), "ServiceAnnouncer", LogMessageGroup.Debug);
                 var anc = new ServiceAnnouncement()
                 {
                     Version = "1.0-alpha",
                     ClusterId = this.manager.ClusterId,
-                    AnnounceId = n++,
+                    AnnounceId = this.packetSeq++,
                     Services = this.manager.LocalServices.ToArray()
                 };
 
@@ -86,6 +87,11 @@ namespace Gear.Services
 
                 Thread.Sleep(interval);
             }
+        }
+
+        public void EnsureServiceAnnouncerIsRunning()
+        {
+
         }
     }
 }

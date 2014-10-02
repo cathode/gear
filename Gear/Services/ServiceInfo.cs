@@ -30,7 +30,7 @@ namespace Gear.Services
         /// Gets or sets the service identifier.
         /// </summary>
         [ProtoMember(2, IsRequired = true)]
-        public ServerService Service { get; set; }
+        public ServerService ServiceType { get; set; }
 
         [ProtoMember(3, IsRequired = true)]
         public string ListenAddress { get; set; }
