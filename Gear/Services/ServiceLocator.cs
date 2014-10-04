@@ -16,28 +16,31 @@ using ProtoBuf;
 
 namespace Gear.Services
 {
-    public class ServiceFinder
+    /// <summary>
+    /// Listens for service announcement broadcasts and notifies other components in the software of potential external cluster nodes on the network.
+    /// </summary>
+    public static class ServiceLocator
     {
-        public ServiceFinder()
+        static ServiceLocator()
         {
 
         }
 
-        public event EventHandler<ServiceDiscoveredEventArgs> ServiceDiscovered;
+        public static event EventHandler<ServiceDiscoveredEventArgs> ServiceDiscovered;
 
-        public bool Running { get; set; }
+        public static bool Running { get; set; }
 
-        public void Run()
+        public static void Run()
         {
             var client = new System.Net.Sockets.UdpClient(new IPEndPoint(IPAddress.Any, ServiceAnnouncer.AnnouncePort));
 
-            this.Running = true;
+            ServiceLocator.Running = true;
             var ep = new IPEndPoint(IPAddress.Broadcast, ServiceAnnouncer.AnnouncePort);
 
 
             //.Client.Bind(ep);
 
-            while (this.Running)
+            while (ServiceLocator.Running)
             {
                 var buffer = client.Receive(ref ep);
 
@@ -48,13 +51,13 @@ namespace Gear.Services
                         var obj = Serializer.Deserialize<ServiceAnnouncement>(stream);
                         Log.Write("Received announcement from node in cluster: " + obj.ClusterId.ToString());
 
-                        
+
 
                         if (obj.Services != null)
                         {
                             foreach (var service in obj.Services)
                             {
-                                this.OnServiceDiscovered(new ServiceDiscoveredEventArgs { ClusterId = obj.ClusterId, Info = service });
+                                ServiceLocator.OnServiceDiscovered(new ServiceDiscoveredEventArgs { ClusterId = obj.ClusterId, Info = service });
                             }
                         }
                     }
@@ -66,10 +69,10 @@ namespace Gear.Services
             }
         }
 
-        protected virtual void OnServiceDiscovered(ServiceDiscoveredEventArgs e)
+        private static void OnServiceDiscovered(ServiceDiscoveredEventArgs e)
         {
-            if (this.ServiceDiscovered != null)
-                this.ServiceDiscovered(this, e);
+            if (ServiceLocator.ServiceDiscovered != null)
+                ServiceLocator.ServiceDiscovered(null, e);
         }
     }
 

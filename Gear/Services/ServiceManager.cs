@@ -21,7 +21,7 @@ namespace Gear.Services
     public class ServiceManager
     {
         private ServiceAnnouncer announcer;
-        private ServiceFinder finder;
+        //private ServiceLocator finder;
 
         private Task announcerTask;
         private Task finderTask;
@@ -38,7 +38,7 @@ namespace Gear.Services
         {
             this.ClusterId = clusterId;
             this.announcer = new ServiceAnnouncer(this);
-            this.finder = new ServiceFinder();
+            //this.finder = new ServiceLocator();
 
             this.remoteServices = new List<ServiceInfo>();
             this.localServices = new List<ServiceInfo>();
@@ -99,16 +99,18 @@ namespace Gear.Services
             this.EnsureServiceAnnouncerIsRunning();
         }
 
-        public void EnsureServiceFinderIsRunning()
+        public void EnsureServiceLocatorIsRunning()
         {
-            if (!this.finder.Running)
-                lock (this.finder)
-                    if (!this.finder.Running)
-                    {
-                        this.finderTask = new Task(this.finder.Run, CancellationToken.None, TaskCreationOptions.LongRunning);
-                        this.finder.ServiceDiscovered += finder_ServiceDiscovered;
-                        this.finderTask.Start();
-                    }
+            ServiceLocator.Run();
+
+            //if (!this.finder.Running)
+            //    lock (this.finder)
+            //        if (!this.finder.Running)
+            //        {
+            //            this.finderTask = new Task(this.finder.Run, CancellationToken.None, TaskCreationOptions.LongRunning);
+            //            this.finder.ServiceDiscovered += finder_ServiceDiscovered;
+            //            this.finderTask.Start();
+            //        }
         }
 
         public void EnsureServiceAnnouncerIsRunning()
@@ -131,8 +133,6 @@ namespace Gear.Services
         private void Invariants()
         {
             Contract.Invariant(this.announcer != null);
-            Contract.Invariant(this.finder != null);
-
         }
     }
 }

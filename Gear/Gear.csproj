@@ -170,6 +170,7 @@
     <Compile Include="Net\MessageSerializationHelper.cs" />
     <Compile Include="Net\Messages\ConfigurationMessage.cs" />
     <Compile Include="Net\Messages\EndpointGreetingMessage.cs" />
+    <Compile Include="Net\Messages\RequestResultMessage.cs" />
     <Compile Include="Net\NetworkList.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerEventArgs.cs" />
@@ -184,7 +185,7 @@
     <Compile Include="Services\ServiceBase.cs" />
     <Compile Include="Services\ServiceCapabilities.cs" />
     <Compile Include="Services\ServiceDetail.cs" />
-    <Compile Include="Services\ServiceFinder.cs" />
+    <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="Services\ServiceInfo.cs" />
     <Compile Include="Services\ServiceManager.cs" />
     <Compile Include="Services\ZoneNodeService.cs" />
