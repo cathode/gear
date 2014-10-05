@@ -63,7 +63,7 @@ namespace Gear.Net
                 {
                     var sock = this.listener.Accept();
 
-                    var channel = new Channel(sock);
+                    var channel = new ConnectedChannel(sock);
 
                     channel.SetUp();
 

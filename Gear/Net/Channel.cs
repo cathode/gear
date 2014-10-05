@@ -22,70 +22,24 @@ namespace Gear.Net
     /// <summary>
     /// Represents a communication channel between the local end point and a remote end point.
     /// </summary>
-    public class Channel
+    public abstract class Channel
     {
-        private readonly Socket socket;
-        private NetworkStream ns;
-
-        private Queue<IMessage> outgoingInactive;
-        private Queue<IMessage> outgoingActive;
-
-        private Queue<IMessage> incomingInactive;
-        private Queue<IMessage> incomingActive;
-
-        private bool hasSentGreeting;
-
-        private bool hasReceivedGreeting;
+        protected Queue<IMessage> outgoingInactive;
+        protected Queue<IMessage> outgoingActive;
+        protected Queue<IMessage> incomingInactive;
+        protected Queue<IMessage> incomingActive;
 
         static Channel()
         {
             RuntimeTypeModel.Default.Add(typeof(IMessage), false);
         }
 
-        internal Channel(Socket socket)
+        protected Channel()
         {
-            Contract.Requires(socket != null);
-
-
-
-
-            this.socket = socket;
-            this.ns = new NetworkStream(socket, false);
-
             this.outgoingActive = new Queue<IMessage>();
             this.outgoingInactive = new Queue<IMessage>();
             this.incomingActive = new Queue<IMessage>();
             this.incomingInactive = new Queue<IMessage>();
-        }
-
-        public Guid RemoteEndPointId { get; set; }
-
-        public EndPointKind RemoteEndPointKind { get; set; }
-
-
-        public static Channel ConnectTo(IPEndPoint remoteEP)
-        {
-            var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-            try
-            {
-                sock.Connect(remoteEP);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-
-            }
-
-            var channel = new Channel(sock);
-            //channel.SetUp();
-            var msg = new Gear.Net.Messages.EndPointGreetingMessage();
-            msg.EndPointId = Guid.NewGuid();
-            msg.Kind = EndPointKind.Client;
-
-            channel.QueueMessage(msg);
-
-            return channel;
         }
 
         public void SetUp()
@@ -125,8 +79,6 @@ namespace Gear.Net
             this.QueueMessage(e.Message);
         }
 
-
-
         /// <summary>
         /// Queues an individual message on the channel, to be sent to the remote endpoint.
         /// </summary>
@@ -151,43 +103,9 @@ namespace Gear.Net
             this.FlushMessages();
         }
 
-        private void FlushMessages()
-        {
-            var ws = this.ns;
+        protected abstract void FlushMessages();
 
-            var ser = ProtoBuf.Serializer.CreateFormatter<MessageContainer>();
-
-            lock (this.outgoingActive)
-            {
-                if (this.outgoingActive.Count == 0)
-                    this.SwapBuffersOutgoing();
-
-                if (this.outgoingActive.Count > 0)
-                {
-                    var msg = this.outgoingActive.Dequeue();
-                    ser.Serialize(ws, new MessageContainer(msg));
-                }
-            }
-
-            // Receive data for pending messages
-            lock (this.incomingInactive)
-            {
-                try
-                {
-                    while (ws.DataAvailable)
-                    {
-                        var msg = ser.Deserialize(ws) as MessageContainer;
-                        this.incomingInactive.Enqueue(msg.Contents);
-                    }
-                }
-                catch
-                {
-
-                }
-            }
-        }
-
-        private void SwapBuffersIncoming()
+        protected void SwapBuffersIncoming()
         {
             // Swap the buffers used for incoming messages.
             try
@@ -219,7 +137,7 @@ namespace Gear.Net
             }
         }
 
-        private void SwapBuffersOutgoing()
+        protected void SwapBuffersOutgoing()
         {
             // Swap the buffers used for outgoing messages.
             try

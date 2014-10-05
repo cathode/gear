@@ -10,13 +10,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProtoBuf;
 
 namespace Gear.Net
 {
     [ProtoBuf.ProtoContract]
     public interface IMessage
     {
-
+        [ProtoMember(1)]
         int DispatchId { get; }
+
+        //[ProtoIgnore]
+        //bool IsBroadcastMessage { get; }
     }
 }
