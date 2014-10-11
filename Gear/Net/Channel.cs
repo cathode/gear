@@ -103,7 +103,45 @@ namespace Gear.Net
             this.FlushMessages();
         }
 
-        protected abstract void FlushMessages();
+        protected abstract System.IO.Stream GetMessageDestinationStream();
+
+        protected void FlushMessages()
+        {
+
+            var ws = this.GetMessageDestinationStream();
+
+            var ser = ProtoBuf.Serializer.CreateFormatter<MessageContainer>();
+
+            lock (this.outgoingActive)
+            {
+                if (this.outgoingActive.Count == 0)
+                    this.SwapBuffersOutgoing();
+
+                if (this.outgoingActive.Count > 0)
+                {
+                    var msg = this.outgoingActive.Dequeue();
+                    ser.Serialize(ws, new MessageContainer(msg));
+                }
+            }
+
+            //// Receive data for pending messages
+            //lock (this.incomingInactive)
+            //{
+            //    try
+            //    {
+            //        while (ws.DataAvailable)
+            //        {
+            //            var msg = ser.Deserialize(ws) as MessageContainer;
+            //            this.incomingInactive.Enqueue(msg.Contents);
+            //        }
+            //    }
+            //    catch
+            //    {
+
+            //    }
+            //}
+
+        }
 
         protected void SwapBuffersIncoming()
         {
@@ -130,10 +168,12 @@ namespace Gear.Net
             }
             catch (Exception ex)
             {
+                throw ex;
+            }
+            finally
+            {
                 if (Monitor.IsEntered(this.incomingActive))
                     Monitor.Exit(this.incomingActive);
-
-                throw ex;
             }
         }
 

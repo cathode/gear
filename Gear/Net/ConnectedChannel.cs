@@ -1,4 +1,11 @@
-﻿using System;
+﻿/******************************************************************************
+ * Gear: An open-world sandbox game for creative people.                      *
+ * http://github.com/cathode/gear/                                            *
+ * Copyright © 2009-2014 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the MIT        *
+ * license. See the included LICENSE file for details.                        *
+ *****************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -59,42 +66,9 @@ namespace Gear.Net
             return channel;
         }
 
-        protected override void FlushMessages()
+        protected override Stream GetMessageDestinationStream()
         {
-
-            var ws = this.ns;
-
-            var ser = ProtoBuf.Serializer.CreateFormatter<MessageContainer>();
-
-            lock (this.outgoingActive)
-            {
-                if (this.outgoingActive.Count == 0)
-                    this.SwapBuffersOutgoing();
-
-                if (this.outgoingActive.Count > 0)
-                {
-                    var msg = this.outgoingActive.Dequeue();
-                    ser.Serialize(ws, new MessageContainer(msg));
-                }
-            }
-
-            // Receive data for pending messages
-            lock (this.incomingInactive)
-            {
-                try
-                {
-                    while (ws.DataAvailable)
-                    {
-                        var msg = ser.Deserialize(ws) as MessageContainer;
-                        this.incomingInactive.Enqueue(msg.Contents);
-                    }
-                }
-                catch
-                {
-
-                }
-            }
-
+            return this.ns;
         }
     }
 }
