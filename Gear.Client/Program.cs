@@ -19,15 +19,24 @@ namespace Gear.Client
     {
         static void Main(string[] args)
         {
+            if (args.Length > 0)
+            {
+                // Check if the client is being invoked in 'shell-only' mode.
+                if (args.Any(e => e == "--shell"))
+                {
+                    ShellProgram.Run();
+                }
 
-            var launcher = new GearLauncher();
-            launcher.Shown += delegate { Log.Write("test"); };
-            Application.Run(launcher);
+            }
 
-            //var chunk = new Chunk();
+            //var launcher = new GearLauncher();
+            //launcher.Shown += delegate { Log.Write("test"); };
+            //Application.Run(launcher);
 
-            Console.Write("Press any key...");
-            Console.Read();
+            ////var chunk = new Chunk();
+
+            //Console.Write("Press any key...");
+            //Console.Read();
         }
     }
 }

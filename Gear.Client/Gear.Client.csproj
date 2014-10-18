@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShellProgram.cs" />
     <Compile Include="UI\GearLauncher.cs">
       <SubType>Form</SubType>
     </Compile>

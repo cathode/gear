@@ -147,6 +147,7 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="ClientEngine.cs" />
+    <Compile Include="GearShell.cs" />
     <Compile Include="Model\Block.cs" />
     <Compile Include="Model\BlockFlags.cs" />
     <Compile Include="Model\Compound.cs" />
