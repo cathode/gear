@@ -11,14 +11,16 @@ namespace Gear.Client
     /// </summary>
     public class ShellProgram
     {
+        //public static Dictionary<string, object> RegisteredCommands;
 
         public static void Run()
         {
             Console.WriteLine("Starting shell.");
 
             Console.Write("> ");
+            var prog = new ShellProgram();
 
-            while (ShellProgram.HandleInput(Console.ReadLine()))
+            while (prog.HandleInput(Console.ReadLine()))
             {
                 Console.Write("> ");
             }
@@ -26,14 +28,54 @@ namespace Gear.Client
             Console.WriteLine("Exiting shell.");
         }
 
-        private static bool HandleInput(string line)
+        public void Write(string output)
+        {
+            Console.Write(output);
+        }
+
+        public void WriteLine(string output)
+        {
+            Console.WriteLine(output);
+        }
+
+        private bool HandleInput(string line)
         {
             var cleaned = line.Trim();
 
             if (cleaned.Equals("exit", StringComparison.OrdinalIgnoreCase))
-                return false;
-            else
                 return true;
+
+            var spi = cleaned.IndexOf(' ');
+            if (spi > 0)
+            {
+                var command = cleaned.Substring(0, spi);
+
+                switch (command)
+                {
+                    case "exit":
+                    case "quit":
+                        return true;
+
+                    case "discover":
+                        return this.CommandDiscover(line);
+
+                    case "list":
+                        return this.CommandList(line);
+                }
+            }
+
+            return false;
+        }
+
+        private bool CommandDiscover(string line)
+        {
+            
+            return true;
+        }
+
+        private bool CommandList(string line)
+        {
+            return true;
         }
     }
 }
