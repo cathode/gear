@@ -19,28 +19,25 @@ namespace Gear.Services
     /// <summary>
     /// Listens for service announcement broadcasts and notifies other components in the software of potential external cluster nodes on the network.
     /// </summary>
-    public static class ServiceLocator
+    public class ServiceLocator
     {
-        static ServiceLocator()
-        {
+        
 
-        }
+        public  event EventHandler<ServiceDiscoveredEventArgs> ServiceDiscovered;
 
-        public static event EventHandler<ServiceDiscoveredEventArgs> ServiceDiscovered;
+        public  bool Running { get; set; }
 
-        public static bool Running { get; set; }
-
-        public static void Run()
+        public  void Run()
         {
             var client = new System.Net.Sockets.UdpClient(new IPEndPoint(IPAddress.Any, ServiceAnnouncer.AnnouncePort));
 
-            ServiceLocator.Running = true;
+            this.Running = true;
             var ep = new IPEndPoint(IPAddress.Broadcast, ServiceAnnouncer.AnnouncePort);
 
 
             //.Client.Bind(ep);
 
-            while (ServiceLocator.Running)
+            while (this.Running)
             {
                 var buffer = client.Receive(ref ep);
 
@@ -57,7 +54,7 @@ namespace Gear.Services
                         {
                             foreach (var service in obj.Services)
                             {
-                                ServiceLocator.OnServiceDiscovered(new ServiceDiscoveredEventArgs { ClusterId = obj.ClusterId, Info = service });
+                                this.OnServiceDiscovered(new ServiceDiscoveredEventArgs { ClusterId = obj.ClusterId, Info = service });
                             }
                         }
                     }
@@ -69,10 +66,10 @@ namespace Gear.Services
             }
         }
 
-        private static void OnServiceDiscovered(ServiceDiscoveredEventArgs e)
+        private void OnServiceDiscovered(ServiceDiscoveredEventArgs e)
         {
-            if (ServiceLocator.ServiceDiscovered != null)
-                ServiceLocator.ServiceDiscovered(null, e);
+            if (this.ServiceDiscovered != null)
+                this.ServiceDiscovered(null, e);
         }
     }
 

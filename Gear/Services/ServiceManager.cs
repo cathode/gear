@@ -21,14 +21,15 @@ namespace Gear.Services
     public class ServiceManager
     {
         private ServiceAnnouncer announcer;
-        //private ServiceLocator finder;
+        private ServiceLocator locator;
 
         private Task announcerTask;
-        private Task finderTask;
+        private Task locatorTask;
 
+        private List<ServiceBase> managedServices;
 
         private List<ServiceInfo> remoteServices;
-        private List<ServiceInfo> localServices;
+        //private List<ServiceInfo> localServices;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceManager"/> class.
@@ -38,10 +39,11 @@ namespace Gear.Services
         {
             this.ClusterId = clusterId;
             this.announcer = new ServiceAnnouncer(this);
-            //this.finder = new ServiceLocator();
+            this.locator = new ServiceLocator();
 
+            this.managedServices = new List<ServiceBase>();
             this.remoteServices = new List<ServiceInfo>();
-            this.localServices = new List<ServiceInfo>();
+            //this.localServices = new List<ServiceInfo>();
         }
 
         /// <summary>
@@ -52,10 +54,16 @@ namespace Gear.Services
         /// <summary>
         /// Gets a collection of <see cref="ServiceInfo"/> objects describing services running on the local (in-process) node.
         /// </summary>
-        public List<ServiceInfo> LocalServices { get { return this.localServices; } }
+        public IEnumerable<ServiceInfo> LocalServices
+        {
+            get
+            {
+                return this.managedServices.Select(e => e.GetServiceInfo());
+            }
+        }
 
         /// <summary>
-        /// Gets a collection of <see cref="ServiceInfo"/> objects describing discovered services running on remote nodes (or out-of-process nodes)
+        /// Gets a collection of <see cref="ServiceInfo"/> objects describing discovered services running on remote nodes (or out-of-process nodes).
         /// </summary>
         public List<ServiceInfo> RemoteServices { get { return this.remoteServices; } }
 
@@ -69,48 +77,60 @@ namespace Gear.Services
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Starts a service of the specified type, with that service listening on the specified port number.
+        /// </summary>
+        /// <param name="serviceType"></param>
+        /// <param name="port"></param>
         public void StartService(ServerService serviceType, ushort port)
         {
-            if (this.LocalServices.Any(e => e.ListenPort == port))
-                return;
+            // Attempt to find an already managed service on the specified port.
+            ServiceBase svc = this.managedServices.FirstOrDefault(e => e.ListenPort == port);
 
-            ServiceBase svc = null;
-
-            switch (serviceType)
+            if (svc == null)
             {
-                case ServerService.ClusterManager:
-                    svc = new ClusterSupervisorService();
-                    break;
+                // No managed service running on the specified port, create new instead.
+                switch (serviceType)
+                {
+                    case ServerService.ClusterManager:
+                        svc = new ClusterSupervisorService();
+                        break;
 
-                case ServerService.ConnectionBroker:
-                    svc = new ClusterSupervisorService();
-                    break;
+                    case ServerService.ConnectionBroker:
+                        svc = new ClusterSupervisorService();
+                        break;
 
-                case ServerService.ZoneNode:
-                    svc = new ZoneNodeService();
-                    break;
+                    case ServerService.ZoneNode:
+                        svc = new ZoneNodeService();
+                        break;
 
-                default:
-                    throw new NotImplementedException();
+                    default:
+                        throw new NotImplementedException();
+                }
+
+                this.managedServices.Add(svc);
             }
 
-            this.localServices.Add(new ServiceInfo { ServiceType = serviceType, ListenPort = port });
+            Log.Write("Attempting to start service: " + svc.GetType().Name);
+
+            svc.Run();
+
+            //this.localServices.Add(new ServiceInfo { ServiceType = serviceType, ListenPort = port });
 
             this.EnsureServiceAnnouncerIsRunning();
         }
 
+
         public void EnsureServiceLocatorIsRunning()
         {
-            ServiceLocator.Run();
-
-            //if (!this.finder.Running)
-            //    lock (this.finder)
-            //        if (!this.finder.Running)
-            //        {
-            //            this.finderTask = new Task(this.finder.Run, CancellationToken.None, TaskCreationOptions.LongRunning);
-            //            this.finder.ServiceDiscovered += finder_ServiceDiscovered;
-            //            this.finderTask.Start();
-            //        }
+            if (!this.locator.Running)
+                lock (this.locator)
+                    if (!this.locator.Running)
+                    {
+                        this.locatorTask = new Task(this.locator.Run, CancellationToken.None, TaskCreationOptions.LongRunning);
+                        this.locator.ServiceDiscovered += finder_ServiceDiscovered;
+                        this.locatorTask.Start();
+                    }
         }
 
         public void EnsureServiceAnnouncerIsRunning()

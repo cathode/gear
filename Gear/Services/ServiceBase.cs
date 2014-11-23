@@ -29,5 +29,18 @@ namespace Gear.Services
         {
 
         }
+
+        public virtual string Name { get { return this.GetType().Name; } }
+
+        public ushort ListenPort { get; set; }
+
+        public virtual ServiceInfo GetServiceInfo()
+        {
+            return new ServiceInfo
+            {
+                ListenPort = 0,
+                ServiceName = this.Name
+            };
+        }
     }
 }
