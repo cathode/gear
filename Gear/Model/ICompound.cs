@@ -13,6 +13,6 @@ namespace Gear.Model
     {
         string CASRegistryNumber { get; }
 
-        public Dictionary<IElement, int> Elements { get; }
+        Dictionary<IElement, int> Elements { get; }
     }
 }

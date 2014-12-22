@@ -39,5 +39,41 @@ namespace Gear.Model
         {
             get { throw new NotImplementedException(); }
         }
+
+        public string CASRegistryNumber
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+
+        public decimal ThermalConductivity
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public decimal ElectricialResistivity
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public decimal ElasticModulus
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public decimal ShearModulus
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public decimal BulkModulus
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public decimal BrinellHardness
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }
