@@ -117,7 +117,7 @@ namespace Gear.Services
 
             //this.localServices.Add(new ServiceInfo { ServiceType = serviceType, ListenPort = port });
 
-            this.EnsureServiceAnnouncerIsRunning();
+            //this.EnsureServiceAnnouncerIsRunning();
         }
 
 

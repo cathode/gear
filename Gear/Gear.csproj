@@ -151,11 +151,15 @@
     <Compile Include="Model\Block.cs" />
     <Compile Include="Model\BlockFlags.cs" />
     <Compile Include="Model\Compound.cs" />
+    <Compile Include="Model\ICompound.cs" />
+    <Compile Include="Model\IElement.cs" />
+    <Compile Include="Model\IPhysical.cs" />
     <Compile Include="Model\Material.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogMessage.cs" />
     <Compile Include="LogMessageGroup.cs" />
     <Compile Include="LogOutput.cs" />
+    <Compile Include="Model\MatterState.cs" />
     <Compile Include="Model\Region.cs" />
     <Compile Include="Model\Chunk.cs" />
     <Compile Include="Model\ChunkMetadata.cs" />
@@ -189,6 +193,7 @@
     <Compile Include="Services\ServiceBase.cs" />
     <Compile Include="Services\ServiceCapabilities.cs" />
     <Compile Include="Services\ServiceDetail.cs" />
+    <Compile Include="Services\ServiceImplementationAttribute.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="Services\ServiceInfo.cs" />
     <Compile Include="Services\ServiceManager.cs" />

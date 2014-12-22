@@ -13,8 +13,31 @@ using System.Threading.Tasks;
 
 namespace Gear.Model
 {
-    public class Compound
+    public class Compound : ICompound
     {
-       
+        /// <summary>
+        /// Gets or sets the internal reference ID of the compound (used by the engine).
+        /// </summary>
+        public Guid CompoundId { get; set; }
+
+        public decimal MeltingPoint
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public decimal BoilingPoint
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public decimal Density
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public Dictionary<IElement, int> Elements
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

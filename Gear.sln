@@ -9,6 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gear.Server", "Gear.Server\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gear.Client", "Gear.Client\Gear.Client.csproj", "{C58D23D8-3F41-4BF2-A0EA-C06820377E67}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform", "Platform", "{A1676D55-4DCA-4016-85B4-55F50CBED03D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FreeBSD", "FreeBSD", "{E8F1FC56-025D-404F-82C9-C465EDE7A84B}"
+	ProjectSection(SolutionItems) = preProject
+		gear_server.sh = gear_server.sh
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug + Contracts|Any CPU = Debug + Contracts|Any CPU
@@ -70,5 +77,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E8F1FC56-025D-404F-82C9-C465EDE7A84B} = {A1676D55-4DCA-4016-85B4-55F50CBED03D}
 	EndGlobalSection
 EndGlobal
