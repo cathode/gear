@@ -1,0 +1,18 @@
+﻿{
+	"ClusterId": "{A54BD9B7-FFDA-44CF-B276-A88FE53BFA8B}",
+	"LogFile": "Logs/Gear.server.log",
+	"Services": [
+		{
+			"ServiceClass": "Gear.Services.ZoneNodeService",
+			"ListenPort": 4122
+		},
+		{
+			"ServiceClass": "Gear.Services.ClusterSupervisorService",
+			"ListenPort": 4123
+		},
+		{
+			"ServiceClass": "Gear.Services.ConnectionBrokerService",
+			"ListenPort": 4124
+		}
+	]
+}

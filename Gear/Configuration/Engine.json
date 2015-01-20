@@ -1,0 +1,8 @@
+﻿{
+    "Modules": [
+        {
+            "Assembly": "Gear.dll",
+            "Kind": "Core"
+        }
+    ]
+}

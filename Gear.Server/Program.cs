@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Threading;
 using Gear.Services;
+using Newtonsoft.Json;
+using System.Reflection;
 
 namespace Gear.Server
 {
@@ -20,13 +22,18 @@ namespace Gear.Server
     {
         public static void Main(string[] args)
         {
-#if DEBUG
-            // Fixed cluster id for debugging/testing
-            var clusterId = new Guid("{FC000000-0000-0000-0000-000000000000}");
-#else
-            // TODO: Read cluster id from configuration file
-            var clusterId = Guid.NewGuid();
-#endif
+            Console.WriteLine("Gear Server - v" + Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            // Read configuration.
+
+            var ser = new JsonSerializer();
+            ServerConfiguration config;
+
+            using (var reader = new JsonTextReader(File.OpenText("./Configuration/Server.json")))
+            {
+                config = ser.Deserialize<ServerConfiguration>(reader);
+            }
+            var clusterId = config.ClusterId;
+
             // Log to console.
             Log.BindOutput(Console.OpenStandardOutput());
 

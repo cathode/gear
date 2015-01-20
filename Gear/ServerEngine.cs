@@ -7,6 +7,7 @@
  *****************************************************************************/
 using System.Net;
 using System.Net.Sockets;
+using System;
 
 namespace Gear
 {
@@ -24,11 +25,11 @@ namespace Gear
         {
             //this.listener = new ConnectionListener();
 
-           // this.InitGShell();
+            // this.InitGShell();
         }
         #endregion
         #region Properties
-     
+
         #endregion
         #region Methods
         protected override void OnStarting(System.EventArgs e)
@@ -47,6 +48,9 @@ namespace Gear
 
         private void ReceiveCallback(System.IAsyncResult ar)
         {
+            if (ar == null)
+                throw new NotImplementedException();
+
             var client = ar.AsyncState as UdpClient;
 
             if (client == null)

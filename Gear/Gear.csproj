@@ -147,9 +147,11 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="ClientEngine.cs" />
+    <Compile Include="GearEngineModuleAttribute.cs" />
     <Compile Include="GearShell.cs" />
     <Compile Include="Model\Block.cs" />
     <Compile Include="Model\BlockFlags.cs" />
+    <Compile Include="Model\ChunkLocation.cs" />
     <Compile Include="Model\Compound.cs" />
     <Compile Include="Model\ICompound.cs" />
     <Compile Include="Model\IElement.cs" />
@@ -163,6 +165,7 @@
     <Compile Include="Model\Region.cs" />
     <Compile Include="Model\Chunk.cs" />
     <Compile Include="Model\ChunkMetadata.cs" />
+    <Compile Include="Model\TerrainGenerator.cs" />
     <Compile Include="Model\Zone.cs" />
     <Compile Include="Model\ZoneMetadata.cs" />
     <Compile Include="Net\BroadcastChannel.cs" />
@@ -175,10 +178,12 @@
     <Compile Include="Net\MessageContainer.cs" />
     <Compile Include="Net\MessageQueue.cs" />
     <Compile Include="Net\MessageSerializationHelper.cs" />
+    <Compile Include="Net\Messages\BlockUpdateMessage.cs" />
     <Compile Include="Net\Messages\ConfigurationMessage.cs" />
     <Compile Include="Net\Messages\EndpointGreetingMessage.cs" />
     <Compile Include="Net\Messages\LocatorRequestMessage.cs" />
     <Compile Include="Net\Messages\RequestResultMessage.cs" />
+    <Compile Include="Net\Messages\ZoneDataRequestMessage.cs" />
     <Compile Include="Net\NetworkList.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerEventArgs.cs" />
@@ -197,6 +202,7 @@
     <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="Services\ServiceInfo.cs" />
     <Compile Include="Services\ServiceManager.cs" />
+    <Compile Include="Services\ServiceMessageHandlerAttribute.cs" />
     <Compile Include="Services\ZoneNodeService.cs" />
     <None Include="app.config" />
     <Compile Include="EngineBase.cs" />
@@ -207,6 +213,8 @@
     </Compile>
     <Compile Include="GameSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Configuration\Engine.json" />
+    <None Include="Configuration\Worlds.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

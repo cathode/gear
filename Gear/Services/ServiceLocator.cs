@@ -46,12 +46,10 @@ namespace Gear.Services
                     using (var stream = new MemoryStream(buffer))
                     {
                         var obj = Serializer.Deserialize<ServiceAnnouncement>(stream);
-                        Log.Write("Received announcement from node in cluster: " + obj.ClusterId.ToString());
-
-
-
+                        
                         if (obj.Services != null)
                         {
+                            Log.Write("Received announcement from node in cluster: " + obj.ClusterId.ToString());
                             foreach (var service in obj.Services)
                             {
                                 this.OnServiceDiscovered(new ServiceDiscoveredEventArgs { ClusterId = obj.ClusterId, Info = service });

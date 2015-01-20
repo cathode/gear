@@ -149,10 +149,12 @@ namespace Gear.Services
 
         }
 
+        
         [ContractInvariantMethod]
         private void Invariants()
         {
             Contract.Invariant(this.announcer != null);
+            Contract.Invariant(this.locator != null);
         }
     }
 }
