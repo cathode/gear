@@ -37,8 +37,8 @@ namespace Gear.Server
             // Log to console.
             Log.BindOutput(Console.OpenStandardOutput());
 
-            if (true)
-                Log.BindOutput(File.Open("Gear.Server.log", FileMode.Append, FileAccess.Write, FileShare.None));
+            if (!string.IsNullOrEmpty(config.LogFile))
+                Log.BindOutput(File.Open(config.LogFile, FileMode.Append, FileAccess.Write, FileShare.None));
 
             Log.Write("Message log initialized", "system", LogMessageGroup.Info);
 
@@ -53,6 +53,8 @@ namespace Gear.Server
             manager.StartService(ServerService.ConnectionBroker, 4122);
             manager.StartService(ServerService.ClusterManager, 4123);
             manager.StartService(ServerService.ZoneNode, 4124);
+
+            
 
             while (true)
             {

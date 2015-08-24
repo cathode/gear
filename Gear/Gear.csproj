@@ -146,9 +146,10 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="ClientEngine.cs" />
+    <Compile Include="Client\Authentication\AuthenticationToken.cs" />
     <Compile Include="GearEngineModuleAttribute.cs" />
     <Compile Include="GearShell.cs" />
+    <Compile Include="IDataAccessLayer.cs" />
     <Compile Include="Model\Block.cs" />
     <Compile Include="Model\BlockFlags.cs" />
     <Compile Include="Model\ChunkLocation.cs" />

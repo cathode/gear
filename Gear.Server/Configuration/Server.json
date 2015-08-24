@@ -1,6 +1,6 @@
 ﻿{
 	"ClusterId": "{A54BD9B7-FFDA-44CF-B276-A88FE53BFA8B}",
-	"LogFile": "Logs/Gear.server.log",
+	"LogFile": "Gear.server.log",
 	"Services": [
 		{
 			"ServiceClass": "Gear.Services.ZoneNodeService",

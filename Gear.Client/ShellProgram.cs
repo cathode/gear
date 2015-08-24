@@ -46,9 +46,9 @@ namespace Gear.Client
                 return true;
 
             var spi = cleaned.IndexOf(' ');
-            if (spi > 0)
+            if (spi == -1)
             {
-                var command = cleaned.Substring(0, spi);
+                var command = cleaned;
 
                 switch (command)
                 {
@@ -69,7 +69,10 @@ namespace Gear.Client
 
         private bool CommandDiscover(string line)
         {
-            
+            var locator = new Services.ServiceLocator();
+
+            locator.Run();
+
             return true;
         }
 

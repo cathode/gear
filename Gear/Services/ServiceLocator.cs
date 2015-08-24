@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.IO;
+
 using ProtoBuf;
 
 namespace Gear.Services
@@ -21,13 +22,13 @@ namespace Gear.Services
     /// </summary>
     public class ServiceLocator
     {
-        
 
-        public  event EventHandler<ServiceDiscoveredEventArgs> ServiceDiscovered;
 
-        public  bool Running { get; set; }
+        public event EventHandler<ServiceDiscoveredEventArgs> ServiceDiscovered;
 
-        public  void Run()
+        public bool Running { get; set; }
+
+        public void Run()
         {
             var client = new System.Net.Sockets.UdpClient(new IPEndPoint(IPAddress.Any, ServiceAnnouncer.AnnouncePort));
 
@@ -46,7 +47,7 @@ namespace Gear.Services
                     using (var stream = new MemoryStream(buffer))
                     {
                         var obj = Serializer.Deserialize<ServiceAnnouncement>(stream);
-                        
+
                         if (obj.Services != null)
                         {
                             Log.Write("Received announcement from node in cluster: " + obj.ClusterId.ToString());

@@ -105,8 +105,12 @@ namespace Gear.Net
 
         protected abstract System.IO.Stream GetMessageDestinationStream();
 
+        /// <summary>
+        /// Runs through all messages in all internal queues and ensures they are processed.
+        /// </summary>
         protected void FlushMessages()
         {
+            // TODO: Ensure FlushMessages method is limited to a single active call.
 
             var ws = this.GetMessageDestinationStream();
 
