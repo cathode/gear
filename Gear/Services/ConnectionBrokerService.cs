@@ -15,9 +15,18 @@ namespace Gear.Services
 {
     public class ConnectionBrokerService : ServiceBase
     {
-        public ConnectionBrokerService()
-        {
+        public static readonly ushort DefaultServicePort = 14122;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectionBrokerService"/> class.
+        /// </summary>
+        /// <param name="port"></param>
+        public ConnectionBrokerService(ushort port)
+        {
+            if (port == 0)
+                port = ConnectionBrokerService.DefaultServicePort;
+
+            this.ListenPort = port;
         }
     }
 }

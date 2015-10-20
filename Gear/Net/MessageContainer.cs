@@ -11,6 +11,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProtoBuf;
+using System.Diagnostics.Contracts;
+
 
 namespace Gear.Net
 {
@@ -26,7 +28,12 @@ namespace Gear.Net
         /// <param name="contents"></param>
         public MessageContainer(IMessage contents)
         {
-            this.DispatchId = contents.DispatchId;
+            Contract.Requires(contents != null);
+
+            if (contents.DispatchId != 0)
+                this.DispatchId = contents.DispatchId;
+            else
+                this.DispatchId = contents.GetType().GetHashCode();
         }
 
         /// <summary>

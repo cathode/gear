@@ -29,8 +29,14 @@ namespace Gear.Net
         protected Queue<IMessage> incomingInactive;
         protected Queue<IMessage> incomingActive;
 
+        protected System.Runtime.Serialization.IFormatter serializer = ProtoBuf.Serializer.CreateFormatter<MessageContainer>();
+
+        protected ChannelState State;
+
         static Channel()
         {
+            Contract.Assume(RuntimeTypeModel.Default != null);
+
             RuntimeTypeModel.Default.Add(typeof(IMessage), false);
         }
 
@@ -40,7 +46,11 @@ namespace Gear.Net
             this.outgoingInactive = new Queue<IMessage>();
             this.incomingActive = new Queue<IMessage>();
             this.incomingInactive = new Queue<IMessage>();
+
+
         }
+
+        public event EventHandler<MessageEventArgs> MessageReceived;
 
         public void SetUp()
         {
@@ -75,8 +85,8 @@ namespace Gear.Net
         void publisher_MessageAvailable(object sender, MessageEventArgs e)
         {
             Contract.Requires(e != null);
-
-            this.QueueMessage(e.Message);
+            if (e.Message != null)
+                this.QueueMessage(e.Message);
         }
 
         /// <summary>
@@ -86,6 +96,9 @@ namespace Gear.Net
         public void QueueMessage(IMessage message)
         {
             Contract.Requires(message != null);
+
+            if (this.State == ChannelState.Shutdown)
+                throw new InvalidOperationException();
 
             this.QueueMessageThreadSafe(message);
         }
@@ -103,7 +116,34 @@ namespace Gear.Net
             this.FlushMessages();
         }
 
+        /// <summary>
+        /// Starts the socket receive loop.
+        /// </summary>
+        public void Setup()
+        {
+
+        }
+
+        /// <summary>
+        /// Gracefully shuts down the <see cref="Channel"/> and notifies the remote endpoint of the impending connection closure.
+        /// </summary>
+        public void Teardown()
+        {
+            var msg = new Messages.TeardownChannelMessage();
+
+            this.QueueMessage(msg);
+            this.State = ChannelState.Shutdown;
+            this.FlushMessages();
+        }
+
+        protected virtual void DoSetup()
+        {
+
+        }
+
         protected abstract System.IO.Stream GetMessageDestinationStream();
+
+        protected abstract void SendMessage(MessageContainer mc);
 
         /// <summary>
         /// Runs through all messages in all internal queues and ensures they are processed.
@@ -112,7 +152,7 @@ namespace Gear.Net
         {
             // TODO: Ensure FlushMessages method is limited to a single active call.
 
-            var ws = this.GetMessageDestinationStream();
+            //var ws = this.GetMessageDestinationStream();
 
             var ser = ProtoBuf.Serializer.CreateFormatter<MessageContainer>();
 
@@ -124,26 +164,19 @@ namespace Gear.Net
                 if (this.outgoingActive.Count > 0)
                 {
                     var msg = this.outgoingActive.Dequeue();
-                    ser.Serialize(ws, new MessageContainer(msg));
+
+                    if (msg != null)
+                    {
+                        this.SendMessage(new MessageContainer(msg));
+                    }
                 }
             }
+        }
 
-            //// Receive data for pending messages
-            //lock (this.incomingInactive)
-            //{
-            //    try
-            //    {
-            //        while (ws.DataAvailable)
-            //        {
-            //            var msg = ser.Deserialize(ws) as MessageContainer;
-            //            this.incomingInactive.Enqueue(msg.Contents);
-            //        }
-            //    }
-            //    catch
-            //    {
+        protected virtual void OnMessageReceived(object e)
+        {
+            this.MessageReceived(this, null);
 
-            //    }
-            //}
 
         }
 
@@ -154,20 +187,17 @@ namespace Gear.Net
             {
                 // Attempt to grab the active queue. If this fails it probably means that
                 // it has messages and they're being processed still.
-                if (Monitor.TryEnter(this.incomingActive, 1))
+                // Always lock active first, then inactive.
+                if (Monitor.TryEnter(this.incomingActive))
                 {
-                    // Always lock active first, then inactive.
-                    lock (this.incomingInactive)
-                    {
-                        // Only swap if the active buffer is empty (all the messages in it were processed)
-                        // Otherwise, the queue would become out-of-order very quickly.
-                        if (this.incomingActive.Count > 0)
-                            return;
+                    // Only swap if the active buffer is empty (all the messages in it were processed)
+                    // Otherwise, the queue would become out-of-order very quickly.
+                    if (this.incomingActive.Count > 0)
+                        return;
 
-                        var q = this.incomingInactive;
-                        this.incomingInactive = this.incomingActive;
-                        this.incomingActive = q;
-                    }
+                    var q = this.incomingInactive;
+                    this.incomingInactive = this.incomingActive;
+                    this.incomingActive = q;
                 }
             }
             catch (Exception ex)

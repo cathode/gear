@@ -37,6 +37,7 @@ namespace Gear.Client.UI
 
         private void button2_Click(object sender, EventArgs e)
         {
+            
             //LanServerScanner.BeginDiscovery(5);
         }
     }

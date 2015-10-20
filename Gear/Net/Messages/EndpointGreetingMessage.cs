@@ -24,9 +24,17 @@ namespace Gear.Net.Messages
         public EndPointKind Kind { get; set; }
         //public 
 
-        public int DispatchId
+        public ushort DispatchId
         {
             get { return 0; }
+        }
+
+        public bool IsBroadcastMessage
+        {
+            get
+            {
+                return false;
+            }
         }
     }
 }

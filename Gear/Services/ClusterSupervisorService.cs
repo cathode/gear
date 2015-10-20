@@ -18,9 +18,14 @@ namespace Gear.Services
     /// </summary>
     public class ClusterSupervisorService : ServiceBase
     {
-        public ClusterSupervisorService()
-        {
+        public static readonly ushort DefaultServicePort = 14123;
 
+        public ClusterSupervisorService(ushort port)
+        {
+            if (port == 0)
+                port = ClusterSupervisorService.DefaultServicePort;
+
+            this.ListenPort = port;
         }
     }
 }

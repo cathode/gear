@@ -29,7 +29,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
     <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
-    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeThrowOnFailure>False</CodeContractsRuntimeThrowOnFailure>
     <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
     <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
     <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
@@ -70,6 +70,12 @@
     <CodeContractsRedundantTests>True</CodeContractsRedundantTests>
     <CodeContractsSuggestReadonly>True</CodeContractsSuggestReadonly>
     <CodeContractsBeingOptimisticOnExternal>True</CodeContractsBeingOptimisticOnExternal>
+    <CodeContractsAssertsToContractsCheckBox>True</CodeContractsAssertsToContractsCheckBox>
+    <CodeContractsMissingPublicEnsuresAsWarnings>True</CodeContractsMissingPublicEnsuresAsWarnings>
+    <CodeContractsInferEnsuresAutoProperties>True</CodeContractsInferEnsuresAutoProperties>
+    <CodeContractsSuggestAssumptionsForCallees>False</CodeContractsSuggestAssumptionsForCallees>
+    <CodeContractsNecessaryEnsures>True</CodeContractsNecessaryEnsures>
+    <CodeContractsSkipAnalysisIfCannotConnectToCache>False</CodeContractsSkipAnalysisIfCannotConnectToCache>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -171,6 +177,7 @@
     <Compile Include="Model\ZoneMetadata.cs" />
     <Compile Include="Net\BroadcastChannel.cs" />
     <Compile Include="Net\Channel.cs" />
+    <Compile Include="Net\ChannelState.cs" />
     <Compile Include="Net\ConnectedChannel.cs" />
     <Compile Include="Net\ConnectionListener.cs" />
     <Compile Include="Net\EndPointKind.cs" />
@@ -183,7 +190,10 @@
     <Compile Include="Net\Messages\ConfigurationMessage.cs" />
     <Compile Include="Net\Messages\EndpointGreetingMessage.cs" />
     <Compile Include="Net\Messages\LocatorRequestMessage.cs" />
+    <Compile Include="Net\Messages\Ids.cs" />
+    <Compile Include="Net\Messages\LocatorResponseMessage.cs" />
     <Compile Include="Net\Messages\RequestResultMessage.cs" />
+    <Compile Include="Net\Messages\TeardownChannelMessage.cs" />
     <Compile Include="Net\Messages\ZoneDataRequestMessage.cs" />
     <Compile Include="Net\NetworkList.cs" />
     <Compile Include="Player.cs" />
@@ -193,6 +203,8 @@
     <Compile Include="ServiceCapabilities.cs" />
     <Compile Include="Services\ClusterSupervisorService.cs" />
     <Compile Include="Services\ConnectionBrokerService.cs" />
+    <Compile Include="Services\NodeKind.cs" />
+    <Compile Include="Services\Ports.cs" />
     <Compile Include="Services\ServerService.cs" />
     <Compile Include="Services\ServiceAnnouncement.cs" />
     <Compile Include="Services\ServiceAnnouncer.cs" />

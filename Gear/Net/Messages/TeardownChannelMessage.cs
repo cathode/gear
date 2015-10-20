@@ -5,26 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using ProtoBuf;
 
-
 namespace Gear.Net.Messages
 {
     [ProtoContract]
-    public class LocatorRequestMessage : IMessage
+    public class TeardownChannelMessage : IMessage
     {
 
+        [ProtoMember(1)]
+        public bool Confirmation { get; set; }
 
-
+        [ProtoIgnore]
         public ushort DispatchId
         {
-            get { return Ids.LocatorRequest; }
+            get { return Ids.TeardownChannel; }
         }
 
+        [ProtoIgnore]
         public bool IsBroadcastMessage
         {
-            get
-            {
-                return false;
-            }
+            get { return false; }
         }
     }
 }

@@ -11,9 +11,9 @@ namespace Gear.Net.Messages
     /// </summary>
     public class ZoneDataRequestMessage : IMessage
     {
-        public int DispatchId
+        public ushort DispatchId
         {
-            get { throw new NotImplementedException(); }
+            get { return Ids.ZoneDataRequest; }
         }
 
         public long ZoneX { get; set; }
@@ -23,5 +23,14 @@ namespace Gear.Net.Messages
         public byte ChunkX { get; set; }
         public byte ChunkY { get; set; }
         public byte ChunkZ { get; set; }
+
+
+        public bool IsBroadcastMessage
+        {
+            get
+            {
+                return false;
+            }
+        }
     }
 }

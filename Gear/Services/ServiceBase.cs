@@ -22,11 +22,13 @@ namespace Gear.Services
 
         internal ServiceBase()
         {
-            this.listener = new ConnectionListener(10000);
+            
         }
 
         public void Run()
         {
+            this.listener = new ConnectionListener(this.ListenPort);
+            this.listener.StartInBackground();
 
         }
 

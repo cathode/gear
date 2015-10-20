@@ -25,7 +25,7 @@ namespace Gear.Net
 
         public ConnectionListener(ushort port)
         {
-            Contract.Requires(port > 1024);
+            //Contract.Requires(port > 1024);
 
             this.ListenPort = port;
 

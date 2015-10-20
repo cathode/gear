@@ -12,8 +12,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.IO;
-
 using ProtoBuf;
+using Gear.Net;
 
 namespace Gear.Services
 {
@@ -22,21 +22,43 @@ namespace Gear.Services
     /// </summary>
     public class ServiceLocator
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServiceLocator"/> class.
+        /// </summary>
+        public ServiceLocator()
+        {
+            this.Timeout = TimeSpan.FromSeconds(15);
+        }
 
-
+        /// <summary>
+        /// Notifies subscribers when a remote service is located.
+        /// </summary>
         public event EventHandler<ServiceDiscoveredEventArgs> ServiceDiscovered;
 
-        public bool Running { get; set; }
+        /// <summary>
+        /// Gets a value indicating whether the locator is searching for services running on known subnets.
+        /// </summary>
+        public bool Running { get; private set; }
+
+        public TimeSpan Timeout { get; set; }
+
+        
 
         public void Run()
         {
-            var client = new System.Net.Sockets.UdpClient(new IPEndPoint(IPAddress.Any, ServiceAnnouncer.AnnouncePort));
+            // Create a client that binds to a random local port.
+            var client = new System.Net.Sockets.UdpClient();
 
             this.Running = true;
-            var ep = new IPEndPoint(IPAddress.Broadcast, ServiceAnnouncer.AnnouncePort);
+            var ep = new IPEndPoint(IPAddress.Broadcast, Ports.Locator);
+
+            // Generate the location request 
+            var req = new Gear.Net.Messages.LocatorRequestMessage();
 
 
-            //.Client.Bind(ep);
+
+            return;
+
 
             while (this.Running)
             {

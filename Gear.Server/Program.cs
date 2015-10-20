@@ -50,9 +50,9 @@ namespace Gear.Server
 
             manager.EnsureServiceLocatorIsRunning();
 
-            manager.StartService(ServerService.ConnectionBroker, 4122);
-            manager.StartService(ServerService.ClusterManager, 4123);
-            manager.StartService(ServerService.ZoneNode, 4124);
+            manager.StartService(ServerService.ConnectionBroker, 14122);
+            manager.StartService(ServerService.ClusterManager, 14123);
+            manager.StartService(ServerService.ZoneNode, 14124);
 
             
 

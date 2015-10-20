@@ -29,6 +29,9 @@ namespace Gear.Net
 
         private bool hasReceivedGreeting;
 
+        private MemoryStream receiveDataBuffer;
+        private MemoryStream sendDataBuffer;
+
         public ConnectedChannel(Socket socket)
         {
             Contract.Requires(socket != null);
@@ -56,19 +59,47 @@ namespace Gear.Net
             }
 
             var channel = new ConnectedChannel(sock);
-            //channel.SetUp();
+           
             var msg = new Gear.Net.Messages.EndPointGreetingMessage();
             msg.EndPointId = Guid.NewGuid();
             msg.Kind = EndPointKind.Client;
 
             channel.QueueMessage(msg);
+            channel.FlushMessages();
+            channel.hasSentGreeting = true;
+
+            
+            sock.ReceiveAsync(new SocketAsyncEventArgs());
 
             return channel;
         }
 
+        protected override void DoSetup()
+        {
+            base.DoSetup();
+
+            var e = new SocketAsyncEventArgs();
+            
+            //this.socket.ReceiveAsync()
+        }
+
+        protected override void SendMessage(MessageContainer mc)
+        {
+            Contract.Requires(mc != null);
+
+            var des = ProtoBuf.Serializer.CreateFormatter<MessageContainer>();
+
+            var s = this.ns;
+
+            des.Serialize(this.ns, mc);
+            this.ns.Flush();
+        }
+
         protected override Stream GetMessageDestinationStream()
         {
-            return this.ns;
+            throw new NotImplementedException();
         }
+
+        
     }
 }

@@ -5,18 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using ProtoBuf;
 
-
 namespace Gear.Net.Messages
 {
     [ProtoContract]
-    public class LocatorRequestMessage : IMessage
+    public class LocatorResponseMessage : IMessage
     {
 
+        [ProtoMember(1)]
+        public Gear.Services.ServiceInfo[] Services { get; set; }
 
 
         public ushort DispatchId
         {
-            get { return Ids.LocatorRequest; }
+            get { return Ids.LocatorResponse; }
+
         }
 
         public bool IsBroadcastMessage

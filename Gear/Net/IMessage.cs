@@ -18,9 +18,9 @@ namespace Gear.Net
     public interface IMessage
     {
         [ProtoMember(1)]
-        int DispatchId { get; }
+        ushort DispatchId { get; }
 
         //[ProtoIgnore]
-        //bool IsBroadcastMessage { get; }
+        bool IsBroadcastMessage { get; }
     }
 }

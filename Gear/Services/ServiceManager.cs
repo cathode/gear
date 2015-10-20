@@ -82,7 +82,7 @@ namespace Gear.Services
         /// </summary>
         /// <param name="serviceType"></param>
         /// <param name="port"></param>
-        public void StartService(ServerService serviceType, ushort port)
+        public void StartService(ServerService serviceType, ushort port = 0)
         {
             // Attempt to find an already managed service on the specified port.
             ServiceBase svc = this.managedServices.FirstOrDefault(e => e.ListenPort == port);
@@ -93,11 +93,11 @@ namespace Gear.Services
                 switch (serviceType)
                 {
                     case ServerService.ClusterManager:
-                        svc = new ClusterSupervisorService();
+                        svc = new ClusterSupervisorService(port);
                         break;
 
                     case ServerService.ConnectionBroker:
-                        svc = new ClusterSupervisorService();
+                        svc = new ConnectionBrokerService(port);
                         break;
 
                     case ServerService.ZoneNode:
