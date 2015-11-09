@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProtoBuf;
 
 namespace Gear.Net.Messages
 {
@@ -11,9 +12,14 @@ namespace Gear.Net.Messages
     /// </summary>
     public class ZoneDataRequestMessage : IMessage
     {
-        public ushort DispatchId
+        [ProtoIgnore]
+        int IMessage.DispatchId
         {
-            get { return Ids.ZoneDataRequest; }
+            get
+            {
+                return 0;
+                //return Ids.ZoneDataRequest;
+            }
         }
 
         public long ZoneX { get; set; }

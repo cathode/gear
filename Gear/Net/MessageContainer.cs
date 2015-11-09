@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ProtoBuf;
 using System.Diagnostics.Contracts;
+using System.Net;
 
 
 namespace Gear.Net
@@ -22,6 +23,21 @@ namespace Gear.Net
     [ProtoContract]
     public class MessageContainer
     {
+        private IMessage contents;
+
+        static MessageContainer()
+        {
+            ProtoBuf.Meta.RuntimeTypeModel.Default.AutoAddMissingTypes = true;
+            ProtoBuf.Meta.RuntimeTypeModel.Default.Add(typeof(MessageContainer), true);
+            //var t = RuntimeTypeModel.Default.Add(typeof(IMessage), true);
+            //t.AddSubType(1, typeof(ClientGreetingMessage));
+
+        }
+
+        public MessageContainer()
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageContainer"/> class.
         /// </summary>
@@ -29,6 +45,8 @@ namespace Gear.Net
         public MessageContainer(IMessage contents)
         {
             Contract.Requires(contents != null);
+
+            this.contents = contents;
 
             if (contents.DispatchId != 0)
                 this.DispatchId = contents.DispatchId;
@@ -42,10 +60,34 @@ namespace Gear.Net
         [ProtoMember(1)]
         public int DispatchId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the message data object.
-        /// </summary>
         [ProtoMember(2)]
-        public IMessage Contents { get; set; }
+        public Guid InstanceId { get; set; }
+
+        [ProtoMember(3)]
+        public Guid MessageId { get; set; }
+
+        /// <summary>
+        /// Gets or sets a <see cref="IMessagePayload"/> object that represents the actual content of the message transmitted.
+        /// </summary>
+        [ProtoMember(4)]
+        public IMessage Contents
+        {
+            get
+            {
+                return this.contents;
+            }
+            set
+            {
+                Contract.Requires(value != null);
+
+                this.DispatchId = value.DispatchId;
+                this.contents = value;
+            }
+        }
+
+        [ProtoIgnore]
+        public IPEndPoint Destination { get; set; }
     }
+
+
 }

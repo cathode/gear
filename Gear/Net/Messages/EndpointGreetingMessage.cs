@@ -22,12 +22,6 @@ namespace Gear.Net.Messages
 
         [ProtoMember(2)]
         public EndPointKind Kind { get; set; }
-        //public 
-
-        public ushort DispatchId
-        {
-            get { return 0; }
-        }
 
         public bool IsBroadcastMessage
         {
@@ -35,6 +29,12 @@ namespace Gear.Net.Messages
             {
                 return false;
             }
+        }
+
+        [ProtoIgnore]
+        int IMessage.DispatchId
+        {
+            get { return Ids.ConnectionSetup; }
         }
     }
 }

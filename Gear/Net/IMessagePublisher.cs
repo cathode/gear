@@ -26,8 +26,5 @@ namespace Gear.Net
         event EventHandler ShuttingDown;
     }
 
-    public class MessageEventArgs : EventArgs
-    {
-        public IMessage Message { get; set; }
-    }
+   
 }

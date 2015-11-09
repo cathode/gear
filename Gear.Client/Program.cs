@@ -45,7 +45,7 @@ namespace Gear.Client
             var channel = Gear.Net.ConnectedChannel.ConnectTo(new System.Net.IPEndPoint(System.Net.IPAddress.Loopback, Services.ConnectionBrokerService.DefaultServicePort));
             //channel.QueueMessage()
 
-            channel.QueueMessage(new Gear.Net.Messages.ZoneDataRequestMessage { ChunkX = 1, ChunkY = 1, ChunkZ = 0, ZoneX = 2, ZoneY = 3, ZoneZ = 0 });
+            //channel.QueueMessage(new Gear.Net.Messages.ZoneDataRequestMessage { ChunkX = 1, ChunkY = 1, ChunkZ = 0, ZoneX = 2, ZoneY = 3, ZoneZ = 0 });
 
             System.Threading.Thread.Sleep(20000);
 

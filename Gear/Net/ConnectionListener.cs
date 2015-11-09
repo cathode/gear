@@ -28,7 +28,7 @@ namespace Gear.Net
             //Contract.Requires(port > 1024);
 
             this.ListenPort = port;
-
+            this.listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             this.Allowed = new NetworkList();
             this.Denied = new NetworkList();
         }
@@ -45,14 +45,10 @@ namespace Gear.Net
 
         public ushort ListenPort { get; private set; }
 
-        public event EventHandler ChannelConnected;
+        public event EventHandler<ChannelEventArgs> ChannelConnected;
 
         public void Start()
-        {
-            if (this.listener != null)
-                return;
-
-            this.listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        {   
             this.listener.Bind(new IPEndPoint(IPAddress.Any, this.ListenPort));
             this.listener.Listen(32);
 
@@ -65,8 +61,7 @@ namespace Gear.Net
 
                     var channel = new ConnectedChannel(sock);
 
-                    channel.SetUp();
-
+                    this.OnConnectionEstablished(this, new ChannelEventArgs { Channel = channel });
                 }
                 catch (TimeoutException ex)
                 {
@@ -77,12 +72,10 @@ namespace Gear.Net
         }
 
 
-        public object StartInBackground()
+        public void StartInBackground()
         {
             Task.Run(() => this.Start());
 
-            //this.Start();
-            return null;
         }
 
         public void Stop()
@@ -90,8 +83,22 @@ namespace Gear.Net
 
         }
 
-        public void OnConnectionEstablished(EventArgs e)
+        protected void OnConnectionEstablished(object sender, ChannelEventArgs e)
         {
+            Contract.Requires(e != null);
+
+
+            if (this.ChannelConnected != null)
+                this.ChannelConnected(sender, e);
+
+            e.Channel.Setup();
+        }
+
+        [ContractInvariantMethod]
+        private void Invariants()
+        {
+            Contract.Invariant(this.listener != null);
+            //Contract.Invariant(this.)
 
         }
     }

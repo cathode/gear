@@ -9,8 +9,8 @@ namespace Gear.Net
     public enum ChannelState
     {
         Initialized,
-        Active,
+        Connected,
         Idle,
-        Shutdown
+        Disconnected
     }
 }

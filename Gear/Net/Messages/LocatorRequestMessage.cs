@@ -11,10 +11,8 @@ namespace Gear.Net.Messages
     [ProtoContract]
     public class LocatorRequestMessage : IMessage
     {
-
-
-
-        public ushort DispatchId
+        [ProtoIgnore]
+        int IMessage.DispatchId
         {
             get { return Ids.LocatorRequest; }
         }
