@@ -81,7 +81,7 @@ namespace Gear.Net
         public static ConnectedChannel ConnectTo(IPEndPoint remoteEP)
         {
             Contract.Requires(remoteEP != null);
-
+            Contract.Ensures(Contract.Result<ConnectedChannel>() != null);
 
             var channel = new ConnectedChannel(remoteEP);
             channel.Connect();
@@ -107,7 +107,7 @@ namespace Gear.Net
             try
             {
                 this.socket.Connect(ep);
-                this.OnConnected(); 
+                this.OnConnected();
                 this.Setup();
                 return true;
 

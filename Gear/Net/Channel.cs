@@ -125,6 +125,12 @@ namespace Gear.Net
             return hid;
         }
 
+        /// <summary>
+        /// Registers a handler for the specified message dispatch ID.
+        /// </summary>
+        /// <param name="dispatchId"></param>
+        /// <param name="handler"></param>
+        /// <returns>The guid of the handler registration, used for unregistering the handler.</returns>
         public Guid RegisterHandler<T>(Action<MessageEventArgs, T> handlerAction) where T : IMessage
         {
             var inst = Activator.CreateInstance<T>();
@@ -138,16 +144,9 @@ namespace Gear.Net
         }
 
         /// <summary>
-        /// Queues an individual message on the channel, to be sent to the remote endpoint.
+        /// Queues one or more messages on the channel, to be sent to the remote endpoint.
         /// </summary>
         /// <param name="message"></param>
-        //public void Send(IMessage message)
-        //{
-        //    Contract.Requires(message != null);
-
-        //    this.QueueTxMessageThreadSafe(message);
-        //}
-
         public void Send(params IMessage[] messages)
         {
             Contract.Requires(messages != null);
@@ -184,7 +183,7 @@ namespace Gear.Net
         protected abstract int SendMessages(Queue<IMessage> messages);
 
         /// <summary>
-        /// Runs through all messages in all internal queues and ensures they are processed.
+        /// Runs through the queue of messages to be sent and writes them to the network.
         /// </summary>
         protected void ProcessTxQueue()
         {
@@ -219,7 +218,9 @@ namespace Gear.Net
             }
         }
 
-
+        /// <summary>
+        /// Runs through the the queue of messages that have been receives and invokes the appropriate events / message handlers.
+        /// </summary>
         protected void ProcessRxQueue()
         {
             try
@@ -275,6 +276,10 @@ namespace Gear.Net
             }
         }
 
+        /// <summary>
+        /// Adds messages to the send queue with thread safety checks.
+        /// </summary>
+        /// <param name="messages"></param>
         protected void QueueTxMessageThreadSafe(params IMessage[] messages)
         {
             Contract.Requires(messages != null);
@@ -290,6 +295,10 @@ namespace Gear.Net
             this.ProcessTxQueue();
         }
 
+        /// <summary>
+        /// Adds messages to the receive queue with thread safety checks.
+        /// </summary>
+        /// <param name="messages"></param>
         protected void QueueRxMessageThreadSafe(params IMessage[] messages)
         {
             Contract.Requires(messages != null);
@@ -319,7 +328,6 @@ namespace Gear.Net
         private void publisher_MessageAvailable(object sender, MessageEventArgs e)
         {
             Contract.Requires(e != null);
-            //if (e.Data != null)
             this.QueueTxMessageThreadSafe(e.Data);
         }
 

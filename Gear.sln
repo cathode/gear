@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gear", "Gear\Gear.csproj", "{B13E769A-A4B6-466F-9896-7FA30F89CAFF}"
 EndProject
@@ -14,6 +14,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FreeBSD", "FreeBSD", "{E8F1FC56-025D-404F-82C9-C465EDE7A84B}"
 	ProjectSection(SolutionItems) = preProject
 		gear_server.sh = gear_server.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D528253F-36AC-4B01-B7A9-5E4B35DAFB95}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
 	EndProjectSection
 EndProject
 Global
@@ -80,5 +85,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E8F1FC56-025D-404F-82C9-C465EDE7A84B} = {A1676D55-4DCA-4016-85B4-55F50CBED03D}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

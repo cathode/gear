@@ -17,8 +17,7 @@ namespace Gear.Net.Messages
         {
             get
             {
-                return 0;
-                //return Ids.ZoneDataRequest;
+                return Ids.ZoneDataRequest;
             }
         }
 
@@ -29,14 +28,5 @@ namespace Gear.Net.Messages
         public byte ChunkX { get; set; }
         public byte ChunkY { get; set; }
         public byte ChunkZ { get; set; }
-
-
-        public bool IsBroadcastMessage
-        {
-            get
-            {
-                return false;
-            }
-        }
     }
 }

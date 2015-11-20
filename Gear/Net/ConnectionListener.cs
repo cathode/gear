@@ -21,12 +21,14 @@ namespace Gear.Net
     /// </summary>
     public class ConnectionListener
     {
-        private Socket listener;
+        private readonly Socket listener;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectionListener"/> class.
+        /// </summary>
+        /// <param name="port">The port number that the listening socket operates on.</param>
         public ConnectionListener(ushort port)
         {
-            //Contract.Requires(port > 1024);
-
             this.ListenPort = port;
             this.listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             this.Allowed = new NetworkList();
@@ -43,12 +45,18 @@ namespace Gear.Net
         /// </summary>
         public NetworkList Denied { get; set; }
 
+        /// <summary>
+        /// Gets the port number that the listener operates on.
+        /// </summary>
         public ushort ListenPort { get; private set; }
 
+        /// <summary>
+        /// Raised when an incoming connection is accepted and forked off into a new <see cref="Channel"/> instance.
+        /// </summary>
         public event EventHandler<ChannelEventArgs> ChannelConnected;
 
         public void Start()
-        {   
+        {
             this.listener.Bind(new IPEndPoint(IPAddress.Any, this.ListenPort));
             this.listener.Listen(32);
 
@@ -61,7 +69,7 @@ namespace Gear.Net
 
                     var channel = new ConnectedChannel(sock);
 
-                    this.OnConnectionEstablished(this, new ChannelEventArgs { Channel = channel });
+                    this.OnConnectionEstablished(this, new ChannelEventArgs(channel));
                 }
                 catch (TimeoutException ex)
                 {
