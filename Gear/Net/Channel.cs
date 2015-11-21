@@ -75,6 +75,7 @@ namespace Gear.Net
             this.rxBuffer = new Queue<IMessage>();
 
             this.txFlushGate = new AutoResetEvent(true);
+            this.isRxQueueIdle = true;
             //this.rxFlushGate = new AutoResetEvent(true);
         }
 
@@ -218,15 +219,21 @@ namespace Gear.Net
             }
         }
 
+        private volatile bool isRxQueueIdle;
+
         /// <summary>
         /// Runs through the the queue of messages that have been receives and invokes the appropriate events / message handlers.
         /// </summary>
         protected void ProcessRxQueue()
         {
-            try
-            {
-                if (Monitor.TryEnter(this.rxFlushGate))
+            //try
+            //{
+                if (this.isRxQueueIdle)
+
+                //if (Monitor.TryEnter(this.rxFlushGate))
                 {
+                    this.isRxQueueIdle = false;
+
                     if (this.State == ChannelState.Connected)
                     {
                         lock (this.rxQueue)
@@ -251,13 +258,16 @@ namespace Gear.Net
                             }
                         }
                     }
+
+                    this.isRxQueueIdle = true;
                 }
-            }
-            finally
-            {
-                if (Monitor.IsEntered(this.rxFlushGate))
-                    Monitor.Exit(this.rxFlushGate);
-            }
+            //}
+            //finally
+            //{
+            //    //if (Monitor.IsEntered(this.rxFlushGate))
+            //    //Monitor.Exit(this.rxFlushGate);
+            //    //this.isRxQueueIdle = true;
+            //}
         }
 
         protected virtual void OnMessageReceived(MessageEventArgs e)
