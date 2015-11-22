@@ -41,15 +41,16 @@ namespace Gear.Client
             Net.MessageSerializationHelper.AddMessageSubtypes();
 
             // DEBUG testing:
-            Console.WriteLine("sleeping 5 seconds");
+            //Console.WriteLine("sleeping 5 seconds");
 
-            System.Threading.Thread.Sleep(5000);
+            //System.Threading.Thread.Sleep(5000);
 
+            var address = System.Net.IPAddress.Parse(args[0]);
 
 
             //var channel = Gear.Net.ConnectedChannel.ConnectTo(new System.Net.IPEndPoint(System.Net.IPAddress.Parse("192.168.10.208"), 9888));
 
-            var channel = Gear.Net.ConnectedChannel.ConnectTo(new System.Net.IPEndPoint(System.Net.IPAddress.Loopback, 9888));
+            var channel = Gear.Net.ConnectedChannel.ConnectTo(new System.Net.IPEndPoint(address, 9888));
 
 
             var max = 1000000000;
