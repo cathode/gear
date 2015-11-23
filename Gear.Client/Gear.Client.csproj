@@ -65,6 +65,9 @@
     <Compile Include="Modeling\Parametrics\Feature.cs" />
     <Compile Include="Geometry\Angle.cs" />
     <Compile Include="Geometry\CoordinateSystem.cs" />
+    <None Include="..\Gear.licenseheader">
+      <Link>Gear.licenseheader</Link>
+    </None>
     <None Include="Geometry\DynamicRotation3.cs" />
     <None Include="Geometry\DynamicVector2.cs" />
     <None Include="Geometry\DynamicVector3.cs" />

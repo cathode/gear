@@ -63,6 +63,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Gear.licenseheader">
+      <Link>Gear.licenseheader</Link>
+    </None>
     <None Include="Configuration\Server.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

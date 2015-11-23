@@ -1,8 +1,9 @@
 ﻿/******************************************************************************
- * Gear.Client: A 3D Graphics API for .NET and Mono - http://gearedstudios.com/ *
- * Copyright © 2009-2012 William 'cathode' Shelley. All Rights Reserved.      *
- * This software is released under the terms and conditions of the MIT/X11    *
- * license. See the 'license.txt' file for details.                           *
+ * Gear: An open-world sandbox game for creative people.                      *
+ * http://github.com/cathode/gear/                                            *
+ * Copyright © 2009-2016 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the MIT        *
+ * license. See the included LICENSE file for details.                        *
  *****************************************************************************/
 using Gear.Client.Geometry;
 using System;
