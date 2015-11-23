@@ -17,21 +17,32 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+    <DocumentationFile>
+    </DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
@@ -47,9 +58,181 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientEngine.cs" />
+    <Compile Include="Modeling\Parametrics\ComponentDocument.cs" />
+    <Compile Include="Modeling\Parametrics\ComponentVariation.cs" />
+    <Compile Include="Modeling\Parametrics\DistanceRelationship.cs" />
+    <Compile Include="Modeling\Parametrics\Entity.cs" />
+    <Compile Include="Modeling\Parametrics\Feature.cs" />
+    <Compile Include="Geometry\Angle.cs" />
+    <Compile Include="Geometry\CoordinateSystem.cs" />
+    <None Include="Geometry\DynamicRotation3.cs" />
+    <None Include="Geometry\DynamicVector2.cs" />
+    <None Include="Geometry\DynamicVector3.cs" />
+    <None Include="Geometry\DynamicVector4.cs" />
+    <Compile Include="Geometry\Edge3.cs" />
+    <Compile Include="Geometry\EdgeFlags.cs" />
+    <Compile Include="Geometry\Extents3.cs" />
+    <Compile Include="Geometry\FastMesh.cs" />
+    <Compile Include="Geometry\IMeshFragment.cs" />
+    <Compile Include="Geometry\IPath.cs" />
+    <Compile Include="Geometry\IRenderable.cs" />
+    <None Include="Geometry\IVector2.cs" />
+    <None Include="Geometry\IVector3.cs" />
+    <None Include="Geometry\IVector4.cs" />
+    <Compile Include="Geometry\Matrix.cs" />
+    <Compile Include="Geometry\Matrix2.cs" />
+    <Compile Include="Geometry\Matrix3.cs" />
+    <Compile Include="Geometry\Matrix4.cs" />
+    <Compile Include="Geometry\Mesh2.cs" />
+    <Compile Include="Geometry\Mesh3.cs" />
+    <Compile Include="Geometry\Mesh4.cs" />
+    <Compile Include="Geometry\MeshData.cs" />
+    <Compile Include="Geometry\Model.cs" />
+    <Compile Include="Geometry\Path2.cs" />
+    <Compile Include="Geometry\Plane3.cs" />
+    <Compile Include="Geometry\Polygon2.cs" />
+    <Compile Include="Geometry\Polygon3.cs" />
+    <Compile Include="Geometry\PrimitiveKind.cs" />
+    <Compile Include="Geometry\Primitives\Box.cs" />
+    <Compile Include="Geometry\Primitives\Cube.cs" />
+    <Compile Include="Geometry\Primitives\Dodecahedron.cs" />
+    <Compile Include="Geometry\Primitives\Icosahedron.cs" />
+    <Compile Include="Geometry\Primitives\MengerSponge.cs" />
+    <Compile Include="Geometry\Primitives\Octahedron.cs" />
+    <Compile Include="Geometry\Primitives\Sphere.cs" />
+    <Compile Include="Geometry\Quad2.cs" />
+    <Compile Include="Geometry\Quad3.cs" />
+    <Compile Include="Geometry\QuadStrip3.cs" />
+    <Compile Include="Geometry\Quaternion.cs" />
+    <Compile Include="Geometry\RadiusMode.cs" />
+    <Compile Include="Geometry\Ray3.cs" />
+    <Compile Include="Geometry\Triangle2.cs" />
+    <Compile Include="Geometry\Triangle3.cs" />
+    <Compile Include="Geometry\TriangleFan3.cs" />
+    <Compile Include="Geometry\TriangleStrip3.cs" />
+    <Compile Include="Geometry\Vector2.cs" />
+    <Compile Include="Geometry\Vector2f.cs" />
+    <Compile Include="Geometry\Vector2i.cs" />
+    <Compile Include="Geometry\Vector3.cs" />
+    <Compile Include="Geometry\Vector3f.cs" />
+    <Compile Include="Geometry\Vector3i.cs" />
+    <Compile Include="Geometry\Vector4.cs" />
+    <Compile Include="Geometry\Vector4f.cs" />
+    <Compile Include="Geometry\Vector4i.cs" />
+    <Compile Include="Geometry\Vertex2.cs" />
+    <Compile Include="Geometry\Vertex3.cs" />
+    <Compile Include="Geometry\VertexFlags.cs" />
+    <Compile Include="Geometry\__Extensions.cs" />
+    <Compile Include="IO\ImporterBase.cs" />
+    <Compile Include="IO\ObjImporter.cs" />
+    <Compile Include="Modeling\BoundingVolume.cs" />
+    <Compile Include="Modeling\Chamfer.cs" />
+    <Compile Include="Modeling\CsgModifier.cs" />
+    <Compile Include="Modeling\CsgOperation.cs" />
+    <None Include="Modeling\EditableMesh.cs" />
+    <None Include="Modeling\EditableMeshEdge.cs" />
+    <None Include="Modeling\EditableMeshEdgeData.cs" />
+    <None Include="Modeling\EditableMeshFace.cs" />
+    <None Include="Modeling\EditableMeshVertex.cs" />
+    <Compile Include="Modeling\EntityKind.cs" />
+    <Compile Include="Modeling\IBinaryGeometryOperation.cs" />
+    <Compile Include="Modeling\IElement.cs" />
+    <Compile Include="Modeling\IFace.cs" />
+    <Compile Include="Modeling\IGeometrySource.cs" />
+    <Compile Include="Modeling\IHalfEdge.cs" />
+    <Compile Include="Modeling\ISelectionModifier.cs" />
+    <Compile Include="Modeling\IUnaryGeometryOperation.cs" />
+    <Compile Include="Modeling\IVertex.cs" />
+    <Compile Include="Modeling\ModifierNode.cs" />
+    <Compile Include="Modeling\PlanarSelectionModifier.cs" />
+    <Compile Include="Modeling\Primitives\Box.cs" />
+    <Compile Include="Modeling\Primitives\Cone.cs" />
+    <Compile Include="Modeling\Primitives\SimplexNoise.cs" />
+    <Compile Include="Modeling\Primitives\Terrain.cs" />
+    <Compile Include="Modeling\Primitives\Tetrahedron.cs" />
+    <Compile Include="Modeling\ProceduralMesh.cs" />
+    <Compile Include="Modeling\ProcedureParameter.cs" />
+    <Compile Include="Modeling\ProcedureParameterCollection.cs" />
+    <Compile Include="Modeling\SelectionAction.cs" />
+    <Compile Include="Modeling\SelectionTarget.cs" />
+    <Compile Include="Modeling\SelectVolumeModifier.cs" />
+    <Compile Include="Modeling\SliceModifier.cs" />
+    <Compile Include="Modeling\VertexSelection.cs" />
+    <Compile Include="Platform\DisplayAdapter.cs" />
+    <Compile Include="Platform\DisplayAdapterEnumerator.cs" />
+    <Compile Include="Platform\DisplayDevice.cs" />
+    <Compile Include="Platform\DisplayProfile.cs" />
+    <Compile Include="Platform\DisplaySurface.cs" />
+    <Compile Include="Platform\Microsoft\ExtendedWindowStyle.cs" />
+    <Compile Include="Platform\Microsoft\Gdi32.cs" />
+    <Compile Include="Platform\Microsoft\OpenGL\WGL.cs" />
+    <Compile Include="Platform\Microsoft\PfdFlags.cs" />
+    <Compile Include="Platform\Microsoft\PfdPixelType.cs" />
+    <Compile Include="Platform\Microsoft\PixelFormatDescriptor.cs" />
+    <Compile Include="Platform\Microsoft\User32.cs" />
+    <Compile Include="Platform\Microsoft\WindowsDisplayAdapter.cs" />
+    <Compile Include="Platform\Microsoft\WindowsDisplayDevice.cs" />
+    <Compile Include="Platform\Microsoft\WindowsDisplayProfileEnumerator.cs" />
+    <Compile Include="Rendering\FrameOptions.cs" />
+    <Compile Include="Rendering\IManagedRendererTarget.cs" />
+    <Compile Include="Rendering\IRenderer.cs" />
+    <Compile Include="Rendering\ManagedBuffer.cs" />
+    <Compile Include="Rendering\ManagedBufferColorPlane.cs" />
+    <Compile Include="Rendering\ManagedBufferDepthPlane.cs" />
+    <Compile Include="Rendering\ManagedBufferStencilPlane.cs" />
+    <Compile Include="Rendering\ManagedRenderer.cs" />
+    <Compile Include="Rendering\ManagedRendererBitmapTarget.cs" />
+    <Compile Include="Rendering\ManagedRendererHostControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Rendering\ManagedRendererHostForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Rendering\materials\MaterialBase.cs" />
+    <Compile Include="Rendering\OpenGL\GLRenderer.cs" />
+    <Compile Include="Rendering\OpenGL\GLRendererResources.cs" />
+    <Compile Include="Rendering\Raytracing\RaytracerRenderer.cs" />
+    <Compile Include="Rendering\Renderer.cs" />
+    <Compile Include="Rendering\RendererInitializationEventArgs.cs" />
+    <Compile Include="Rendering\RendererOptions.cs" />
+    <Compile Include="Rendering\RenderEventArgs.cs" />
+    <Compile Include="Rendering\RenderStyle.cs" />
+    <Compile Include="Rendering\Software\Fragment.cs" />
+    <Compile Include="Rendering\Software\Shaders\FragmentShader.cs" />
+    <Compile Include="Rendering\Software\Shaders\VertexShader.cs" />
+    <Compile Include="Rendering\Software\SoftwareRenderer.cs" />
+    <Compile Include="Rendering\Software\SoftwareRendererState.cs" />
+    <Compile Include="SceneGraph\Camera.cs" />
+    <Compile Include="SceneGraph\CameraChangedEventArgs.cs" />
+    <Compile Include="SceneGraph\CameraFacing.cs" />
+    <Compile Include="SceneGraph\CameraMode.cs" />
+    <Compile Include="SceneGraph\CameraModifierLock.cs" />
+    <Compile Include="SceneGraph\Constraint.cs" />
+    <Compile Include="SceneGraph\ConstraintTarget.cs" />
+    <Compile Include="SceneGraph\DirectionalLight.cs" />
+    <Compile Include="SceneGraph\LabelNode.cs" />
+    <Compile Include="SceneGraph\LightNode.cs" />
+    <Compile Include="SceneGraph\Node.cs" />
+    <Compile Include="SceneGraph\NodeRenderFlags.cs" />
+    <Compile Include="SceneGraph\PointLight.cs" />
+    <Compile Include="SceneGraph\ReferenceSpace.cs" />
+    <Compile Include="SceneGraph\Scene.cs" />
+    <Compile Include="SceneGraph\SpotLight.cs" />
+    <Compile Include="SceneGraph\SpriteNode.cs" />
+    <Compile Include="SceneGraph\TransformOrder.cs" />
+    <Compile Include="SceneGraph\VisibilityGroup.cs" />
+    <Compile Include="UI\Button.cs" />
+    <Compile Include="UI\ContainerElement.cs" />
+    <Compile Include="UI\Element.cs" />
+    <Compile Include="UI\ElementChildrenCollection.cs" />
+    <Compile Include="UI\Presentation\ElementMesher.cs" />
+    <Compile Include="__HashCode.cs" />
+    <Compile Include="Modeling\Parametrics\Processes\Extrude.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Modeling\Parametrics\RelationshipBase.cs" />
     <Compile Include="ShellProgram.cs" />
+    <Compile Include="Modeling\Parametrics\Sketch.cs" />
     <Compile Include="UI\GearLauncher.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,7 +252,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Rendering\OpenGL\Shaders\vertex_shader.glsl" />
+    <None Include="Samples\ComplexSphere.obj" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Samples\EmptyScene.xml" />
+    <Content Include="Samples\SimpleScene.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
