@@ -38,14 +38,31 @@ namespace Gear.Client
 
             }
 
-            // DEBUG testing:
-            Console.WriteLine("sleeping 5 seconds");
-            System.Threading.Thread.Sleep(5000);
+            Net.MessageSerializationHelper.AddMessageSubtypes();
 
-            var channel = Gear.Net.ConnectedChannel.ConnectTo(new System.Net.IPEndPoint(System.Net.IPAddress.Loopback, Services.ConnectionBrokerService.DefaultServicePort));
+            // DEBUG testing:
+            //Console.WriteLine("sleeping 5 seconds");
+
+            //System.Threading.Thread.Sleep(5000);
+
+            var address = System.Net.IPAddress.Parse(args[0]);
+
+
+            //var channel = Gear.Net.ConnectedChannel.ConnectTo(new System.Net.IPEndPoint(System.Net.IPAddress.Parse("192.168.10.208"), 9888));
+
+            var channel = Gear.Net.ConnectedChannel.ConnectTo(new System.Net.IPEndPoint(address, 9888));
+
+
+            var max = 1000000000;
+
+            for (int i = 0; i < max; ++i)
+            {
+                channel.Send(new Net.Messages.ZoneDataRequestMessage());
+            }
+
             //channel.QueueMessage()
 
-            channel.QueueMessage(new Gear.Net.Messages.ZoneDataRequestMessage { ChunkX = 1, ChunkY = 1, ChunkZ = 0, ZoneX = 2, ZoneY = 3, ZoneZ = 0 });
+            //channel.QueueMessage(new Gear.Net.Messages.ZoneDataRequestMessage { ChunkX = 1, ChunkY = 1, ChunkZ = 0, ZoneX = 2, ZoneY = 3, ZoneZ = 0 });
 
             System.Threading.Thread.Sleep(20000);
 

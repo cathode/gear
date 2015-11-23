@@ -24,14 +24,38 @@ namespace Gear.Net
     /// </summary>
     public abstract class Channel
     {
-        protected Queue<IMessage> outgoingInactive;
-        protected Queue<IMessage> outgoingActive;
-        protected Queue<IMessage> incomingInactive;
-        protected Queue<IMessage> incomingActive;
+        #region Fields
+        /// <summary>
+        /// Holds the messages that are being serialized and flushed to the socket.
+        /// </summary>
+        protected Queue<IMessage> txBuffer;
 
-        protected System.Runtime.Serialization.IFormatter serializer = ProtoBuf.Serializer.CreateFormatter<MessageContainer>();
+        /// <summary>
+        /// Holds the messages that have been queued for sending.
+        /// </summary>
+        protected Queue<IMessage> txQueue;
 
-        protected ChannelState State;
+        /// <summary>
+        /// Holds the messages that are being processed by message handlers / event subscribers.
+        /// </summary>
+        protected Queue<IMessage> rxBuffer;
+
+        /// <summary>
+        /// Holds the messages that have been deserialized and received from the socket.
+        /// </summary>
+        protected Queue<IMessage> rxQueue;
+
+        private readonly object txLock = new object();
+        private readonly object rxLock = new object();
+
+        private readonly object txFlushGate = new object();
+        private readonly object rxFlushGate = new object();
+
+        private readonly Dictionary<int, List<MessageHandlerRegistration>> messageHandlers = new Dictionary<int, List<MessageHandlerRegistration>>();
+
+        #endregion
+
+        #region Constructors
 
         static Channel()
         {
@@ -40,22 +64,31 @@ namespace Gear.Net
             RuntimeTypeModel.Default.Add(typeof(IMessage), false);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Channel"/> class.
+        /// </summary>
         protected Channel()
         {
-            this.outgoingActive = new Queue<IMessage>();
-            this.outgoingInactive = new Queue<IMessage>();
-            this.incomingActive = new Queue<IMessage>();
-            this.incomingInactive = new Queue<IMessage>();
+            this.txQueue = new Queue<IMessage>();
+            this.txBuffer = new Queue<IMessage>();
+            this.rxQueue = new Queue<IMessage>();
+            this.rxBuffer = new Queue<IMessage>();
 
-
+            this.txFlushGate = new AutoResetEvent(true);
+            this.isRxQueueIdle = true;
+            //this.rxFlushGate = new AutoResetEvent(true);
         }
+
+        #endregion
+
+        public abstract IPEndPoint LocalEndPoint { get; }
+        public abstract IPEndPoint RemoteEndPoint { get; }
+
+        public ChannelState State { get; protected set; }
 
         public event EventHandler<MessageEventArgs> MessageReceived;
 
-        public void SetUp()
-        {
 
-        }
 
         /// <summary>
         /// All messages published by the specified publisher will be forwarded
@@ -70,7 +103,227 @@ namespace Gear.Net
             publisher.ShuttingDown += publisher_ShuttingDown;
         }
 
-        void publisher_ShuttingDown(object sender, EventArgs e)
+        /// <summary>
+        /// Registers a handler for the specified message dispatch ID.
+        /// </summary>
+        /// <param name="dispatchId"></param>
+        /// <param name="handler"></param>
+        /// <returns>The guid of the handler registration, used for unregistering</returns>
+        public Guid RegisterHandler(int dispatchId, Action<MessageEventArgs, IMessage> handlerAction)
+        {
+            var hid = Guid.NewGuid();
+
+            var reg = new MessageHandlerRegistration();
+
+            reg.HandlerId = hid;
+            reg.Action = handlerAction;
+
+            if (!this.messageHandlers.ContainsKey(dispatchId))
+                this.messageHandlers.Add(dispatchId, new List<MessageHandlerRegistration>());
+
+            this.messageHandlers[dispatchId].Add(reg);
+
+            return hid;
+        }
+
+        /// <summary>
+        /// Registers a handler for the specified message dispatch ID.
+        /// </summary>
+        /// <param name="dispatchId"></param>
+        /// <param name="handler"></param>
+        /// <returns>The guid of the handler registration, used for unregistering the handler.</returns>
+        public Guid RegisterHandler<T>(Action<MessageEventArgs, T> handlerAction) where T : IMessage
+        {
+            var inst = Activator.CreateInstance<T>();
+
+            return this.RegisterHandler(inst.DispatchId, (e, m) => { handlerAction(e, (T)m); });
+        }
+
+        public void UnregisterHandler(Guid handlerId)
+        {
+            //this.messageHandlers.Values.First()
+        }
+
+        /// <summary>
+        /// Queues one or more messages on the channel, to be sent to the remote endpoint.
+        /// </summary>
+        /// <param name="message"></param>
+        public void Send(params IMessage[] messages)
+        {
+            Contract.Requires(messages != null);
+            Contract.Requires(messages.Length > 0);
+
+            this.QueueTxMessageThreadSafe(messages);
+        }
+
+        /// <summary>
+        /// Starts the socket receive loop.
+        /// </summary>
+        public void Setup()
+        {
+            this.BeginBackgroundReceive();
+        }
+
+        /// <summary>
+        /// Gracefully shuts down the <see cref="Channel"/> and notifies the remote endpoint of the impending connection closure.
+        /// </summary>
+        public void Teardown()
+        {
+            var msg = new Messages.TeardownChannelMessage();
+
+            this.Send(msg);
+            this.State = ChannelState.Disconnected;
+            this.ProcessTxQueue();
+        }
+
+        /// <summary>
+        /// Starts the Channel's rx process in the background.
+        /// </summary>
+        protected abstract void BeginBackgroundReceive();
+
+        protected abstract int SendMessages(Queue<IMessage> messages);
+
+        /// <summary>
+        /// Runs through the queue of messages to be sent and writes them to the network.
+        /// </summary>
+        protected void ProcessTxQueue()
+        {
+            try
+            {
+                // Ensure method is limited to a single active call.
+                // If another call to FlushMessage is running (has txFlushGate locked), we just abort.
+                if (Monitor.TryEnter(this.txFlushGate))
+                {
+                    // Channel can't be disconnected or dead
+                    if (this.State == ChannelState.Connected)
+                    {
+                        // Lock the active queue and send all messages in it.
+                        lock (this.txQueue)
+                        {
+                            // Swap queued messages to send buffer
+                            var q = this.txQueue;
+                            var b = this.txBuffer;
+                            this.txBuffer = q;
+                            this.txQueue = b;
+                        }
+
+                        if (this.txBuffer.Count > 0)
+                            this.SendMessages(this.txBuffer);
+                    }
+                }
+            }
+            finally
+            {
+                if (Monitor.IsEntered(this.txFlushGate))
+                    Monitor.Exit(this.txFlushGate);
+            }
+        }
+
+        private volatile bool isRxQueueIdle;
+
+        /// <summary>
+        /// Runs through the the queue of messages that have been receives and invokes the appropriate events / message handlers.
+        /// </summary>
+        protected void ProcessRxQueue()
+        {
+            //try
+            //{
+                if (this.isRxQueueIdle)
+
+                //if (Monitor.TryEnter(this.rxFlushGate))
+                {
+                    this.isRxQueueIdle = false;
+
+                    if (this.State == ChannelState.Connected)
+                    {
+                        lock (this.rxQueue)
+                        {
+                            var q = this.rxQueue;
+                            var b = this.rxBuffer;
+                            this.rxBuffer = q;
+                            this.rxQueue = b;
+                        }
+
+
+                        while (this.rxBuffer.Count > 0)
+                        {
+                            var item = this.rxBuffer.Dequeue();
+                            try
+                            {
+                                this.OnMessageReceived(new MessageEventArgs(item));
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+                    }
+
+                    this.isRxQueueIdle = true;
+                }
+            //}
+            //finally
+            //{
+            //    //if (Monitor.IsEntered(this.rxFlushGate))
+            //    //Monitor.Exit(this.rxFlushGate);
+            //    //this.isRxQueueIdle = true;
+            //}
+        }
+
+        protected virtual void OnMessageReceived(MessageEventArgs e)
+        {
+            Contract.Requires(e != null);
+
+            if (this.MessageReceived != null)
+                this.MessageReceived(this, e);
+
+            // TODO: Invoke registered message handlers for received message type
+
+            var msg = e.Data;
+            if (this.messageHandlers.ContainsKey(msg.DispatchId))
+            {
+                this.messageHandlers[msg.DispatchId].ForEach((h) => { h.Action(e, msg); });
+            }
+        }
+
+        /// <summary>
+        /// Adds messages to the send queue with thread safety checks.
+        /// </summary>
+        /// <param name="messages"></param>
+        protected void QueueTxMessageThreadSafe(params IMessage[] messages)
+        {
+            Contract.Requires(messages != null);
+            Contract.Requires(messages.Length > 0);
+
+            // TODO: ensure that locking against the queue itself is correct.
+            lock (this.txQueue)
+            {
+                foreach (var m in messages)
+                    this.txQueue.Enqueue(m);
+            }
+
+            this.ProcessTxQueue();
+        }
+
+        /// <summary>
+        /// Adds messages to the receive queue with thread safety checks.
+        /// </summary>
+        /// <param name="messages"></param>
+        protected void QueueRxMessageThreadSafe(params IMessage[] messages)
+        {
+            Contract.Requires(messages != null);
+            Contract.Requires(messages.Length > 0);
+
+            lock (this.rxQueue)
+            {
+                foreach (var m in messages)
+                    this.rxQueue.Enqueue(m);
+            }
+
+            this.ProcessRxQueue();
+        }
+
+        private void publisher_ShuttingDown(object sender, EventArgs e)
         {
             var publisher = (IMessagePublisher)sender;
 
@@ -82,170 +335,31 @@ namespace Gear.Net
             }
         }
 
-        void publisher_MessageAvailable(object sender, MessageEventArgs e)
+        private void publisher_MessageAvailable(object sender, MessageEventArgs e)
         {
             Contract.Requires(e != null);
-            if (e.Message != null)
-                this.QueueMessage(e.Message);
-        }
-
-        /// <summary>
-        /// Queues an individual message on the channel, to be sent to the remote endpoint.
-        /// </summary>
-        /// <param name="message"></param>
-        public void QueueMessage(IMessage message)
-        {
-            Contract.Requires(message != null);
-
-            if (this.State == ChannelState.Shutdown)
-                throw new InvalidOperationException();
-
-            this.QueueMessageThreadSafe(message);
-        }
-
-        private void QueueMessageThreadSafe(IMessage message)
-        {
-            Contract.Requires(message != null);
-
-            // TODO: ensure that locking against the queue itself is correct.
-            lock (this.outgoingInactive)
-            {
-                this.outgoingInactive.Enqueue(message);
-            }
-
-            this.FlushMessages();
-        }
-
-        /// <summary>
-        /// Starts the socket receive loop.
-        /// </summary>
-        public void Setup()
-        {
-
-        }
-
-        /// <summary>
-        /// Gracefully shuts down the <see cref="Channel"/> and notifies the remote endpoint of the impending connection closure.
-        /// </summary>
-        public void Teardown()
-        {
-            var msg = new Messages.TeardownChannelMessage();
-
-            this.QueueMessage(msg);
-            this.State = ChannelState.Shutdown;
-            this.FlushMessages();
-        }
-
-        protected virtual void DoSetup()
-        {
-
-        }
-
-        protected abstract System.IO.Stream GetMessageDestinationStream();
-
-        protected abstract void SendMessage(MessageContainer mc);
-
-        /// <summary>
-        /// Runs through all messages in all internal queues and ensures they are processed.
-        /// </summary>
-        protected void FlushMessages()
-        {
-            // TODO: Ensure FlushMessages method is limited to a single active call.
-
-            //var ws = this.GetMessageDestinationStream();
-
-            var ser = ProtoBuf.Serializer.CreateFormatter<MessageContainer>();
-
-            lock (this.outgoingActive)
-            {
-                if (this.outgoingActive.Count == 0)
-                    this.SwapBuffersOutgoing();
-
-                if (this.outgoingActive.Count > 0)
-                {
-                    var msg = this.outgoingActive.Dequeue();
-
-                    if (msg != null)
-                    {
-                        this.SendMessage(new MessageContainer(msg));
-                    }
-                }
-            }
-        }
-
-        protected virtual void OnMessageReceived(object e)
-        {
-            this.MessageReceived(this, null);
-
-
-        }
-
-        protected void SwapBuffersIncoming()
-        {
-            // Swap the buffers used for incoming messages.
-            try
-            {
-                // Attempt to grab the active queue. If this fails it probably means that
-                // it has messages and they're being processed still.
-                // Always lock active first, then inactive.
-                if (Monitor.TryEnter(this.incomingActive))
-                {
-                    // Only swap if the active buffer is empty (all the messages in it were processed)
-                    // Otherwise, the queue would become out-of-order very quickly.
-                    if (this.incomingActive.Count > 0)
-                        return;
-
-                    var q = this.incomingInactive;
-                    this.incomingInactive = this.incomingActive;
-                    this.incomingActive = q;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                if (Monitor.IsEntered(this.incomingActive))
-                    Monitor.Exit(this.incomingActive);
-            }
-        }
-
-        protected void SwapBuffersOutgoing()
-        {
-            // Swap the buffers used for outgoing messages.
-            try
-            {
-                if (Monitor.TryEnter(this.outgoingActive, 1))
-                {
-                    lock (this.outgoingInactive)
-                    {
-                        if (outgoingActive.Count > 0)
-                            return;
-
-                        var q = this.outgoingInactive;
-                        this.outgoingInactive = this.outgoingActive;
-                        this.outgoingActive = q;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                if (Monitor.IsEntered(this.outgoingActive))
-                    Monitor.Exit(this.outgoingActive);
-
-                throw ex;
-            }
+            this.QueueTxMessageThreadSafe(e.Data);
         }
 
         [ContractInvariantMethod]
         private void Invariants()
         {
-            Contract.Invariant(this.outgoingActive != null);
-            Contract.Invariant(this.outgoingInactive != null);
-            Contract.Invariant(this.incomingActive != null);
-            Contract.Invariant(this.incomingInactive != null);
+            Contract.Invariant(this.txQueue != null);
+            Contract.Invariant(this.txBuffer != null);
+            Contract.Invariant(this.rxQueue != null);
+            Contract.Invariant(this.rxBuffer != null);
 
         }
+
+        #region Inner Types
+
+        public class MessageHandlerRegistration
+        {
+            public Guid HandlerId { get; set; }
+
+            public Action<MessageEventArgs, IMessage> Action { get; set; }
+        }
+
+        #endregion
     }
 }

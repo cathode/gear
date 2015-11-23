@@ -17,27 +17,37 @@ namespace Gear.Net
     /// <summary>
     /// Provides a <see cref="Channel"/> implementation that sends and receives broadcast packets on the local LAN.
     /// </summary>
-    public class BroadcastChannel : Channel
+    public class DatagramChannel : Channel
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BroadcastChannel"/> class.
+        /// Initializes a new instance of the <see cref="DatagramChannel"/> class.
         /// </summary>
         /// <param name="port"></param>
-        public BroadcastChannel(ushort port)
+        public DatagramChannel(ushort port)
         {
 
         }
 
         private UdpClient endpoint;
 
-        protected override System.IO.Stream GetMessageDestinationStream()
-        {
-            throw new NotSupportedException();
-        }
-
-        protected override void SendMessage(MessageContainer mc)
+        protected override int SendMessages(Queue<IMessage> messages)
         {
             throw new NotImplementedException();
+        }
+
+        protected override void BeginBackgroundReceive()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override System.Net.IPEndPoint LocalEndPoint
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override System.Net.IPEndPoint RemoteEndPoint
+        {
+            get { throw new NotImplementedException(); }
         }
     }
 }

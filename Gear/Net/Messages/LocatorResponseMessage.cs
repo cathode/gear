@@ -14,8 +14,8 @@ namespace Gear.Net.Messages
         [ProtoMember(1)]
         public Gear.Services.ServiceInfo[] Services { get; set; }
 
-
-        public ushort DispatchId
+        [ProtoIgnore]
+        int IMessage.DispatchId
         {
             get { return Ids.LocatorResponse; }
 

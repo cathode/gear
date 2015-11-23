@@ -36,5 +36,15 @@ namespace Gear.Net.Messages
                 return false;
             }
         }
+
+        ushort IMessage.DispatchId
+        {
+            get { return Ids.ConnectionSetup; }
+        }
+
+        bool IMessage.IsBroadcastMessage
+        {
+            get { return false; }
+        }
     }
 }

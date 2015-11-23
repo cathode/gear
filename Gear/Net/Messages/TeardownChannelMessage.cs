@@ -15,15 +15,9 @@ namespace Gear.Net.Messages
         public bool Confirmation { get; set; }
 
         [ProtoIgnore]
-        public ushort DispatchId
+        public int DispatchId
         {
             get { return Ids.TeardownChannel; }
-        }
-
-        [ProtoIgnore]
-        public bool IsBroadcastMessage
-        {
-            get { return false; }
         }
     }
 }

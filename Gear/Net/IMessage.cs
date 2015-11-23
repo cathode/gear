@@ -17,10 +17,10 @@ namespace Gear.Net
     [ProtoBuf.ProtoContract]
     public interface IMessage
     {
-        [ProtoMember(1)]
-        ushort DispatchId { get; }
+        [ProtoIgnore]
+        int DispatchId { get; }
 
         //[ProtoIgnore]
-        bool IsBroadcastMessage { get; }
+        //bool IsBroadcastMessage { get; }
     }
 }
