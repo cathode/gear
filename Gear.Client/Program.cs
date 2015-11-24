@@ -40,6 +40,15 @@ namespace Gear.Client
 
             Net.MessageSerializationHelper.AddMessageSubtypes();
 
+            var renderer = new Gear.Client.Rendering.Software.SoftwareRenderer();
+            renderer.Initialize(new Rendering.RendererOptions());
+
+            var scene = new SceneGraph.Scene();
+            scene.Root = new SceneGraph.Node(new Modeling.Primitives.Cone(1.0, 2.0));
+
+            renderer.Scene = scene;
+            renderer.Start();
+
         }
     }
 }

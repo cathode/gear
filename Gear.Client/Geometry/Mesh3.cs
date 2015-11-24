@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Collections.ObjectModel;
+using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Gear.Client.Geometry
 {
@@ -21,6 +23,8 @@ namespace Gear.Client.Geometry
         #region Fields
         private Polygon3[] polygons;
         private Vertex3[] vertices;
+
+        private int vertexBuffer;
         #endregion
         #region Constructors
         /// <summary>
@@ -49,6 +53,7 @@ namespace Gear.Client.Geometry
             set
             {
                 this.polygons = value;
+                this.UpdateVBO();
             }
         }
 
@@ -62,6 +67,11 @@ namespace Gear.Client.Geometry
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+
+        private void UpdateVBO()
+        {
+            //GL.GenBuffers(1, out this.vertexBuffer);
         }
         #endregion
 

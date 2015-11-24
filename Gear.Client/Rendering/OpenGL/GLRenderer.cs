@@ -149,7 +149,6 @@ namespace Gear.Client.Rendering.OpenGL
             base.OnSceneChanged(e);
             var clamped = this.BackgroundColor.Clamp();
 
-            this.UpdateDirtyVBOs(this.Scene.Root);
            
         }
 
@@ -296,32 +295,6 @@ namespace Gear.Client.Rendering.OpenGL
             this.RenderFrame();
             return;
         }
-
-        // VBO support
-
-        private HashSet<int> vboPointers = new HashSet<int>();
-
-        private void UpdateDirtyVBOs(Node node)
-        {
-            //uint[] VBOid = new uint[2];
-
-            //GL.GenBuffers(2, out VBOid);
-            if (node.Renderable != null)
-                this.BuildVBOForMesh(node.Renderable);
-
-            foreach (var child in node.Children)
-                this.UpdateDirtyVBOs(child);
-        }
-
-        private void BuildVBOForMesh(IRenderable renderable)
-        {
-            uint[] VBOid = new uint[2];
-
-            //GL.GenBuffers()
-            //GL.GenBuffers(2, out VBOid);
-        }
-
-
 
         #endregion
     }
