@@ -21,10 +21,12 @@ namespace Gear.Client.Geometry
     public class Mesh3 : IEnumerable<Polygon3>, IRenderable
     {
         #region Fields
+        internal int VertexBuffer;
+
         private Polygon3[] polygons;
         private Vertex3[] vertices;
 
-        private int vertexBuffer;
+       
         #endregion
         #region Constructors
         /// <summary>
@@ -71,7 +73,8 @@ namespace Gear.Client.Geometry
 
         private void UpdateVBO()
         {
-            //GL.GenBuffers(1, out this.vertexBuffer);
+            GL.GenBuffers(1, out this.VertexBuffer);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, this.VertexBuffer);
         }
         #endregion
 

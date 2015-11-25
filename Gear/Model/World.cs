@@ -19,6 +19,9 @@ namespace Gear.Model
     /// </summary>
     public class World
     {
+        public World()
+        {
+        }
 
         /// <summary>
         /// Gets or sets the unique id of the world.

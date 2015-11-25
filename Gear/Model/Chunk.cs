@@ -22,6 +22,7 @@ namespace Gear.Model
         public static int ChunkSize = 16;
 
         public const int DataLength = 1 << 15;
+
         private Block[] data;
 
         /// <summary>

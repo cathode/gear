@@ -38,6 +38,7 @@ namespace Gear
             get;
             set;
         }
+        public PlayerInfo Metadata { get; set; }
         #endregion
     }
 }

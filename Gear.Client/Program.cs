@@ -40,7 +40,7 @@ namespace Gear.Client
 
             Net.MessageSerializationHelper.AddMessageSubtypes();
 
-            var renderer = new Gear.Client.Rendering.Software.SoftwareRenderer();
+            var renderer = new Gear.Client.Rendering.OpenGL.GLRenderer();
             renderer.Initialize(new Rendering.RendererOptions());
 
             var scene = new SceneGraph.Scene();

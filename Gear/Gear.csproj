@@ -160,6 +160,10 @@
     <Compile Include="GearEngineModuleAttribute.cs" />
     <Compile Include="GearShell.cs" />
     <Compile Include="IDataAccessLayer.cs" />
+    <Compile Include="IO\FileDataStore.cs" />
+    <Compile Include="IO\IDataStore.cs" />
+    <Compile Include="IO\IPlayerDataStore.cs" />
+    <Compile Include="IO\ServerDataStore.cs" />
     <Compile Include="Model\Block.cs" />
     <Compile Include="Model\BlockFlags.cs" />
     <Compile Include="Model\ChunkLocation.cs" />
@@ -207,6 +211,7 @@
     <Compile Include="Net\NetworkList.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerEventArgs.cs" />
+    <Compile Include="PlayerInfo.cs" />
     <Compile Include="ServerEngine.cs" />
     <Compile Include="Model\World.cs" />
     <Compile Include="ServiceCapabilities.cs" />

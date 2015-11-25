@@ -13,8 +13,12 @@ using System.Threading.Tasks;
 
 namespace Gear.Services
 {
+    /// <summary>
+    /// Implements a service that brokers connections from 
+    /// </summary>
     public class ConnectionBrokerService : ServiceBase
     {
+
         public static readonly ushort DefaultServicePort = 14122;
 
         /// <summary>

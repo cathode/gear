@@ -228,6 +228,7 @@
     <Compile Include="UI\ContainerElement.cs" />
     <Compile Include="UI\Element.cs" />
     <Compile Include="UI\ElementChildrenCollection.cs" />
+    <Compile Include="UI\HudOverlayNode.cs" />
     <Compile Include="UI\Presentation\ElementMesher.cs" />
     <Compile Include="__HashCode.cs" />
     <Compile Include="Modeling\Parametrics\Processes\Extrude.cs" />

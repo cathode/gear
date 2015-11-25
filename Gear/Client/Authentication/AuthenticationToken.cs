@@ -13,7 +13,8 @@ using System.Threading.Tasks;
 
 namespace Gear.Client.Authentication
 {
-    class AuthenticationToken
+    public class AuthenticationToken
     {
+
     }
 }
