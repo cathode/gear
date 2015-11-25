@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Gear.Client.UI
 {
+
     public class HudOverlayNode : Gear.Client.SceneGraph.Node
     {
     }

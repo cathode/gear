@@ -9,11 +9,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Gear
+namespace Gear.Client.Geometry
 {
-    public interface IDataAccessLayer
+    /// <summary>
+    /// Represents a 2x2 matrix.
+    /// </summary>
+    public class Matrix2
     {
     }
 }

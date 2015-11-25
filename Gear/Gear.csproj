@@ -157,9 +157,27 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Client\Authentication\AuthenticationToken.cs" />
+    <Compile Include="Client\Geometry\Angle.cs" />
+    <Compile Include="Client\Geometry\IRenderable.cs" />
+    <Compile Include="Client\Geometry\Matrix.cs" />
+    <Compile Include="Client\Geometry\Matrix2.cs" />
+    <Compile Include="Client\Geometry\Matrix3.cs" />
+    <Compile Include="Client\Geometry\Matrix4.cs" />
+    <Compile Include="Client\Geometry\Quaternion.cs" />
+    <Compile Include="Client\Geometry\Vector2.cs" />
+    <Compile Include="Client\Geometry\Vector2f.cs" />
+    <Compile Include="Client\Geometry\Vector2i.cs" />
+    <Compile Include="Client\Geometry\Vector3.cs" />
+    <Compile Include="Client\Geometry\Vector3f.cs" />
+    <Compile Include="Client\Geometry\Vector3i.cs" />
+    <Compile Include="Client\Geometry\Vector4.cs" />
+    <Compile Include="Client\Geometry\Vector4f.cs" />
+    <Compile Include="Client\Geometry\Vector4i.cs" />
+    <Compile Include="Client\Geometry\Vertex2.cs" />
+    <Compile Include="Client\Geometry\Vertex3.cs" />
+    <Compile Include="Client\Geometry\VertexFlags.cs" />
     <Compile Include="GearEngineModuleAttribute.cs" />
     <Compile Include="GearShell.cs" />
-    <Compile Include="IDataAccessLayer.cs" />
     <Compile Include="IO\FileDataStore.cs" />
     <Compile Include="IO\IDataStore.cs" />
     <Compile Include="IO\IPlayerDataStore.cs" />
@@ -168,8 +186,14 @@
     <Compile Include="Model\BlockFlags.cs" />
     <Compile Include="Model\ChunkLocation.cs" />
     <Compile Include="Model\Compound.cs" />
+    <Compile Include="Model\Generators\InfinityGenerator.cs" />
+    <Compile Include="Model\Generators\InfinityGeneratorParameters.cs" />
+    <Compile Include="Model\Generators\PlanetGenerator.cs" />
+    <Compile Include="Model\Generators\PlanetGeneratorParameters.cs" />
     <Compile Include="Model\ICompound.cs" />
     <Compile Include="Model\IElement.cs" />
+    <Compile Include="Model\IGenerator.cs" />
+    <Compile Include="Model\InfinityWorld.cs" />
     <Compile Include="Model\IPhysical.cs" />
     <Compile Include="Model\Material.cs" />
     <Compile Include="Log.cs" />
@@ -177,6 +201,7 @@
     <Compile Include="LogMessageGroup.cs" />
     <Compile Include="LogOutput.cs" />
     <Compile Include="Model\MatterState.cs" />
+    <Compile Include="Model\PlanetWorld.cs" />
     <Compile Include="Model\Region.cs" />
     <Compile Include="Model\Chunk.cs" />
     <Compile Include="Model\ChunkMetadata.cs" />
@@ -198,6 +223,7 @@
     <Compile Include="Net\MessageSerializationHelper.cs" />
     <Compile Include="Net\Messages\BlockUpdateMessage.cs" />
     <Compile Include="Net\Messages\ConfigurationMessage.cs" />
+    <Compile Include="__HashCode.cs" />
     <None Include="..\Gear.licenseheader">
       <Link>Gear.licenseheader</Link>
     </None>
@@ -253,6 +279,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\Assets\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Model\Generators\references.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

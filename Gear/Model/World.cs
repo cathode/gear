@@ -11,16 +11,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics.Contracts;
+using Gear.Client.Geometry;
 
 namespace Gear.Model
 {
     /// <summary>
     /// A game world.
     /// </summary>
-    public class World
+    public abstract class World
     {
-        public World()
+
+
+        protected World(IGenerator generator)
         {
+
         }
 
         /// <summary>
@@ -37,27 +41,27 @@ namespace Gear.Model
             set;
         }
 
-        public WorldDimension GetDimension(string name)
+        public int Seed { get; set; }
+
+        public IGenerator Generator { get; protected set; }
+
+        /// <summary>
+        /// Gets the average gravity vector at the specified chunk location.
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        public abstract Gear.Client.Geometry.Vector3 GetGravityVector(Vector3 location);
+
+
+        public abstract double GetSurfaceElevation(Vector3 location);
+
+        public virtual double[] GetElevationMap()
         {
             throw new NotImplementedException();
         }
     }
 
 
-    public class WorldDimension
-    {
-        public string Name
-        {
-            get;
-            set;
-        }
-
-        public Chunk PrimaryChunk
-        {
-            get;
-            set;
-        }
-    }
 
     /// <summary>
     /// Represents the implementation of a given type of block.

@@ -37,6 +37,24 @@ namespace Gear.Client
                 }
 
             }
+            // test, generate world:
+            var seed = 1234;
+            // Init planet generator
+            var gen = new Gear.Model.Generators.PlanetGenerator();
+            // Setup generator settings
+            var pmin = new Gear.Model.Generators.PlanetGeneratorParameters();
+            var pmax = new Gear.Model.Generators.PlanetGeneratorParameters();
+            pmax.AverageDensity = 6500; // Maximum 6500 kg/m3
+            pmin.AverageDensity = 4000;
+            pmax.DiameterKm = 14000;
+            pmin.DiameterKm = 11000;
+            
+
+            gen.ParametersMaximum = pmax;
+            gen.ParametersMinimum = pmin;
+
+            var world = gen.GenerateWorld(seed);
+
 
             Net.MessageSerializationHelper.AddMessageSubtypes();
 

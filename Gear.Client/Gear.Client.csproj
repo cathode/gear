@@ -63,7 +63,6 @@
     <Compile Include="Modeling\Parametrics\DistanceRelationship.cs" />
     <Compile Include="Modeling\Parametrics\Entity.cs" />
     <Compile Include="Modeling\Parametrics\Feature.cs" />
-    <Compile Include="Geometry\Angle.cs" />
     <Compile Include="Geometry\CoordinateSystem.cs" />
     <None Include="..\Gear.licenseheader">
       <Link>Gear.licenseheader</Link>
@@ -78,14 +77,9 @@
     <Compile Include="Geometry\FastMesh.cs" />
     <Compile Include="Geometry\IMeshFragment.cs" />
     <Compile Include="Geometry\IPath.cs" />
-    <Compile Include="Geometry\IRenderable.cs" />
     <None Include="Geometry\IVector2.cs" />
     <None Include="Geometry\IVector3.cs" />
     <None Include="Geometry\IVector4.cs" />
-    <Compile Include="Geometry\Matrix.cs" />
-    <Compile Include="Geometry\Matrix2.cs" />
-    <Compile Include="Geometry\Matrix3.cs" />
-    <Compile Include="Geometry\Matrix4.cs" />
     <Compile Include="Geometry\Mesh2.cs" />
     <Compile Include="Geometry\Mesh3.cs" />
     <Compile Include="Geometry\Mesh4.cs" />
@@ -106,25 +100,12 @@
     <Compile Include="Geometry\Quad2.cs" />
     <Compile Include="Geometry\Quad3.cs" />
     <Compile Include="Geometry\QuadStrip3.cs" />
-    <Compile Include="Geometry\Quaternion.cs" />
     <Compile Include="Geometry\RadiusMode.cs" />
     <Compile Include="Geometry\Ray3.cs" />
     <Compile Include="Geometry\Triangle2.cs" />
     <Compile Include="Geometry\Triangle3.cs" />
     <Compile Include="Geometry\TriangleFan3.cs" />
     <Compile Include="Geometry\TriangleStrip3.cs" />
-    <Compile Include="Geometry\Vector2.cs" />
-    <Compile Include="Geometry\Vector2f.cs" />
-    <Compile Include="Geometry\Vector2i.cs" />
-    <Compile Include="Geometry\Vector3.cs" />
-    <Compile Include="Geometry\Vector3f.cs" />
-    <Compile Include="Geometry\Vector3i.cs" />
-    <Compile Include="Geometry\Vector4.cs" />
-    <Compile Include="Geometry\Vector4f.cs" />
-    <Compile Include="Geometry\Vector4i.cs" />
-    <Compile Include="Geometry\Vertex2.cs" />
-    <Compile Include="Geometry\Vertex3.cs" />
-    <Compile Include="Geometry\VertexFlags.cs" />
     <Compile Include="Geometry\__Extensions.cs" />
     <Compile Include="IO\ImporterBase.cs" />
     <Compile Include="IO\ObjImporter.cs" />
@@ -230,7 +211,6 @@
     <Compile Include="UI\ElementChildrenCollection.cs" />
     <Compile Include="UI\HudOverlayNode.cs" />
     <Compile Include="UI\Presentation\ElementMesher.cs" />
-    <Compile Include="__HashCode.cs" />
     <Compile Include="Modeling\Parametrics\Processes\Extrude.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
