@@ -169,8 +169,10 @@
     <Compile Include="Geometry\Matrix2.cs" />
     <Compile Include="Geometry\Matrix3.cs" />
     <Compile Include="Geometry\Matrix4.cs" />
+    <Compile Include="Geometry\Path2.cs" />
     <Compile Include="Geometry\Plane3.cs" />
     <Compile Include="Geometry\Quaternion.cs" />
+    <Compile Include="Geometry\Ray3.cs" />
     <Compile Include="Geometry\Vector2.cs" />
     <Compile Include="Geometry\Vector2f.cs" />
     <Compile Include="Geometry\Vector2i.cs" />

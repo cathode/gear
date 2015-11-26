@@ -67,36 +67,32 @@
     <None Include="..\Gear.licenseheader">
       <Link>Gear.licenseheader</Link>
     </None>
-    <Compile Include="Geometry\Edge3.cs" />
-    <Compile Include="Geometry\EdgeFlags.cs" />
-    <Compile Include="Geometry\FastMesh.cs" />
-    <Compile Include="Geometry\IMeshFragment.cs" />
-    <Compile Include="Geometry\IPath.cs" />
-    <Compile Include="Geometry\Mesh2.cs" />
-    <Compile Include="Geometry\Mesh3.cs" />
-    <Compile Include="Geometry\Mesh4.cs" />
-    <Compile Include="Geometry\MeshData.cs" />
-    <Compile Include="Geometry\Model.cs" />
-    <Compile Include="Geometry\Path2.cs" />
-    <Compile Include="Geometry\Polygon2.cs" />
-    <Compile Include="Geometry\Polygon3.cs" />
-    <Compile Include="Geometry\PrimitiveKind.cs" />
-    <Compile Include="Geometry\Primitives\Box.cs" />
-    <Compile Include="Geometry\Primitives\Cube.cs" />
-    <Compile Include="Geometry\Primitives\Dodecahedron.cs" />
-    <Compile Include="Geometry\Primitives\Icosahedron.cs" />
-    <Compile Include="Geometry\Primitives\MengerSponge.cs" />
-    <Compile Include="Geometry\Primitives\Octahedron.cs" />
-    <Compile Include="Geometry\Primitives\Sphere.cs" />
-    <Compile Include="Geometry\Quad2.cs" />
-    <Compile Include="Geometry\Quad3.cs" />
-    <Compile Include="Geometry\QuadStrip3.cs" />
-    <Compile Include="Geometry\RadiusMode.cs" />
-    <Compile Include="Geometry\Ray3.cs" />
-    <Compile Include="Geometry\Triangle2.cs" />
-    <Compile Include="Geometry\Triangle3.cs" />
-    <Compile Include="Geometry\TriangleFan3.cs" />
-    <Compile Include="Geometry\TriangleStrip3.cs" />
+    <Compile Include="Modeling\Edge3.cs" />
+    <Compile Include="Modeling\EdgeFlags.cs" />
+    <Compile Include="Modeling\FastMesh.cs" />
+    <Compile Include="Modeling\IMeshFragment.cs" />
+    <Compile Include="Modeling\Mesh2.cs" />
+    <Compile Include="Modeling\Mesh3.cs" />
+    <Compile Include="Modeling\Mesh4.cs" />
+    <Compile Include="Modeling\MeshData.cs" />
+    <Compile Include="Modeling\Model.cs" />
+    <Compile Include="Modeling\Polygon2.cs" />
+    <Compile Include="Modeling\Polygon3.cs" />
+    <Compile Include="Modeling\PrimitiveKind.cs" />
+    <Compile Include="Modeling\Primitives\Cube.cs" />
+    <Compile Include="Modeling\Primitives\Dodecahedron.cs" />
+    <Compile Include="Modeling\Primitives\Icosahedron.cs" />
+    <Compile Include="Modeling\Primitives\MengerSponge.cs" />
+    <Compile Include="Modeling\Primitives\Octahedron.cs" />
+    <Compile Include="Modeling\Primitives\Sphere.cs" />
+    <Compile Include="Modeling\Quad2.cs" />
+    <Compile Include="Modeling\Quad3.cs" />
+    <Compile Include="Modeling\QuadStrip3.cs" />
+    <Compile Include="Modeling\RadiusMode.cs" />
+    <Compile Include="Modeling\Triangle2.cs" />
+    <Compile Include="Modeling\Triangle3.cs" />
+    <Compile Include="Modeling\TriangleFan3.cs" />
+    <Compile Include="Modeling\TriangleStrip3.cs" />
     <Compile Include="Geometry\__Extensions.cs" />
     <Compile Include="IO\ImporterBase.cs" />
     <Compile Include="IO\ObjImporter.cs" />
@@ -235,6 +231,7 @@
     <Content Include="Samples\EmptyScene.xml" />
     <Content Include="Samples\SimpleScene.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
