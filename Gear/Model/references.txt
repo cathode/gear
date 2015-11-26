@@ -3,3 +3,5 @@
 http://acko.net/blog/making-worlds-1-of-spheres-and-cubes/
 
 http://gameprogrammer.com/fractal.html
+
+https://upvoid.com/devblog/2013/05/terrain-engine-part-1-dual-contouring/

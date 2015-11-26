@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gear.Client.UI;
+using Gear.Model;
 
 namespace Gear.Client
 {
@@ -40,25 +41,22 @@ namespace Gear.Client
             // test, generate world:
             var seed = 1234;
             // Init planet generator
-            var gen = new Gear.Model.Generators.PlanetGenerator();
+            var world = new PlanetWorld(seed);
             // Setup generator settings
-            var pmin = new Gear.Model.Generators.PlanetGeneratorParameters();
-            var pmax = new Gear.Model.Generators.PlanetGeneratorParameters();
+            var pmin = new PlanetWorldParameters();
+            var pmax = new PlanetWorldParameters();
             pmax.AverageDensity = 6500; // Maximum 6500 kg/m3
             pmin.AverageDensity = 4000;
             pmax.DiameterKm = 14000;
             pmin.DiameterKm = 11000;
-            
 
-            gen.ParametersMaximum = pmax;
-            gen.ParametersMinimum = pmin;
-
-            var world = gen.GenerateWorld(seed);
+            world.Initialize(pmin, pmax);
 
 
             Net.MessageSerializationHelper.AddMessageSubtypes();
 
             var renderer = new Gear.Client.Rendering.OpenGL.GLRenderer();
+            //var renderer = new Gear.Client.Rendering.Software.SoftwareRenderer();
             renderer.Initialize(new Rendering.RendererOptions());
 
             var scene = new SceneGraph.Scene();

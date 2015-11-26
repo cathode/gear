@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientEngine.cs" />
+    <Compile Include="Modeling\ChunkMesh.cs" />
     <Compile Include="Modeling\Parametrics\ComponentDocument.cs" />
     <Compile Include="Modeling\Parametrics\ComponentVariation.cs" />
     <Compile Include="Modeling\Parametrics\DistanceRelationship.cs" />

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gear.Model.Generators
+namespace Gear.Model
 {
-    public class InfinityGeneratorParameters
+    public class InfinityWorldParameters
     {
         public double SurfaceBaseHeight { get; set; }
 

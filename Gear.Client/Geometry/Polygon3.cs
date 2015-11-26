@@ -16,7 +16,7 @@ namespace Gear.Client.Geometry
     /// <summary>
     /// Represents a polygon in three-dimensional space. A polygon is a shape made up of vertices.
     /// </summary>
-    public class Polygon3 : IEnumerable<Vertex3>
+    public class Polygon3 : IEnumerable<Vertex3>, IRenderableFace
     {
         #region Fields
         /// <summary>
@@ -211,6 +211,30 @@ namespace Gear.Client.Geometry
             get
             {
                 return this.vertices.Length;
+            }
+        }
+
+        public uint A
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public uint B
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public uint C
+        {
+            get
+            {
+                throw new NotImplementedException();
             }
         }
         #endregion

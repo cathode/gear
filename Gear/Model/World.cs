@@ -20,9 +20,7 @@ namespace Gear.Model
     /// </summary>
     public abstract class World
     {
-
-
-        protected World(IGenerator generator)
+        protected World(int seed)
         {
 
         }
@@ -46,19 +44,17 @@ namespace Gear.Model
         public IGenerator Generator { get; protected set; }
 
         /// <summary>
-        /// Gets the average gravity vector at the specified chunk location.
+        /// Gets the approximate gravity vector at the specified location.
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        public abstract Gear.Client.Geometry.Vector3 GetGravityVector(Vector3 location);
+        public abstract Vector3 GetGravityVector(Vector3 location);
 
+        public abstract Chunk GenerateChunk(Vector3 location);
 
         public abstract double GetSurfaceElevation(Vector3 location);
 
-        public virtual double[] GetElevationMap()
-        {
-            throw new NotImplementedException();
-        }
+        //public abstract double[] GetElevationMap();
     }
 
 

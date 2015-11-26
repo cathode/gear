@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Gear.Client.Geometry;
 
-namespace Gear.Model
+namespace Gear.Client.Modeling
 {
-    public interface IGenerator
+    class ChunkMesh
     {
-        World GenerateWorld(int seed);
-
-        
     }
 }

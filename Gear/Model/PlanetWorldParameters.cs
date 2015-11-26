@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gear.Model.Generators
+namespace Gear.Model
 {
-    public class PlanetGeneratorParameters
+    public class PlanetWorldParameters
     {
         /// <summary>
         /// Gets or sets a value indicating the planet size (diameter in kilometers) that is or will be generated.
