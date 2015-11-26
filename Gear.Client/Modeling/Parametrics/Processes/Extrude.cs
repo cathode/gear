@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gear.Client.Modeling.Parametrics.Processes
+namespace Gear.Modeling.Parametrics.Processes
 {
     public class Extrude
     {

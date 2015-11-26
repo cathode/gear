@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gear.Client.Modeling
+namespace Gear.Modeling
 {
     /// <summary>
     /// Provides an <see cref="ISelectionModifier"/> implementation which selects items that are contained or which intersect a three-dimensional bounding volume.

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gear.Geometry
+namespace Gear.Modeling
 {
     public interface IMeshFragment
     {

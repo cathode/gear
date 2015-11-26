@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics.Contracts;
 
-namespace Gear.Client.Modeling
+namespace Gear.Modeling
 {
     public delegate bool ProcedureParameterValidator(ProcedureParameter parameter, object value);
 

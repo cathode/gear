@@ -11,10 +11,10 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using Gear.Geometry;
-using WEdge = Gear.Client.Modeling.EditableMeshEdge;
-using WFace = Gear.Client.Modeling.EditableMeshFace;
-using WVertex = Gear.Client.Modeling.EditableMeshVertex;
-namespace Gear.Client.Modeling
+using WEdge = Gear.Modeling.EditableMeshEdge;
+using WFace = Gear.Modeling.EditableMeshFace;
+using WVertex = Gear.Modeling.EditableMeshVertex;
+namespace Gear.Modeling
 {
     /// <summary>
     /// Provides an implementation of a 3d mesh that supports modifications to it's topology.

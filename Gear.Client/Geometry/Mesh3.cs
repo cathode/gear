@@ -12,8 +12,9 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
+using Gear.Geometry;
 
-namespace Gear.Geometry
+namespace Gear.Modeling
 {
     /// <summary>
     /// Represents an unstructured grid in 3d-space comprised of polygons.

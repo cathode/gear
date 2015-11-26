@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using Gear.Geometry;
 
-namespace Gear.Client.Modeling
+namespace Gear.Modeling
 {
     /// <summary>
     /// Represents a bounding volume, in other words an axis-aligned rectangular volume.

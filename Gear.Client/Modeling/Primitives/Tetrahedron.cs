@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using Gear.Geometry;
 
-namespace Gear.Client.Modeling.Primitives
+namespace Gear.Modeling.Primitives
 {
     public sealed class Tetrahedron : ProceduralMesh
     {

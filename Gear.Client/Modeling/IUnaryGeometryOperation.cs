@@ -10,11 +10,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gear.Client.Modeling
+namespace Gear.Modeling
 {
     public interface IUnaryGeometryOperation
     {
-        Gear.Geometry.Mesh3 Input
+        Mesh3 Input
         {
             get;
             set;

@@ -10,8 +10,9 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Diagnostics.Contracts;
+using Gear.Geometry;
 
-namespace Gear.Geometry
+namespace Gear.Modeling
 {
     /// <summary>
     /// Represents a quad in 3D-space, in other words a four sided planar polygon.

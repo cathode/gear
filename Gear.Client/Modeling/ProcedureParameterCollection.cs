@@ -12,7 +12,7 @@ using System.Text;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 
-namespace Gear.Client.Modeling
+namespace Gear.Modeling
 {
     public class ProcedureParameterCollection : KeyedCollection<string, ProcedureParameter>
     {

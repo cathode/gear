@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Gear.Geometry;
+using Gear.Modeling;
 using Gear.Client.SceneGraph;
 
 namespace Gear.Client.Rendering.Software

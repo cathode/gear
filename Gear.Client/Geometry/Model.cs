@@ -7,7 +7,7 @@
  *****************************************************************************/
 using Gear.Geometry;
 
-namespace Gear.Geometry
+namespace Gear.Modeling
 {
     /// <summary>
     /// Represents an three-dimensional mesh combined with additional rendering information such as color or texture.

@@ -9,8 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics.Contracts;
+using Gear.Geometry;
 
-namespace Gear.Geometry
+namespace Gear.Modeling
 {
     /// <summary>
     /// Represents an edge of a polygon.

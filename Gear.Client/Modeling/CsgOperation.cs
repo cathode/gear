@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gear.Client.Modeling
+namespace Gear.Modeling
 {
     /// <summary>
     /// Represents supported constructive solid geometry operations.

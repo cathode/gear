@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gear.Geometry
+namespace Gear.Modeling
 {
     /// <summary>
     /// Represents a path comprised of straight line segments in 2D space.

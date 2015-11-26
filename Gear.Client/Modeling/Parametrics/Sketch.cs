@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using Gear.Geometry;
 
-namespace Gear.Client.Modeling.Parametrics
+namespace Gear.Modeling.Parametrics
 {
     /// <summary>
     /// Represents a 2-dimensional set of lines defined by relationships.

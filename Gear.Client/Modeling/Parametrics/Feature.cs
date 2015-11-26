@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gear.Client.Modeling.Parametrics
+namespace Gear.Modeling.Parametrics
 {
     public class Feature
     {

@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using Gear.Geometry;
 
-namespace Gear.Client.Modeling.Primitives
+namespace Gear.Modeling.Primitives
 {
     internal static class __Extensions
     {

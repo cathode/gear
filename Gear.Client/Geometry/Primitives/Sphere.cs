@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gear.Geometry.Primitives
+namespace Gear.Modeling.Primitives
 {
     public class Sphere : Mesh3
     {

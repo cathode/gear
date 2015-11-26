@@ -12,7 +12,7 @@ using System.Text;
 using Gear.Client.SceneGraph;
 using Gear.Geometry;
 
-namespace Gear.Client.Modeling
+namespace Gear.Modeling
 {
     /// <summary>
     /// Provides a base class for subtypes that represent procedurally created meshes.

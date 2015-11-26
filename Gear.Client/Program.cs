@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gear.Client.UI;
 using Gear.Model;
+using Gear.Geometry;
+using Gear.Modeling.Primitives;
 
 namespace Gear.Client
 {
@@ -60,7 +62,7 @@ namespace Gear.Client
             renderer.Initialize(new Rendering.RendererOptions());
 
             var scene = new SceneGraph.Scene();
-            scene.Root = new SceneGraph.Node(new Modeling.Primitives.Cone(1.0, 2.0));
+            scene.Root = new SceneGraph.Node(new Cone(1.0, 2.0));
 
             renderer.Scene = scene;
             renderer.Start();

@@ -10,8 +10,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Diagnostics.Contracts;
+using Gear.Geometry;
 
-namespace Gear.Geometry
+namespace Gear.Modeling
 {
     /// <summary>
     /// Represents a polygon in three-dimensional space. A polygon is a shape made up of vertices.

@@ -8,8 +8,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using Gear.Geometry;
 
-namespace Gear.Geometry
+namespace Gear.Modeling
 {
     /// <summary>
     /// Represents a polygon in two-dimensional space.

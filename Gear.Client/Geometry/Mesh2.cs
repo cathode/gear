@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 using System.Text;
 
-namespace Gear.Geometry
+namespace Gear.Modeling
 {
     /// <summary>
     /// An unstructured grid of two-dimensional polygons.

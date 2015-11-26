@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gear.Client.Modeling
+namespace Gear.Modeling
 {
     /// <summary>
     /// Represents an interface for a type that produces geometry based 

@@ -9,7 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Gear.Geometry.Primitives
+
+namespace Gear.Modeling.Primitives
 {
     public class Dodecahedron : Mesh3
     {

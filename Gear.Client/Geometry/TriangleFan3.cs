@@ -5,7 +5,7 @@
  * This software is released under the terms and conditions of the MIT        *
  * license. See the included LICENSE file for details.                        *
  *****************************************************************************/
-namespace Gear.Geometry
+namespace Gear.Modeling
 {
     public class TriangleFan3 : Polygon3
     {

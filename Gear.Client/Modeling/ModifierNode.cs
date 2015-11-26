@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using Gear.Client.SceneGraph;
 
-namespace Gear.Client.Modeling
+namespace Gear.Modeling
 {
     public class ModifierNode : Node
     {

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using Gear.Geometry;
 using System.Diagnostics.Contracts;
 
-namespace Gear.Client.Modeling
+namespace Gear.Modeling
 {
     public class CsgModifier : ModifierNode
     {

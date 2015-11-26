@@ -8,8 +8,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Gear.Geometry;
 
-namespace Gear.Geometry.Primitives
+namespace Gear.Modeling.Primitives
 {
     public class Icosahedron : Mesh3
     {

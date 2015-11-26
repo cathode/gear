@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Gear.Geometry;
 
-namespace Gear.Client.Modeling
+namespace Gear.Modeling
 {
     public class SliceModifier
     {

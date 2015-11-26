@@ -12,7 +12,7 @@ using System.Text;
 using Gear.Geometry;
 using System.Diagnostics.Contracts;
 
-namespace Gear.Client.Modeling.Primitives
+namespace Gear.Modeling.Primitives
 {
     public class Box : ProceduralMesh
     {

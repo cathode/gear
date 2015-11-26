@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
 
-namespace Gear.Geometry.Primitives
+namespace Gear.Modeling.Primitives
 {
     /// <summary>
     /// Provides a solid primitive that implements the Menger sponge algorithm.

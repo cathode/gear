@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gear.Client.Modeling.Parametrics
+namespace Gear.Modeling.Parametrics
 {
     /// <summary>
     /// Represents a relationship between two entities that preserves distance between them.

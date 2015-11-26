@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics.Contracts;
 
-namespace Gear.Client.Modeling.Parametrics
+namespace Gear.Modeling.Parametrics
 {
     /// <summary>
     /// Represents an element of a parametric model.
