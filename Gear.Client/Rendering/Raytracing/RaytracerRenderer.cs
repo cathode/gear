@@ -6,7 +6,7 @@
  * license. See the included LICENSE file for details.                        *
  *****************************************************************************/
 using System;
-using Gear.Client.Geometry;
+using Gear.Geometry;
 using Gear.Client.SceneGraph;
 
 namespace Gear.Client.Rendering.Raytraced

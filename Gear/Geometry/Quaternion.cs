@@ -12,7 +12,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics.Contracts;
 
-namespace Gear.Client.Geometry
+namespace Gear.Geometry
 {
     /// <summary>
     /// Represents a quaternion.

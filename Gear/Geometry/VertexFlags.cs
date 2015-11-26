@@ -7,7 +7,7 @@
  *****************************************************************************/
 using System;
 
-namespace Gear.Client.Geometry
+namespace Gear.Geometry
 {
     [Flags]
     public enum VertexFlags : int

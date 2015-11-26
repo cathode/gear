@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Gear.Client.Geometry
+namespace Gear.Geometry
 {
     /// <summary>
     /// Represents a triangle in two-dimensional space.

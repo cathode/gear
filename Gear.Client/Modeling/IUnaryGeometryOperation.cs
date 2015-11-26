@@ -14,7 +14,7 @@ namespace Gear.Client.Modeling
 {
     public interface IUnaryGeometryOperation
     {
-        Gear.Client.Geometry.Mesh3 Input
+        Gear.Geometry.Mesh3 Input
         {
             get;
             set;

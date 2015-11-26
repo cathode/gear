@@ -7,7 +7,7 @@
  *****************************************************************************/
 using System;
 
-namespace Gear.Client.Geometry
+namespace Gear.Geometry
 {
     /// <summary>
     /// A two-dimensional double-precision floating point vector.

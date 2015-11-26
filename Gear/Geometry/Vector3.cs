@@ -9,7 +9,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Diagnostics.Contracts;
 
-namespace Gear.Client.Geometry
+namespace Gear.Geometry
 {
     /// <summary>
     /// Represents a three-dimensional vector using three double-precision floating point numbers.
@@ -42,9 +42,9 @@ namespace Gear.Client.Geometry
         /// <summary>
         /// Initializes a new instance of the <see cref="Vector3"/> struct.
         /// </summary>
-        /// <param name="vector">A <see cref="Gear.Client.Geometry.Vector2"/> instance supplying x and y values.</param>
+        /// <param name="vector">A <see cref="Gear.Geometry.Vector2"/> instance supplying x and y values.</param>
         /// <remarks>The z value defaults to 0.</remarks>
-        public Vector3(Gear.Client.Geometry.Vector2 vector)
+        public Vector3(Gear.Geometry.Vector2 vector)
         {
             this.x = vector.X;
             this.y = vector.Y;

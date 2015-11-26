@@ -7,7 +7,7 @@
  *****************************************************************************/
 using System;
 using System.Drawing;
-using Gear.Client.Geometry;
+using Gear.Geometry;
 
 namespace Gear.Client.SceneGraph
 {

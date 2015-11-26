@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Threading;
-using Gear.Client.Geometry;
+using Gear.Geometry;
 using Gear.Client.Platform;
 using Gear.Client.SceneGraph;
 using System.Diagnostics.Contracts;

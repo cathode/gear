@@ -9,7 +9,7 @@ using System;
 using System.Threading;
 using Gear.Client.Platform;
 using Gear.Client.SceneGraph;
-using Gear.Client.Geometry;
+using Gear.Geometry;
 using System.Diagnostics.Contracts;
 
 namespace Gear.Client.Rendering

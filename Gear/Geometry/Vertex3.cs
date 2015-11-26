@@ -5,11 +5,11 @@
  * This software is released under the terms and conditions of the MIT        *
  * license. See the included LICENSE file for details.                        *
  *****************************************************************************/
-using Gear.Client.Geometry;
+using Gear.Geometry;
 using System;
 using System.Diagnostics.Contracts;
 
-namespace Gear.Client.Geometry
+namespace Gear.Geometry
 {
     /// <summary>
     /// Represents a vertex of a polygon in three-dimensional space.

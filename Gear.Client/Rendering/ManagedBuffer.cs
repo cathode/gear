@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using Gear.Client.Geometry;
+using Gear.Geometry;
 
 namespace Gear.Client.Rendering
 {

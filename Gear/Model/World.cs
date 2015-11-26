@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics.Contracts;
-using Gear.Client.Geometry;
+using Gear.Geometry;
 
 namespace Gear.Model
 {

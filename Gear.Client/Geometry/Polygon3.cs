@@ -11,7 +11,7 @@ using System.Text;
 using System.Linq;
 using System.Diagnostics.Contracts;
 
-namespace Gear.Client.Geometry
+namespace Gear.Geometry
 {
     /// <summary>
     /// Represents a polygon in three-dimensional space. A polygon is a shape made up of vertices.

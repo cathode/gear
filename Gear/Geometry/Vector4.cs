@@ -9,7 +9,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Diagnostics.Contracts;
 
-namespace Gear.Client.Geometry
+namespace Gear.Geometry
 {
     /// <summary>
     /// A four-dimensional double-precision floating point vector.

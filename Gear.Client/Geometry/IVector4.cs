@@ -9,9 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Gear.Client.Geometry
+namespace Gear.Geometry
 {
-    public interface Vector4 : Gear.Client.Geometry.Vector3
+    public interface Vector4 : Gear.Geometry.Vector3
     {
         #region Properties
         double W

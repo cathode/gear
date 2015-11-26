@@ -7,7 +7,7 @@
  *****************************************************************************/
 using System;
 
-namespace Gear.Client.Geometry
+namespace Gear.Geometry
 {
     /// <summary>
     /// Represents a double-precision floating point angle. This type is immutable.

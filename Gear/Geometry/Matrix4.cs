@@ -9,7 +9,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Diagnostics.Contracts;
 
-namespace Gear.Client.Geometry
+namespace Gear.Geometry
 {
     /// <summary>
     /// Provides a 4-by-4 double-precision floating point matrix implementation. This type is immutable.

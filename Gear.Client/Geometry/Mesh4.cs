@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Gear.Client.Geometry4
+namespace Gear.Geometry4
 {
     public class Mesh4
     {

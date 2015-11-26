@@ -11,7 +11,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
-using Gear.Client.Geometry;
+using Gear.Geometry;
 
 namespace Gear.Client.SceneGraph
 {

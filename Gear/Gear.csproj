@@ -158,11 +158,18 @@
     </Compile>
     <Compile Include="Client\Authentication\AuthenticationToken.cs" />
     <Compile Include="Geometry\Angle.cs" />
+    <Compile Include="Geometry\CoordinateSystem.cs" />
+    <None Include="Geometry\DynamicRotation3.cs" />
+    <None Include="Geometry\DynamicVector2.cs" />
+    <None Include="Geometry\DynamicVector3.cs" />
+    <None Include="Geometry\DynamicVector4.cs" />
+    <Compile Include="Geometry\Extents3.cs" />
     <Compile Include="Geometry\IRenderable.cs" />
     <Compile Include="Geometry\Matrix.cs" />
     <Compile Include="Geometry\Matrix2.cs" />
     <Compile Include="Geometry\Matrix3.cs" />
     <Compile Include="Geometry\Matrix4.cs" />
+    <Compile Include="Geometry\Plane3.cs" />
     <Compile Include="Geometry\Quaternion.cs" />
     <Compile Include="Geometry\Vector2.cs" />
     <Compile Include="Geometry\Vector2f.cs" />

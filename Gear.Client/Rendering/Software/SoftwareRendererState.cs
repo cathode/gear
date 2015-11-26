@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Gear.Client.Geometry;
+using Gear.Geometry;
 using System.Diagnostics.Contracts;
 using Gear.Client.SceneGraph;
 

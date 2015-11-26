@@ -5,7 +5,7 @@
  * This software is released under the terms and conditions of the MIT        *
  * license. See the included LICENSE file for details.                        *
  *****************************************************************************/
-using Gear.Client.Geometry;
+using Gear.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

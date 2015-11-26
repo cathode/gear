@@ -11,7 +11,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using Gear.Client.Geometry;
+using Gear.Geometry;
 using Gear.Client.SceneGraph;
 
 namespace Gear.Client.Rendering.Software

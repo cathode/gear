@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using Gear.Client.Geometry;
+using Gear.Geometry;
 using System.Diagnostics.Contracts;
 
 namespace Gear.Client.Rendering

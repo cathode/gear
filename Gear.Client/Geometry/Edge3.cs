@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics.Contracts;
 
-namespace Gear.Client.Geometry
+namespace Gear.Geometry
 {
     /// <summary>
     /// Represents an edge of a polygon.

@@ -8,7 +8,7 @@
 using System;
 using System.Diagnostics.Contracts;
 
-namespace Gear.Client.Geometry
+namespace Gear.Geometry
 {
     /// <summary>
     /// Represents a triangle in 3D-space, defined by three vertices.

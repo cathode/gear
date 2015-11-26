@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
-using Gear.Client.Geometry;
+using Gear.Geometry;
 using WEdge = Gear.Client.Modeling.EditableMeshEdge;
 using WFace = Gear.Client.Modeling.EditableMeshFace;
 using WVertex = Gear.Client.Modeling.EditableMeshVertex;

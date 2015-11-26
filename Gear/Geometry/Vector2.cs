@@ -8,7 +8,7 @@
 using System;
 using System.Diagnostics.Contracts;
 
-namespace Gear.Client.Geometry
+namespace Gear.Geometry
 {
     /// <summary>
     /// A two-dimensional double-precision floating point vector. This type is immutable.

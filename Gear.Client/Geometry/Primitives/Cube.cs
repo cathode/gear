@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Gear.Client.Geometry.Primitives
+namespace Gear.Geometry.Primitives
 {
     /// <summary>
     /// Represents a cube primitive in 3d space. This class is immutable.

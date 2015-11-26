@@ -1,0 +1,99 @@
+﻿/******************************************************************************
+ * Gear: An open-world sandbox game for creative people.                      *
+ * http://github.com/cathode/gear/                                            *
+ * Copyright © 2009-2016 William 'cathode' Shelley. All Rights Reserved.      *
+ * This software is released under the terms and conditions of the MIT        *
+ * license. See the included LICENSE file for details.                        *
+ *****************************************************************************/
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Gear.Geometry
+{
+    /// <summary>
+    /// A dynamic three-dimensional double-precision floating point vector implementation.
+    /// </summary>
+    public sealed class DynamicVector3 : IVector3
+    {
+
+        #region Fields - Private
+        public static readonly Func<Vector3> ZeroFunction = delegate
+        {
+            return Vector3.Zero;
+        };
+
+        private Func<Vector3> function;
+        #endregion
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DynamicVector3"/> class.
+        /// </summary>
+        public DynamicVector3()
+        {
+            this.function = DynamicVector3.ZeroFunction;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="function"></param>
+        public DynamicVector3(Func<Vector3> function)
+        {
+            if (function == null)
+                throw new ArgumentNullException("function");
+            this.function = function;
+        }
+        #endregion
+        #region Properties - Public
+        public Func<Vector3> Function
+        {
+            get
+            {
+                return this.function;
+            }
+            set
+            {
+                this.function = value ?? DynamicVector3.ZeroFunction;
+            }
+        }
+
+        public double X
+        {
+            get
+            {
+                return this.Function().X;
+            }
+        }
+
+        public double Y
+        {
+            get
+            {
+                return this.Function().Y;
+            }
+        }
+
+        public double Z
+        {
+            get
+            {
+                return this.Function().Z;
+            }
+        }
+        #endregion
+        #region Methods
+        public Vector3 ToVector3()
+        {
+            return this.Function();
+        }
+
+        Vector2 IVector2.ToVector2()
+        {
+            var sn3 = this.ToVector3();
+
+            return new Vector2(sn3.X, sn3.Y);
+        }
+        #endregion
+    }
+}

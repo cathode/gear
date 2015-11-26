@@ -7,13 +7,13 @@
  *****************************************************************************/
 using System;
 
-namespace Gear.Client.Geometry
+namespace Gear.Geometry
 {
     /// <summary>
     /// A three-dimensional double-precision floating point vector.
     /// </summary>
     [Obsolete]
-    public interface Vector3 : Gear.Client.Geometry.Vector2
+    public interface Vector3 : Gear.Geometry.Vector2
     {
         #region Properties
         /// <summary>

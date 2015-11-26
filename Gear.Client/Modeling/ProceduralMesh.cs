@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Gear.Client.SceneGraph;
-using Gear.Client.Geometry;
+using Gear.Geometry;
 
 namespace Gear.Client.Modeling
 {
