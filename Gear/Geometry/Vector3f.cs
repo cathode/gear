@@ -25,6 +25,9 @@ namespace Gear.Geometry
             this.y = y;
             this.z = z;
         }
+
+        public static Vector3f Zero { get; internal set; }
+
         public float X
         {
             get

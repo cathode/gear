@@ -62,7 +62,7 @@ namespace Gear.Client
             renderer.Initialize(new Rendering.RendererOptions());
 
             var scene = new SceneGraph.Scene();
-            scene.Root = new SceneGraph.Node(new Cone(1.0, 2.0));
+            //scene.Root = new SceneGraph.Node(new Cone(1.0, 2.0));
 
             renderer.Scene = scene;
             renderer.Start();

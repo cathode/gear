@@ -116,7 +116,6 @@
     <Compile Include="Modeling\IVertex.cs" />
     <Compile Include="Modeling\ModifierNode.cs" />
     <Compile Include="Modeling\PlanarSelectionModifier.cs" />
-    <Compile Include="Modeling\Primitives\Box.cs" />
     <Compile Include="Modeling\Primitives\Cone.cs" />
     <Compile Include="Modeling\Primitives\SimplexNoise.cs" />
     <Compile Include="Modeling\Primitives\Terrain.cs" />
@@ -173,6 +172,7 @@
     <Compile Include="Rendering\Software\Shaders\VertexShader.cs" />
     <Compile Include="Rendering\Software\SoftwareRenderer.cs" />
     <Compile Include="Rendering\Software\SoftwareRendererState.cs" />
+    <Compile Include="Rendering\VBO.cs" />
     <Compile Include="SceneGraph\Camera.cs" />
     <Compile Include="SceneGraph\CameraChangedEventArgs.cs" />
     <Compile Include="SceneGraph\CameraFacing.cs" />

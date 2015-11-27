@@ -14,7 +14,7 @@ using System.Diagnostics.Contracts;
 
 namespace Gear.Modeling.Primitives
 {
-    public class Cone : Mesh3
+    public class Cone 
     {
         #region Constructors
         /// <summary>
@@ -39,30 +39,30 @@ namespace Gear.Modeling.Primitives
             Contract.Requires(vertexCount > 2);
 
             var alpha = Math.PI * (2.0 / vertexCount);
-            var vertices = new Vertex3[vertexCount + 2];
+            var vertices = new Vertex3f[vertexCount + 2];
 
             int tipIndex = vertexCount;
             int baseIndex = vertexCount + 1;
-            vertices[tipIndex] = new Vertex3(0, height, 0); // Tip of cone
-            vertices[baseIndex] = new Vertex3(0, 0, 0); // Center of base
+            vertices[tipIndex] = new Vertex3f(0, (float)height, 0); // Tip of cone
+            vertices[baseIndex] = new Vertex3f(0, 0, 0); // Center of base
 
             for (int i = 0; i < vertexCount; ++i)
             {
                 var theta = alpha * i;
-                vertices[i] = new Vertex3(Math.Cos(theta) * radius, 0, Math.Sin(theta) * radius);
+                //vertices[i] = new Vertex3f(Math.Cos(theta) * radius, 0, Math.Sin(theta) * radius);
             }
 
             var polys = new List<Polygon3>();
-            polys.Add(new Triangle3(vertices[tipIndex], vertices[0], vertices[tipIndex - 1]));
-            polys.Add(new Triangle3(vertices[0], vertices[tipIndex - 1], vertices[baseIndex]));
+            //polys.Add(new Triangle3(vertices[tipIndex], vertices[0], vertices[tipIndex - 1]));
+            //polys.Add(new Triangle3(vertices[0], vertices[tipIndex - 1], vertices[baseIndex]));
 
             for (int i = 1; i < vertexCount; ++i)
             {
-                polys.Add(new Triangle3(vertices[tipIndex], vertices[i - 1], vertices[i]));
-                polys.Add(new Triangle3(vertices[i], vertices[i - 1], vertices[baseIndex]));
+                //polys.Add(new Triangle3(vertices[tipIndex], vertices[i - 1], vertices[i]));
+                //polys.Add(new Triangle3(vertices[i], vertices[i - 1], vertices[baseIndex]));
             }
 
-            this.Polygons = polys.ToArray();
+            //this.Polygons = polys.ToArray();
         }
         #endregion
     }
