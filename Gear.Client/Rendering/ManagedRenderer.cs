@@ -130,7 +130,7 @@ namespace Gear.Client.Rendering
         /// looking at the center of the scene geometry.
         /// </summary>
         /// <param name="vector3"></param>
-        public virtual void ZoomExtents(Extents3 extents)
+        public virtual void ZoomExtents(Extents3d extents)
         {
             this.ActiveCamera.Position = extents.FindMidpoint() * -1;
 
@@ -144,7 +144,7 @@ namespace Gear.Client.Rendering
             var efactor = (extents.A.Y - extents.B.Y) / 100.0;
             var sfactor = 100.0 / (this.Profile.Height / 2.0);
             var f = efactor * sfactor;
-            this.ActiveCamera.Scale = new Vector3(yf, yf, yf);
+            this.ActiveCamera.Scale = new Vector3d(yf, yf, yf);
         }
 
         /// <summary>

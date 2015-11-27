@@ -54,7 +54,7 @@ namespace Gear.Modeling
         /// <param name="b">The top-right vertex of the quad.</param>
         /// <param name="c">The bottom-right vertex of the quad.</param>
         /// <param name="d">The bottom-left vertex of the quad.</param>
-        public Quad3(Vertex3 a, Vertex3 b, Vertex3 c, Vertex3 d)
+        public Quad3(Vertex3d a, Vertex3d b, Vertex3d c, Vertex3d d)
             : base(a, b, c, d)
         {
             
@@ -67,7 +67,7 @@ namespace Gear.Modeling
         /// <param name="b"></param>
         /// <param name="c"></param>
         /// <param name="d"></param>
-        public Quad3(Vertex3[] verts, int a, int b, int c, int d)
+        public Quad3(Vertex3d[] verts, int a, int b, int c, int d)
             : base(verts[a], verts[b], verts[c], verts[d])
         {
             Contract.Requires(verts != null);
@@ -90,24 +90,24 @@ namespace Gear.Modeling
         }
 
         public Quad3(double width, double height)
-            : base(new Vertex3(), new Vertex3(), new Vertex3(), new Vertex3())
+            : base(new Vertex3d(), new Vertex3d(), new Vertex3d(), new Vertex3d())
         {
             var x1 = width / -2.0;
             var x2 = width / 2.0;
             var y1 = height / -2.0;
             var y2 = height / 2.0;
 
-            this.A.Position = new Vector3(x1, y1, 0.0);
-            this.B.Position = new Vector3(x1, y2, 0.0);
-            this.C.Position = new Vector3(x2, y2, 0.0);
-            this.D.Position = new Vector3(x2, y1, 0.0);
+            this.A.Position = new Vector3d(x1, y1, 0.0);
+            this.B.Position = new Vector3d(x1, y2, 0.0);
+            this.C.Position = new Vector3d(x2, y2, 0.0);
+            this.D.Position = new Vector3d(x2, y1, 0.0);
         }
         #endregion
         #region Properties
         /// <summary>
         /// Gets or sets the top-left vertex of the quad.
         /// </summary>
-        public Vertex3 A
+        public Vertex3d A
         {
             get
             {
@@ -124,7 +124,7 @@ namespace Gear.Modeling
         /// <summary>
         /// Gets or sets the top-right vertex of the quad.
         /// </summary>
-        public Vertex3 B
+        public Vertex3d B
         {
             get
             {
@@ -141,7 +141,7 @@ namespace Gear.Modeling
         /// <summary>
         /// Gets or sets the bottom-right vertex of the quad.
         /// </summary>
-        public Vertex3 C
+        public Vertex3d C
         {
             get
             {
@@ -158,7 +158,7 @@ namespace Gear.Modeling
         /// <summary>
         /// Gets or sets the bottom-left vertex of the quad.
         /// </summary>
-        public Vertex3 D
+        public Vertex3d D
         {
             get
             {

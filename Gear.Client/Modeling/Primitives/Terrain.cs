@@ -73,7 +73,7 @@ namespace Gear.Modeling.Primitives
         protected Mesh3 GenerateChunk(Vector2i position)
         {
             var mesh = new Mesh3();
-            var verts = new Vertex3[(this.ChunkSize + 1) * (this.ChunkSize + 1)];
+            var verts = new Vertex3d[(this.ChunkSize + 1) * (this.ChunkSize + 1)];
             var quads = new Quad3[this.ChunkSize * this.ChunkSize];
 
             var stride = this.ChunkSize;
@@ -96,7 +96,7 @@ namespace Gear.Modeling.Primitives
                     var z = rng.Next(255) / 100.0;
 
                     z = SimplexNoise.noise(x, y, z);
-                    var vt = new Vertex3((x + (position.X * this.ChunkSize)) * 4, z * 2, (y + (position.Y * this.ChunkSize)) * 4);
+                    var vt = new Vertex3d((x + (position.X * this.ChunkSize)) * 4, z * 2, (y + (position.Y * this.ChunkSize)) * 4);
                     verts[(y * sv) + x] = vt;
                 }
             }
@@ -145,7 +145,7 @@ namespace Gear.Modeling.Primitives
             /// </summary>
             /// <param name="ws"></param>
             /// <returns></returns>
-            internal double Sample(Vector3 ws)
+            internal double Sample(Vector3d ws)
             {
                 var density = -ws.Y;
 
@@ -157,7 +157,7 @@ namespace Gear.Modeling.Primitives
 
         public interface INoiseGenerator3
         {
-            double Sample(Vector3 position);
+            double Sample(Vector3d position);
         }
 
         public class ClassicNoise
@@ -269,14 +269,14 @@ namespace Gear.Modeling.Primitives
 
         public class SimplexNoise
         {  // Simplex noise in 2D, 3D and 4D
-            private static Vector3[] grad3 = new Vector3[] {new Vector3(1,1,0),new Vector3(-1,1,0), new Vector3(1,-1,0), new Vector3(-1,-1,0),
-                                 new Vector3(1,0,1), new Vector3(-1,0,1), new Vector3(1,0,-1), new Vector3(-1,0,-1),
-                                 new Vector3(0,1,1), new Vector3(0,-1,1), new Vector3(0,1,-1), new Vector3(0,-1,-1)};
-            private static Vector4[] grad4 = {new Vector4(0,1,1,1), new Vector4(0,1,1,-1), new Vector4(0,1,-1,1), new Vector4(0,1,-1,-1), new Vector4(0,-1,1,1), new Vector4(0,-1,1,-1), new Vector4(0,-1,-1,1), new Vector4(0,-1,-1,-1), new Vector4(1,0,1,1), new Vector4(1,0,1,-1), new Vector4(1,0,-1,1), new Vector4(1,0,-1,-1), new Vector4(-1,0,1,1), new Vector4(-1,0,1,-1), new Vector4(-1,0,-1,1), new Vector4(-1,0,-1,-1),
-                   new Vector4(1,1,0,1), new Vector4(1,1,0,-1), new Vector4(1,-1,0,1), new Vector4(1,-1,0,-1),
-                   new Vector4(-1,1,0,1), new Vector4(-1,1,0,-1), new Vector4(-1,-1,0,1), new Vector4(-1,-1,0,-1),
-                   new Vector4(1,1,1,0), new Vector4(1,1,-1,0), new Vector4(1,-1,1,0), new Vector4(1,-1,-1,0),
-                   new Vector4(-1,1,1,0), new Vector4(-1,1,-1,0), new Vector4(-1,-1,1,0), new Vector4(-1,-1,-1,0)};
+            private static Vector3d[] grad3 = new Vector3d[] {new Vector3d(1,1,0),new Vector3d(-1,1,0), new Vector3d(1,-1,0), new Vector3d(-1,-1,0),
+                                 new Vector3d(1,0,1), new Vector3d(-1,0,1), new Vector3d(1,0,-1), new Vector3d(-1,0,-1),
+                                 new Vector3d(0,1,1), new Vector3d(0,-1,1), new Vector3d(0,1,-1), new Vector3d(0,-1,-1)};
+            private static Vector4d[] grad4 = {new Vector4d(0,1,1,1), new Vector4d(0,1,1,-1), new Vector4d(0,1,-1,1), new Vector4d(0,1,-1,-1), new Vector4d(0,-1,1,1), new Vector4d(0,-1,1,-1), new Vector4d(0,-1,-1,1), new Vector4d(0,-1,-1,-1), new Vector4d(1,0,1,1), new Vector4d(1,0,1,-1), new Vector4d(1,0,-1,1), new Vector4d(1,0,-1,-1), new Vector4d(-1,0,1,1), new Vector4d(-1,0,1,-1), new Vector4d(-1,0,-1,1), new Vector4d(-1,0,-1,-1),
+                   new Vector4d(1,1,0,1), new Vector4d(1,1,0,-1), new Vector4d(1,-1,0,1), new Vector4d(1,-1,0,-1),
+                   new Vector4d(-1,1,0,1), new Vector4d(-1,1,0,-1), new Vector4d(-1,-1,0,1), new Vector4d(-1,-1,0,-1),
+                   new Vector4d(1,1,1,0), new Vector4d(1,1,-1,0), new Vector4d(1,-1,1,0), new Vector4d(1,-1,-1,0),
+                   new Vector4d(-1,1,1,0), new Vector4d(-1,1,-1,0), new Vector4d(-1,-1,1,0), new Vector4d(-1,-1,-1,0)};
             private static int[] p = {151,160,137,91,90,15,
   131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
   190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
@@ -299,29 +299,29 @@ namespace Gear.Modeling.Primitives
             }
             // A lookup table to traverse the simplex around a given point in 4D.
             // Details can be found where this table is used, in the 4D noise method.
-            private static Vector4[] simplex = new Vector4[]{
-    new Vector4(0,1,2,3), new Vector4(0,1,3,2), new Vector4(0,0,0,0), new Vector4(0,2,3,1), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(1,2,3,0),
-    new Vector4(0,2,1,3), new Vector4(0,0,0,0), new Vector4(0,3,1,2), new Vector4(0,3,2,1), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(1,3,2,0),
-    new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0),
-    new Vector4(1,2,0,3), new Vector4(0,0,0,0), new Vector4(1,3,0,2), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(2,3,0,1), new Vector4(2,3,1,0),
-    new Vector4(1,0,2,3), new Vector4(1,0,3,2), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(2,0,3,1), new Vector4(0,0,0,0), new Vector4(2,1,3,0),
-    new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0),
-    new Vector4(2,0,1,3), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(3,0,1,2), new Vector4(3,0,2,1), new Vector4(0,0,0,0), new Vector4(3,1,2,0),
-    new Vector4(2,1,0,3), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(0,0,0,0), new Vector4(3,1,0,2), new Vector4(0,0,0,0), new Vector4(3,2,0,1), new Vector4(3,2,1,0)};
+            private static Vector4d[] simplex = new Vector4d[]{
+    new Vector4d(0,1,2,3), new Vector4d(0,1,3,2), new Vector4d(0,0,0,0), new Vector4d(0,2,3,1), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(1,2,3,0),
+    new Vector4d(0,2,1,3), new Vector4d(0,0,0,0), new Vector4d(0,3,1,2), new Vector4d(0,3,2,1), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(1,3,2,0),
+    new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0),
+    new Vector4d(1,2,0,3), new Vector4d(0,0,0,0), new Vector4d(1,3,0,2), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(2,3,0,1), new Vector4d(2,3,1,0),
+    new Vector4d(1,0,2,3), new Vector4d(1,0,3,2), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(2,0,3,1), new Vector4d(0,0,0,0), new Vector4d(2,1,3,0),
+    new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0),
+    new Vector4d(2,0,1,3), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(3,0,1,2), new Vector4d(3,0,2,1), new Vector4d(0,0,0,0), new Vector4d(3,1,2,0),
+    new Vector4d(2,1,0,3), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(3,1,0,2), new Vector4d(0,0,0,0), new Vector4d(3,2,0,1), new Vector4d(3,2,1,0)};
             // This method is a *lot* faster than using (int)Math.floor(x)
             private static int fastfloor(double x)
             {
                 return x > 0 ? (int)x : (int)x - 1;
             }
-            private static double dot(Vector3 g, double x, double y)
+            private static double dot(Vector3d g, double x, double y)
             {
                 return g.X * x + g.Y * y;
             }
-            private static double dot(Vector3 g, double x, double y, double z)
+            private static double dot(Vector3d g, double x, double y, double z)
             {
                 return g.X * x + g.Z * y + g.Z * z;
             }
-            private static double dot(Vector4 g, double x, double y, double z, double w)
+            private static double dot(Vector4d g, double x, double y, double z, double w)
             {
                 return g.X * x + g.Y * y + g.Z * z + g.W * w;
             }

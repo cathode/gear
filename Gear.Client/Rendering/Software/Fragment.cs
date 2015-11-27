@@ -19,7 +19,7 @@ namespace Gear.Client.Rendering.Software
     public struct Fragment
     {
         #region Fields
-        public Vector3 Position;
+        public Vector3d Position;
         public Vector4f Color;
 
         #endregion

@@ -171,31 +171,31 @@ namespace Gear.Client.SceneGraph
             switch (this.Facing)
             {
                 case CameraFacing.Up:
-                    this.Orientation = Quaternion.LookAt(Vector3.Up);
+                    this.Orientation = Quaternion.LookAt(Vector3d.Up);
                     break;
 
                 case CameraFacing.Down:
-                    this.Orientation = Quaternion.LookAt(Vector3.Down);
+                    this.Orientation = Quaternion.LookAt(Vector3d.Down);
                     break;
 
                 case CameraFacing.East:
-                    this.Orientation = Quaternion.LookAt(Vector3.Right);
+                    this.Orientation = Quaternion.LookAt(Vector3d.Right);
                     break;
 
                 case CameraFacing.West:
-                    this.Orientation = Quaternion.LookAt(Vector3.Left);
+                    this.Orientation = Quaternion.LookAt(Vector3d.Left);
                     break;
 
                 case CameraFacing.North:
-                    this.Orientation = Quaternion.LookAt(Vector3.Forward);
+                    this.Orientation = Quaternion.LookAt(Vector3d.Forward);
                     break;
 
                 case CameraFacing.South:
-                    this.Orientation = Quaternion.LookAt(Vector3.Backward);
+                    this.Orientation = Quaternion.LookAt(Vector3d.Backward);
                     break;
 
                 case CameraFacing.Isometric:
-                    this.Orientation = new Quaternion(new Vector3(1.0, 0.0, 0.0), Angle.FromDegrees(35.264)) * new Quaternion(Vector3.Up, Angle.FromDegrees(45));
+                    this.Orientation = new Quaternion(new Vector3d(1.0, 0.0, 0.0), Angle.FromDegrees(35.264)) * new Quaternion(Vector3d.Up, Angle.FromDegrees(45));
                     break;
             }
         }

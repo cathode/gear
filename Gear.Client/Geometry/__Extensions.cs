@@ -17,7 +17,7 @@ namespace Gear.Geometry
 {
     public static class VertexArrayExtensions
     {
-        public static Triangle3 Triangle(this Vertex3[] array, int a, int b, int c)
+        public static Triangle3 Triangle(this Vertex3d[] array, int a, int b, int c)
         {
             Contract.Requires(array.Length >= 3);
             Contract.Requires(a < array.Length);
@@ -29,7 +29,7 @@ namespace Gear.Geometry
 
             return new Triangle3(array[a], array[b], array[c]);
         }
-        public static Quad3 Quad(this Vertex3[] array, int a, int b, int c, int d)
+        public static Quad3 Quad(this Vertex3d[] array, int a, int b, int c, int d)
         {
             Contract.Requires(array.Length >= 4);
             Contract.Requires(a < array.Length);
@@ -40,7 +40,7 @@ namespace Gear.Geometry
             return new Quad3(array[a], array[b], array[c], array[d]);
         }
 
-        public static Polygon3 Polygon(this Vertex3[] array, params int[] indices)
+        public static Polygon3 Polygon(this Vertex3d[] array, params int[] indices)
         {
             Contract.Requires(array != null);
             Contract.Requires(indices != null);

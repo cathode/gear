@@ -125,7 +125,7 @@ namespace Gear.Client.Rendering.Software
             }
         }
 
-        private void DrawLine(Vector3 v1, Vector4f c1, Vector3 v2, Vector4f c2)
+        private void DrawLine(Vector3d v1, Vector4f c1, Vector3d v2, Vector4f c2)
         {
             var xdiff = v2.X - v1.X;
             var ydiff = v2.Y - v1.Y;
@@ -257,7 +257,7 @@ namespace Gear.Client.Rendering.Software
             // -----------------
 
             // Find the vertex with the middle y value.
-            var ps = new Vertex3[] { p1, p2, p3 };
+            var ps = new Vertex3d[] { p1, p2, p3 };
             ps = ps.OrderBy(p => p.Y).ToArray();
 
             var ystart = (int)ps[0].Y;
@@ -344,7 +344,7 @@ namespace Gear.Client.Rendering.Software
 
             if (node is SpriteNode)
             {
-                var v = state.Transform(new Vertex3(node.Position.X, node.Position.Y, node.Position.Z), ReferenceSpace.Object);
+                var v = state.Transform(new Vertex3d(node.Position.X, node.Position.Y, node.Position.Z), ReferenceSpace.Object);
 
                 if (!double.IsInfinity(v.X) && !double.IsInfinity(v.Y) && !double.IsInfinity(v.Z)
                     && !double.IsNaN(v.X) && !double.IsNaN(v.Y) && !double.IsNaN(v.Z))
@@ -387,7 +387,7 @@ namespace Gear.Client.Rendering.Software
             state.PopMatrix();
         }
 
-        public override void ZoomExtents(Extents3 extents)
+        public override void ZoomExtents(Extents3d extents)
         {
 
             this.ActiveCamera.Position = extents.FindMidpoint();
@@ -398,7 +398,7 @@ namespace Gear.Client.Rendering.Software
             double w = this.Profile.Width;
             var f = ((v1.Y - v2.Y) / 100.0) * (100 / (h / w));
 
-            this.ActiveCamera.Scale = new Vector3(f * 0.9, f * 0.9, f * 0.9);
+            this.ActiveCamera.Scale = new Vector3d(f * 0.9, f * 0.9, f * 0.9);
 
         }
         #endregion

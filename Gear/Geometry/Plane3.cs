@@ -18,18 +18,18 @@ namespace Gear.Geometry
     public struct Plane3
     {
         #region Fields
-        private Vector3 normal;
-        private Vector3 origin;
+        private Vector3d normal;
+        private Vector3d origin;
         #endregion
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Plane3"/> struct with the specified normal.
         /// </summary>
         /// <param name="normal">The surface normal of the plane.</param>
-        public Plane3(Vector3 normal)
+        public Plane3(Vector3d normal)
         {
             this.normal = normal;
-            this.origin = new Vector3(0.0, 0.0, 0.0);
+            this.origin = new Vector3d(0.0, 0.0, 0.0);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Gear.Geometry
         /// </summary>
         /// <param name="normal">The surface normal of the plane.</param>
         /// <param name="origin">The center of the plane.</param>
-        public Plane3(Vector3 normal, Vector3 origin)
+        public Plane3(Vector3d normal, Vector3d origin)
         {
             this.normal = normal;
             this.origin = origin;
@@ -45,9 +45,9 @@ namespace Gear.Geometry
         #endregion
         #region Properties 
         /// <summary>
-        /// Gets or sets a <see cref="Vector3"/> describing the normal of the plane.
+        /// Gets or sets a <see cref="Vector3d"/> describing the normal of the plane.
         /// </summary>
-        public Vector3 Normal
+        public Vector3d Normal
         {
             get
             {
@@ -60,9 +60,9 @@ namespace Gear.Geometry
         }
 
         /// <summary>
-        /// Gets or sets a <see cref="Vector3"/> describing the location of the center of the plane.
+        /// Gets or sets a <see cref="Vector3d"/> describing the location of the center of the plane.
         /// </summary>
-        public Vector3 Origin
+        public Vector3d Origin
         {
             get
             {
@@ -81,7 +81,7 @@ namespace Gear.Geometry
         {
             get
             {
-                return new Plane3(new Vector3(0.0, 0.0, 1.0));
+                return new Plane3(new Vector3d(0.0, 0.0, 1.0));
             }
         }
 
@@ -92,7 +92,7 @@ namespace Gear.Geometry
         {
             get
             {
-                return new Plane3(new Vector3(0.0, 1.0, 0.0));
+                return new Plane3(new Vector3d(0.0, 1.0, 0.0));
             }
         }
 
@@ -103,7 +103,7 @@ namespace Gear.Geometry
         {
             get
             {
-                return new Plane3(new Vector3(1.0, 0.0, 0.0));
+                return new Plane3(new Vector3d(1.0, 0.0, 0.0));
             }
         }
         #endregion

@@ -145,7 +145,7 @@ namespace Gear.Geometry
         /// <param name="b">The value of the second row.</param>
         /// <param name="c">The value of the third row.</param>
         /// <param name="d">The value of the fourth row.</param>
-        public Matrix4(Vector4 a, Vector4 b, Vector4 c, Vector4 d)
+        public Matrix4(Vector4d a, Vector4d b, Vector4d c, Vector4d d)
         {
             this.ax = a.X;
             this.ay = a.Y;
@@ -235,88 +235,88 @@ namespace Gear.Geometry
         /// <summary>
         /// Gets the first row of the matrix.
         /// </summary>
-        public Vector4 A
+        public Vector4d A
         {
             get
             {
-                return new Vector4(ax, ay, az, aw);
+                return new Vector4d(ax, ay, az, aw);
             }
         }
 
         /// <summary>
         /// Gets the second row of the matrix.
         /// </summary>
-        public Vector4 B
+        public Vector4d B
         {
             get
             {
-                return new Vector4(bx, by, bz, bw);
+                return new Vector4d(bx, by, bz, bw);
             }
         }
 
         /// <summary>
         /// Gets the third row of the matrix.
         /// </summary>
-        public Vector4 C
+        public Vector4d C
         {
             get
             {
-                return new Vector4(cx, cy, cz, cw);
+                return new Vector4d(cx, cy, cz, cw);
             }
         }
 
         /// <summary>
         /// Gets the fourth row of the matrix.
         /// </summary>
-        public Vector4 D
+        public Vector4d D
         {
             get
             {
-                return new Vector4(dx, dy, dz, dw);
+                return new Vector4d(dx, dy, dz, dw);
             }
         }
 
         /// <summary>
         /// Gets the first column of the matrix.
         /// </summary>
-        public Vector4 X
+        public Vector4d X
         {
             get
             {
-                return new Vector4(ax, bx, cx, dx);
+                return new Vector4d(ax, bx, cx, dx);
             }
         }
 
         /// <summary>
         /// Gets the second column of the matrix.
         /// </summary>
-        public Vector4 Y
+        public Vector4d Y
         {
             get
             {
-                return new Vector4(ay, by, cy, dy);
+                return new Vector4d(ay, by, cy, dy);
             }
         }
 
         /// <summary>
         /// Gets the third column of the matrix.
         /// </summary>
-        public Vector4 Z
+        public Vector4d Z
         {
             get
             {
-                return new Vector4(az, bz, cz, dz);
+                return new Vector4d(az, bz, cz, dz);
             }
         }
 
         /// <summary>
         /// Gets the fourth column of the matrix.
         /// </summary>
-        public Vector4 W
+        public Vector4d W
         {
             get
             {
-                return new Vector4(aw, bw, cw, dw);
+                return new Vector4d(aw, bw, cw, dw);
             }
         }
         #endregion
@@ -443,24 +443,24 @@ namespace Gear.Geometry
                                m.dx * s, m.dy * s, m.dz * s, m.dw * s);
 
         }
-        public Vector3 Multiply(Vector3 vector)
+        public Vector3d Multiply(Vector3d vector)
         {
             return Matrix4.Multiply(this, vector);
         }
-        public static Vector3 Multiply(Matrix4 matrix, Vector3 vector)
+        public static Vector3d Multiply(Matrix4 matrix, Vector3d vector)
         {
-            var v4 = matrix * new Vector4(vector.X, vector.Y, vector.Z, 1.0);
-            return new Vector3(v4.X / v4.W, v4.Y / v4.W, v4.Z / v4.W);
+            var v4 = matrix * new Vector4d(vector.X, vector.Y, vector.Z, 1.0);
+            return new Vector3d(v4.X / v4.W, v4.Y / v4.W, v4.Z / v4.W);
         }
 
-        public Vector4 Multiply(Vector4 v)
+        public Vector4d Multiply(Vector4d v)
         {
             return Matrix4.Multiply(this, v);
         }
 
-        public static Vector4 Multiply(Matrix4 m, Vector4 v)
+        public static Vector4d Multiply(Matrix4 m, Vector4d v)
         {
-            return new Vector4(m.ax * v.X + m.ay * v.Y + m.az * v.Z + m.aw * v.W,
+            return new Vector4d(m.ax * v.X + m.ay * v.Y + m.az * v.Z + m.aw * v.W,
                                m.bx * v.X + m.by * v.Y + m.bz * v.Z + m.bw * v.W,
                                m.cx * v.X + m.cy * v.Y + m.cz * v.Z + m.cw * v.W,
                                m.dx * v.X + m.dy * v.Y + m.dz * v.Z + m.dw * v.W);
@@ -603,9 +603,9 @@ namespace Gear.Geometry
         /// <summary>
         /// Creates a matrix that describes a translation operation.
         /// </summary>
-        /// <param name="t">A <see cref="Vector3"/> that describes the translation amount.</param>
+        /// <param name="t">A <see cref="Vector3d"/> that describes the translation amount.</param>
         /// <returns>A new <see cref="Matrix4"/> that describes the translation operation.</returns>
-        public static Matrix4 CreateTranslationMatrix(Vector3 t)
+        public static Matrix4 CreateTranslationMatrix(Vector3d t)
         {
             return new Matrix4(1, 0, 0, t.X,
                                0, 1, 0, t.Y,
@@ -631,9 +631,9 @@ namespace Gear.Geometry
         /// <summary>
         /// Creates a matrix that describes a scaling operation.
         /// </summary>
-        /// <param name="s">A <see cref="Vector3"/> that describes the x, y, and z value to scale by.</param>
+        /// <param name="s">A <see cref="Vector3d"/> that describes the x, y, and z value to scale by.</param>
         /// <returns>A new <see cref="Matrix4"/> that describes the scaling operation.</returns>
-        public static Matrix4 CreateScalingMatrix(Vector3 s)
+        public static Matrix4 CreateScalingMatrix(Vector3d s)
         {
             return new Matrix4(s.X, 0, 0, 0,
                                0, s.Y, 0, 0,
@@ -672,10 +672,10 @@ namespace Gear.Geometry
         /// <summary>
         /// Creates a matrix that describes a rotation operation.
         /// </summary>
-        /// <param name="axis">A unit <see cref="Vector3"/> that describes the axis along which the rotation is performed.</param>
+        /// <param name="axis">A unit <see cref="Vector3d"/> that describes the axis along which the rotation is performed.</param>
         /// <param name="angle">The amount of rotation.</param>
         /// <returns>A new <see cref="Matrix4"/> that describes the rotation operation.</returns>
-        public static Matrix4 CreateRotationMatrix(Vector3 axis, Angle angle)
+        public static Matrix4 CreateRotationMatrix(Vector3d axis, Angle angle)
         {
             var q = new Quaternion(axis, angle.Radians);
             q = (q.Length == 1) ? q : q.Normalized();
@@ -718,7 +718,7 @@ namespace Gear.Geometry
 
         }
 
-        public static Matrix4 CreateRotationMatrix(Vector3 vec)
+        public static Matrix4 CreateRotationMatrix(Vector3d vec)
         {
             return Matrix4.CreateRotationMatrix(vec.X, vec.Y, vec.Z);
         }
@@ -881,23 +881,23 @@ namespace Gear.Geometry
         /// <param name="matrix"></param>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public static Vector3 operator *(Matrix4 matrix, Vector3 vector)
+        public static Vector3d operator *(Matrix4 matrix, Vector3d vector)
         {
             return Matrix4.Multiply(matrix, vector);
         }
 
         /// <summary>
-        /// Multiplies a matrix and a <see cref="Vertex3"/>, effectively applying a vertex transformation.
+        /// Multiplies a matrix and a <see cref="Vertex3d"/>, effectively applying a vertex transformation.
         /// </summary>
         /// <param name="matrix"></param>
         /// <param name="vertex"></param>
         /// <returns></returns>
-        public static Vertex3 operator *(Matrix4 matrix, Vertex3 vertex)
+        public static Vertex3d operator *(Matrix4 matrix, Vertex3d vertex)
         {
             Contract.Requires(vertex != null);
 
             var result = Matrix4.Multiply(matrix, vertex.Position);
-            return new Vertex3(result.X, result.Y, result.Z)
+            return new Vertex3d(result.X, result.Y, result.Z)
             {
                 Color = vertex.Color,
                 Flags = vertex.Flags
@@ -910,7 +910,7 @@ namespace Gear.Geometry
         /// <param name="matrix"></param>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public static Vector4 operator *(Matrix4 matrix, Vector4 vector)
+        public static Vector4d operator *(Matrix4 matrix, Vector4d vector)
         {
             return Matrix4.Multiply(matrix, vector);
         }

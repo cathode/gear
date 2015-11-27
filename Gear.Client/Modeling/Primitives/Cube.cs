@@ -34,16 +34,16 @@ namespace Gear.Modeling.Primitives
             this.size = size;
 
             var r = size * 0.5;
-            var verts = new Vertex3[8];
-            verts[0] = new Vertex3(r, r, r);
-            verts[1] = new Vertex3(r, -r, r);
-            verts[2] = new Vertex3(-r, -r, r);
-            verts[3] = new Vertex3(-r, r, r);
+            var verts = new Vertex3d[8];
+            verts[0] = new Vertex3d(r, r, r);
+            verts[1] = new Vertex3d(r, -r, r);
+            verts[2] = new Vertex3d(-r, -r, r);
+            verts[3] = new Vertex3d(-r, r, r);
 
-            verts[4] = new Vertex3(r, r, -r);
-            verts[5] = new Vertex3(r, -r, -r);
-            verts[6] = new Vertex3(-r, -r, -r);
-            verts[7] = new Vertex3(-r, r, -r);
+            verts[4] = new Vertex3d(r, r, -r);
+            verts[5] = new Vertex3d(r, -r, -r);
+            verts[6] = new Vertex3d(-r, -r, -r);
+            verts[7] = new Vertex3d(-r, r, -r);
 
             var edges = new Edge3[]
             {

@@ -70,7 +70,7 @@ namespace Gear.Modeling
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public bool Contains(Vector3 point)
+        public bool Contains(Vector3d point)
         {
             throw new NotImplementedException();
         }

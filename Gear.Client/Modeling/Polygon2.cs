@@ -15,13 +15,13 @@ namespace Gear.Modeling
     /// <summary>
     /// Represents a polygon in two-dimensional space.
     /// </summary>
-    public class Polygon2 : IEnumerable<Vertex2>
+    public class Polygon2 : IEnumerable<Vertex2d>
     {
         #region Fields
         /// <summary>
         /// Holds the actual vertices of the polygon.
         /// </summary>
-        private readonly Vertex2[] vertices;
+        private readonly Vertex2d[] vertices;
         #endregion
         #region Constructors
         /// <summary>
@@ -32,7 +32,7 @@ namespace Gear.Modeling
         {
             Contract.Requires(vertices > 2);
 
-            this.vertices = new Vertex2[vertices];
+            this.vertices = new Vertex2d[vertices];
         }      
         
         /// <summary>
@@ -56,11 +56,11 @@ namespace Gear.Modeling
         /// <param name="mode">The <see cref="RadiusMode"/> that indicates how the <paramref name="radius"/> parameter is interpreted.</param>
         public Polygon2(int sides, double radius, RadiusMode mode)
         {
-            this.vertices = new Vertex2[sides];
+            this.vertices = new Vertex2d[sides];
             for (int s = 0; s < sides; s++)
             {
                 double a = ((2 * Math.PI) / sides) * s;
-                this[s] = new Vertex2(Math.Sin(a) * radius, Math.Cos(a) * radius);
+                this[s] = new Vertex2d(Math.Sin(a) * radius, Math.Cos(a) * radius);
             }
         }       
         
@@ -68,7 +68,7 @@ namespace Gear.Modeling
         /// Initializes a new instance of the <see cref="Polygon2"/> class.
         /// </summary>
         /// <param name="vertices"></param>
-        public Polygon2(params Vertex2[] vertices)
+        public Polygon2(params Vertex2d[] vertices)
         {
             if (vertices.Length < 3)
                 throw new ArgumentException("Polygons must contain at least 3 vertices.", "vertices");
@@ -89,11 +89,11 @@ namespace Gear.Modeling
         #endregion
         #region Indexers
         /// <summary>
-        /// Gets or sets a <see cref="Vector2"/> representing the vertex with the specified index.
+        /// Gets or sets a <see cref="Vector2d"/> representing the vertex with the specified index.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Vertex2 this[int index]
+        public Vertex2d this[int index]
         {
             get
             {
@@ -110,7 +110,7 @@ namespace Gear.Modeling
         /// Gets the enumerator for the current instance.
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<Vertex2> GetEnumerator()
+        public IEnumerator<Vertex2d> GetEnumerator()
         {
             for (int i = 0; i < this.vertices.Length; i++)
             {

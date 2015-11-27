@@ -101,14 +101,14 @@ namespace Gear.Client.Rendering.Software
             this.UpdateDerivedMatrices();
         }
 
-        public Vertex3 Transform(Vertex3 input)
+        public Vertex3d Transform(Vertex3d input)
         {
             Contract.Requires(input != null);
 
             return this.WorldViewProjection * input;
         }
 
-        public Vertex3 Transform(Vertex3 input, ReferenceSpace space)
+        public Vertex3d Transform(Vertex3d input, ReferenceSpace space)
         {
             Contract.Requires(input != null);
 
@@ -122,12 +122,12 @@ namespace Gear.Client.Rendering.Software
             else
                 return input;
         }
-        public Vector3 Transform(Vector3 input)
+        public Vector3d Transform(Vector3d input)
         {
             return this.WorldViewProjection * input;
         }
 
-        public void Translate(Vector3 translation)
+        public void Translate(Vector3d translation)
         {
             this.WorldMatrix *= Matrix4.CreateTranslationMatrix(translation);
 
@@ -136,10 +136,10 @@ namespace Gear.Client.Rendering.Software
 
         public void Translate(double x, double y, double z)
         {
-            this.Translate(new Vector3(x, y, z));
+            this.Translate(new Vector3d(x, y, z));
         }
 
-        public void Scale(Vector3 scaling)
+        public void Scale(Vector3d scaling)
         {
             this.WorldMatrix *= Matrix4.CreateScalingMatrix(scaling);
 
@@ -148,7 +148,7 @@ namespace Gear.Client.Rendering.Software
 
         public void Scale(double x, double y, double z)
         {
-            this.Scale(new Vector3(x, y, z));
+            this.Scale(new Vector3d(x, y, z));
         }
 
         public void Rotate(Quaternion rotation)

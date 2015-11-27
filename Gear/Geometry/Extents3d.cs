@@ -21,10 +21,10 @@ namespace Gear.Geometry
     /// The first point (A) is the front, top, right corner of the box. The second point
     /// (B) is the back, bottom, left corner of the box.
     /// </remarks>
-    public class Extents3
+    public class Extents3d
     {
         #region Fields
-        public static readonly Extents3 Empty = new Extents3(0, 0, 0);
+        public static readonly Extents3d Empty = new Extents3d(0, 0, 0);
 
         private readonly double right;
         private readonly double top;
@@ -35,9 +35,9 @@ namespace Gear.Geometry
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Extents3"/> class.
+        /// Initializes a new instance of the <see cref="Extents3d"/> class.
         /// </summary>
-        public Extents3()
+        public Extents3d()
         {
             this.left = 0;
             this.right = 0;
@@ -48,12 +48,12 @@ namespace Gear.Geometry
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Extents3"/> class.
+        /// Initializes a new instance of the <see cref="Extents3d"/> class.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public Extents3(double x, double y, double z)
+        public Extents3d(double x, double y, double z)
         {
             this.right = x / 2.0;
             this.left = x / -2.0;
@@ -66,11 +66,11 @@ namespace Gear.Geometry
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Extents3"/> class.
+        /// Initializes a new instance of the <see cref="Extents3d"/> class.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        public Extents3(Vector3 a, Vector3 b)
+        public Extents3d(Vector3d a, Vector3d b)
             : this(a.X, a.Y, a.Z, b.X, b.Y, b.Z)
         {
             Contract.Requires(a.X >= b.X);
@@ -80,7 +80,7 @@ namespace Gear.Geometry
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Extents3"/> class.
+        /// Initializes a new instance of the <see cref="Extents3d"/> class.
         /// </summary>
         /// <param name="right"></param>
         /// <param name="top"></param>
@@ -88,7 +88,7 @@ namespace Gear.Geometry
         /// <param name="left"></param>
         /// <param name="bottom"></param>
         /// <param name="back"></param>
-        public Extents3(double right, double top, double front, double left, double bottom, double back)
+        public Extents3d(double right, double top, double front, double left, double bottom, double back)
         {
             Contract.Requires(right >= left);
             Contract.Requires(front >= back);
@@ -103,19 +103,19 @@ namespace Gear.Geometry
         }
         #endregion
         #region Properties
-        public Vector3 A
+        public Vector3d A
         {
             get
             {
-                return new Vector3(this.right, this.top, this.front);
+                return new Vector3d(this.right, this.top, this.front);
             }
         }
 
-        public Vector3 B
+        public Vector3d B
         {
             get
             {
-                return new Vector3(this.left, this.bottom, this.back);
+                return new Vector3d(this.left, this.bottom, this.back);
             }
 
         }
@@ -193,32 +193,32 @@ namespace Gear.Geometry
         }
         #endregion
         #region Methods
-        public static bool Equals(Extents3 e1, Extents3 e2)
+        public static bool Equals(Extents3d e1, Extents3d e2)
         {
-            if (Extents3.ReferenceEquals(e1, null))
-                return Extents3.ReferenceEquals(e2, null);
-            else if (Extents3.ReferenceEquals(e2, null))
-                return Extents3.ReferenceEquals(e1, null);
+            if (Extents3d.ReferenceEquals(e1, null))
+                return Extents3d.ReferenceEquals(e2, null);
+            else if (Extents3d.ReferenceEquals(e2, null))
+                return Extents3d.ReferenceEquals(e1, null);
             else
                 return e1 == e2;
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Extents3)
-                return this == (Extents3)obj;
+            if (obj is Extents3d)
+                return this == (Extents3d)obj;
 
             return false;
         }
 
-        public bool Equals(Extents3 other)
+        public bool Equals(Extents3d other)
         {
-            return Extents3.Equals(this, other);
+            return Extents3d.Equals(this, other);
         }
 
-        public Vector3 FindMidpoint()
+        public Vector3d FindMidpoint()
         {
-            return new Vector3((this.left + this.right) / 2.0, (this.top + this.bottom) / 2.0, (this.front + this.back) / 2.0);
+            return new Vector3d((this.left + this.right) / 2.0, (this.top + this.bottom) / 2.0, (this.front + this.back) / 2.0);
         }
 
         public override string ToString()
@@ -232,7 +232,7 @@ namespace Gear.Geometry
         }
 
         /// <summary>
-        /// Invariant contracts for the <see cref="Extents3"/> class.
+        /// Invariant contracts for the <see cref="Extents3d"/> class.
         /// </summary>
         [ContractInvariantMethod]
         private void Invariants()
@@ -247,11 +247,11 @@ namespace Gear.Geometry
         #endregion
         #region Operators
         /// <summary>
-        /// Determines if the current <see cref="Extents3"/> fully contains the space defined by the specified <see cref="Extents3"/>.
+        /// Determines if the current <see cref="Extents3d"/> fully contains the space defined by the specified <see cref="Extents3d"/>.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool FullyContains(Extents3 other)
+        public bool FullyContains(Extents3d other)
         {
             return this.Right >= other.Right
                 && this.Top >= other.Top
@@ -261,9 +261,9 @@ namespace Gear.Geometry
                 && this.Back <= other.Back;
         }
 
-        public static Extents3 operator |(Extents3 e1, Extents3 e2)
+        public static Extents3d operator |(Extents3d e1, Extents3d e2)
         {
-            return new Extents3(e1.Right >= e2.Right ? e1.Right : e2.Right,
+            return new Extents3d(e1.Right >= e2.Right ? e1.Right : e2.Right,
                                 e1.Top >= e2.Top ? e1.Top : e2.Top,
                                 e1.Front >= e2.Front ? e1.Front : e2.Front,
 
@@ -272,7 +272,7 @@ namespace Gear.Geometry
                                 e1.Back <= e2.Back ? e1.Back : e2.Back);
         }
 
-        public static bool operator ==(Extents3 e1, Extents3 e2)
+        public static bool operator ==(Extents3d e1, Extents3d e2)
         {
             if (object.ReferenceEquals(e1, null))
                 if (object.ReferenceEquals(e2, null))
@@ -291,7 +291,7 @@ namespace Gear.Geometry
 
         }
 
-        public static bool operator !=(Extents3 e1, Extents3 e2)
+        public static bool operator !=(Extents3d e1, Extents3d e2)
         {
             return e1.right != e2.right
                 || e1.left != e2.left

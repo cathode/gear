@@ -49,7 +49,7 @@ namespace Gear.Modeling
         /// <summary>
         /// Gets or sets the first vertex.
         /// </summary>
-        public Vertex2 A
+        public Vertex2d A
         {
             get
             {
@@ -64,7 +64,7 @@ namespace Gear.Modeling
         /// <summary>
         /// Gets or sets the second vertex.
         /// </summary>
-        public Vertex2 B
+        public Vertex2d B
         {
             get
             {
@@ -79,7 +79,7 @@ namespace Gear.Modeling
         /// <summary>
         /// Gets or sets the third vertex.
         /// </summary>
-        public Vertex2 C
+        public Vertex2d C
         {
             get
             {

@@ -14,33 +14,33 @@ namespace Gear.Geometry
     /// <summary>
     /// Represents a vertex of a polygon in three-dimensional space.
     /// </summary>
-    public class Vertex3 : IRenderableVertex
+    public class Vertex3d : IRenderableVertex
     {
         #region Fields
-        private Vector3 position;
-        private Vector3 normal;
+        private Vector3d position;
+        private Vector3d normal;
         private Vector4f color;
-        private Vector2 textureCoordinates;
+        private Vector2d textureCoordinates;
         private VertexFlags flags;
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Vertex3"/> class.
+        /// Initializes a new instance of the <see cref="Vertex3d"/> class.
         /// </summary>
-        public Vertex3()
+        public Vertex3d()
         {
             this.color = Vector4f.Color(0, 0, 0, 1);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Vertex3"/> class.
+        /// Initializes a new instance of the <see cref="Vertex3d"/> class.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public Vertex3(double x, double y, double z)
+        public Vertex3d(double x, double y, double z)
         {
-            this.position = new Vector3(x, y, z);
+            this.position = new Vector3d(x, y, z);
             this.color = Vector4f.Color(0, 0, 0, 1);
         }
         #endregion
@@ -108,7 +108,7 @@ namespace Gear.Geometry
         /// <summary>
         /// Gets or sets the object-space coordinates of the vertex.
         /// </summary>
-        public Vector3 Position
+        public Vector3d Position
         {
             get
             {
@@ -123,7 +123,7 @@ namespace Gear.Geometry
         /// <summary>
         /// Gets or sets the normal vector of the vertex.
         /// </summary>
-        public Vector3 Normal
+        public Vector3d Normal
         {
             get
             {
@@ -135,7 +135,7 @@ namespace Gear.Geometry
             }
         }
 
-        public Vector2 TextureCoordinates
+        public Vector2d TextureCoordinates
         {
             get
             {
@@ -154,16 +154,16 @@ namespace Gear.Geometry
         }
         #endregion
         #region Operators
-        public static explicit operator Vector3(Vertex3 vertex)
+        public static explicit operator Vector3d(Vertex3d vertex)
         {
             Contract.Requires(vertex != null);
 
-            return new Vector3(vertex.X, vertex.Y, vertex.Z);
+            return new Vector3d(vertex.X, vertex.Y, vertex.Z);
         }
 
-        public Vector3 ToVector3()
+        public Vector3d ToVector3()
         {
-            return new Vector3(this.X, this.Y, this.Z);
+            return new Vector3d(this.X, this.Y, this.Z);
         }
         #endregion
 

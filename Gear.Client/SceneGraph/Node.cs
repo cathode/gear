@@ -24,8 +24,8 @@ namespace Gear.Client.SceneGraph
         private readonly List<Node> children = new List<Node>();
         private readonly List<Constraint> constraints = new List<Constraint>();
         private IRenderable renderable;
-        private Vector3 position = Node.DefaultPosition;
-        private Vector3 scale = Node.DefaultScale;
+        private Vector3d position = Node.DefaultPosition;
+        private Vector3d scale = Node.DefaultScale;
         private Quaternion orientation = Node.DefaultOrientation;
         private NodeRenderFlags renderFlags;
         #endregion
@@ -70,23 +70,23 @@ namespace Gear.Client.SceneGraph
         {
             get
             {
-                return new Quaternion(Vector3.Up, 0.0);
+                return new Quaternion(Vector3d.Up, 0.0);
             }
         }
 
-        public static Vector3 DefaultPosition
+        public static Vector3d DefaultPosition
         {
             get
             {
-                return Vector3.Zero;
+                return Vector3d.Zero;
             }
         }
 
-        public static Vector3 DefaultScale
+        public static Vector3d DefaultScale
         {
             get
             {
-                return new Vector3(1, 1, 1);
+                return new Vector3d(1, 1, 1);
             }
         }
 
@@ -123,9 +123,9 @@ namespace Gear.Client.SceneGraph
         }
 
         /// <summary>
-        /// Gets or sets an <see cref="Vector3"/> which determines the position of the current <see cref="Node"/> relative to it's parent.
+        /// Gets or sets an <see cref="Vector3d"/> which determines the position of the current <see cref="Node"/> relative to it's parent.
         /// </summary>
-        public Vector3 Position
+        public Vector3d Position
         {
             get
             {
@@ -153,9 +153,9 @@ namespace Gear.Client.SceneGraph
         }
 
         /// <summary>
-        /// Gets or sets an <see cref="Vector3"/> which determines the scale of the current <see cref="Node"/> relative to it's parent.
+        /// Gets or sets an <see cref="Vector3d"/> which determines the scale of the current <see cref="Node"/> relative to it's parent.
         /// </summary>
-        public Vector3 Scale
+        public Vector3d Scale
         {
             get
             {
@@ -373,7 +373,7 @@ namespace Gear.Client.SceneGraph
         /// Calculates the extents of the current node.
         /// </summary>
         /// <returns></returns>
-        public virtual Extents3 GetExtents()
+        public virtual Extents3d GetExtents()
         {
             if (this.renderable != null)
             {
@@ -396,7 +396,7 @@ namespace Gear.Client.SceneGraph
                 {
                     //Vertex3 v = null;
 
-                    Vertex3 v = m * new Vertex3(vt.Position.X, vt.Position.Y, vt.Position.Z);
+                    Vertex3d v = m * new Vertex3d(vt.Position.X, vt.Position.Y, vt.Position.Z);
 
                     x1 = (v.X > x1) ? v.X : x1;
                     x2 = (v.X < x2) ? v.X : x2;
@@ -409,13 +409,13 @@ namespace Gear.Client.SceneGraph
                 }
 
 
-                var v1 = new Vector3(x1, y1, z1);
-                var v2 = new Vector3(x2, y2, z2);
+                var v1 = new Vector3d(x1, y1, z1);
+                var v2 = new Vector3d(x2, y2, z2);
 
-                return new Extents3(v1, v2);
+                return new Extents3d(v1, v2);
             }
             else
-                return new Extents3(0, 0, 0);
+                return new Extents3d(0, 0, 0);
         }
 
         /// <summary>
@@ -439,7 +439,7 @@ namespace Gear.Client.SceneGraph
         /// all child nodes of the current node.
         /// </summary>
         /// <returns></returns>
-        public Extents3 GetGraphExtents()
+        public Extents3d GetGraphExtents()
         {
             var ext = this.GetExtents();
 
@@ -454,7 +454,7 @@ namespace Gear.Client.SceneGraph
         /// Determines the node's position, relative to the position of each of it's parents.
         /// </summary>
         /// <returns></returns>
-        public Vector3 GetWorldPosition()
+        public Vector3d GetWorldPosition()
         {
             if (this.parents.Count == 0)
                 return this.Position;

@@ -48,11 +48,11 @@ namespace Gear.Model
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        public abstract Vector3 GetGravityVector(Vector3 location);
+        public abstract Vector3d GetGravityVector(Vector3d location);
 
-        public abstract Chunk GenerateChunk(Vector3 location);
+        public abstract Chunk GenerateChunk(Vector3d location);
 
-        public abstract double GetSurfaceElevation(Vector3 location);
+        public abstract double GetSurfaceElevation(Vector3d location);
 
         //public abstract double[] GetElevationMap();
     }

@@ -18,8 +18,8 @@ namespace Gear.Geometry
     public sealed class CoordinateSystem
     {
         #region Fields
-        private Vector3 scale;
-        private Vector3 position;
+        private Vector3d scale;
+        private Vector3d position;
         private Quaternion rotation;
         #endregion
         #region Constructors
@@ -29,7 +29,7 @@ namespace Gear.Geometry
         /// <param name="position"></param>
         /// <param name="rotation"></param>
         /// <param name="scale"></param>
-        public CoordinateSystem(Vector3 position, Quaternion rotation, Vector3 scale)
+        public CoordinateSystem(Vector3d position, Quaternion rotation, Vector3d scale)
         {
             this.position = position;
             this.rotation = rotation;
@@ -37,7 +37,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Properties
-        public Vector3 Position
+        public Vector3d Position
         {
             get
             {
@@ -53,7 +53,7 @@ namespace Gear.Geometry
             }
         }
 
-        public Vector3 Scale
+        public Vector3d Scale
         {
             get
             {
@@ -69,7 +69,7 @@ namespace Gear.Geometry
             this.rotation *= system.rotation;
         }
 
-        public Vector3 Transform(Vector3 v)
+        public Vector3d Transform(Vector3d v)
         {
             throw new NotImplementedException();
         }

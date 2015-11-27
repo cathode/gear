@@ -165,7 +165,7 @@ namespace Gear.Client.Rendering
             {
                 if (Control.ModifierKeys == Keys.Control)
                 {
-                    this.renderer.ActiveCamera.Orientation = Quaternion.LookAt(new Vector3(e.X - (e.X / 2.0), e.Y - (e.Y / 2.0), 10));
+                    this.renderer.ActiveCamera.Orientation = Quaternion.LookAt(new Vector3d(e.X - (e.X / 2.0), e.Y - (e.Y / 2.0), 10));
                 }
                 else
                 {
@@ -173,7 +173,7 @@ namespace Gear.Client.Rendering
                     var ydelta = e.Y - this.ry;
                     this.rx += xdelta;
                     this.ry += ydelta;
-                    this.renderer.ActiveCamera.Orientation *= new Quaternion(Vector3.Up, Angle.FromDegrees(-xdelta * sensitivity));
+                    this.renderer.ActiveCamera.Orientation *= new Quaternion(Vector3d.Up, Angle.FromDegrees(-xdelta * sensitivity));
                 }
             }
             else if (this.isPanning)
@@ -184,7 +184,7 @@ namespace Gear.Client.Rendering
                 this.ty += ydelta;
                 var s = this.renderer.ActiveCamera.Scale.X;
 
-                this.renderer.ActiveCamera.Position = (Vector3)this.renderer.ActiveCamera.Position + new Vector3(xdelta * (this.sensitivity * 3 * (1.0 / s)), ydelta * (this.sensitivity * 3 * (1.0 / s)), 0);
+                this.renderer.ActiveCamera.Position = (Vector3d)this.renderer.ActiveCamera.Position + new Vector3d(xdelta * (this.sensitivity * 3 * (1.0 / s)), ydelta * (this.sensitivity * 3 * (1.0 / s)), 0);
             }
             else if (this.isZooming)
             {
@@ -193,7 +193,7 @@ namespace Gear.Client.Rendering
                 this.sx += xdelta;
                 this.sy += ydelta;
                 var scale = (xdelta / 2.0 + ydelta / 2.0) / 2.0 * sensitivity;
-                this.renderer.ActiveCamera.Scale = (Vector3)this.renderer.ActiveCamera.Scale + new Vector3(scale, scale, scale);
+                this.renderer.ActiveCamera.Scale = (Vector3d)this.renderer.ActiveCamera.Scale + new Vector3d(scale, scale, scale);
             }
         }
 
@@ -294,7 +294,7 @@ namespace Gear.Client.Rendering
             if (this.isAutoRotateEnabled)
             {
                 //var axis = this.renderer.ActiveCamera.Orientation.GetAxis();
-                this.renderer.ActiveCamera.Orientation *= new Quaternion(Vector3.Up, Angle.FromDegrees(0.5));
+                this.renderer.ActiveCamera.Orientation *= new Quaternion(Vector3d.Up, Angle.FromDegrees(0.5));
             }
         }
 

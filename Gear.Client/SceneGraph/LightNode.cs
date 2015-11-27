@@ -16,12 +16,12 @@ namespace Gear.Client.SceneGraph
 {
     public abstract class LightNode : Node
     {
-        public Vector4 Diffuse
+        public Vector4d Diffuse
         {
             get;
             set;
         }
-        public Vector4 Specular
+        public Vector4d Specular
         {
             get;
             set;

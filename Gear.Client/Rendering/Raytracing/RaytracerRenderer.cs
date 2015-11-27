@@ -48,26 +48,26 @@ namespace Gear.Client.Rendering.Raytraced
             for (int y = 0; y < this.fb.Height; y++)
                 for (int x = 0; x < this.fb.Width; x++)
                 {
-                    Ray3 ray = new Ray3()
+                    Ray3d ray = new Ray3d()
                     {
-                        Origin = new Vector3(x, y, double.NegativeInfinity),
-                        Normal = new Vector3(0.0, 0.0, 1.0),
+                        Origin = new Vector3d(x, y, double.NegativeInfinity),
+                        Normal = new Vector3d(0.0, 0.0, 1.0),
                     };
                     buffer[x, y] = this.TraceRay(ray);
                 }
         }
 
-        protected virtual Vector3 ClosestIntersection(Ray3 ray)
+        protected virtual Vector3d ClosestIntersection(Ray3d ray)
         {
             throw new NotImplementedException();
         }
 
-        protected virtual Vector3 ScreenToWorld(int x, int y)
+        protected virtual Vector3d ScreenToWorld(int x, int y)
         {
             throw new NotImplementedException();
         }
 
-        protected virtual Vector4f TraceRay(Ray3 ray)
+        protected virtual Vector4f TraceRay(Ray3d ray)
         {
             return this.BackgroundColor;
         }

@@ -45,9 +45,9 @@ namespace Gear.Modeling
     public struct FastVertex
     {
         #region Fields
-        private Vector3 position;
-        private Vector3 normal;
-        private Vector2 texCoords;
+        private Vector3d position;
+        private Vector3d normal;
+        private Vector2d texCoords;
         #endregion
         #region Constructors
         /// <summary>
@@ -58,14 +58,14 @@ namespace Gear.Modeling
         /// <param name="z"></param>
         public FastVertex(double x, double y, double z)
         {
-            this.position = new Vector3(x, y, z);
-            this.normal = Vector3.Zero;
-            this.texCoords = Vector2.Zero;
+            this.position = new Vector3d(x, y, z);
+            this.normal = Vector3d.Zero;
+            this.texCoords = Vector2d.Zero;
         }
 
         #endregion
         #region Properties
-        public Vector3 Position
+        public Vector3d Position
         {
             get
             {

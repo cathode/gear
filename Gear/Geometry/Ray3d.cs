@@ -12,9 +12,9 @@ using System.Text;
 
 namespace Gear.Geometry
 {
-    public struct Ray3
+    public struct Ray3d
     {
-        public Vector3 Origin;
-        public Vector3 Normal;
+        public Vector3d Origin;
+        public Vector3d Normal;
     }
 }

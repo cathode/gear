@@ -21,7 +21,7 @@ namespace Gear.Modeling.Primitives
 
         public Icosahedron(double radius)
         {
-            var verts = new Vertex3[12];
+            var verts = new Vertex3d[12];
 
             double phiaa = 26.56505;
 
@@ -31,8 +31,8 @@ namespace Gear.Modeling.Primitives
             double theb = Math.PI * 36.0 / 180.0;
             double the72 = Math.PI * 72.0 / 180.0;
 
-            verts[0] = new Vertex3(0.0, 0.0, r);
-            verts[11] = new Vertex3(0.0, 0.0, -r);
+            verts[0] = new Vertex3d(0.0, 0.0, r);
+            verts[11] = new Vertex3d(0.0, 0.0, -r);
             double the = 0.0;
 
             for (int i = 1; i < 6; i++)
@@ -40,7 +40,7 @@ namespace Gear.Modeling.Primitives
                 double x = r * Math.Cos(the) * Math.Cos(phia);
                 double y = r * Math.Sin(the) * Math.Cos(phia);
                 double z = r * Math.Sin(phia);
-                verts[i] = new Vertex3(x, y, z);
+                verts[i] = new Vertex3d(x, y, z);
                 the += the72;
             }
 
@@ -50,7 +50,7 @@ namespace Gear.Modeling.Primitives
                 double x = r * Math.Cos(the) * Math.Cos(-phia);
                 double y = r * Math.Sin(the) * Math.Cos(-phia);
                 double z = r * Math.Sin(-phia);
-                verts[i] = new Vertex3(x, y, z);
+                verts[i] = new Vertex3d(x, y, z);
                 the += the72;
             }
             var polys = new Polygon3[20];

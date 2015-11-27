@@ -22,19 +22,19 @@ namespace Gear.Modeling
         }
         #endregion
         #region Properties
-        public List<Vector3> Positions
+        public List<Vector3d> Positions
         {
             get;
             set;
         }
 
-        public List<Vector3> Normals
+        public List<Vector3d> Normals
         {
             get;
             set;
         }
 
-        public List<Vector2> TextureCoordinates
+        public List<Vector2d> TextureCoordinates
         {
             get;
             set;

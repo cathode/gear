@@ -39,7 +39,7 @@ namespace Gear.Geometry
         private readonly double cz;
         #endregion
         #region Constructors
-        public Matrix3(Vector3 a, Vector3 b, Vector3 c)
+        public Matrix3(Vector3d a, Vector3d b, Vector3d c)
         {
             this.ax = a.X;
             this.ay = a.Y;

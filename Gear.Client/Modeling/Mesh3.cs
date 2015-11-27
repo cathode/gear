@@ -25,7 +25,7 @@ namespace Gear.Modeling
         internal int VertexBuffer;
 
         private Polygon3[] polygons;
-        private Vertex3[] vertices;
+        private Vertex3d[] vertices;
 
        
         #endregion
@@ -36,14 +36,14 @@ namespace Gear.Modeling
         public Mesh3()
         {
             this.polygons = new Polygon3[0];
-            this.vertices = new Vertex3[0];
+            this.vertices = new Vertex3d[0];
         }
 
         public Mesh3(params Polygon3[] polygons)
         {
             this.polygons = polygons;
             //TODO: fixme
-            this.vertices = new Vertex3[0];
+            this.vertices = new Vertex3d[0];
         }
         #endregion
         #region Properties

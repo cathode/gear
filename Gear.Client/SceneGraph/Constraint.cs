@@ -45,17 +45,17 @@ namespace Gear.Client.SceneGraph
 
         #endregion
         #region Methods
-        public Vector3 ApplyPositionConstraint(Vector3 newPosition)
+        public Vector3d ApplyPositionConstraint(Vector3d newPosition)
         {
             throw new NotImplementedException();
         }
 
-        public Vector3 ApplyOrientationConstraint(Vector3 newOrientation)
+        public Vector3d ApplyOrientationConstraint(Vector3d newOrientation)
         {
             throw new NotImplementedException();
         }
 
-        public Vector3 ApplyScaleConstraint(Vector3 newScale)
+        public Vector3d ApplyScaleConstraint(Vector3d newScale)
         {
             throw new NotImplementedException();
         }

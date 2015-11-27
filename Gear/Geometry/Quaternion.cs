@@ -32,7 +32,7 @@ namespace Gear.Geometry
         /// </summary>
         /// <param name="axis">The axis about which to rotate.</param>
         /// <param name="angle">The angle of rotation, in radians.</param>
-        public Quaternion(Vector3 axis, double angle)
+        public Quaternion(Vector3d axis, double angle)
             : this(axis, Angle.FromRadians(angle))
         {
         }
@@ -40,9 +40,9 @@ namespace Gear.Geometry
         /// <summary>
         /// Initializes a new instance of the <see cref="Quaterion"/> class.
         /// </summary>
-        /// <param name="axis">A <see cref="Vector3"/> that describes the axis of the rotation.</param>
+        /// <param name="axis">A <see cref="Vector3d"/> that describes the axis of the rotation.</param>
         /// <param name="angle"></param>
-        public Quaternion(Vector3 axis, Angle angle)
+        public Quaternion(Vector3d axis, Angle angle)
         {
             var rads = angle.Radians;
 
@@ -165,12 +165,12 @@ namespace Gear.Geometry
             throw new NotImplementedException();
         }
 
-        public static Quaternion LookAt(Vector3 lookAt)
+        public static Quaternion LookAt(Vector3d lookAt)
         {
-            var up = Vector3.Up;
+            var up = Vector3d.Up;
             var forward = lookAt;
-            Vector3.OrthoNormalize(ref forward, ref up);
-            var right = Vector3.CrossProduct(up, forward);
+            Vector3d.OrthoNormalize(ref forward, ref up);
+            var right = Vector3d.CrossProduct(up, forward);
 
             var w = 1.0 + right.X + up.Y + forward.Z;
 
@@ -226,14 +226,14 @@ namespace Gear.Geometry
             return new Quaternion(q.w, q.x, q.y, q.z);
         }
 
-        public Vector3 GetAxis()
+        public Vector3d GetAxis()
         {
             if (this.w == 1.0)
-                return Vector3.Up;
+                return Vector3d.Up;
 
             var m = Math.Sqrt(1 - (this.w * this.w));
 
-            return new Vector3(this.x / m, this.y / m, this.z / m);
+            return new Vector3d(this.x / m, this.y / m, this.z / m);
         }
 
         public Angle GetAngle()
@@ -246,12 +246,12 @@ namespace Gear.Geometry
             return new Quaternion(w, -x, -y, -z);
         }
 
-        public void GetAxisAngle(out Vector3 axis, out Angle angle)
+        public void GetAxisAngle(out Vector3d axis, out Angle angle)
         {
             var a = 2.0 * Math.Acos(this.w);
             var m = Math.Sqrt(1 - (this.w * this.w));
 
-            axis = new Vector3(this.x / m, this.y / m, this.z / m);
+            axis = new Vector3d(this.x / m, this.y / m, this.z / m);
             angle = Angle.FromRadians(a);
         }
         #endregion

@@ -13,17 +13,17 @@ namespace Gear.Model
         {
 
         }
-        public override Vector3 GetGravityVector(Vector3 location)
+        public override Vector3d GetGravityVector(Vector3d location)
         {
-            return Vector3.Down;
+            return Vector3d.Down;
 
         }
-        public override Chunk GenerateChunk(Vector3 location)
+        public override Chunk GenerateChunk(Vector3d location)
         {
             throw new NotImplementedException();
         }
 
-        public override double GetSurfaceElevation(Vector3 location)
+        public override double GetSurfaceElevation(Vector3d location)
         {
             throw new NotImplementedException();
         }

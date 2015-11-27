@@ -59,7 +59,7 @@ namespace Gear.Modeling.Primitives
             this.perm = p;
         }
 
-        public IEnumerable<Vector4> Noise3(Vector3 p, Vector3 q)
+        public IEnumerable<Vector4d> Noise3(Vector3d p, Vector3d q)
         {
             throw new NotImplementedException();
         }

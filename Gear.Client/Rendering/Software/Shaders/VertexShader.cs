@@ -19,7 +19,7 @@ namespace Gear.Client.Rendering.Software.Shaders
     public class VertexShader
     {
         #region Methods
-        public virtual Vertex3 Shade(Vertex3 v)
+        public virtual Vertex3d Shade(Vertex3d v)
         {
             return v;
         }

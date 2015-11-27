@@ -45,17 +45,17 @@ namespace Gear.Modeling
             var xa = -w;
             var xb = w;
             var ya = -h;
-            var yb = h;            this[0] = new Vertex2(xa, ya);
-            this[1] = new Vertex2(xb, ya);
-            this[2] = new Vertex2(xb, yb);
-            this[3] = new Vertex2(xa, yb);
+            var yb = h;            this[0] = new Vertex2d(xa, ya);
+            this[1] = new Vertex2d(xb, ya);
+            this[2] = new Vertex2d(xb, yb);
+            this[3] = new Vertex2d(xa, yb);
         }
         #endregion
         #region Properties
         /// <summary>
         /// Gets or sets the upper-left vertex of the quad.
         /// </summary>
-        public Vertex2 A
+        public Vertex2d A
         {
             get
             {
@@ -70,7 +70,7 @@ namespace Gear.Modeling
         /// <summary>
         /// Gets or sets the upper-right vertex of the quad.
         /// </summary>
-        public Vertex2 B
+        public Vertex2d B
         {
             get
             {
@@ -85,7 +85,7 @@ namespace Gear.Modeling
         /// <summary>
         /// Gets or sets the lower-right vertex of the quad.
         /// </summary>
-        public Vertex2 C
+        public Vertex2d C
         {
             get
             {
@@ -100,7 +100,7 @@ namespace Gear.Modeling
         /// <summary>
         /// Gets or sets the lower-left vertex of the quad.
         /// </summary>
-        public Vertex2 D
+        public Vertex2d D
         {
             get
             {

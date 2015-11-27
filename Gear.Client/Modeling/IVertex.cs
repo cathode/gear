@@ -16,8 +16,8 @@ namespace Gear.Modeling
     public interface IVertex
     {
         #region Properties
-        Vector3 Position { get; set; }
-        Vector3 Normal { get; set; }
+        Vector3d Position { get; set; }
+        Vector3d Normal { get; set; }
         object Tag { get; set; }
         #endregion
         #region Methods

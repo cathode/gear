@@ -42,7 +42,7 @@ namespace Gear.Modeling
         /// <param name="a">The first vertex of the triangle.</param>
         /// <param name="b">The second vertex of the triangle.</param>
         /// <param name="c">The third vertex of the triangle.</param>
-        public Triangle3(Vertex3 a, Vertex3 b, Vertex3 c)
+        public Triangle3(Vertex3d a, Vertex3d b, Vertex3d c)
             : base(a, b, c)
         {
             Contract.Requires(a != null);
@@ -54,7 +54,7 @@ namespace Gear.Modeling
         /// <summary>
         /// Gets or sets the first vertex position.
         /// </summary>
-        public Vertex3 A
+        public Vertex3d A
         {
             get
             {
@@ -71,7 +71,7 @@ namespace Gear.Modeling
         /// <summary>
         /// Gets or sets the second vertex position.
         /// </summary>
-        public Vertex3 B
+        public Vertex3d B
         {
             get
             {
@@ -88,7 +88,7 @@ namespace Gear.Modeling
         /// <summary>
         /// Gets or sets the third vertex position.
         /// </summary>
-        public Vertex3 C
+        public Vertex3d C
         {
             get
             {
@@ -110,11 +110,11 @@ namespace Gear.Modeling
             }
         }
 
-        public override Vector3 Normal
+        public override Vector3d Normal
         {
             get
             {
-                return Vector3.CrossProduct((Vector3)this.B - (Vector3)this.A, (Vector3)this.C - (Vector3)this.A).Normalize();
+                return Vector3d.CrossProduct((Vector3d)this.B - (Vector3d)this.A, (Vector3d)this.C - (Vector3d)this.A).Normalize();
             }
         }
 
@@ -147,12 +147,12 @@ namespace Gear.Modeling
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
-        public Vector3 GetIntersection(Edge3 line)
+        public Vector3d GetIntersection(Edge3 line)
         {
             Contract.Requires(line != null);
 
             // Set up vector variables;
-            Vector3 a, b, c, p, q;
+            Vector3d a, b, c, p, q;
             a = this.A.ToVector3();
             b = this.B.ToVector3();
             c = this.C.ToVector3();
@@ -213,7 +213,7 @@ namespace Gear.Modeling
                     var sy = p.Y + (dy * k);
                     var sz = p.Z + (dz * k);
 
-                    return new Vector3(sx, sy, sz);
+                    return new Vector3d(sx, sy, sz);
                 }
             }
 
@@ -238,7 +238,7 @@ namespace Gear.Modeling
             var r2 = other.B.ToVector3();
             var r3 = other.C.ToVector3();
 
-            var n1 = Vector3.CrossProduct(q2 - q1, q3 - q1);
+            var n1 = Vector3d.CrossProduct(q2 - q1, q3 - q1);
 
             throw new NotImplementedException();
         }

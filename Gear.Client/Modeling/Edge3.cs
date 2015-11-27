@@ -27,7 +27,7 @@ namespace Gear.Modeling
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        public Edge3(Vertex3 p, Vertex3 q)
+        public Edge3(Vertex3d p, Vertex3d q)
         {
             Contract.Requires(p != null);
             Contract.Requires(q != null);
@@ -35,7 +35,7 @@ namespace Gear.Modeling
             this.P = p;
             this.Q = q;
         }
-        public Edge3(Vertex3[] vertices, int p, int q)
+        public Edge3(Vertex3d[] vertices, int p, int q)
         {
             Contract.Requires(vertices != null);
             Contract.Requires(p < vertices.Length);
@@ -48,12 +48,12 @@ namespace Gear.Modeling
         }
         #endregion
         #region Properties
-        public Vertex3 P
+        public Vertex3d P
         {
             get;
             set;
         }
-        public Vertex3 Q
+        public Vertex3d Q
         {
             get;
             set;
@@ -84,7 +84,7 @@ namespace Gear.Modeling
         }
         #endregion
         #region Methods
-        public Vector3 GetMidpoint()
+        public Vector3d GetMidpoint()
         {
             return (this.P.Position + this.Q.Position) / 2.0;
         }
@@ -93,7 +93,7 @@ namespace Gear.Modeling
         /// Calculates the point at which the edge intersects the XY plane.
         /// </summary>
         /// <returns></returns>
-        public Vector3 GetIntersectionXY()
+        public Vector3d GetIntersectionXY()
         {
             return this.GetIntersectionXY(0.0);
         }
@@ -103,7 +103,7 @@ namespace Gear.Modeling
         /// </summary>
         /// <param name="z">The offset of the XY plane along the Z axis.</param>
         /// <returns></returns>
-        public Vector3 GetIntersectionXY(double z)
+        public Vector3d GetIntersectionXY(double z)
         {
             throw new NotImplementedException();
         }
@@ -112,7 +112,7 @@ namespace Gear.Modeling
         /// Calculates the point at which the edge intersects the XY plane.
         /// </summary>
         /// <returns></returns>
-        public Vector3 GetIntersectionYZ()
+        public Vector3d GetIntersectionYZ()
         {
             return this.GetIntersectionYZ(0.0);
         }
@@ -122,7 +122,7 @@ namespace Gear.Modeling
         /// </summary>
         /// <param name="x">The offset of the YZ plane along the X axis.</param>
         /// <returns></returns>
-        public Vector3 GetIntersectionYZ(double x)
+        public Vector3d GetIntersectionYZ(double x)
         {
             var x1 = this.P.X;
             var x2 = this.Q.X;
@@ -147,7 +147,7 @@ namespace Gear.Modeling
         /// Calculates the edge's intersection with the ZX plane.
         /// </summary>
         /// <returns></returns>
-        public Vector3 GetIntersectionZX()
+        public Vector3d GetIntersectionZX()
         {
             return this.GetIntersectionZX(0.0);
         }
@@ -157,7 +157,7 @@ namespace Gear.Modeling
         /// </summary>
         /// <param name="y">The offset of the ZX plane along the Y axis.</param>
         /// <returns></returns>
-        public Vector3 GetIntersectionZX(double y)
+        public Vector3d GetIntersectionZX(double y)
         {
             throw new NotImplementedException();
         }
