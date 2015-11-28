@@ -8,34 +8,59 @@ namespace Gear.Geometry
 {
     public struct Vertex3f : IRenderableVertex
     {
+        private Vector3f position;
+        private Vector3f normal;
+        private Vector2f texCoords;
+
         public Vertex3f(float x, float y, float z)
         {
-            this.Position = new Vector3f(x, y, z);
-            this.Normal = Vector3f.Zero;
-            this.TexCoords = Vector2f.Zero;
+            this.position = new Vector3f(x, y, z);
+            this.normal = Vector3f.Zero;
+            this.texCoords = Vector2f.Zero;
         }
 
         public Vertex3f(Vector3f position, Vector3f normal, Vector2f texCoords)
         {
-            this.Position = position;
-            this.Normal = normal;
-            this.TexCoords = texCoords;
+            this.position = position;
+            this.normal = normal;
+            this.texCoords = texCoords;
 
         }
 
         public Vector3f Normal
         {
-            get; set;
+            get
+            {
+                return this.normal;
+            }
+            set
+            {
+                this.normal = value;
+            }
         }
 
         public Vector3f Position
         {
-            get; set;
+            get
+            {
+                return this.position;
+            }
+            set
+            {
+                this.position = value;
+            }
         }
 
         public Vector2f TexCoords
         {
-            get; set;
+            get
+            {
+                return this.texCoords;
+            }
+            set
+            {
+                this.texCoords = value;
+            }
         }
     }
 }
