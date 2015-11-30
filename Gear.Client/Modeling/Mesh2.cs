@@ -15,10 +15,10 @@ namespace Gear.Modeling
     /// <summary>
     /// An unstructured grid of two-dimensional polygons.
     /// </summary>
-    public class Mesh2 : IEnumerable<Polygon2>
+    public class Mesh2 : IEnumerable<Polygon2d>
     {
         #region Fields
-        private Polygon2[] polygons;
+        private Polygon2d[] polygons;
         #endregion
         #region Constructors
         /// <summary>
@@ -26,7 +26,7 @@ namespace Gear.Modeling
         /// </summary>
         public Mesh2()
         {
-            this.polygons = new Polygon2[0];
+            this.polygons = new Polygon2d[0];
         }
         #endregion
         #region Methods
@@ -34,7 +34,7 @@ namespace Gear.Modeling
         /// Gets the enumerator for the current instance.
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<Polygon2> GetEnumerator()
+        public IEnumerator<Polygon2d> GetEnumerator()
         {
             for (int i = 0; i < this.polygons.Length; i++)
             {

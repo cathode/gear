@@ -14,7 +14,7 @@ using System.Diagnostics.Contracts;
 
 namespace Gear.Modeling.Primitives
 {
-    public class Cone 
+    public class Cone : Mesh
     {
         #region Constructors
         /// <summary>
@@ -22,7 +22,7 @@ namespace Gear.Modeling.Primitives
         /// </summary>
         /// <param name="radius"></param>
         /// <param name="height"></param>
-        public Cone(double radius, double height)
+        public Cone(float radius, float height)
             : this(radius, height, 12)
         {
 
@@ -34,7 +34,7 @@ namespace Gear.Modeling.Primitives
         /// <param name="radius"></param>
         /// <param name="height"></param>
         /// <param name="vertexCount"></param>
-        public Cone(double radius, double height, int vertexCount)
+        public Cone(float radius, float height, int vertexCount)
         {
             Contract.Requires(vertexCount > 2);
 
@@ -49,18 +49,19 @@ namespace Gear.Modeling.Primitives
             for (int i = 0; i < vertexCount; ++i)
             {
                 var theta = alpha * i;
-                //vertices[i] = new Vertex3f(Math.Cos(theta) * radius, 0, Math.Sin(theta) * radius);
+                vertices[i] = new Vertex3f((float)Math.Cos(theta) * radius, 0.0f, (float)Math.Sin(theta) * radius);
             }
 
-            var polys = new List<Polygon3>();
-            //polys.Add(new Triangle3(vertices[tipIndex], vertices[0], vertices[tipIndex - 1]));
-            //polys.Add(new Triangle3(vertices[0], vertices[tipIndex - 1], vertices[baseIndex]));
+            var polys = new List<Triangle3f>();
+            polys.Add(new Triangle3f(vertices[tipIndex], vertices[0], vertices[tipIndex - 1]));
+            polys.Add(new Triangle3f(vertices[0], vertices[tipIndex - 1], vertices[baseIndex]));
 
             for (int i = 1; i < vertexCount; ++i)
             {
-                //polys.Add(new Triangle3(vertices[tipIndex], vertices[i - 1], vertices[i]));
-                //polys.Add(new Triangle3(vertices[i], vertices[i - 1], vertices[baseIndex]));
+                polys.Add(new Triangle3f(vertices[tipIndex], vertices[i - 1], vertices[i]));
+                polys.Add(new Triangle3f(vertices[i], vertices[i - 1], vertices[baseIndex]));
             }
+            this.Vertices = vertices;
 
             //this.Polygons = polys.ToArray();
         }

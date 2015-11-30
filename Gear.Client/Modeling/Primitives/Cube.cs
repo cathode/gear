@@ -63,15 +63,15 @@ namespace Gear.Modeling.Primitives
                 new Edge3(verts, 3, 7),
             };
 
-            this.Polygons = new Quad3[] { 
+            this.Polygons = new Quad3d[] { 
                 // Top and bottom
-                new Quad3(edges, 0, 1, 2, 3),
-                new Quad3(edges, 4, 5, 6, 7),
+                new Quad3d(edges, 0, 1, 2, 3),
+                new Quad3d(edges, 4, 5, 6, 7),
                 //new Quad3(edges,  
-                new Quad3(verts, 0, 3, 7, 4),
-                new Quad3(verts, 1, 0, 4, 5),
-                new Quad3(verts, 2, 1, 5, 6),
-                new Quad3(verts, 3, 2, 6, 7),
+                new Quad3d(verts, 0, 3, 7, 4),
+                new Quad3d(verts, 1, 0, 4, 5),
+                new Quad3d(verts, 2, 1, 5, 6),
+                new Quad3d(verts, 3, 2, 6, 7),
                 
             };
         }

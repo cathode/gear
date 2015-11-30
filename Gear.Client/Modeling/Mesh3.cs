@@ -19,12 +19,12 @@ namespace Gear.Modeling
     /// <summary>
     /// Represents an unstructured grid in 3d-space comprised of polygons.
     /// </summary>
-    public class Mesh3 : IEnumerable<Polygon3>, IRenderable
+    public class Mesh3 : IEnumerable<Polygon3d>, IRenderable
     {
         #region Fields
         internal int VertexBuffer;
 
-        private Polygon3[] polygons;
+        private Polygon3d[] polygons;
         private Vertex3d[] vertices;
 
        
@@ -35,11 +35,11 @@ namespace Gear.Modeling
         /// </summary>
         public Mesh3()
         {
-            this.polygons = new Polygon3[0];
+            this.polygons = new Polygon3d[0];
             this.vertices = new Vertex3d[0];
         }
 
-        public Mesh3(params Polygon3[] polygons)
+        public Mesh3(params Polygon3d[] polygons)
         {
             this.polygons = polygons;
             //TODO: fixme
@@ -47,7 +47,7 @@ namespace Gear.Modeling
         }
         #endregion
         #region Properties
-        public Polygon3[] Polygons
+        public Polygon3d[] Polygons
         {
             get
             {
@@ -62,7 +62,7 @@ namespace Gear.Modeling
 
         #endregion
         #region Methods
-        public IEnumerator<Polygon3> GetEnumerator()
+        public IEnumerator<Polygon3d> GetEnumerator()
         {
             foreach (var poly in this.polygons)
                 yield return poly;

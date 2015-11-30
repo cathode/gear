@@ -15,32 +15,32 @@ namespace Gear.Modeling
     /// <summary>
     /// Represents a triangle in two-dimensional space.
     /// </summary>
-    public class Triangle2 : Polygon2
+    public class Triangle2d : Polygon2d
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Triangle2"/> class.
+        /// Initializes a new instance of the <see cref="Triangle2d"/> class.
         /// </summary>
-        public Triangle2()
+        public Triangle2d()
             : base(3)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Triangle2"/> class.
+        /// Initializes a new instance of the <see cref="Triangle2d"/> class.
         /// </summary>
         /// <param name="radius"></param>
-        public Triangle2(double radius)
+        public Triangle2d(double radius)
             : base(3, radius)
         {
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref="Triangle2"/> class.
+        ///  Initializes a new instance of the <see cref="Triangle2d"/> class.
         /// </summary>
         /// <param name="radius"></param>
         /// <param name="mode"></param>
-        public Triangle2(double radius, RadiusMode mode)
+        public Triangle2d(double radius, RadiusMode mode)
             : base(3, radius, mode)
         {
         }

@@ -7,7 +7,7 @@
     <ProjectGuid>{C58D23D8-3F41-4BF2-A0EA-C06820377E67}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gear.Client</RootNamespace>
+    <RootNamespace>Gear</RootNamespace>
     <AssemblyName>Gear.Client</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -59,6 +59,8 @@
   <ItemGroup>
     <Compile Include="ClientEngine.cs" />
     <Compile Include="Modeling\ChunkMesh.cs" />
+    <Compile Include="Modeling\Mesh.cs" />
+    <Compile Include="Modeling\MeshFragment.cs" />
     <Compile Include="Modeling\Parametrics\ComponentDocument.cs" />
     <Compile Include="Modeling\Parametrics\ComponentVariation.cs" />
     <Compile Include="Modeling\Parametrics\DistanceRelationship.cs" />
@@ -74,10 +76,9 @@
     <Compile Include="Modeling\Mesh2.cs" />
     <Compile Include="Modeling\Mesh3.cs" />
     <Compile Include="Modeling\Mesh4.cs" />
-    <Compile Include="Modeling\MeshData.cs" />
     <Compile Include="Modeling\Model.cs" />
-    <Compile Include="Modeling\Polygon2.cs" />
-    <Compile Include="Modeling\Polygon3.cs" />
+    <Compile Include="Modeling\Polygon2d.cs" />
+    <Compile Include="Modeling\Polygon3d.cs" />
     <Compile Include="Modeling\PrimitiveKind.cs" />
     <Compile Include="Modeling\Primitives\Cube.cs" />
     <Compile Include="Modeling\Primitives\Dodecahedron.cs" />
@@ -85,12 +86,13 @@
     <Compile Include="Modeling\Primitives\MengerSponge.cs" />
     <Compile Include="Modeling\Primitives\Octahedron.cs" />
     <Compile Include="Modeling\Primitives\Sphere.cs" />
-    <Compile Include="Modeling\Quad2.cs" />
-    <Compile Include="Modeling\Quad3.cs" />
+    <Compile Include="Modeling\Quad2d.cs" />
+    <Compile Include="Modeling\Quad3d.cs" />
     <Compile Include="Modeling\QuadStrip3.cs" />
     <Compile Include="Modeling\RadiusMode.cs" />
-    <Compile Include="Modeling\Triangle2.cs" />
-    <Compile Include="Modeling\Triangle3.cs" />
+    <Compile Include="Modeling\Triangle2d.cs" />
+    <Compile Include="Modeling\Triangle3d.cs" />
+    <Compile Include="Modeling\Triangle3f.cs" />
     <Compile Include="Modeling\TriangleFan3.cs" />
     <Compile Include="Modeling\TriangleStrip3.cs" />
     <Compile Include="Geometry\__Extensions.cs" />

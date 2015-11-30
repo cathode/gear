@@ -246,7 +246,7 @@ namespace Gear.Client.Rendering.Software
             }
         }
 
-        private void DrawTriangle(Triangle3 triangle)
+        private void DrawTriangle(Triangle3d triangle)
         {
             var p1 = triangle[0];
             var p2 = triangle[1];
@@ -279,17 +279,17 @@ namespace Gear.Client.Rendering.Software
             }
         }
 
-        private void DrawQuad(Quad3 quad)
+        private void DrawQuad(Quad3d quad)
         {
             var emid = new Edge3(quad.A, quad.C);
         }
 
-        private void DrawPolygon(Polygon3 poly)
+        private void DrawPolygon(Polygon3d poly)
         {
-            if (poly is Triangle3)
-                this.DrawTriangle((Triangle3)poly);
-            else if (poly is Quad3)
-                this.DrawQuad((Quad3)poly);
+            if (poly is Triangle3d)
+                this.DrawTriangle((Triangle3d)poly);
+            else if (poly is Quad3d)
+                this.DrawQuad((Quad3d)poly);
             else
             {
                 // NOP

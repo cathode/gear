@@ -7,7 +7,7 @@
  *****************************************************************************/
 namespace Gear.Modeling
 {
-    public class TriangleStrip3 : Polygon3
+    public class TriangleStrip3 : Polygon3d
     {
     }
 }

@@ -15,7 +15,7 @@ namespace Gear.Modeling
     /// <summary>
     /// Represents a polygon in two-dimensional space.
     /// </summary>
-    public class Polygon2 : IEnumerable<Vertex2d>
+    public class Polygon2d : IEnumerable<Vertex2d>
     {
         #region Fields
         /// <summary>
@@ -25,10 +25,10 @@ namespace Gear.Modeling
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Polygon2"/> class.
+        /// Initializes a new instance of the <see cref="Polygon2d"/> class.
         /// </summary>
         /// <param name="vertices">The number of sides of the new polygon.</param>
-        public Polygon2(int vertices)
+        public Polygon2d(int vertices)
         {
             Contract.Requires(vertices > 2);
 
@@ -36,17 +36,17 @@ namespace Gear.Modeling
         }      
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="Polygon2"/> class.
+        /// Initializes a new instance of the <see cref="Polygon2d"/> class.
         /// </summary>
         /// <param name="sides">The number of sides of the new polygon.</param>
         /// <param name="radius">The radius of the new polygon.</param>
-        public Polygon2(int sides, double radius)
+        public Polygon2d(int sides, double radius)
             : this(sides, radius, RadiusMode.Vertex)
         {
         }    
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="Polygon2"/> class.
+        /// Initializes a new instance of the <see cref="Polygon2d"/> class.
         /// </summary>
         /// <remarks>
         /// Creates a regular polygon.
@@ -54,7 +54,7 @@ namespace Gear.Modeling
         /// <param name="sides">The number of sides of the new polygon.</param>
         /// <param name="radius">The radius of the new polygon.</param>
         /// <param name="mode">The <see cref="RadiusMode"/> that indicates how the <paramref name="radius"/> parameter is interpreted.</param>
-        public Polygon2(int sides, double radius, RadiusMode mode)
+        public Polygon2d(int sides, double radius, RadiusMode mode)
         {
             this.vertices = new Vertex2d[sides];
             for (int s = 0; s < sides; s++)
@@ -65,10 +65,10 @@ namespace Gear.Modeling
         }       
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="Polygon2"/> class.
+        /// Initializes a new instance of the <see cref="Polygon2d"/> class.
         /// </summary>
         /// <param name="vertices"></param>
-        public Polygon2(params Vertex2d[] vertices)
+        public Polygon2d(params Vertex2d[] vertices)
         {
             if (vertices.Length < 3)
                 throw new ArgumentException("Polygons must contain at least 3 vertices.", "vertices");

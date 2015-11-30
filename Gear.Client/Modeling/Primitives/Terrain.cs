@@ -74,7 +74,7 @@ namespace Gear.Modeling.Primitives
         {
             var mesh = new Mesh3();
             var verts = new Vertex3d[(this.ChunkSize + 1) * (this.ChunkSize + 1)];
-            var quads = new Quad3[this.ChunkSize * this.ChunkSize];
+            var quads = new Quad3d[this.ChunkSize * this.ChunkSize];
 
             var stride = this.ChunkSize;
             var sv = stride + 1;
@@ -103,7 +103,7 @@ namespace Gear.Modeling.Primitives
 
             for (int y = 0; y < stride; ++y)
                 for (int x = 0; x < stride; ++x)
-                    quads[(y * stride) + x] = new Quad3(verts, (y * sv) + x, (y * sv) + (x + 1), ((y + 1) * sv) + (x + 1), ((y + 1) * sv) + x);
+                    quads[(y * stride) + x] = new Quad3d(verts, (y * sv) + x, (y * sv) + (x + 1), ((y + 1) * sv) + (x + 1), ((y + 1) * sv) + x);
 
             return new Mesh3(quads);
         }

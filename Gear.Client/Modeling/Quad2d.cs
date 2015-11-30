@@ -12,32 +12,32 @@ namespace Gear.Modeling
     /// <summary>
     /// Represents a quadrilateral polygon in two-dimensional space.
     /// </summary>
-    public class Quad2 : Polygon2
+    public class Quad2d : Polygon2d
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Quad2"/> class.
+        /// Initializes a new instance of the <see cref="Quad2d"/> class.
         /// </summary>
-        public Quad2()
+        public Quad2d()
             : base(4)
         {
         }     
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="Quad2"/> class.
+        /// Initializes a new instance of the <see cref="Quad2d"/> class.
         /// </summary>
         /// <param name="size">The width and height of the new quad.</param>
-        public Quad2(double size)
+        public Quad2d(double size)
             : this(size, size)
         {
         }  
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="Quad2"/> class.
+        /// Initializes a new instance of the <see cref="Quad2d"/> class.
         /// </summary>
         /// <param name="width">The width of the quad.</param>
         /// <param name="height">The height of the quad.</param>
-        public Quad2(double width, double height)
+        public Quad2d(double width, double height)
             : base(4)
         {
             var w = width / 2.0;

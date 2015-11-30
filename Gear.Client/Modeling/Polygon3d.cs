@@ -17,11 +17,11 @@ namespace Gear.Modeling
     /// <summary>
     /// Represents a polygon in three-dimensional space. A polygon is a shape made up of vertices.
     /// </summary>
-    public class Polygon3 : IEnumerable<Vertex3d>, IRenderableFace
+    public class Polygon3d : IEnumerable<Vertex3d>, IRenderableFace
     {
         #region Fields
         /// <summary>
-        /// Holds the vertices of the current <see cref="Polygon3"/>.
+        /// Holds the vertices of the current <see cref="Polygon3d"/>.
         /// </summary>
         private readonly Vertex3d[] vertices;
         protected readonly Edge3[] edges;
@@ -30,10 +30,10 @@ namespace Gear.Modeling
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Polygon3"/> class.
+        /// Initializes a new instance of the <see cref="Polygon3d"/> class.
         /// </summary>
         /// <param name="vertexCount">The number of vertices of the new polygon.</param>
-        public Polygon3(int vertexCount)
+        public Polygon3d(int vertexCount)
         {
             Contract.Requires(vertexCount > 2);
 
@@ -45,14 +45,14 @@ namespace Gear.Modeling
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Polygon3"/> class.
+        /// Initializes a new instance of the <see cref="Polygon3d"/> class.
         /// </summary>
         /// <param name="vertexCount">The number of sides of the new polygon.</param>
         /// <param name="radius">The radius of the new polygon.</param>
         /// <remarks>
         /// Assumes <see cref="RadiusMode.Vertex"/>.
         /// </remarks>
-        public Polygon3(int vertexCount, double radius)
+        public Polygon3d(int vertexCount, double radius)
             : this(vertexCount, radius, RadiusMode.Vertex)
         {
             Contract.Requires(vertexCount > 2);
@@ -60,12 +60,12 @@ namespace Gear.Modeling
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Polygon3"/> class as a regular polygon with the specified radius.
+        /// Initializes a new instance of the <see cref="Polygon3d"/> class as a regular polygon with the specified radius.
         /// </summary>
         /// <param name="vertexCount">The number of sides of the new polygon.</param>
         /// <param name="radius">The radius of the new polygon.</param>
         /// <param name="mode">The <see cref="RadiusMode"/> that describes how the radius value is interpreted.</param>
-        public Polygon3(int vertexCount, double radius, RadiusMode mode)
+        public Polygon3d(int vertexCount, double radius, RadiusMode mode)
         {
             Contract.Requires(vertexCount > 2);
             Contract.Ensures(this.Vertices.Length == vertexCount);
@@ -93,10 +93,10 @@ namespace Gear.Modeling
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Polygon3"/> class from the specified vertices.
+        /// Initializes a new instance of the <see cref="Polygon3d"/> class from the specified vertices.
         /// </summary>
         /// <param name="vertices">A collection of vertices to use for the new polygon.</param>
-        public Polygon3(params Vertex3d[] vertices)
+        public Polygon3d(params Vertex3d[] vertices)
         {
             Contract.Requires(vertices != null);
             Contract.Requires(vertices.Length > 2);
@@ -107,7 +107,7 @@ namespace Gear.Modeling
             this.RegenerateEdges();
         }
 
-        public Polygon3(Vertex3d[] verts, params int[] indices)
+        public Polygon3d(Vertex3d[] verts, params int[] indices)
         {
             Contract.Requires(verts != null);
             Contract.Requires(indices != null);
@@ -128,7 +128,7 @@ namespace Gear.Modeling
             this.RegenerateEdges();
         }
 
-        public Polygon3(Edge3[] edges, params int[] indices)
+        public Polygon3d(Edge3[] edges, params int[] indices)
         {
             Contract.Requires(edges != null);
             Contract.Requires(edges.Length > 2);
@@ -149,7 +149,7 @@ namespace Gear.Modeling
         #endregion
         #region Properties
         /// <summary>
-        /// Gets a value indicating whether the vertices of the current <see cref="Polygon3"/> lie on the same plane in 3d-space.
+        /// Gets a value indicating whether the vertices of the current <see cref="Polygon3d"/> lie on the same plane in 3d-space.
         /// </summary>
         public virtual bool IsPlanar
         {
@@ -164,7 +164,7 @@ namespace Gear.Modeling
         }
 
         /// <summary>
-        /// Gets the <see cref="PrimitiveKind"/> of the current <see cref="Polygon3"/>.
+        /// Gets the <see cref="PrimitiveKind"/> of the current <see cref="Polygon3d"/>.
         /// </summary>
         public virtual PrimitiveKind Kind
         {
@@ -175,7 +175,7 @@ namespace Gear.Modeling
         }
 
         /// <summary>
-        /// Gets the surface normal of the current <see cref="Polygon3"/>.
+        /// Gets the surface normal of the current <see cref="Polygon3d"/>.
         /// </summary>
         public virtual Vector3d Normal
         {
@@ -276,18 +276,18 @@ namespace Gear.Modeling
         }
 
         /// <summary>
-        /// Returns an enumerator for the current <see cref="Polygon3"/>.
+        /// Returns an enumerator for the current <see cref="Polygon3d"/>.
         /// </summary>
-        /// <returns>An enumerator that allows enumeration of the vertices of the current <see cref="Polygon3"/>.</returns>
+        /// <returns>An enumerator that allows enumeration of the vertices of the current <see cref="Polygon3d"/>.</returns>
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
         }
 
         /// <summary>
-        /// Returns an enumerator for the current <see cref="Polygon3"/>. 
+        /// Returns an enumerator for the current <see cref="Polygon3d"/>. 
         /// </summary>
-        /// <returns>An enumerator that allows enumeration of the vertices of the current <see cref="Polygon3"/>.</returns>
+        /// <returns>An enumerator that allows enumeration of the vertices of the current <see cref="Polygon3d"/>.</returns>
         public IEnumerator<Vertex3d> GetEnumerator()
         {
             for (int i = 0; i < this.vertices.Length; i++)
@@ -300,18 +300,18 @@ namespace Gear.Modeling
         /// Decomposes the current polygon into triangles.
         /// </summary>
         /// <returns></returns>
-        public virtual IEnumerable<Triangle3> Decompose()
+        public virtual IEnumerable<Triangle3d> Decompose()
         {
             var a = (from v in this.Vertices
                      orderby v.X
                      select v).First();
 
-            yield return new Triangle3(this.vertices[0], this.vertices[1], this.vertices[2]);
+            yield return new Triangle3d(this.vertices[0], this.vertices[1], this.vertices[2]);
             //throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Finds and returns a <see cref="Vector3d"/> that describes the position of the incenter of the current <see cref="Polygon3"/>.
+        /// Finds and returns a <see cref="Vector3d"/> that describes the position of the incenter of the current <see cref="Polygon3d"/>.
         /// </summary>
         /// <returns></returns>
         public Vector3d GetIncenter()

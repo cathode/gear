@@ -14,35 +14,35 @@ namespace Gear.Modeling
     /// <summary>
     /// Represents a triangle in 3D-space, defined by three vertices.
     /// </summary>
-    public class Triangle3 : Polygon3
+    public class Triangle3d : Polygon3d
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Triangle3"/> class.
+        /// Initializes a new instance of the <see cref="Triangle3d"/> class.
         /// </summary>
         /// <param name="radius"></param>
-        public Triangle3(double radius)
+        public Triangle3d(double radius)
             : base(3, radius)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Triangle3"/> class.
+        /// Initializes a new instance of the <see cref="Triangle3d"/> class.
         /// </summary>
         /// <param name="radius"></param>
         /// <param name="mode"></param>
-        public Triangle3(double radius, RadiusMode mode)
+        public Triangle3d(double radius, RadiusMode mode)
             : base(3, radius, mode)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Triangle3"/> class.
+        /// Initializes a new instance of the <see cref="Triangle3d"/> class.
         /// </summary>
         /// <param name="a">The first vertex of the triangle.</param>
         /// <param name="b">The second vertex of the triangle.</param>
         /// <param name="c">The third vertex of the triangle.</param>
-        public Triangle3(Vertex3d a, Vertex3d b, Vertex3d c)
+        public Triangle3d(Vertex3d a, Vertex3d b, Vertex3d c)
             : base(a, b, c)
         {
             Contract.Requires(a != null);
@@ -129,8 +129,8 @@ namespace Gear.Modeling
         #region Methods
         public override bool Equals(object obj)
         {
-            if (obj is Triangle3)
-                return this == (Triangle3)obj;
+            if (obj is Triangle3d)
+                return this == (Triangle3d)obj;
             return false;
         }
 
@@ -226,7 +226,7 @@ namespace Gear.Modeling
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public Edge3 GetIntersection(Triangle3 other)
+        public Edge3 GetIntersection(Triangle3d other)
         {
             if (other == null)
                 return null;
@@ -261,13 +261,13 @@ namespace Gear.Modeling
         /// <summary>
         /// Compares the vertices of two triangles and determines if they represent the same triangle.
         /// </summary>
-        /// <param name="t1">The first <see cref="Triangle3"/> to compare.</param>
-        /// <param name="t2">The second <see cref="Triangle3"/> to compare.</param>
+        /// <param name="t1">The first <see cref="Triangle3d"/> to compare.</param>
+        /// <param name="t2">The second <see cref="Triangle3d"/> to compare.</param>
         /// <returns>true if the triangles represent the same geometry; otherwise, false.</returns>
-        public static bool operator ==(Triangle3 t1, Triangle3 t2)
+        public static bool operator ==(Triangle3d t1, Triangle3d t2)
         {
-            if (Triangle3.ReferenceEquals(t1, null) || Triangle3.ReferenceEquals(t2, null))
-                if (Triangle3.ReferenceEquals(t1, t2))
+            if (Triangle3d.ReferenceEquals(t1, null) || Triangle3d.ReferenceEquals(t2, null))
+                if (Triangle3d.ReferenceEquals(t1, t2))
                     return true;
                 else
                     return false;
@@ -278,13 +278,13 @@ namespace Gear.Modeling
         /// <summary>
         /// Compares the vertices of two triangles and determines if they represent different triangles.
         /// </summary>
-        /// <param name="t1">The first <see cref="Triangle3"/> to compare.</param>
-        /// <param name="t2">The second <see cref="Triangle3"/> to compare.</param>
+        /// <param name="t1">The first <see cref="Triangle3d"/> to compare.</param>
+        /// <param name="t2">The second <see cref="Triangle3d"/> to compare.</param>
         /// <returns>true if the triangles represent different geometry; otherwise, false.</returns>
-        public static bool operator !=(Triangle3 t1, Triangle3 t2)
+        public static bool operator !=(Triangle3d t1, Triangle3d t2)
         {
-            if (Triangle3.ReferenceEquals(t1, null) || Triangle3.ReferenceEquals(t2, null))
-                if (Triangle3.ReferenceEquals(t1, t2))
+            if (Triangle3d.ReferenceEquals(t1, null) || Triangle3d.ReferenceEquals(t2, null))
+                if (Triangle3d.ReferenceEquals(t1, t2))
                     return false;
                 else
                     return true;

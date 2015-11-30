@@ -17,57 +17,57 @@ namespace Gear.Modeling
     /// <summary>
     /// Represents a quad in 3D-space, in other words a four sided planar polygon.
     /// </summary>
-    public class Quad3 : Polygon3
+    public class Quad3d : Polygon3d
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Quad3"/> class.
+        /// Initializes a new instance of the <see cref="Quad3d"/> class.
         /// </summary>
-        public Quad3()
+        public Quad3d()
             : base(4)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Quad3"/> class.
+        /// Initializes a new instance of the <see cref="Quad3d"/> class.
         /// </summary>
-        /// <param name="radius">The radius of the new <see cref="Quad3"/>.</param>
-        public Quad3(double radius)
+        /// <param name="radius">The radius of the new <see cref="Quad3d"/>.</param>
+        public Quad3d(double radius)
             : base(4, radius)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Quad3"/> class.
+        /// Initializes a new instance of the <see cref="Quad3d"/> class.
         /// </summary>
-        /// <param name="radius">The radius of the new <see cref="Quad3"/>.</param>
+        /// <param name="radius">The radius of the new <see cref="Quad3d"/>.</param>
         /// <param name="mode">The <see cref="RadiusMode"/> that describes how the value of the radius parameter is interpreted.</param>
-        public Quad3(double radius, RadiusMode mode)
+        public Quad3d(double radius, RadiusMode mode)
             : base(4, radius, mode)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Quad3"/> class.
+        /// Initializes a new instance of the <see cref="Quad3d"/> class.
         /// </summary>
         /// <param name="a">The top-left vertex of the quad.</param>
         /// <param name="b">The top-right vertex of the quad.</param>
         /// <param name="c">The bottom-right vertex of the quad.</param>
         /// <param name="d">The bottom-left vertex of the quad.</param>
-        public Quad3(Vertex3d a, Vertex3d b, Vertex3d c, Vertex3d d)
+        public Quad3d(Vertex3d a, Vertex3d b, Vertex3d c, Vertex3d d)
             : base(a, b, c, d)
         {
             
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="Quad3"/> class.
+        /// Initializes a new instance of the <see cref="Quad3d"/> class.
         /// </summary>
         /// <param name="verts"></param>
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <param name="c"></param>
         /// <param name="d"></param>
-        public Quad3(Vertex3d[] verts, int a, int b, int c, int d)
+        public Quad3d(Vertex3d[] verts, int a, int b, int c, int d)
             : base(verts[a], verts[b], verts[c], verts[d])
         {
             Contract.Requires(verts != null);
@@ -82,14 +82,14 @@ namespace Gear.Modeling
             Contract.Requires(d < verts.Length);
         }
 
-        public Quad3(Edge3[] edges, int a, int b, int c, int d)
+        public Quad3d(Edge3[] edges, int a, int b, int c, int d)
             : base(edges, a, b, c, d)
         {
             Contract.Requires(edges != null);
             Contract.Requires(edges.Length > 3);
         }
 
-        public Quad3(double width, double height)
+        public Quad3d(double width, double height)
             : base(new Vertex3d(), new Vertex3d(), new Vertex3d(), new Vertex3d())
         {
             var x1 = width / -2.0;

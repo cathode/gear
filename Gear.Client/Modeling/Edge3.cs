@@ -59,13 +59,13 @@ namespace Gear.Modeling
             set;
         }
 
-        public Polygon3 Left
+        public Polygon3d Left
         {
             get;
             set;
         }
 
-        public Polygon3 Right
+        public Polygon3d Right
         {
             get;
             set;

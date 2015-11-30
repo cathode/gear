@@ -7,7 +7,7 @@
  *****************************************************************************/
 namespace Gear.Modeling
 {
-    public class TriangleFan3 : Polygon3
+    public class TriangleFan3 : Polygon3d
     {
     }
 }

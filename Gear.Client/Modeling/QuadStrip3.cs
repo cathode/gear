@@ -14,7 +14,7 @@ namespace Gear.Modeling
     /// <summary>
     /// Represents a strip of connected quads in 3d space.
     /// </summary>
-    public class QuadStrip3 : Polygon3
+    public class QuadStrip3 : Polygon3d
     {
         #region Constructors
         /// <summary>
