@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
+
 
 namespace Gear.Geometry
 {
+    [StructLayout(LayoutKind.Sequential, Pack=1)]
     public struct Vertex3f : IRenderableVertex
     {
+        //[FieldOffset(0)]
         private Vector3f position;
+        //[FieldOffset(12)]
         private Vector3f normal;
+        //[FieldOffset(24)]
         private Vector2f texCoords;
 
         public Vertex3f(float x, float y, float z)
