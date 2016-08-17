@@ -21,8 +21,20 @@ namespace Gear.Model
         /// </remarks>
         public double AverageDensity { get; set; }
 
-        public double AtmosphereHeight { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating the height (in kilometers) of the planet's atmosphere.
+        /// </summary>
+        public double AtmosphereHeightKm { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating how oblate (flat) the planet is.
+        /// </summary>
+        /// <remarks>
+        /// A value of 0.0 indicates a perfect sphere, a value of 1.0 indicates
+        /// an ellipsoid whose equatorial diameter is twice it's polar diameter,
+        /// and a value of -1.0 indicates an ellipsoid whose equatorial diameter
+        /// is half of it's polar diameter.
+        /// </remarks>
         public double Oblateness { get; set; }
 
         public double AxialTilt { get; set; }
@@ -30,5 +42,9 @@ namespace Gear.Model
         public double RotationalVelocity { get; set; }
 
         public double OrbitalVelocity { get; set; }
+
+        public double AverageOrbit { get; set; }
+
+        public double OrbitalEccentricity { get; set; }
     }
 }

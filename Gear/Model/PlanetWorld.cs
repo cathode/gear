@@ -49,13 +49,13 @@ namespace Gear.Model
             factor = ((double)int.MaxValue / rng.Next());
             p.RotationalVelocity = factor * (pmax.RotationalVelocity - pmin.RotationalVelocity) + pmin.RotationalVelocity;
 
-            // Calculate planet eccentricity (oblateness)
+            // Calculate planet oblateness
             factor = ((double)int.MaxValue / rng.Next());
             p.Oblateness = factor * (pmax.Oblateness - pmin.Oblateness) + pmin.Oblateness;
 
             // Calculate mean atmosphere height
             factor = ((double)int.MaxValue / rng.Next());
-            p.AtmosphereHeight = factor * (pmax.AtmosphereHeight - pmin.AtmosphereHeight) + pmin.AtmosphereHeight;
+            p.AtmosphereHeightKm = factor * (pmax.AtmosphereHeightKm - pmin.AtmosphereHeightKm) + pmin.AtmosphereHeightKm;
 
 
             // Calculate orbital speed
