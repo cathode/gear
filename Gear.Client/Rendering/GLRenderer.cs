@@ -340,6 +340,20 @@ namespace Gear.Client.Rendering
             GL.Enable(EnableCap.ColorMaterial);
             GL.Enable(EnableCap.CullFace);
 
+            var mesh = Gear.Modeling.Mesh.NewCube();
+            uint[] vboId = new uint[2];
+
+
+            GL.GenBuffers(2, vboId);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vboId[0]);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, vboId[1]);
+
+            var indices = new ushort[mesh.Triangles.Length];
+
+            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * sizeof(ushort)), indices, BufferUsageHint.StaticDraw);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vboId[0]);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(mesh.Vertices.Length * 8 * sizeof(float)), mesh.Vertices, BufferUsageHint.StaticDraw);
 
 
             //GL.Translate(0, 0, -0.25);

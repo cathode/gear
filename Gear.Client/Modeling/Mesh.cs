@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Gear.Geometry;
-
+using Gear.Client.Rendering;
 
 namespace Gear.Modeling
 {
@@ -42,6 +42,8 @@ namespace Gear.Modeling
                 this.vertices = value;
             }
         }
+        public Triangle3f[] Triangles { get; set; }
+
         #endregion
 
         #region Methods
@@ -67,7 +69,7 @@ namespace Gear.Modeling
             // top
             ts[0] = new byte[] { 0, 1, 2 };
             ts[1] = new byte[] { 2, 3, 0 };
-
+            //ts[2] = new byte[]
 
 
             //var edges = new Edge3[]
@@ -160,9 +162,10 @@ namespace Gear.Modeling
             polys[18] = new Triangle3f(verts[9], verts[10], verts[5]);
             polys[19] = new Triangle3f(verts[10], verts[6], verts[1]);
 
+            
             var result = new Mesh();
             result.vertices = verts;
-
+            result.Triangles = polys;
             return result;
         }
 
@@ -170,6 +173,17 @@ namespace Gear.Modeling
         {
 
         }
+
+        #endregion
+        #region vertex buffer handling
+
+        public VBO CurrentVBO { get; set; }
+
+        public void LoadMeshIntoBuffer(Gear.Client.Rendering.VBO vbo)
+        {
+
+        }
+
         #endregion
     }
 }

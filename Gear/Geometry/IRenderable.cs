@@ -19,7 +19,6 @@ namespace Gear.Geometry
     public interface IRenderable
     {
         #region Properties
-       
         /// <summary>
         /// Gets a collection of vertices to render.
         /// </summary>
