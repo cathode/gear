@@ -57,7 +57,7 @@ namespace Gear.Client
 
             Net.MessageSerializationHelper.AddMessageSubtypes();
 
-            var renderer = new Gear.Client.Rendering.OpenGL.GLRenderer();
+            var renderer = new Gear.Client.Rendering.GLRenderer();
             //var renderer = new Gear.Client.Rendering.Software.SoftwareRenderer();
             renderer.Initialize(new Rendering.RendererOptions());
 

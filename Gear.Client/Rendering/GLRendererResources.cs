@@ -12,7 +12,10 @@ using System.Text;
 
 namespace Gear.Client.Rendering
 {
-    public class FrameOptions
+    [CLSCompliant(false)]
+    public class GLRendererResources
     {
+        public uint VertexBuffer;
+        public uint ElementBuffer;
     }
 }

@@ -6,25 +6,31 @@
  * license. See the included LICENSE file for details.                        *
  *****************************************************************************/
 using System;
-using System.Threading;
-using Gear.Client.Platform;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Gear.Client.SceneGraph;
 using Gear.Geometry;
 using System.Diagnostics.Contracts;
+//using Gear.Client.Platform.Microsoft;
+//using Gear.Client.Platform.Microsoft.OpenGL;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Input;
+using OpenTK.Graphics.OpenGL;
+using Gear.Client.Platform;
 
 namespace Gear.Client.Rendering
 {
     /// <summary>
-    /// Represents the basic functionality that underpins a 3D graphics renderer.
+    /// Provides a real-time renderer that utilizes the OpenGL API.
     /// </summary>
-    /// <remarks>
-    /// After creating a new instance of a <see cref="Renderer"/>-derived class,
-    /// the <see cref="Renderer.Initialize"/> method must be called to perform any required set-up
-    /// which the implementation might need to do prior to being able to render frames.
-    /// </remarks>
-    public abstract class Renderer 
+    public class GLRenderer : IDisposable
     {
         #region Fields
+        private bool isDisposed;
+        private OpenTK.GameWindow gameWindow;
+
         /// <summary>
         /// Backing field for the <see cref="Renderer.ActiveCamera"/> property.
         /// </summary>
@@ -64,11 +70,10 @@ namespace Gear.Client.Rendering
         #endregion
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Renderer"/> class.
+        /// Initializes a new instance of the <see cref="GLRenderer"/> class.
         /// </summary>
-        protected Renderer()
+        public GLRenderer()
         {
-            this.profile = DisplayProfile.Default;
             this.activeCamera = new Camera()
             {
                 FieldOfView = Angle.FromDegrees(45),
@@ -77,6 +82,38 @@ namespace Gear.Client.Rendering
             };
 
             this.Scene = new Scene();
+
+            var gw = new GameWindow();
+            this.gameWindow = gw;
+
+            gw.Load += (sender, e) =>
+            {
+                gw.VSync = VSyncMode.On;
+            };
+
+            gw.Resize += (sender, e) =>
+                {
+                    GL.Viewport(0, 0, gw.Width, gw.Height);
+                };
+
+            gw.UpdateFrame += (sender, e) =>
+                {
+                    // add game logic, input handling
+                    if (gw.Keyboard[Key.Escape])
+                    {
+                        gw.Exit();
+                    }
+                };
+
+            gw.RenderFrame += (sender, e) =>
+                {
+                    this.RenderFrame();
+                };
+        }
+
+        ~GLRenderer()
+        {
+            this.Dispose(false);
         }
         #endregion
         #region Events
@@ -121,6 +158,13 @@ namespace Gear.Client.Rendering
         public event EventHandler Stopping;
         #endregion
         #region Properties
+        public bool IsDisposed
+        {
+            get
+            {
+                return this.isDisposed;
+            }
+        }
         /// <summary>
         /// Gets or sets the background color of the scene.
         /// </summary>
@@ -228,7 +272,7 @@ namespace Gear.Client.Rendering
         /// </summary>
         public void RenderFrame()
         {
-            
+            //var options = this.CreateFrameOptions();
             var e = new RenderEventArgs();
 
             this.OnPreRender(e);
@@ -244,15 +288,13 @@ namespace Gear.Client.Rendering
             if (this.isRunning)
                 return;
 
+            this.isRunning = true;
+            this.Initialize(RendererOptions.Empty);
+
             this.OnStarting(EventArgs.Empty);
 
-            this.isRunning = true;
-
-            while (this.isRunning)
-            {
-                this.RenderFrame();
-                //Thread.Sleep(25);
-            }
+            this.gameWindow.Closed += gameWindow_Closed;
+            this.gameWindow.Run(60.0);
         }
 
         /// <summary>
@@ -276,6 +318,32 @@ namespace Gear.Client.Rendering
         {
             if (this.Initializing != null)
                 this.Initializing(this, e);
+
+            gameWindow.Title = "Gear.Client Sample Application";
+
+            float[] mat_specular = { 1.0f, 1.0f, 1.0f, 1.0f };
+            float[] mat_shininess = { 50.0f };
+            float[] light_position = { 100.0f, 100.0f, 100.0f, 0.0f };
+            float[] light_ambient = { 0.1f, 0.1f, 0.1f, 1.0f };
+
+            GL.ShadeModel(ShadingModel.Smooth);
+            GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Specular, mat_specular);
+            GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Shininess, mat_shininess);
+            GL.Light(LightName.Light0, LightParameter.Position, light_position);
+            GL.Light(LightName.Light0, LightParameter.Ambient, light_ambient);
+            GL.Light(LightName.Light0, LightParameter.Diffuse, mat_specular);
+
+
+            GL.Enable(EnableCap.Lighting);
+            GL.Enable(EnableCap.Light0);
+            GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.ColorMaterial);
+            GL.Enable(EnableCap.CullFace);
+
+
+
+            //GL.Translate(0, 0, -0.25);
+            //GL.Scale(0.5, 0.5, 0.5);
         }
 
         /// <summary>
@@ -316,6 +384,13 @@ namespace Gear.Client.Rendering
         {
             if (this.ProfileChanged != null)
                 this.ProfileChanged(this, e);
+
+            //GL.Viewport(0, 0, this.Profile.Width, this.Profile.Height);
+            //GL.MatrixMode(MatrixMode.Projection);
+
+            //GLU.Perspective(45.0, (double)this.Profile.Width / (double)this.Profile.Height, 0.1, 100.0);
+            //GL.MatrixMode(MatrixMode.ModelView);
+            //GL.LoadIdentity();
         }
 
         /// <summary>
@@ -326,6 +401,73 @@ namespace Gear.Client.Rendering
         {
             if (this.Render != null)
                 this.Render(this, e);
+
+
+            // render graphics
+            GL.ClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+
+
+            /*
+            GL.Begin(BeginMode.Quads);
+            // Front Face
+            GL.Normal3(0.0f, 0.0f, 0.5f);
+            GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 1.0f);
+            GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 1.0f);
+            GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, 1.0f);
+            GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, 1.0f);
+            // Back Face
+            GL.Normal3(0.0f, 0.0f, -0.5f);
+            GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, -1.0f);
+            GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, -1.0f);
+            GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, -1.0f);
+            GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, -1.0f);
+            // Top Face
+            GL.Normal3(0.0f, 0.5f, 0.0f);
+            GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, -1.0f);
+            GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(-1.0f, 1.0f, 1.0f);
+            GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(1.0f, 1.0f, 1.0f);
+            GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, -1.0f);
+            // Bottom Face
+            GL.Normal3(0.0f, -0.5f, 0.0f);
+            GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(-1.0f, -1.0f, -1.0f);
+            GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(1.0f, -1.0f, -1.0f);
+            GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 1.0f);
+            GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 1.0f);
+            // Right Face
+            GL.Normal3(0.5f, 0.0f, 0.0f);
+            GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, -1.0f);
+            GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, -1.0f);
+            GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, 1.0f);
+            GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 1.0f);
+            // Left Face
+            GL.Normal3(-0.5f, 0.0f, 0.0f);
+            GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, -1.0f);
+            GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 1.0f);
+            GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, 1.0f);
+            GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, -1.0f);
+            GL.End();*/
+
+
+            //GL.sp
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();
+
+            GL.Scale(0.01, 0.01, 0.01);
+
+            var ct = this.ActiveCamera.Position;
+
+            GL.Translate(-ct.X, -ct.Y, -ct.Z);
+
+            var rt = this.ActiveCamera.Orientation;
+
+            this.ActiveCamera.Orientation = rt.RotateBy(1.5);
+            GL.Rotate(rt.W, rt.X, rt.Y, rt.Z);
+
+            this.ProcessNode(this.Scene.Root);
+
+            gameWindow.SwapBuffers();
         }
 
         /// <summary>
@@ -365,6 +507,79 @@ namespace Gear.Client.Rendering
             Contract.Invariant(this.ActiveCamera != null);
             Contract.Invariant(this.Profile != null);
         }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            this.Dispose(true);
+            this.isDisposed = true;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            //WGL.MakeCurrent(this.deviceContext, IntPtr.Zero);
+            //WGL.DeleteContext(this.renderingContext);
+        }
+
+        void gameWindow_Closed(object sender, EventArgs e)
+        {
+            this.Stop();
+
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
+        }
+
+
+        private void Idle()
+        {
+
+        }
+
+
+        double r = 10.0;
+
+        protected virtual void ProcessNode(Node node)
+        {
+            var axis = node.Orientation.GetAxis();
+            GL.PushMatrix();
+            GL.Rotate(node.Orientation.GetAngle().Degrees, axis.X, axis.Y, axis.Z);
+            GL.Translate(node.Position.X, node.Position.Y, node.Position.Z);
+
+
+            //if (node.Renderable != null)
+            //foreach (var poly in node.Renderable.Faces)
+            //{
+                //GL.Begin(PrimitiveType.Polygon);
+                //var n = poly.Normal;
+
+                //GL.Normal3(n.X, n.Y, n.Z);
+
+                //foreach (var vert in poly.Vertices.Reverse())
+                 //   GL.Vertex3(vert.X, vert.Y, vert.Z);
+
+                //GL.End();
+            //}
+
+
+            foreach (var child in node.Children)
+            {
+                this.ProcessNode(child);
+            }
+            GL.PopMatrix();
+
+        }
+
+        private void IdleFunc_Callback()
+        {
+            //GLUT.PostRedisplay();
+            return;
+        }
+
+        private void DisplayFunc_Callback()
+        {
+            this.RenderFrame();
+            return;
+        }
+
         #endregion
     }
 }

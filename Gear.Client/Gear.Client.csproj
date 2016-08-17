@@ -145,35 +145,14 @@
     <Compile Include="Platform\Microsoft\WindowsDisplayAdapter.cs" />
     <Compile Include="Platform\Microsoft\WindowsDisplayDevice.cs" />
     <Compile Include="Platform\Microsoft\WindowsDisplayProfileEnumerator.cs" />
-    <Compile Include="Rendering\FrameOptions.cs" />
-    <Compile Include="Rendering\IManagedRendererTarget.cs" />
-    <Compile Include="Rendering\IRenderer.cs" />
-    <Compile Include="Rendering\ManagedBuffer.cs" />
-    <Compile Include="Rendering\ManagedBufferColorPlane.cs" />
-    <Compile Include="Rendering\ManagedBufferDepthPlane.cs" />
-    <Compile Include="Rendering\ManagedBufferStencilPlane.cs" />
-    <Compile Include="Rendering\ManagedRenderer.cs" />
-    <Compile Include="Rendering\ManagedRendererBitmapTarget.cs" />
-    <Compile Include="Rendering\ManagedRendererHostControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Rendering\ManagedRendererHostForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Rendering\materials\MaterialBase.cs" />
-    <Compile Include="Rendering\OpenGL\GLRenderer.cs" />
-    <Compile Include="Rendering\OpenGL\GLRendererResources.cs" />
-    <Compile Include="Rendering\Raytracing\RaytracerRenderer.cs" />
-    <Compile Include="Rendering\Renderer.cs" />
+    <Compile Include="Rendering\GLRenderer.cs" />
+    <Compile Include="Rendering\GLRendererResources.cs" />
+    <None Include="Rendering\Renderer.cs" />
     <Compile Include="Rendering\RendererInitializationEventArgs.cs" />
     <Compile Include="Rendering\RendererOptions.cs" />
     <Compile Include="Rendering\RenderEventArgs.cs" />
     <Compile Include="Rendering\RenderStyle.cs" />
-    <Compile Include="Rendering\Software\Fragment.cs" />
-    <Compile Include="Rendering\Software\Shaders\FragmentShader.cs" />
-    <Compile Include="Rendering\Software\Shaders\VertexShader.cs" />
-    <Compile Include="Rendering\Software\SoftwareRenderer.cs" />
-    <Compile Include="Rendering\Software\SoftwareRendererState.cs" />
     <Compile Include="Rendering\VBO.cs" />
     <Compile Include="SceneGraph\Camera.cs" />
     <Compile Include="SceneGraph\CameraChangedEventArgs.cs" />
