@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using Gear.Geometry;
+using Gear.Modeling;
 
 namespace Gear.Client.SceneGraph
 {
@@ -23,7 +24,7 @@ namespace Gear.Client.SceneGraph
         private readonly LinkedList<Node> parents = new LinkedList<Node>();
         private readonly List<Node> children = new List<Node>();
         private readonly List<Constraint> constraints = new List<Constraint>();
-        private IRenderable renderable;
+       
         private Vector3d position = Node.DefaultPosition;
         private Vector3d scale = Node.DefaultScale;
         private Quaternion orientation = Node.DefaultOrientation;
@@ -49,9 +50,9 @@ namespace Gear.Client.SceneGraph
                     this.Add(c);
         }
 
-        public Node(IRenderable renderable)
+        public Node(Mesh mesh)
         {
-            this.renderable = renderable;
+            this.Renderable = mesh;
         }
         #endregion
         #region Properties
@@ -231,16 +232,10 @@ namespace Gear.Client.SceneGraph
             }
         }
 
-        public IRenderable Renderable
+        public Mesh Renderable
         {
-            get
-            {
-                return this.renderable;
-            }
-            set
-            {
-                this.renderable = value;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -375,7 +370,7 @@ namespace Gear.Client.SceneGraph
         /// <returns></returns>
         public virtual Extents3d GetExtents()
         {
-            if (this.renderable != null)
+            if (this.Renderable != null)
             {
                 double x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0;
 
@@ -392,7 +387,7 @@ namespace Gear.Client.SceneGraph
                     m = Matrix4.CreateTranslationMatrix(pos) * rm;
                 }
 
-                foreach (var vt in this.renderable.Vertices)
+                foreach (var vt in this.Renderable.Vertices)
                 {
                     //Vertex3 v = null;
 

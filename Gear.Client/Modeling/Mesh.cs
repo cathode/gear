@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Gear.Geometry;
 using Gear.Client.Rendering;
+using System.Diagnostics.Contracts;
 
 namespace Gear.Modeling
 {
@@ -24,6 +25,7 @@ namespace Gear.Modeling
         public Mesh()
         {
             this.vertices = new Vertex3f[0];
+            this.Triangles = new Triangle3f[0];
         }
 
         //public Mesh(IEnumerable<Triangle3f> )
@@ -90,17 +92,19 @@ namespace Gear.Modeling
             //    new Edge3(verts, 3, 7),
             //};
 
-            //this.Polygons = new Quad3d[] { 
-            //    // Top and bottom
-            //    new Quad3d(edges, 0, 1, 2, 3),
-            //    new Quad3d(edges, 4, 5, 6, 7),
-            //    //new Quad3(edges,  
-            //    new Quad3d(verts, 0, 3, 7, 4),
-            //    new Quad3d(verts, 1, 0, 4, 5),
-            //    new Quad3d(verts, 2, 1, 5, 6),
-            //    new Quad3d(verts, 3, 2, 6, 7),
+            var triangles = new Triangle3f[] { 
+                // Top and bottom
+                new Triangle3f(verts[0], verts[1], verts[2]),
+                new Triangle3f(verts[2], verts[3], verts[0])
+            };
+                //new Quad3(edges,  
+                //new Triangle3f(verts, 0, 3, 7, 4),
+                //new Triangle3f(verts, 1, 0, 4, 5),
+                //new Triangle3f(verts, 2, 1, 5, 6),
+                //new Triangle3f(verts, 3, 2, 6, 7),
                 
             //};
+            mesh.Triangles = triangles;
 
             return mesh;
         }
@@ -172,6 +176,12 @@ namespace Gear.Modeling
         public void Optimize()
         {
 
+        }
+
+        [ContractInvariantMethod]
+        private void ContractInvariants()
+        {
+            Contract.Invariant(this.Triangles != null);
         }
 
         #endregion

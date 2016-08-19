@@ -340,25 +340,29 @@ namespace Gear.Client.Rendering
             GL.Enable(EnableCap.ColorMaterial);
             GL.Enable(EnableCap.CullFace);
 
-            var mesh = Gear.Modeling.Mesh.NewCube();
-            uint[] vboId = new uint[2];
+            this.mesh = Gear.Modeling.Mesh.NewIcosahedron(1.0f);
+            this.vboId = new uint[2];
 
 
             GL.GenBuffers(2, vboId);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vboId[0]);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, vboId[1]);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, this.vboId[0]);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, this.vboId[1]);
 
             var indices = new ushort[mesh.Triangles.Length];
 
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * sizeof(ushort)), indices, BufferUsageHint.StaticDraw);
+            this.elementCount = (ushort)indices.Length;
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vboId[0]);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(mesh.Vertices.Length * 8 * sizeof(float)), mesh.Vertices, BufferUsageHint.StaticDraw);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, this.vboId[0]);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(mesh.Vertices.Length * 8 * sizeof(float)), this.mesh.Vertices, BufferUsageHint.StaticDraw);
 
 
             //GL.Translate(0, 0, -0.25);
             //GL.Scale(0.5, 0.5, 0.5);
         }
+        private Gear.Modeling.Mesh mesh;
+        private uint[] vboId;
+        private ushort elementCount;
 
         /// <summary>
         /// Raises the <see cref="Renderer.PostRender"/> event.
@@ -418,68 +422,89 @@ namespace Gear.Client.Rendering
 
 
             // render graphics
-            GL.ClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+            GL.ClearColor(0.15f, 0.15f, 0.15f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 
 
-            /*
-            GL.Begin(BeginMode.Quads);
-            // Front Face
-            GL.Normal3(0.0f, 0.0f, 0.5f);
-            GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 1.0f);
-            GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 1.0f);
-            GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, 1.0f);
-            // Back Face
-            GL.Normal3(0.0f, 0.0f, -0.5f);
-            GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, -1.0f);
-            GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, -1.0f);
-            // Top Face
-            GL.Normal3(0.0f, 0.5f, 0.0f);
-            GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(-1.0f, 1.0f, 1.0f);
-            GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, -1.0f);
-            // Bottom Face
-            GL.Normal3(0.0f, -0.5f, 0.0f);
-            GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(1.0f, -1.0f, -1.0f);
-            GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 1.0f);
-            GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 1.0f);
-            // Right Face
-            GL.Normal3(0.5f, 0.0f, 0.0f);
-            GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, -1.0f);
-            GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, -1.0f);
-            GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 1.0f);
-            // Left Face
-            GL.Normal3(-0.5f, 0.0f, 0.0f);
-            GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 1.0f);
-            GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, 1.0f);
-            GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            GL.End();*/
+            //GL.Scale(0.5, 0.5, 0.5);
+            //GL.Rotate(this.r += 0.2f, 0, 1, 1);
+            //GL.Translate(0f, 0f, -1f);
+
+            //GL.Begin(PrimitiveType.Quads);
+            //// Front Face
+            //GL.Normal3(0.0f, 0.0f, 0.5f);
+            //GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 1.0f);
+            //GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 1.0f);
+            //GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, 1.0f);
+            //GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, 1.0f);
+            //// Back Face
+            //GL.Normal3(0.0f, 0.0f, -0.5f);
+            //GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, -1.0f);
+            //GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, -1.0f);
+            //GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, -1.0f);
+            //GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, -1.0f);
+            //// Top Face
+            //GL.Normal3(0.0f, 0.5f, 0.0f);
+            //GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, -1.0f);
+            //GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(-1.0f, 1.0f, 1.0f);
+            //GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(1.0f, 1.0f, 1.0f);
+            //GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, -1.0f);
+            //// Bottom Face
+            //GL.Normal3(0.0f, -0.5f, 0.0f);
+            //GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(-1.0f, -1.0f, -1.0f);
+            //GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(1.0f, -1.0f, -1.0f);
+            //GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 1.0f);
+            //GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 1.0f);
+            //// Right Face
+            //GL.Normal3(0.5f, 0.0f, 0.0f);
+            //GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, -1.0f);
+            //GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, -1.0f);
+            //GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, 1.0f);
+            //GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 1.0f);
+            //// Left Face
+            //GL.Normal3(-0.5f, 0.0f, 0.0f);
+            //GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, -1.0f);
+            //GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 1.0f);
+            //GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, 1.0f);
+            //GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, -1.0f);
+            //GL.End();
 
 
-            //GL.sp
+
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
 
-            GL.Scale(0.01, 0.01, 0.01);
+            //GL.Scale(0.1, 0.1, 0.1);
 
-            var ct = this.ActiveCamera.Position;
+            //var ct = this.ActiveCamera.Position;
 
-            GL.Translate(-ct.X, -ct.Y, -ct.Z);
+            //GL.Translate(-ct.X, -ct.Y, -ct.Z);
 
-            var rt = this.ActiveCamera.Orientation;
+            //var rt = this.ActiveCamera.Orientation;
 
-            this.ActiveCamera.Orientation = rt.RotateBy(1.5);
-            GL.Rotate(rt.W, rt.X, rt.Y, rt.Z);
+            //this.ActiveCamera.Orientation = rt.RotateBy(1.5);
+            //GL.Rotate(rt.W, rt.X, rt.Y, rt.Z);
+
+            // TEST CODE:
+
+            //GL.BindBuffer(BufferTarget.ArrayBuffer, this.vboId[0]);
+            //GL.BindBuffer(BufferTarget.ElementArrayBuffer, this.vboId[1]);
+
+            //GL.EnableClientState(ArrayCap.VertexArray);
+            //GL.VertexPointer(3, VertexPointerType.Float, 0, IntPtr.Zero);
+
+            //GL.DrawElements(BeginMode.Triangles, this.elementCount * 3, DrawElementsType.UnsignedShort, IntPtr.Zero);
+
+            //GL.DisableClientState(ArrayCap.VertexArray);
+            //GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            //GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+
 
             this.ProcessNode(this.Scene.Root);
+
+            // Render frame time
+            //OpenTK.Graphics.OpenGL4.gl
 
             gameWindow.SwapBuffers();
         }
@@ -519,7 +544,7 @@ namespace Gear.Client.Rendering
         {
             Contract.Invariant(this.Scene != null);
             Contract.Invariant(this.ActiveCamera != null);
-            Contract.Invariant(this.Profile != null);
+            //Contract.Invariant(this.Profile != null);
         }
 
         public void Dispose()
@@ -559,19 +584,22 @@ namespace Gear.Client.Rendering
             GL.Translate(node.Position.X, node.Position.Y, node.Position.Z);
 
 
-            //if (node.Renderable != null)
-            //foreach (var poly in node.Renderable.Faces)
-            //{
-                //GL.Begin(PrimitiveType.Polygon);
-                //var n = poly.Normal;
+            if (node.Renderable != null)
+                foreach (var poly in node.Renderable.Triangles)
+                {
 
-                //GL.Normal3(n.X, n.Y, n.Z);
+                    GL.Begin(PrimitiveType.Triangles);
+                    var n = poly.Normal;
 
-                //foreach (var vert in poly.Vertices.Reverse())
-                 //   GL.Vertex3(vert.X, vert.Y, vert.Z);
+                    GL.Normal3(n.X, n.Y, n.Z);
 
-                //GL.End();
-            //}
+                    foreach (var v in new[] { poly.C, poly.B, poly.A })
+                    {
+                        var p = v.Position;
+                        GL.Vertex3(p.X, p.Y, p.Z);
+                    }
+                    GL.End();
+                }
 
 
             foreach (var child in node.Children)

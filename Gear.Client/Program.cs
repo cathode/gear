@@ -62,9 +62,15 @@ namespace Gear.Client
             renderer.Initialize(new Rendering.RendererOptions());
 
             var scene = new SceneGraph.Scene();
-            //scene.Root = new SceneGraph.Node(new Cone(1.0, 2.0));
+            scene.Root = new SceneGraph.Node(Gear.Modeling.Mesh.NewIcosahedron(0.45f));
+            scene.Root.Position = new Vector3d(0, 0, -0.2);
+            var cube = new SceneGraph.Node(Gear.Modeling.Mesh.NewCube(0.1f));
+            cube.Position = new Vector3d(0.5, 0, 0.25);
+            scene.Root.Add(cube);
 
             renderer.Scene = scene;
+
+            renderer.PreRender += (o, e) => { scene.Root.Orientation.RotateBy(20); };
             renderer.Start();
 
         }

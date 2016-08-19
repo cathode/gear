@@ -26,5 +26,12 @@ namespace Gear.Modeling
         public Vertex3f A { get; set; }
         public Vertex3f B { get; set; }
         public Vertex3f C { get; set; }
+        public Vector3f Normal
+        {
+            get
+            {
+                return Vector3f.CrossProduct(this.B.Position - this.A.Position, this.C.Position - this.A.Position).Normalize();
+            }
+        }
     }
 }
