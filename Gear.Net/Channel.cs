@@ -141,7 +141,7 @@ namespace Gear.Net
 
         public void UnregisterHandler(Guid handlerId)
         {
-            //this.messageHandlers.Values.First()
+            var handlers = this.messageHandlers.Values.SelectMany(e => e.Where(p => p.HandlerId == handlerId));
         }
 
         /// <summary>
@@ -228,39 +228,39 @@ namespace Gear.Net
         {
             //try
             //{
-                if (this.isRxQueueIdle)
+            if (this.isRxQueueIdle)
 
-                //if (Monitor.TryEnter(this.rxFlushGate))
+            //if (Monitor.TryEnter(this.rxFlushGate))
+            {
+                this.isRxQueueIdle = false;
+
+                if (this.State == ChannelState.Connected)
                 {
-                    this.isRxQueueIdle = false;
-
-                    if (this.State == ChannelState.Connected)
+                    lock (this.rxQueue)
                     {
-                        lock (this.rxQueue)
-                        {
-                            var q = this.rxQueue;
-                            var b = this.rxBuffer;
-                            this.rxBuffer = q;
-                            this.rxQueue = b;
-                        }
-
-
-                        while (this.rxBuffer.Count > 0)
-                        {
-                            var item = this.rxBuffer.Dequeue();
-                            try
-                            {
-                                this.OnMessageReceived(new MessageEventArgs(item));
-                            }
-                            catch
-                            {
-
-                            }
-                        }
+                        var q = this.rxQueue;
+                        var b = this.rxBuffer;
+                        this.rxBuffer = q;
+                        this.rxQueue = b;
                     }
 
-                    this.isRxQueueIdle = true;
+
+                    while (this.rxBuffer.Count > 0)
+                    {
+                        var item = this.rxBuffer.Dequeue();
+                        try
+                        {
+                            this.OnMessageReceived(new MessageEventArgs(item));
+                        }
+                        catch
+                        {
+
+                        }
+                    }
                 }
+
+                this.isRxQueueIdle = true;
+            }
             //}
             //finally
             //{

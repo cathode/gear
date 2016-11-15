@@ -10,28 +10,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Runtime;
-using System.Diagnostics;
-using System.Reflection;
 using ProtoBuf;
 
-namespace Gear.Net
+namespace Gear.Net.Messages
 {
-    public class MessageSerializationHelper
+    [ProtoContract]
+    public class TeardownChannelMessage : IMessage
     {
-        public static void AddMessageSubtypes(Assembly asm = null)
+
+        [ProtoMember(1)]
+        public bool Confirmation { get; set; }
+
+        [ProtoIgnore]
+        public int DispatchId
         {
-            if (asm == null)
-                asm = Assembly.GetExecutingAssembly();
-
-            var types = asm.GetTypes();
-            var meta = ProtoBuf.Meta.RuntimeTypeModel.Default.Add(typeof(IMessage), true);
-
-            foreach (var t in types.Where(e => e.GetInterfaces().Contains(typeof(IMessage))))
-            {
-                IMessage instance = Activator.CreateInstance(t) as IMessage;
-                meta.AddSubType(instance.DispatchId, t);
-            }
+            get { return BuiltinMessageIds.TeardownChannel; }
         }
     }
 }

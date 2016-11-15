@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Gear</RootNamespace>
     <AssemblyName>Gear</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -137,14 +137,9 @@
     <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MongoDB.Bson">
-      <HintPath>..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
-    </Reference>
-    <Reference Include="MongoDB.Driver">
-      <HintPath>..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
-    </Reference>
-    <Reference Include="protobuf-net">
-      <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
+    <Reference Include="protobuf-net, Version=2.1.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\packages\protobuf-net.2.1.0\lib\net451\protobuf-net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
@@ -216,19 +211,6 @@
     <Compile Include="Model\TerrainGenerator.cs" />
     <Compile Include="Model\Zone.cs" />
     <Compile Include="Model\ZoneMetadata.cs" />
-    <Compile Include="Net\Channel.cs" />
-    <Compile Include="Net\ChannelEventArgs.cs" />
-    <Compile Include="Net\ChannelState.cs" />
-    <Compile Include="Net\ConnectedChannel.cs" />
-    <Compile Include="Net\ConnectionListener.cs" />
-    <Compile Include="Net\DatagramChannel.cs" />
-    <Compile Include="Net\EndPointKind.cs" />
-    <Compile Include="Net\IMessage.cs" />
-    <Compile Include="Net\IMessagePublisher.cs" />
-    <Compile Include="Net\MessageContainer.cs" />
-    <Compile Include="Net\MessageEventArgs.cs" />
-    <Compile Include="Net\MessageQueue.cs" />
-    <Compile Include="Net\MessageSerializationHelper.cs" />
     <Compile Include="Net\Messages\BlockUpdateMessage.cs" />
     <Compile Include="Net\Messages\ConfigurationMessage.cs" />
     <Compile Include="__HashCode.cs" />
@@ -237,12 +219,9 @@
     </None>
     <None Include="Net\Messages\EndpointGreetingMessage.cs" />
     <Compile Include="Net\Messages\LocatorRequestMessage.cs" />
-    <Compile Include="Net\Messages\Ids.cs" />
     <Compile Include="Net\Messages\LocatorResponseMessage.cs" />
     <Compile Include="Net\Messages\RequestResultMessage.cs" />
-    <Compile Include="Net\Messages\TeardownChannelMessage.cs" />
     <Compile Include="Net\Messages\ZoneDataRequestMessage.cs" />
-    <Compile Include="Net\NetworkList.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerEventArgs.cs" />
     <Compile Include="PlayerInfo.cs" />
@@ -285,7 +264,12 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Gear.Net\Gear.Net.csproj">
+      <Project>{dbe9ad59-cb8b-40d6-8c41-b63a29e55aa2}</Project>
+      <Name>Gear.Net</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Model\references.txt" />
   </ItemGroup>

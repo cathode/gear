@@ -48,7 +48,8 @@ namespace Gear.Server
 
             Log.Write("Message log initialized", "system", LogMessageGroup.Info);
 
-            Net.MessageSerializationHelper.AddMessageSubtypes();
+            
+            Gear.Net.MessageSerializationHelper.AddMessageSubtypes();
             //var engine = new ServerEngine();
             //engine.Run();
 

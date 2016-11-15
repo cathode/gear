@@ -55,7 +55,7 @@ namespace Gear.Client
             world.Initialize(pmin, pmax);
 
 
-            Net.MessageSerializationHelper.AddMessageSubtypes();
+            Gear.Net.MessageSerializationHelper.AddMessageSubtypes();
 
             var renderer = new Gear.Client.Rendering.GLRenderer();
             //var renderer = new Gear.Client.Rendering.Software.SoftwareRenderer();

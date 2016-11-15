@@ -60,10 +60,16 @@ namespace Gear.Net
         /// </summary>
         public event EventHandler Connected;
 
+        /// <summary>
+        /// Raised when the <see cref="Channel"/> loses it's established connection to the remote endpoint.
+        /// </summary>
         public event EventHandler Disconnected;
 
         #region Properties
-        public Guid RemoteEndPointId { get; set; }
+        /// <summary>
+        /// Gets or sets the unique id of the client or server that the channel is connected to.
+        /// </summary>
+        public Guid RemoteEndPointId { get; protected set; }
 
         public EndPointKind RemoteEndPointKind { get; set; }
 

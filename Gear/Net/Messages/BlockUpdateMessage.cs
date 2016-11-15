@@ -20,7 +20,7 @@ namespace Gear.Net.Messages
         [ProtoIgnore]
         int IMessage.DispatchId
         {
-            get { return Ids.BlockUpdate; }
+            get { return BuiltinMessageIds.BlockUpdate; }
         }
 
         public long X { get; set; }

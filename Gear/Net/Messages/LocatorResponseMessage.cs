@@ -24,7 +24,7 @@ namespace Gear.Net.Messages
         [ProtoIgnore]
         int IMessage.DispatchId
         {
-            get { return Ids.LocatorResponse; }
+            get { return BuiltinMessageIds.LocatorResponse; }
 
         }
 

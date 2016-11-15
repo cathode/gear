@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics.Contracts;
 using System.Net;
@@ -21,7 +22,11 @@ namespace Gear.Net
     /// </summary>
     public class ConnectionListener
     {
+        private bool isRunning;
         private readonly Socket listener;
+        //private Task t;
+
+        //private CancellationToken token;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectionListener"/> class.
@@ -55,13 +60,17 @@ namespace Gear.Net
         /// </summary>
         public event EventHandler<ChannelEventArgs> ChannelConnected;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Start()
         {
             this.listener.Bind(new IPEndPoint(IPAddress.Any, this.ListenPort));
             this.listener.Listen(32);
 
 
-            while (true)
+            //while (!this.token.IsCancellationRequested)
+            while (this.isRunning)
             {
                 try
                 {
@@ -76,6 +85,11 @@ namespace Gear.Net
                     // TODO: Add logging.
                     break;
                 }
+                catch (SocketException ex)
+                {
+
+                    break;
+                }
             }
         }
 
@@ -83,12 +97,13 @@ namespace Gear.Net
         public void StartInBackground()
         {
             Task.Run(() => this.Start());
-
         }
 
         public void Stop()
         {
-
+            this.isRunning = false;
+            this.listener.Shutdown(SocketShutdown.Both);
+            this.listener.Close();
         }
 
         protected void OnConnectionEstablished(object sender, ChannelEventArgs e)
