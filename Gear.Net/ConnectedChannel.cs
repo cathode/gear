@@ -28,6 +28,8 @@ namespace Gear.Net
 
         private IPEndPoint cachedRemoteEP;
 
+        private Timer reconnectTimer;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectedChannel"/> class.
         /// </summary>
@@ -63,7 +65,7 @@ namespace Gear.Net
         /// <summary>
         /// Raised when the <see cref="Channel"/> loses it's established connection to the remote endpoint.
         /// </summary>
-        public event EventHandler Disconnected;
+        public event EventHandler<ChannelDisconnectedEventArgs> Disconnected;
 
         #region Properties
         /// <summary>
@@ -121,6 +123,7 @@ namespace Gear.Net
             catch (Exception ex)
             {
                 // TODO: Handle failed connection attempt
+                this.OnDisconnected();
                 return false;
             }
         }
@@ -145,9 +148,24 @@ namespace Gear.Net
         {
             this.State = ChannelState.Disconnected;
 
-            if (this.Disconnected != null)
+            var args = new ChannelDisconnectedEventArgs();
+
+            //Raise the event.
+            this.Disconnected?.Invoke(this, args);
+
+            if ((args.ReconnectCount == -1 || args.ReconnectCount > 0) && args.ReconnectInterval.TotalMilliseconds > 0)
             {
-                this.Disconnected(this, EventArgs.Empty);
+                lock (this.reconnectTimer)
+                {
+                    if (this.reconnectTimer == null)
+                    {
+                        this.reconnectTimer = new Timer(this.ReconnectCallback, args, args.ReconnectInterval, TimeSpan.FromMilliseconds(-1));
+                    }
+                    else
+                    {
+                        this.reconnectTimer.Change(args.ReconnectInterval, TimeSpan.FromMilliseconds(-1));
+                    }
+                }
             }
         }
 
@@ -195,6 +213,35 @@ namespace Gear.Net
             this.socket.BeginReceive(state.Buffer, 0, 4, SocketFlags.Peek, this.RecvCallback, state);
         }
 
+        private void ReconnectCallback(object state)
+        {
+            var args = state as ChannelDisconnectedEventArgs;
+
+            if (args == null)
+                return;
+
+            //TODO: Evaluate need for locking
+            lock (this.reconnectTimer)
+            {
+                // attempt reconnect
+                if (args.ReconnectCount > 0)
+                {
+                    if (!this.Connect())
+                    {
+                        args.ReconnectCount--;
+                        this.reconnectTimer.Change(args.ReconnectInterval, TimeSpan.FromMilliseconds(-1));
+                    }
+                }
+                else if (args.ReconnectCount == -1)
+                {
+                    if (!this.Connect())
+                    {
+                        this.reconnectTimer.Change(args.ReconnectInterval, TimeSpan.FromMilliseconds(-1));
+                    }
+                }
+            }
+        }
+
         private void RecvCallback(IAsyncResult result)
         {
             try
@@ -209,7 +256,6 @@ namespace Gear.Net
                 // Did we at least get the length prefix?
                 if (rxCount == 4)
                 {
-
                     // Check if we have the entire message
                     var msgSize = 0;
                     if (!Serializer.TryReadLengthPrefix(state.Buffer, 0, 4, PrefixStyle.Fixed32BigEndian, out msgSize))
@@ -224,13 +270,35 @@ namespace Gear.Net
                         state.ResizeBuffers(bsize);
                     }
 
-                    // Blocking receive from socket
-                    this.socket.Receive(state.Buffer, bsize, SocketFlags.None);
+                    // Read into buffer until entire message is available
+                    do
+                    {
+                        int readRemain = bsize - state.ReceivedBytes;
+                        // Blocking receive from socket
+                        state.ReceivedBytes += this.socket.Receive(state.Buffer, state.ReceivedBytes, readRemain, SocketFlags.None);
+                    }
+                    while (state.ReceivedBytes < bsize);
 
-                    state.BufferStream.Position = 0;
 
-                    // Entire message available
-                    msg = Serializer.DeserializeWithLengthPrefix<IMessage>(state.BufferStream, PrefixStyle.Fixed32BigEndian);
+                    if (state.ReceivedBytes == bsize)
+                    {
+                        // Entire message available
+                        msg = Serializer.DeserializeWithLengthPrefix<IMessage>(state.BufferStream, PrefixStyle.Fixed32BigEndian);
+
+                        // Cleanup
+                        state.ReceivedBytes = 0;
+                        state.BufferStream.Position = 0;
+                        state.TotalBytes = -1;
+
+                        // Read the next prefix.
+                        this.socket.BeginReceive(state.Buffer, 0, 4, SocketFlags.Peek, this.RecvCallback, state);
+
+                        if (msg != null)
+                        {
+                            // After next read operation is dispatched, we need to handle the received message
+                            this.QueueRxMessageThreadSafe(msg);
+                        }
+                    }
                 }
                 else
                 {
@@ -239,14 +307,7 @@ namespace Gear.Net
                     Thread.Sleep(1);
                 }
 
-                // Read the next prefix.
-                this.socket.BeginReceive(state.Buffer, 0, 4, SocketFlags.Peek, this.RecvCallback, state);
 
-                if (msg != null)
-                {
-                    // After next read operation is dispatched, we need to handle the received message
-                    this.QueueRxMessageThreadSafe(msg);
-                }
             }
             catch (IOException ioe)
             {
@@ -255,7 +316,10 @@ namespace Gear.Net
             catch (SocketException se)
             {
                 if (!this.socket.Connected)
+                {
+                    // Channel is dead
                     this.OnDisconnected();
+                }
             }
         }
 
@@ -263,7 +327,8 @@ namespace Gear.Net
         {
             public byte[] Buffer;
             public MemoryStream BufferStream;
-            public int Offset;
+            public int ReceivedBytes = 0;
+            public int TotalBytes = -1;
             public const int BufferSegment = 8192; // 8KiB buffer size
 
             public RxState()
@@ -274,7 +339,7 @@ namespace Gear.Net
 
             internal void ResizeBuffers(int bsize)
             {
-                Array.Resize<byte>(ref this.Buffer, bsize);
+                Array.Resize<byte>(ref this.Buffer, (int)Math.Ceiling((double)bsize / RxState.BufferSegment) * RxState.BufferSegment);
                 this.BufferStream.Dispose();
                 this.BufferStream = new MemoryStream(this.Buffer);
             }

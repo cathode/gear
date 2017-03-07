@@ -19,13 +19,12 @@ namespace Gear.Net.Messages
     public static class BuiltinMessageIds
     {
         // System
+        public static readonly int EndpointGreeting = 0x0001; 
+        public static readonly int TeardownChannel = 0x0002;
 
-        public static readonly ushort TeardownChannel = 0x9000;
-        public static readonly ushort LocatorRequest = 0x9001;
-        public static readonly ushort LocatorResponse = 0x9002;
-
-        public static readonly int BlockUpdate = 0x1000;
-
-        public static readonly int ZoneDataRequest = 0x2005;
+        // File transfer
+        public static readonly int TransferFile = 0x0100;
+        public static readonly int TransferFileData = 0x0101;
+        public static readonly int TransferFileReceipt = 0x0102;
     }
 }

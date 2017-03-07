@@ -21,7 +21,11 @@ namespace Gear.Net.Messages
         [ProtoIgnore]
         int IMessage.DispatchId
         {
-            get { return BuiltinMessageIds.LocatorRequest; }
+            get
+            {
+                //return BuiltinMessageIds.LocatorRequest;
+                throw new NotImplementedException();
+            }
         }
 
         public bool IsBroadcastMessage

@@ -65,9 +65,15 @@ namespace Gear.Net
         /// </summary>
         public void Start()
         {
+            if (this.isRunning)
+                return;
+
+            this.isRunning = true;
+
             this.listener.Bind(new IPEndPoint(IPAddress.Any, this.ListenPort));
             this.listener.Listen(32);
 
+            
 
             //while (!this.token.IsCancellationRequested)
             while (this.isRunning)

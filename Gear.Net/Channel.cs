@@ -51,6 +51,8 @@ namespace Gear.Net
         private readonly object txFlushGate = new object();
         private readonly object rxFlushGate = new object();
 
+        private readonly object metaLock = new object();
+
         private readonly Dictionary<int, List<MessageHandlerRegistration>> messageHandlers = new Dictionary<int, List<MessageHandlerRegistration>>();
 
         #endregion
@@ -88,7 +90,7 @@ namespace Gear.Net
 
         public event EventHandler<MessageEventArgs> MessageReceived;
 
-
+        public bool InvokeHandlersAsync { get; set; }
 
         /// <summary>
         /// All messages published by the specified publisher will be forwarded
@@ -109,21 +111,22 @@ namespace Gear.Net
         /// <param name="dispatchId"></param>
         /// <param name="handler"></param>
         /// <returns>The guid of the handler registration, used for unregistering</returns>
-        public Guid RegisterHandler(int dispatchId, Action<MessageEventArgs, IMessage> handlerAction)
+        public void RegisterHandler(int dispatchId, Action<MessageEventArgs, IMessage> handlerAction, object owner = null)
         {
-            var hid = Guid.NewGuid();
-
             var reg = new MessageHandlerRegistration();
 
-            reg.HandlerId = hid;
+            reg.Owner = owner;
             reg.Action = handlerAction;
 
-            if (!this.messageHandlers.ContainsKey(dispatchId))
-                this.messageHandlers.Add(dispatchId, new List<MessageHandlerRegistration>());
+            lock (this.metaLock)
+            {
+                if (!this.messageHandlers.ContainsKey(dispatchId))
+                    this.messageHandlers.Add(dispatchId, new List<MessageHandlerRegistration>());
 
-            this.messageHandlers[dispatchId].Add(reg);
-
-            return hid;
+                this.messageHandlers[dispatchId].Add(reg);
+            }
+            // Any recieved messages that didnt' have a handler when they arrived, might be handled now.
+            this.ProcessRxQueue();
         }
 
         /// <summary>
@@ -132,16 +135,36 @@ namespace Gear.Net
         /// <param name="dispatchId"></param>
         /// <param name="handler"></param>
         /// <returns>The guid of the handler registration, used for unregistering the handler.</returns>
-        public Guid RegisterHandler<T>(Action<MessageEventArgs, T> handlerAction) where T : IMessage
+        public void RegisterHandler<T>(Action<MessageEventArgs, T> handlerAction, object owner = null) where T : IMessage
         {
             var inst = Activator.CreateInstance<T>();
 
-            return this.RegisterHandler(inst.DispatchId, (e, m) => { handlerAction(e, (T)m); });
+            this.RegisterHandler(inst.DispatchId, (e, m) => { handlerAction(e, (T)m); }, owner);
         }
 
-        public void UnregisterHandler(Guid handlerId)
+        public void UnregisterHandler(object owner)
         {
-            var handlers = this.messageHandlers.Values.SelectMany(e => e.Where(p => p.HandlerId == handlerId));
+            lock (this.metaLock)
+            {
+                var handlers = this.messageHandlers.Values.SelectMany(e => e.Where(p => p.Owner == owner)).ToArray();
+
+                var rem = new List<int>();
+
+                foreach (var kvp in this.messageHandlers)
+                {
+                    foreach (var h in handlers)
+                        if (kvp.Value.Contains(h))
+                            kvp.Value.Remove(h);
+
+                    if (kvp.Value.Count == 0)
+                        rem.Add(kvp.Key);
+                }
+
+                foreach (var id in rem)
+                {
+                    this.messageHandlers.Remove(id);
+                }
+            }
         }
 
         /// <summary>
@@ -226,11 +249,7 @@ namespace Gear.Net
         /// </summary>
         protected void ProcessRxQueue()
         {
-            //try
-            //{
             if (this.isRxQueueIdle)
-
-            //if (Monitor.TryEnter(this.rxFlushGate))
             {
                 this.isRxQueueIdle = false;
 
@@ -248,41 +267,32 @@ namespace Gear.Net
                     while (this.rxBuffer.Count > 0)
                     {
                         var item = this.rxBuffer.Dequeue();
-                        try
-                        {
-                            this.OnMessageReceived(new MessageEventArgs(item));
-                        }
-                        catch
-                        {
 
-                        }
+                        this.OnMessageReceived(new MessageEventArgs(item) { ReceivedAt = DateTime.Now, Sender = this.RemoteEndPoint });
                     }
                 }
 
                 this.isRxQueueIdle = true;
             }
-            //}
-            //finally
-            //{
-            //    //if (Monitor.IsEntered(this.rxFlushGate))
-            //    //Monitor.Exit(this.rxFlushGate);
-            //    //this.isRxQueueIdle = true;
-            //}
         }
 
         protected virtual void OnMessageReceived(MessageEventArgs e)
         {
             Contract.Requires(e != null);
 
-            if (this.MessageReceived != null)
-                this.MessageReceived(this, e);
-
-            // TODO: Invoke registered message handlers for received message type
+            this.MessageReceived?.Invoke(this, e);
 
             var msg = e.Data;
             if (this.messageHandlers.ContainsKey(msg.DispatchId))
             {
-                this.messageHandlers[msg.DispatchId].ForEach((h) => { h.Action(e, msg); });
+                if (this.InvokeHandlersAsync)
+                {
+                    Task.Run(() => this.messageHandlers[msg.DispatchId].ForEach((h) => { h.Action(e, msg); }));
+                }
+                else
+                {
+                    this.messageHandlers[msg.DispatchId].ForEach((h) => { h.Action(e, msg); });
+                }
             }
         }
 
@@ -355,7 +365,7 @@ namespace Gear.Net
 
         public class MessageHandlerRegistration
         {
-            public Guid HandlerId { get; set; }
+            public object Owner { get; set; }
 
             public Action<MessageEventArgs, IMessage> Action { get; set; }
         }

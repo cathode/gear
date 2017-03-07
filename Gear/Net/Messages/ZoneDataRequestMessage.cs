@@ -24,7 +24,8 @@ namespace Gear.Net.Messages
         {
             get
             {
-                return BuiltinMessageIds.ZoneDataRequest;
+                throw new NotImplementedException();
+                //return BuiltinMessageIds.ZoneDataRequest;
             }
         }
 

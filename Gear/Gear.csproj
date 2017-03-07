@@ -212,12 +212,10 @@
     <Compile Include="Model\Zone.cs" />
     <Compile Include="Model\ZoneMetadata.cs" />
     <Compile Include="Net\Messages\BlockUpdateMessage.cs" />
-    <Compile Include="Net\Messages\ConfigurationMessage.cs" />
     <Compile Include="__HashCode.cs" />
     <None Include="..\Gear.licenseheader">
       <Link>Gear.licenseheader</Link>
     </None>
-    <None Include="Net\Messages\EndpointGreetingMessage.cs" />
     <Compile Include="Net\Messages\LocatorRequestMessage.cs" />
     <Compile Include="Net\Messages\LocatorResponseMessage.cs" />
     <Compile Include="Net\Messages\RequestResultMessage.cs" />
