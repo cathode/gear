@@ -134,10 +134,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
     <Compile Include="Channel.cs" />
     <Compile Include="ChannelDisconnectedEventArgs.cs" />
     <Compile Include="ChannelEventArgs.cs" />
     <Compile Include="ChannelState.cs" />
+    <Compile Include="Collections\NetworkCollectionManager.cs" />
+    <Compile Include="Collections\NetworkedCollection.cs" />
+    <Compile Include="Collections\NetworkedCollectionAction.cs" />
+    <Compile Include="Collections\NetworkedCollectionQueryRequestMessage.cs" />
+    <Compile Include="Collections\NetworkedCollectionQueryResponseMessage.cs" />
+    <Compile Include="Collections\NetworkedCollectionUpdateMessage.cs" />
+    <Compile Include="Collections\ReplicationMode.cs" />
     <Compile Include="ConnectedChannel.cs" />
     <Compile Include="ConnectionListener.cs" />
     <Compile Include="DatagramChannel.cs" />
@@ -160,6 +170,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

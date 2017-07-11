@@ -1,7 +1,7 @@
 ﻿/******************************************************************************
  * Gear: An open-world sandbox game for creative people.                      *
  * http://github.com/cathode/gear/                                            *
- * Copyright © 2009-2016 William 'cathode' Shelley. All Rights Reserved.      *
+ * Copyright © 2009-2017 William 'cathode' Shelley. All Rights Reserved.      *
  * This software is released under the terms and conditions of the MIT        *
  * license. See the included LICENSE file for details.                        *
  *****************************************************************************/
@@ -30,6 +30,8 @@ namespace Gear.Net
 
         private Timer reconnectTimer;
 
+        private readonly object reconnectSync = new object();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectedChannel"/> class.
         /// </summary>
@@ -40,6 +42,8 @@ namespace Gear.Net
 
             this.cachedRemoteEP = remoteEP;
         }
+
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectedChannel"/> class.
@@ -54,6 +58,21 @@ namespace Gear.Net
                 this.State = ChannelState.Connected;
 
             this.cachedRemoteEP = this.socket.RemoteEndPoint as IPEndPoint;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectedChannel"/> class.
+        /// </summary>
+        /// <param name="hostname"></param>
+        /// <param name="port"></param>
+        public ConnectedChannel(string hostname, ushort port)
+        {
+            IPEndPoint ep;
+
+            var hostEntry = Dns.GetHostEntry(hostname);
+            ep = new IPEndPoint(hostEntry.AddressList.First(a => a.AddressFamily == AddressFamily.InterNetwork), port);
+
+            this.cachedRemoteEP = ep;
         }
 
         /// <summary>
@@ -155,7 +174,7 @@ namespace Gear.Net
 
             if ((args.ReconnectCount == -1 || args.ReconnectCount > 0) && args.ReconnectInterval.TotalMilliseconds > 0)
             {
-                lock (this.reconnectTimer)
+                lock (this.reconnectSync)
                 {
                     if (this.reconnectTimer == null)
                     {

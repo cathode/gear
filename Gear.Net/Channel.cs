@@ -1,7 +1,7 @@
 ﻿/******************************************************************************
  * Gear: An open-world sandbox game for creative people.                      *
  * http://github.com/cathode/gear/                                            *
- * Copyright © 2009-2016 William 'cathode' Shelley. All Rights Reserved.      *
+ * Copyright © 2009-2017 William 'cathode' Shelley. All Rights Reserved.      *
  * This software is released under the terms and conditions of the MIT        *
  * license. See the included LICENSE file for details.                        *
  *****************************************************************************/
@@ -359,6 +359,7 @@ namespace Gear.Net
             Contract.Invariant(this.rxQueue != null);
             Contract.Invariant(this.rxBuffer != null);
 
+            Contract.Invariant(this.messageHandlers != null);
         }
 
         #region Inner Types
