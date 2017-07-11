@@ -21,6 +21,7 @@ namespace Gear.Client.SceneGraph
         /// Rotation, then translation, then scale.
         /// </summary>
         RotateTranslateScale,
+
         /// <summary>
         /// Translation, then rotation, then scale.
         /// </summary>

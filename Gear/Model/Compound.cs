@@ -45,7 +45,6 @@ namespace Gear.Model
             get { throw new NotImplementedException(); }
         }
 
-
         public decimal ThermalConductivity
         {
             get { throw new NotImplementedException(); }

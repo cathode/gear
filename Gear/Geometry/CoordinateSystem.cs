@@ -23,6 +23,7 @@ namespace Gear.Geometry
         private Quaternion rotation;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CoordinateSystem"/> class.
         /// </summary>
@@ -35,6 +36,7 @@ namespace Gear.Geometry
             this.rotation = rotation;
             this.scale = scale;
         }
+
         #endregion
         #region Properties
         public Vector3d Position
@@ -60,6 +62,7 @@ namespace Gear.Geometry
                 return this.scale;
             }
         }
+
         #endregion
         #region Methods
         public void Apply(CoordinateSystem system)

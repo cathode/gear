@@ -13,7 +13,6 @@ using System.Text;
 
 namespace Gear
 {
-
     public delegate void LogMessageHandler(LogMessage message);
 
     /// <summary>
@@ -22,6 +21,7 @@ namespace Gear
     public static class Log
     {
         #region Fields
+
         /// <summary>
         /// Holds the default format string used when outputting log messages.
         /// </summary>
@@ -38,6 +38,7 @@ namespace Gear
         private static int threshold = 0;
         #endregion
         #region Methods
+
         /// <summary>
         /// Writes a message to the log.
         /// </summary>
@@ -71,7 +72,9 @@ namespace Gear
             }
 
             if (Log.buffer.Count >= Log.threshold)
+            {
                 Log.Flush();
+            }
         }
 
         /// <summary>
@@ -94,7 +97,9 @@ namespace Gear
             lock (Log.outputs)
             {
                 if (!Log.outputs.Any(op => op.Stream == stream))
+                {
                     Log.outputs.Add(new LogOutput(stream, format, filter));
+                }
             }
         }
 
@@ -103,7 +108,9 @@ namespace Gear
             lock (Log.handlers)
             {
                 if (!Log.handlers.Contains(callback))
+                {
                     Log.handlers.Add(callback);
+                }
             }
         }
 

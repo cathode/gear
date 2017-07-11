@@ -23,6 +23,7 @@ namespace Gear.Client.SceneGraph
 
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Constraint"/> class.
         /// </summary>
@@ -30,10 +31,10 @@ namespace Gear.Client.SceneGraph
         /// <param name="target">The property of the node that is affected by the constraint.</param>
         public Constraint(ConstraintTarget target)
         {
-
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets or sets the <see cref="ConstraintTarget"/> that indicates the property or properties on the subject node which are constrained.
         /// </summary>

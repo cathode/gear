@@ -23,21 +23,25 @@ namespace Gear
             get;
             set;
         }
+
         public bool IsLocalPlayer
         {
             get;
             set;
         }
+
         public bool IsBot
         {
             get;
             set;
         }
+
         public Guid ClientID
         {
             get;
             set;
         }
+
         public PlayerInfo Metadata { get; set; }
         #endregion
     }

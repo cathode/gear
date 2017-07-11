@@ -14,11 +14,10 @@ using System.Threading.Tasks;
 namespace Gear.Services
 {
     /// <summary>
-    /// Implements a service that brokers connections from 
+    /// Implements a service that brokers connections from
     /// </summary>
     public class ConnectionBrokerService : ServiceBase
     {
-
         public static readonly ushort DefaultServicePort = 14122;
 
         /// <summary>
@@ -28,7 +27,9 @@ namespace Gear.Services
         public ConnectionBrokerService(ushort port)
         {
             if (port == 0)
+            {
                 port = ConnectionBrokerService.DefaultServicePort;
+            }
 
             this.ListenPort = port;
         }

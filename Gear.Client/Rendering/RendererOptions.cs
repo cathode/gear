@@ -19,6 +19,7 @@ namespace Gear.Client.Rendering
     public class RendererOptions
     {
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RendererOptions"/> class.
         /// </summary>
@@ -27,6 +28,7 @@ namespace Gear.Client.Rendering
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets an empty <see cref="RendererOptions"/> instance with all values configured to their defaults.
         /// </summary>
@@ -40,6 +42,7 @@ namespace Gear.Client.Rendering
                 };
             }
         }
+
         /// <summary>
         /// Gets or sets the <see cref="DisplayProfile"/> associated with the renderer options.
         /// </summary>

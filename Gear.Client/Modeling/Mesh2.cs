@@ -21,6 +21,7 @@ namespace Gear.Modeling
         private Polygon2d[] polygons;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Mesh2"/> class.
         /// </summary>
@@ -30,6 +31,7 @@ namespace Gear.Modeling
         }
         #endregion
         #region Methods
+
         /// <summary>
         /// Gets the enumerator for the current instance.
         /// </summary>

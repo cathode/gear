@@ -53,6 +53,7 @@ namespace Gear.Modeling.Primitives
                 verts[i] = new Vertex3d(x, y, z);
                 the += the72;
             }
+
             var polys = new Polygon3d[20];
 
             polys[0] = new Triangle3d(verts[0], verts[1], verts[2]);

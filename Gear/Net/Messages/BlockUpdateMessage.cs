@@ -22,13 +22,15 @@ namespace Gear.Net.Messages
         {
             get
             {
-                //return BuiltinMessageIds.BlockUpdate;
+                // return BuiltinMessageIds.BlockUpdate;
                 throw new NotImplementedException();
             }
         }
 
         public long X { get; set; }
+
         public long Y { get; set; }
+
         public long Z { get; set; }
 
         public int? NewBlockId { get; set; }

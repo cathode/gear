@@ -19,6 +19,7 @@ namespace Gear.Model
     public class Material
     {
         public Guid MaterialId { get; set; }
+
         public string Name { get; set; }
     }
 }

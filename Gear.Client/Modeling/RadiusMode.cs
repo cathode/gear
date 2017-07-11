@@ -19,7 +19,7 @@ namespace Gear.Modeling
 
         /// <summary>
         /// The radius is calculated from the center of the object to the midpoint of each edge of the polygon.
-        /// </summary>   
+        /// </summary>
         Edge = 0x1,
 
         /// <summary>

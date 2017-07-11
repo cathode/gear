@@ -15,9 +15,10 @@ namespace Gear.Geometry
     /// A four-dimensional double-precision floating point vector.
     /// </summary>
     [StructLayout(LayoutKind.Explicit)]
-    public struct Vector4d 
+    public struct Vector4d
     {
         #region Fields
+
         /// <summary>
         /// Backing field for the <see cref="Vector4d.X"/> property.
         /// </summary>
@@ -43,6 +44,7 @@ namespace Gear.Geometry
         private readonly double w;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Vector4d"/> struct.
         /// </summary>
@@ -57,6 +59,7 @@ namespace Gear.Geometry
             this.z = z;
             this.w = w;
         }
+
         #endregion
         #region Indexers
         public double this[int element]
@@ -67,19 +70,30 @@ namespace Gear.Geometry
                 Contract.Requires(element < 4);
 
                 if (element == 0)
+                {
                     return this.x;
+                }
                 else if (element == 1)
+                {
                     return this.y;
+                }
                 else if (element == 2)
+                {
                     return this.z;
+                }
                 else if (element == 3)
+                {
                     return this.w;
+                }
                 else
+                {
                     throw new NotImplementedException();
+                }
             }
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets or sets the x-component of the vector.
         /// </summary>
@@ -134,11 +148,13 @@ namespace Gear.Geometry
                 return new Vector4d();
             }
         }
+
         #endregion
         #region Methods
         public Vector4d Add(Vector4d other)
         {
-            return new Vector4d(this.x + other.x,
+            return new Vector4d(
+                this.x + other.x,
                                this.y + other.y,
                                this.z + other.z,
                                this.w + other.w);
@@ -146,7 +162,8 @@ namespace Gear.Geometry
 
         public static Vector4d Add(Vector4d a, Vector4d b)
         {
-            return new Vector4d(a.x + b.x,
+            return new Vector4d(
+                a.x + b.x,
                                a.y + b.y,
                                a.z + b.z,
                                a.w + b.w);
@@ -200,7 +217,10 @@ namespace Gear.Geometry
         public override bool Equals(object obj)
         {
             if (obj is Vector4d)
+            {
                 return this == (Vector4d)obj;
+            }
+
             return false;
         }
 
@@ -235,6 +255,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Operators
+
         /// <summary>
         /// Determines if two <see cref="Vector4d"/> instances are equal.
         /// </summary>
@@ -259,7 +280,8 @@ namespace Gear.Geometry
 
         public static Vector4d operator +(Vector4d left, Vector4d right)
         {
-            return new Vector4d(left.x + right.x,
+            return new Vector4d(
+                left.x + right.x,
                                left.y + right.y,
                                left.z + right.z,
                                left.w + right.w);

@@ -19,6 +19,7 @@ namespace Gear.Modeling
     public class BoundingVolume
     {
         #region Properties
+
         /// <summary>
         /// Gets or sets the width (measurement on the X-axis) of the volume.
         /// </summary>
@@ -65,6 +66,7 @@ namespace Gear.Modeling
         }
         #endregion
         #region Methods
+
         /// <summary>
         /// Determines if the specified point is contained by the bounding volume.
         /// </summary>

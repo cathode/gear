@@ -12,7 +12,7 @@ namespace Gear.Model
         /// Gets or sets a value indicating the planet size (diameter in kilometers) that is or will be generated.
         /// </summary>
         public double DiameterKm { get; set; }
-        
+
         /// <summary>
         /// Gets or sets a value indicating the average density (in kilograms per cubic meter) of generated planets.
         /// </summary>

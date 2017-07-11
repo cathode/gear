@@ -17,6 +17,7 @@ namespace Gear.Client.Platform.Microsoft.OpenGL
     {
         #region Fields
         public const string DLL = "OpenGL32.dll";
+
         #endregion
         #region Methods
         [DllImport(WGL.DLL, EntryPoint = "wglCreateContext")]

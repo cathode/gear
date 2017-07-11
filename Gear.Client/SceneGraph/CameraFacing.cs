@@ -15,7 +15,7 @@ namespace Gear.Client.SceneGraph
     /// <summary>
     /// Enumerates pre-defined  facings of a camera.
     /// </summary>
-  
+
     public enum CameraFacing
     {
         /// <summary>
@@ -46,7 +46,7 @@ namespace Gear.Client.SceneGraph
         Down = 0x03,
 
         /// <summary>
-        /// Indicates the camera is facing east. 
+        /// Indicates the camera is facing east.
         /// </summary>
         East = 0x04,
 

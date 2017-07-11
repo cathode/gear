@@ -18,12 +18,14 @@ namespace Gear.Modeling
     public class Polygon2d : IEnumerable<Vertex2d>
     {
         #region Fields
+
         /// <summary>
         /// Holds the actual vertices of the polygon.
         /// </summary>
         private readonly Vertex2d[] vertices;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Polygon2d"/> class.
         /// </summary>
@@ -33,8 +35,8 @@ namespace Gear.Modeling
             Contract.Requires(vertices > 2);
 
             this.vertices = new Vertex2d[vertices];
-        }      
-        
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Polygon2d"/> class.
         /// </summary>
@@ -43,8 +45,8 @@ namespace Gear.Modeling
         public Polygon2d(int sides, double radius)
             : this(sides, radius, RadiusMode.Vertex)
         {
-        }    
-        
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Polygon2d"/> class.
         /// </summary>
@@ -62,8 +64,8 @@ namespace Gear.Modeling
                 double a = ((2 * Math.PI) / sides) * s;
                 this[s] = new Vertex2d(Math.Sin(a) * radius, Math.Cos(a) * radius);
             }
-        }       
-        
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Polygon2d"/> class.
         /// </summary>
@@ -71,11 +73,15 @@ namespace Gear.Modeling
         public Polygon2d(params Vertex2d[] vertices)
         {
             if (vertices.Length < 3)
+            {
                 throw new ArgumentException("Polygons must contain at least 3 vertices.", "vertices");
+            }
+
             this.vertices = vertices;
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets the number of sides of the current polygon.
         /// </summary>
@@ -88,6 +94,7 @@ namespace Gear.Modeling
         }
         #endregion
         #region Indexers
+
         /// <summary>
         /// Gets or sets a <see cref="Vector2d"/> representing the vertex with the specified index.
         /// </summary>
@@ -99,6 +106,7 @@ namespace Gear.Modeling
             {
                 return this.vertices[index];
             }
+
             set
             {
                 this.vertices[index] = value;
@@ -106,6 +114,7 @@ namespace Gear.Modeling
         }
         #endregion
         #region Methods
+
         /// <summary>
         /// Gets the enumerator for the current instance.
         /// </summary>
@@ -116,8 +125,8 @@ namespace Gear.Modeling
             {
                 yield return this.vertices[i];
             }
-        }    
-        
+        }
+
         /// <summary>
         /// Gets the enumerator for the current instance.
         /// </summary>

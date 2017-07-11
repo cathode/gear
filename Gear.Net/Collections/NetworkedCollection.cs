@@ -17,6 +17,7 @@ namespace Gear.Net.Collections
         private System.Collections.Generic.Dictionary<int, T> items;
 
         public event EventHandler<MessageEventArgs> MessageAvailable;
+
         public event EventHandler ShuttingDown;
 
         /// <summary>
@@ -30,7 +31,6 @@ namespace Gear.Net.Collections
 
         public ReplicationMode Mode { get; set; }
 
-
         /// <summary>
         /// Becomes a consumer for a remote networked collection with the specified id.
         /// </summary>
@@ -40,7 +40,6 @@ namespace Gear.Net.Collections
         public bool Consume(Guid id, Channel channel)
         {
             var msg = new NetworkedCollectionUpdateMessage();
-
 
             return false;
         }
@@ -88,8 +87,6 @@ namespace Gear.Net.Collections
             var msg = new NetworkedCollectionUpdateMessage();
             msg.CollectionId = this.CollectionId;
             msg.Action = NetworkedCollectionAction.Add;
-
-
         }
 
         public void Clear()
@@ -134,8 +131,6 @@ namespace Gear.Net.Collections
 
             var msg = new NetworkedCollectionUpdateMessage();
 
-
-
             return true;
         }
 
@@ -148,6 +143,5 @@ namespace Gear.Net.Collections
         {
             throw new NotImplementedException();
         }
-
     }
 }

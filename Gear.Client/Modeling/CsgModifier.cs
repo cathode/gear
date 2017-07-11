@@ -29,6 +29,7 @@ namespace Gear.Modeling
             get;
             set;
         }
+
         #endregion
         #region Methods
         public static Mesh3 GenerateSubtraction(Mesh3 mesh, BoundingVolume sub)
@@ -42,7 +43,6 @@ namespace Gear.Modeling
             var isec = from e in mesh.SelectMany(poly => poly.Edges).Distinct()
                        where e.P.X > sub.X
                        select e;
-
 
             var result = new Mesh3();
             return result;

@@ -21,6 +21,7 @@ namespace Gear.Client.Platform.Microsoft
     public sealed class PixelFormatDescriptor
     {
         #region Fields
+
         /// <summary>
         /// Used internally by Win32 API, this is always set to 40.
         /// </summary>
@@ -104,12 +105,13 @@ namespace Gear.Client.Platform.Microsoft
 
         [FieldOffset(0x24)]
         private uint dwDamageMask;
+
         #endregion
         #region Constructors
         public PixelFormatDescriptor()
         {
-
         }
+
         #endregion
         #region Properties
         public PfdFlags Flags
@@ -118,6 +120,7 @@ namespace Gear.Client.Platform.Microsoft
             {
                 return this.flags;
             }
+
             set
             {
                 this.flags = value;
@@ -130,6 +133,7 @@ namespace Gear.Client.Platform.Microsoft
             {
                 return this.pixelType;
             }
+
             set
             {
                 this.pixelType = value;
@@ -142,6 +146,7 @@ namespace Gear.Client.Platform.Microsoft
             {
                 return this.depthBits;
             }
+
             set
             {
                 this.depthBits = value;
@@ -154,6 +159,7 @@ namespace Gear.Client.Platform.Microsoft
             {
                 return this.stencilBits;
             }
+
             set
             {
                 this.stencilBits = value;

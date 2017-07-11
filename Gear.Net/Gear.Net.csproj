@@ -134,6 +134,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalSuppressions.cs">
+      <Link>GlobalSuppressions.cs</Link>
+    </Compile>
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
@@ -152,7 +155,6 @@
     <Compile Include="ConnectionListener.cs" />
     <Compile Include="DatagramChannel.cs" />
     <Compile Include="EndPointKind.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IMessage.cs" />
     <Compile Include="IMessagePublisher.cs" />
     <Compile Include="MessageContainer.cs" />

@@ -17,6 +17,5 @@ namespace Gear.Modeling
     /// </summary>
     public class Path2
     {
-
     }
 }

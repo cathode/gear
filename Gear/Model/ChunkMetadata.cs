@@ -15,6 +15,5 @@ namespace Gear.Model
 {
     public class ChunkMetadata
     {
-
     }
 }

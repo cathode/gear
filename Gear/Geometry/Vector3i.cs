@@ -18,6 +18,7 @@ namespace Gear.Geometry
     public struct Vector3i
     {
         #region Fields
+
         /// <summary>
         /// Backing field for the <see cref="Vector3i.X"/> property.
         /// </summary>
@@ -34,6 +35,7 @@ namespace Gear.Geometry
         private int z;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Vector3i"/> struct.
         /// </summary>
@@ -48,6 +50,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets or sets the value of the X component for the current <see cref="Vector3i"/> instance.
         /// </summary>
@@ -57,6 +60,7 @@ namespace Gear.Geometry
             {
                 return this.x;
             }
+
             set
             {
                 this.x = value;
@@ -72,6 +76,7 @@ namespace Gear.Geometry
             {
                 return this.y;
             }
+
             set
             {
                 this.y = value;
@@ -87,15 +92,18 @@ namespace Gear.Geometry
             {
                 return this.z;
             }
+
             set
             {
                 this.z = value;
             }
         }
+
         #endregion
         #region Methods
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="v1"></param>
         /// <param name="v2"></param>
@@ -110,7 +118,9 @@ namespace Gear.Geometry
         public override bool Equals(object obj)
         {
             if (obj is Vector3i)
+            {
                 return this == (Vector3i)obj;
+            }
 
             return false;
         }
@@ -119,6 +129,7 @@ namespace Gear.Geometry
         {
             return __HashCode.Calculate(this.x, this.y, this.z, typeof(Vector3i));
         }
+
         #endregion
         #region Operators
         public static bool operator ==(Vector3i left, Vector3i right)

@@ -17,13 +17,19 @@ namespace Gear.Modeling
     {
         #region Properties
         Vector3d Position { get; set; }
+
         Vector3d Normal { get; set; }
+
         object Tag { get; set; }
+
         #endregion
         #region Methods
         IEnumerable<IVertex> GetNeighboringVertices();
+
         IEnumerable<IHalfEdge> GetOutgoingEdges();
+
         IEnumerable<IHalfEdge> GetIncomingEdges();
+
         IEnumerable<IFace> GetNeighboringFaces();
         #endregion
     }

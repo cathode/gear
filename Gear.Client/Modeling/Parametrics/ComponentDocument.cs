@@ -15,6 +15,5 @@ namespace Gear.Modeling.Parametrics
 {
     public class ComponentDocument
     {
-
     }
 }

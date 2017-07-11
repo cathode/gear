@@ -19,6 +19,7 @@ namespace Gear.Modeling.Primitives
         private Random rng;
         private long seed;
         private Vector2i size;
+
         #endregion
         public Terrain(int width, int length)
         {
@@ -54,6 +55,7 @@ namespace Gear.Modeling.Primitives
             {
                 return this.seed;
             }
+
             set
             {
                 this.seed = value;
@@ -64,10 +66,12 @@ namespace Gear.Modeling.Primitives
         public IEnumerable<Mesh3> Generate()
         {
             for (int y = 0; y < this.size.Y; ++y)
+            {
                 for (int x = 0; x < this.size.X; ++x)
                 {
                     yield return this.GenerateChunk(new Vector2i(x, y));
                 }
+            }
         }
 
         protected Mesh3 GenerateChunk(Vector2i position)
@@ -93,7 +97,7 @@ namespace Gear.Modeling.Primitives
             {
                 for (int x = 0; x < stride + 1; ++x)
                 {
-                    var z = rng.Next(255) / 100.0;
+                    var z = this.rng.Next(255) / 100.0;
 
                     z = SimplexNoise.noise(x, y, z);
                     var vt = new Vertex3d((x + (position.X * this.ChunkSize)) * 4, z * 2, (y + (position.Y * this.ChunkSize)) * 4);
@@ -102,8 +106,12 @@ namespace Gear.Modeling.Primitives
             }
 
             for (int y = 0; y < stride; ++y)
+            {
                 for (int x = 0; x < stride; ++x)
+                {
                     quads[(y * stride) + x] = new Quad3d(verts, (y * sv) + x, (y * sv) + (x + 1), ((y + 1) * sv) + (x + 1), ((y + 1) * sv) + x);
+                }
+            }
 
             return new Mesh3(quads);
         }
@@ -115,7 +123,7 @@ namespace Gear.Modeling.Primitives
 
         public static double Lerp(double x, double x1, double x2, double q00, double q01)
         {
-            return ((x2 - x) / (x2 - x1)) * q00 + ((x - x1) / (x2 - x1)) * q01;
+            return (((x2 - x) / (x2 - x1)) * q00) + (((x - x1) / (x2 - x1)) * q01);
         }
 
         public static double BiLerp(double x, double y, double q11, double q12, double q21, double q22, double x1, double y1, double x2, double y2)
@@ -149,8 +157,6 @@ namespace Gear.Modeling.Primitives
             {
                 var density = -ws.Y;
 
-
-
                 return density;
             }
         }
@@ -162,47 +168,56 @@ namespace Gear.Modeling.Primitives
 
         public class ClassicNoise
         { // Classic Perlin noise in 3D, for comparison
-            private static Vector3i[] grad3 = new Vector3i[] {new Vector3i(1,1,0),new Vector3i(-1,1,0), new Vector3i(1,-1,0), new Vector3i(-1,-1,0),
-                                 new Vector3i(1,0,1), new Vector3i(-1,0,1), new Vector3i(1,0,-1), new Vector3i(-1,0,-1),
-                                 new Vector3i(0,1,1), new Vector3i(0,-1,1), new Vector3i(0,1,-1), new Vector3i(0,-1,-1)};
+            private static Vector3i[] grad3 = new Vector3i[] {new Vector3i(1, 1, 0), new Vector3i(-1, 1, 0), new Vector3i(1, -1, 0), new Vector3i(-1, -1, 0),
+                                 new Vector3i(1, 0, 1), new Vector3i(-1, 0, 1), new Vector3i(1, 0, -1), new Vector3i(-1, 0, -1),
+                                 new Vector3i(0, 1, 1), new Vector3i(0, -1, 1), new Vector3i(0, 1, -1), new Vector3i(0, -1, -1)};
 
-            private static int[] p = new int[] {151,160,137,91,90,15,
-              131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
-              190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
-              88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,
-              77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,
-              102,143,54, 65,25,63,161, 1,216,80,73,209,76,132,187,208, 89,18,169,200,196,
-              135,130,116,188,159,86,164,100,109,198,173,186, 3,64,52,217,226,250,124,123,
-              5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,
-              223,183,170,213,119,248,152, 2,44,154,163, 70,221,153,101,155,167, 43,172,9,
-              129,22,39,253, 19,98,108,110,79,113,224,232,178,185, 112,104,218,246,97,228,
-              251,34,242,193,238,210,144,12,191,179,162,241, 81,51,145,235,249,14,239,107,
-              49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
-              138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180};
+            private static int[] p = new int[] {151, 160, 137, 91, 90, 15,
+              131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23,
+              190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32, 57, 177, 33,
+              88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175, 74, 165, 71, 134, 139, 48, 27, 166,
+              77, 146, 158, 231, 83, 111, 229, 122, 60, 211, 133, 230, 220, 105, 92, 41, 55, 46, 245, 40, 244,
+              102, 143, 54, 65, 25, 63, 161, 1, 216, 80, 73, 209, 76, 132, 187, 208, 89, 18, 169, 200, 196,
+              135, 130, 116, 188, 159, 86, 164, 100, 109, 198, 173, 186, 3, 64, 52, 217, 226, 250, 124, 123,
+              5, 202, 38, 147, 118, 126, 255, 82, 85, 212, 207, 206, 59, 227, 47, 16, 58, 17, 182, 189, 28, 42,
+              223, 183, 170, 213, 119, 248, 152, 2, 44, 154, 163, 70, 221, 153, 101, 155, 167, 43, 172, 9,
+              129, 22, 39, 253, 19, 98, 108, 110, 79, 113, 224, 232, 178, 185, 112, 104, 218, 246, 97, 228,
+              251, 34, 242, 193, 238, 210, 144, 12, 191, 179, 162, 241, 81, 51, 145, 235, 249, 14, 239, 107,
+              49, 192, 214, 31, 181, 199, 106, 157, 184, 84, 204, 176, 115, 121, 50, 45, 127, 4, 150, 254,
+              138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180};
+
             // To remove the need for index wrapping, double the permutation table length
             private static int[] perm = new int[512];
+
             static ClassicNoise()
             {
                 for (int i = 0; i < 512; i++)
+                {
                     perm[i] = p[i & 255];
+                }
             }
+
             // This method is a *lot* faster than using (int)Math.floor(x)
             private static int fastfloor(double x)
             {
                 return x > 0 ? (int)x : (int)x - 1;
             }
+
             private static double dot(Vector3i g, double x, double y, double z)
             {
-                return g.X * x + g.Y * y + g.Z * z;
+                return (g.X * x) + (g.Y * y) + (g.Z * z);
             }
+
             private static double mix(double a, double b, double t)
             {
-                return (1 - t) * a + t * b;
+                return ((1 - t) * a) + (t * b);
             }
+
             private static double fade(double t)
             {
-                return t * t * t * (t * (t * 6 - 15) + 10);
+                return t * t * t * ((t * ((t * 6) - 15)) + 10);
             }
+
             // Classic Perlin noise, 3D version
             public static double noise(double x, double y, double z)
             {
@@ -269,62 +284,74 @@ namespace Gear.Modeling.Primitives
 
         public class SimplexNoise
         {  // Simplex noise in 2D, 3D and 4D
-            private static Vector3d[] grad3 = new Vector3d[] {new Vector3d(1,1,0),new Vector3d(-1,1,0), new Vector3d(1,-1,0), new Vector3d(-1,-1,0),
-                                 new Vector3d(1,0,1), new Vector3d(-1,0,1), new Vector3d(1,0,-1), new Vector3d(-1,0,-1),
-                                 new Vector3d(0,1,1), new Vector3d(0,-1,1), new Vector3d(0,1,-1), new Vector3d(0,-1,-1)};
-            private static Vector4d[] grad4 = {new Vector4d(0,1,1,1), new Vector4d(0,1,1,-1), new Vector4d(0,1,-1,1), new Vector4d(0,1,-1,-1), new Vector4d(0,-1,1,1), new Vector4d(0,-1,1,-1), new Vector4d(0,-1,-1,1), new Vector4d(0,-1,-1,-1), new Vector4d(1,0,1,1), new Vector4d(1,0,1,-1), new Vector4d(1,0,-1,1), new Vector4d(1,0,-1,-1), new Vector4d(-1,0,1,1), new Vector4d(-1,0,1,-1), new Vector4d(-1,0,-1,1), new Vector4d(-1,0,-1,-1),
-                   new Vector4d(1,1,0,1), new Vector4d(1,1,0,-1), new Vector4d(1,-1,0,1), new Vector4d(1,-1,0,-1),
-                   new Vector4d(-1,1,0,1), new Vector4d(-1,1,0,-1), new Vector4d(-1,-1,0,1), new Vector4d(-1,-1,0,-1),
-                   new Vector4d(1,1,1,0), new Vector4d(1,1,-1,0), new Vector4d(1,-1,1,0), new Vector4d(1,-1,-1,0),
-                   new Vector4d(-1,1,1,0), new Vector4d(-1,1,-1,0), new Vector4d(-1,-1,1,0), new Vector4d(-1,-1,-1,0)};
-            private static int[] p = {151,160,137,91,90,15,
-  131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
-  190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
-  88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,
-  77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,
-  102,143,54, 65,25,63,161, 1,216,80,73,209,76,132,187,208, 89,18,169,200,196,
-  135,130,116,188,159,86,164,100,109,198,173,186, 3,64,52,217,226,250,124,123,
-  5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,
-  223,183,170,213,119,248,152, 2,44,154,163, 70,221,153,101,155,167, 43,172,9,
-  129,22,39,253, 19,98,108,110,79,113,224,232,178,185, 112,104,218,246,97,228,
-  251,34,242,193,238,210,144,12,191,179,162,241, 81,51,145,235,249,14,239,107,
-  49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
-  138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180};
+            private static Vector3d[] grad3 = new Vector3d[] {new Vector3d(1, 1, 0), new Vector3d(-1, 1, 0), new Vector3d(1, -1, 0), new Vector3d(-1, -1, 0),
+                                 new Vector3d(1, 0, 1), new Vector3d(-1, 0, 1), new Vector3d(1, 0, -1), new Vector3d(-1, 0, -1),
+                                 new Vector3d(0, 1, 1), new Vector3d(0, -1, 1), new Vector3d(0, 1, -1), new Vector3d(0, -1, -1)};
+
+            private static Vector4d[] grad4 = {new Vector4d(0, 1, 1, 1), new Vector4d(0, 1, 1, -1), new Vector4d(0, 1, -1, 1), new Vector4d(0, 1, -1, -1), new Vector4d(0, -1, 1, 1), new Vector4d(0, -1, 1, -1), new Vector4d(0, -1, -1, 1), new Vector4d(0, -1, -1, -1), new Vector4d(1, 0, 1, 1), new Vector4d(1, 0, 1, -1), new Vector4d(1, 0, -1, 1), new Vector4d(1, 0, -1, -1), new Vector4d(-1, 0, 1, 1), new Vector4d(-1, 0, 1, -1), new Vector4d(-1, 0, -1, 1), new Vector4d(-1, 0, -1, -1),
+                   new Vector4d(1, 1, 0, 1), new Vector4d(1, 1, 0, -1), new Vector4d(1, -1, 0, 1), new Vector4d(1, -1, 0, -1),
+                   new Vector4d(-1, 1, 0, 1), new Vector4d(-1, 1, 0, -1), new Vector4d(-1, -1, 0, 1), new Vector4d(-1, -1, 0, -1),
+                   new Vector4d(1, 1, 1, 0), new Vector4d(1, 1, -1, 0), new Vector4d(1, -1, 1, 0), new Vector4d(1, -1, -1, 0),
+                   new Vector4d(-1, 1, 1, 0), new Vector4d(-1, 1, -1, 0), new Vector4d(-1, -1, 1, 0), new Vector4d(-1, -1, -1, 0)};
+
+            private static int[] p = {151, 160, 137, 91, 90, 15,
+  131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23,
+  190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32, 57, 177, 33,
+  88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175, 74, 165, 71, 134, 139, 48, 27, 166,
+  77, 146, 158, 231, 83, 111, 229, 122, 60, 211, 133, 230, 220, 105, 92, 41, 55, 46, 245, 40, 244,
+  102, 143, 54, 65, 25, 63, 161, 1, 216, 80, 73, 209, 76, 132, 187, 208, 89, 18, 169, 200, 196,
+  135, 130, 116, 188, 159, 86, 164, 100, 109, 198, 173, 186, 3, 64, 52, 217, 226, 250, 124, 123,
+  5, 202, 38, 147, 118, 126, 255, 82, 85, 212, 207, 206, 59, 227, 47, 16, 58, 17, 182, 189, 28, 42,
+  223, 183, 170, 213, 119, 248, 152, 2, 44, 154, 163, 70, 221, 153, 101, 155, 167, 43, 172, 9,
+  129, 22, 39, 253, 19, 98, 108, 110, 79, 113, 224, 232, 178, 185, 112, 104, 218, 246, 97, 228,
+  251, 34, 242, 193, 238, 210, 144, 12, 191, 179, 162, 241, 81, 51, 145, 235, 249, 14, 239, 107,
+  49, 192, 214, 31, 181, 199, 106, 157, 184, 84, 204, 176, 115, 121, 50, 45, 127, 4, 150, 254,
+  138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180};
+
             // To remove the need for index wrapping, double the permutation table length
             private static int[] perm = new int[512];
+
             static SimplexNoise()
             {
                 for (int i = 0; i < 512; i++)
+                {
                     perm[i] = p[i & 255];
+                }
             }
+
             // A lookup table to traverse the simplex around a given point in 4D.
             // Details can be found where this table is used, in the 4D noise method.
             private static Vector4d[] simplex = new Vector4d[]{
-    new Vector4d(0,1,2,3), new Vector4d(0,1,3,2), new Vector4d(0,0,0,0), new Vector4d(0,2,3,1), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(1,2,3,0),
-    new Vector4d(0,2,1,3), new Vector4d(0,0,0,0), new Vector4d(0,3,1,2), new Vector4d(0,3,2,1), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(1,3,2,0),
-    new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0),
-    new Vector4d(1,2,0,3), new Vector4d(0,0,0,0), new Vector4d(1,3,0,2), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(2,3,0,1), new Vector4d(2,3,1,0),
-    new Vector4d(1,0,2,3), new Vector4d(1,0,3,2), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(2,0,3,1), new Vector4d(0,0,0,0), new Vector4d(2,1,3,0),
-    new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0),
-    new Vector4d(2,0,1,3), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(3,0,1,2), new Vector4d(3,0,2,1), new Vector4d(0,0,0,0), new Vector4d(3,1,2,0),
-    new Vector4d(2,1,0,3), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(0,0,0,0), new Vector4d(3,1,0,2), new Vector4d(0,0,0,0), new Vector4d(3,2,0,1), new Vector4d(3,2,1,0)};
+    new Vector4d(0, 1, 2, 3), new Vector4d(0, 1, 3, 2), new Vector4d(0, 0, 0, 0), new Vector4d(0, 2, 3, 1), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(1, 2, 3, 0),
+    new Vector4d(0, 2, 1, 3), new Vector4d(0, 0, 0, 0), new Vector4d(0, 3, 1, 2), new Vector4d(0, 3, 2, 1), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(1, 3, 2, 0),
+    new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0),
+    new Vector4d(1, 2, 0, 3), new Vector4d(0, 0, 0, 0), new Vector4d(1, 3, 0, 2), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(2, 3, 0, 1), new Vector4d(2, 3, 1, 0),
+    new Vector4d(1, 0, 2, 3), new Vector4d(1, 0, 3, 2), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(2, 0, 3, 1), new Vector4d(0, 0, 0, 0), new Vector4d(2, 1, 3, 0),
+    new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0),
+    new Vector4d(2, 0, 1, 3), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(3, 0, 1, 2), new Vector4d(3, 0, 2, 1), new Vector4d(0, 0, 0, 0), new Vector4d(3, 1, 2, 0),
+    new Vector4d(2, 1, 0, 3), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(0, 0, 0, 0), new Vector4d(3, 1, 0, 2), new Vector4d(0, 0, 0, 0), new Vector4d(3, 2, 0, 1), new Vector4d(3, 2, 1, 0)};
+
             // This method is a *lot* faster than using (int)Math.floor(x)
             private static int fastfloor(double x)
             {
                 return x > 0 ? (int)x : (int)x - 1;
             }
+
             private static double dot(Vector3d g, double x, double y)
             {
-                return g.X * x + g.Y * y;
+                return (g.X * x) + (g.Y * y);
             }
+
             private static double dot(Vector3d g, double x, double y, double z)
             {
-                return g.X * x + g.Z * y + g.Z * z;
+                return (g.X * x) + (g.Z * y) + (g.Z * z);
             }
+
             private static double dot(Vector4d g, double x, double y, double z, double w)
             {
-                return g.X * x + g.Y * y + g.Z * z + g.W * w;
+                return (g.X * x) + (g.Y * y) + (g.Z * z) + (g.W * w);
             }
+
             // 2D simplex noise
             public static double noise(double xin, double yin)
             {
@@ -353,13 +380,14 @@ namespace Gear.Modeling.Primitives
                     i1 = 0;
                     j1 = 1;
                 }      // upper triangle, YX order: (0,0)->(0,1)->(1,1)
+
                 // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and
                 // a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y), where
                 // c = (3-Sqrt(3))/6
                 double x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y) unskewed coords
                 double y1 = y0 - j1 + G2;
-                double x2 = x0 - 1.0 + 2.0 * G2; // Offsets for last corner in (x,y) unskewed coords
-                double y2 = y0 - 1.0 + 2.0 * G2;
+                double x2 = x0 - 1.0 + (2.0 * G2); // Offsets for last corner in (x,y) unskewed coords
+                double y2 = y0 - 1.0 + (2.0 * G2);
                 // Work out the hashed gradient indices of the three simplex corners
                 int ii = i & 255;
                 int jj = j & 255;
@@ -367,34 +395,44 @@ namespace Gear.Modeling.Primitives
                 int gi1 = perm[ii + i1 + perm[jj + j1]] % 12;
                 int gi2 = perm[ii + 1 + perm[jj + 1]] % 12;
                 // Calculate the contribution from the three corners
-                double t0 = 0.5 - x0 * x0 - y0 * y0;
+                double t0 = 0.5 - (x0 * x0) - (y0 * y0);
                 if (t0 < 0)
+                {
                     n0 = 0.0;
+                }
                 else
                 {
                     t0 *= t0;
                     n0 = t0 * t0 * dot(grad3[gi0], x0, y0);  // (x,y) of grad3 used for 2D gradient
                 }
-                double t1 = 0.5 - x1 * x1 - y1 * y1;
+
+                double t1 = 0.5 - (x1 * x1) - (y1 * y1);
                 if (t1 < 0)
+                {
                     n1 = 0.0;
+                }
                 else
                 {
                     t1 *= t1;
                     n1 = t1 * t1 * dot(grad3[gi1], x1, y1);
                 }
-                double t2 = 0.5 - x2 * x2 - y2 * y2;
+
+                double t2 = 0.5 - (x2 * x2) - (y2 * y2);
                 if (t2 < 0)
+                {
                     n2 = 0.0;
+                }
                 else
                 {
                     t2 *= t2;
                     n2 = t2 * t2 * dot(grad3[gi2], x2, y2);
                 }
+
                 // Add contributions from each corner to get the final noise value.
                 // The result is scaled to return values in the interval [-1,1].
                 return 70.0 * (n0 + n1 + n2);
             }
+
             // 3D simplex noise
             public static double noise(double xin, double yin, double zin)
             {
@@ -477,6 +515,7 @@ namespace Gear.Modeling.Primitives
                         k2 = 0;
                     } // Y X Z order
                 }
+
                 // A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in (x,y,z),
                 // a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in (x,y,z), and
                 // a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in (x,y,z), where
@@ -484,12 +523,12 @@ namespace Gear.Modeling.Primitives
                 double x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z) coords
                 double y1 = y0 - j1 + G3;
                 double z1 = z0 - k1 + G3;
-                double x2 = x0 - i2 + 2.0 * G3; // Offsets for third corner in (x,y,z) coords
-                double y2 = y0 - j2 + 2.0 * G3;
-                double z2 = z0 - k2 + 2.0 * G3;
-                double x3 = x0 - 1.0 + 3.0 * G3; // Offsets for last corner in (x,y,z) coords
-                double y3 = y0 - 1.0 + 3.0 * G3;
-                double z3 = z0 - 1.0 + 3.0 * G3;
+                double x2 = x0 - i2 + (2.0 * G3); // Offsets for third corner in (x,y,z) coords
+                double y2 = y0 - j2 + (2.0 * G3);
+                double z2 = z0 - k2 + (2.0 * G3);
+                double x3 = x0 - 1.0 + (3.0 * G3); // Offsets for last corner in (x,y,z) coords
+                double y3 = y0 - 1.0 + (3.0 * G3);
+                double z3 = z0 - 1.0 + (3.0 * G3);
                 // Work out the hashed gradient indices of the four simplex corners
                 int ii = i & 255;
                 int jj = j & 255;
@@ -499,46 +538,58 @@ namespace Gear.Modeling.Primitives
                 int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;
                 int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
                 // Calculate the contribution from the four corners
-                double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
+                double t0 = 0.6 - (x0 * x0) - (y0 * y0) - (z0 * z0);
                 if (t0 < 0)
+                {
                     n0 = 0.0;
+                }
                 else
                 {
                     t0 *= t0;
                     n0 = t0 * t0 * dot(grad3[gi0], x0, y0, z0);
                 }
-                double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
+
+                double t1 = 0.6 - (x1 * x1) - (y1 * y1) - (z1 * z1);
                 if (t1 < 0)
+                {
                     n1 = 0.0;
+                }
                 else
                 {
                     t1 *= t1;
                     n1 = t1 * t1 * dot(grad3[gi1], x1, y1, z1);
                 }
-                double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
+
+                double t2 = 0.6 - (x2 * x2) - (y2 * y2) - (z2 * z2);
                 if (t2 < 0)
+                {
                     n2 = 0.0;
+                }
                 else
                 {
                     t2 *= t2;
                     n2 = t2 * t2 * dot(grad3[gi2], x2, y2, z2);
                 }
-                double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
+
+                double t3 = 0.6 - (x3 * x3) - (y3 * y3) - (z3 * z3);
                 if (t3 < 0)
+                {
                     n3 = 0.0;
+                }
                 else
                 {
                     t3 *= t3;
                     n3 = t3 * t3 * dot(grad3[gi3], x3, y3, z3);
                 }
+
                 // Add contributions from each corner to get the final noise value.
                 // The result is scaled to stay just inside [-1,1]
                 return 32.0 * (n0 + n1 + n2 + n3);
             }
+
             // 4D simplex noise
             double noise(double x, double y, double z, double w)
             {
-
                 // The skewing and unskewing factors are hairy again for the 4D case
                 double F4 = (Math.Sqrt(5.0) - 1.0) / 4.0;
                 double G4 = (5.0 - Math.Sqrt(5.0)) / 20.0;
@@ -600,18 +651,18 @@ namespace Gear.Modeling.Primitives
                 double y1 = y0 - j1 + G4;
                 double z1 = z0 - k1 + G4;
                 double w1 = w0 - l1 + G4;
-                double x2 = x0 - i2 + 2.0 * G4; // Offsets for third corner in (x,y,z,w) coords
-                double y2 = y0 - j2 + 2.0 * G4;
-                double z2 = z0 - k2 + 2.0 * G4;
-                double w2 = w0 - l2 + 2.0 * G4;
-                double x3 = x0 - i3 + 3.0 * G4; // Offsets for fourth corner in (x,y,z,w) coords
-                double y3 = y0 - j3 + 3.0 * G4;
-                double z3 = z0 - k3 + 3.0 * G4;
-                double w3 = w0 - l3 + 3.0 * G4;
-                double x4 = x0 - 1.0 + 4.0 * G4; // Offsets for last corner in (x,y,z,w) coords
-                double y4 = y0 - 1.0 + 4.0 * G4;
-                double z4 = z0 - 1.0 + 4.0 * G4;
-                double w4 = w0 - 1.0 + 4.0 * G4;
+                double x2 = x0 - i2 + (2.0 * G4); // Offsets for third corner in (x,y,z,w) coords
+                double y2 = y0 - j2 + (2.0 * G4);
+                double z2 = z0 - k2 + (2.0 * G4);
+                double w2 = w0 - l2 + (2.0 * G4);
+                double x3 = x0 - i3 + (3.0 * G4); // Offsets for fourth corner in (x,y,z,w) coords
+                double y3 = y0 - j3 + (3.0 * G4);
+                double z3 = z0 - k3 + (3.0 * G4);
+                double w3 = w0 - l3 + (3.0 * G4);
+                double x4 = x0 - 1.0 + (4.0 * G4); // Offsets for last corner in (x,y,z,w) coords
+                double y4 = y0 - 1.0 + (4.0 * G4);
+                double z4 = z0 - 1.0 + (4.0 * G4);
+                double w4 = w0 - 1.0 + (4.0 * G4);
                 // Work out the hashed gradient indices of the five simplex corners
                 int ii = i & 255;
                 int jj = j & 255;
@@ -623,46 +674,61 @@ namespace Gear.Modeling.Primitives
                 int gi3 = perm[ii + i3 + perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]]] % 32;
                 int gi4 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] % 32;
                 // Calculate the contribution from the five corners
-                double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
+                double t0 = 0.6 - (x0 * x0) - (y0 * y0) - (z0 * z0) - (w0 * w0);
                 if (t0 < 0)
+                {
                     n0 = 0.0;
+                }
                 else
                 {
                     t0 *= t0;
                     n0 = t0 * t0 * dot(grad4[gi0], x0, y0, z0, w0);
                 }
-                double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
+
+                double t1 = 0.6 - (x1 * x1) - (y1 * y1) - (z1 * z1) - (w1 * w1);
                 if (t1 < 0)
+                {
                     n1 = 0.0;
+                }
                 else
                 {
                     t1 *= t1;
                     n1 = t1 * t1 * dot(grad4[gi1], x1, y1, z1, w1);
                 }
-                double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
+
+                double t2 = 0.6 - (x2 * x2) - (y2 * y2) - (z2 * z2) - (w2 * w2);
                 if (t2 < 0)
+                {
                     n2 = 0.0;
+                }
                 else
                 {
                     t2 *= t2;
                     n2 = t2 * t2 * dot(grad4[gi2], x2, y2, z2, w2);
                 }
-                double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
+
+                double t3 = 0.6 - (x3 * x3) - (y3 * y3) - (z3 * z3) - (w3 * w3);
                 if (t3 < 0)
+                {
                     n3 = 0.0;
+                }
                 else
                 {
                     t3 *= t3;
                     n3 = t3 * t3 * dot(grad4[gi3], x3, y3, z3, w3);
                 }
-                double t4 = 0.6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
+
+                double t4 = 0.6 - (x4 * x4) - (y4 * y4) - (z4 * z4) - (w4 * w4);
                 if (t4 < 0)
+                {
                     n4 = 0.0;
+                }
                 else
                 {
                     t4 *= t4;
                     n4 = t4 * t4 * dot(grad4[gi4], x4, y4, z4, w4);
                 }
+
                 // Sum up and scale the result to cover the range [-1,1]
                 return 27.0 * (n0 + n1 + n2 + n3 + n4);
             }

@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using Gear.Net.Messages;
 using Gear.Net;
 
-
 namespace Gear.Services
 {
     public abstract class ServiceBase
@@ -22,14 +21,12 @@ namespace Gear.Services
 
         internal ServiceBase()
         {
-            
         }
 
         public void Run()
         {
             this.listener = new ConnectionListener(this.ListenPort);
             this.listener.StartInBackground();
-
         }
 
         public virtual string Name { get { return this.GetType().Name; } }

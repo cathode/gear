@@ -21,6 +21,7 @@ namespace Gear.Client.SceneGraph
             get;
             set;
         }
+
         public Vector4d Specular
         {
             get;

@@ -12,7 +12,6 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics.Contracts;
 
-
 namespace Gear.Geometry
 {
     /// <summary>
@@ -22,6 +21,7 @@ namespace Gear.Geometry
     public struct Vector3f : IEquatable<Vector3f>
     {
         #region Fields
+
         /// <summary>
         /// Backing field for the static <see cref="Vector3f.Zero"/> property.
         /// </summary>
@@ -46,6 +46,7 @@ namespace Gear.Geometry
         private readonly float z;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Vector3f"/> struct.
         /// </summary>
@@ -81,6 +82,7 @@ namespace Gear.Geometry
             this.y = y;
             this.z = z;
         }
+
         #endregion
         #region Indexers
         public float this[int element]
@@ -91,17 +93,26 @@ namespace Gear.Geometry
                 Contract.Requires(element < 3);
 
                 if (element == 0)
+                {
                     return this.x;
+                }
                 else if (element == 1)
+                {
                     return this.y;
+                }
                 else if (element == 2)
+                {
                     return this.z;
+                }
                 else
+                {
                     throw new NotImplementedException();
+                }
             }
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets the zero vector.
         /// </summary>
@@ -213,6 +224,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Operators
+
         /// <summary>
         /// Subtracts vector b from vector a and returns a new vector as the result.
         /// </summary>
@@ -289,6 +301,7 @@ namespace Gear.Geometry
         {
             return left.X == right.X && left.Y == right.Y && left.Z == right.Z;
         }
+
         #endregion
         #region Methods
         public Vector3f Absolute()
@@ -319,7 +332,8 @@ namespace Gear.Geometry
         /// <returns></returns>
         public static Vector3f Add(Vector3f a, Vector3f b)
         {
-            return new Vector3f(a.X + b.X,
+            return new Vector3f(
+                a.X + b.X,
                                a.Y + b.Y,
                                a.Z + b.Z);
         }
@@ -333,7 +347,8 @@ namespace Gear.Geometry
         /// <returns></returns>
         public static Vector3f Add(Vector3f a, Vector3f b, Vector3f c)
         {
-            return new Vector3f(a.X + b.X + c.X,
+            return new Vector3f(
+                a.X + b.X + c.X,
                                a.Y + b.Y + c.Y,
                                a.Z + b.Z + c.Z);
         }
@@ -348,7 +363,8 @@ namespace Gear.Geometry
         /// <returns>A new <see cref="Vector3f"/> that is the result of the addition.</returns>
         public static Vector3f Add(Vector3f a, Vector3f b, Vector3f c, Vector3f d)
         {
-            return new Vector3f(a.X + b.X + c.X + d.X,
+            return new Vector3f(
+                a.X + b.X + c.X + d.X,
                                a.Y + b.Y + c.Y + d.Y,
                                a.Z + b.Z + c.Z + d.Z);
         }
@@ -361,14 +377,23 @@ namespace Gear.Geometry
         public static Vector3f Add(Vector3f[] vectors)
         {
             if (vectors == null)
+            {
                 throw new ArgumentNullException("vectors");
+            }
             else if (vectors.Length < 1)
+            {
                 return Vector3f.Zero;
+            }
             else if (vectors.Length == 1)
+            {
                 return vectors[0];
+            }
+
             var r = vectors[0];
             for (int i = 1; i < vectors.Length; i++)
+            {
                 r += vectors[i];
+            }
 
             return r;
         }
@@ -378,7 +403,8 @@ namespace Gear.Geometry
         /// </summary>
         public Vector3f Ceiling()
         {
-            return new Vector3f((float)Math.Ceiling(this.X),
+            return new Vector3f(
+                (float)Math.Ceiling(this.X),
                                (float)Math.Ceiling(this.Y),
                                (float)Math.Ceiling(this.Z));
         }
@@ -390,7 +416,8 @@ namespace Gear.Geometry
         /// <returns></returns>
         public static Vector3f Ceiling(Vector3f vector)
         {
-            return new Vector3f((float)Math.Ceiling(vector.X),
+            return new Vector3f(
+                (float)Math.Ceiling(vector.X),
                                (float)Math.Ceiling(vector.Y),
                                (float)Math.Ceiling(vector.Z));
         }
@@ -401,7 +428,8 @@ namespace Gear.Geometry
         /// <param name="other">The other <see cref="Vector3f"/> instance.</param>
         public Vector3f CrossProduct(Vector3f other)
         {
-            return new Vector3f((this.Y * other.Z) - (this.Z * other.Y),
+            return new Vector3f(
+                (this.Y * other.Z) - (this.Z * other.Y),
                                     (this.Z * other.X) - (this.X * other.Z),
                                     (this.X * other.Y) - (this.Y * other.X));
         }
@@ -442,7 +470,7 @@ namespace Gear.Geometry
             var yd = b.y - a.y;
             var zd = b.z - a.z;
 
-            return (float)Math.Sqrt(xd * xd + yd * yd + zd * zd);
+            return (float)Math.Sqrt((xd * xd) + (yd * yd) + (zd * zd));
         }
 
         /// <summary>
@@ -463,7 +491,9 @@ namespace Gear.Geometry
         public override bool Equals(object obj)
         {
             if (obj is Vector3f)
+            {
                 return Vector3f.Equals(this, (Vector3f)obj);
+            }
 
             return false;
         }
@@ -478,7 +508,6 @@ namespace Gear.Geometry
 
             tangent = tangent.Normalize();
         }
-
 
         /// <summary>
         /// Compares the current <see cref="Vector3f"/> and the specified <see cref="Vector3f"/> for equality.
@@ -518,9 +547,10 @@ namespace Gear.Geometry
         /// <returns></returns>
         public static Vector3f Interpolate(Vector3f a, Vector3f b)
         {
-            return new Vector3f((a.X * 0.5f) + (b.X * 0.5f),
-                               (a.Y * 0.5f) + (b.Y * 0.5f),
-                               (a.Z * 0.5f) + (b.Z * 0.5f));
+            return new Vector3f(
+                (a.X * 0.5f) + (b.X * 0.5f),
+                (a.Y * 0.5f) + (b.Y * 0.5f),
+                (a.Z * 0.5f) + (b.Z * 0.5f));
         }
 
         /// <summary>
@@ -533,8 +563,12 @@ namespace Gear.Geometry
         public static Vector3f Interpolate(Vector3f a, Vector3f b, float weight)
         {
             if (weight < 0.0f || weight > 1.0f)
+            {
                 throw new ArgumentOutOfRangeException("weight", "Weight must be between 0.0f and 1.0f");
-            return new Vector3f((a.X * (1.0f - weight)) + (b.X * weight),
+            }
+
+            return new Vector3f(
+                (a.X * (1.0f - weight)) + (b.X * weight),
                 (a.Y * (1.0f - weight)) + (b.Y * weight),
                 (a.Z * (1.0f - weight)) + (b.Z * weight));
         }
@@ -558,7 +592,9 @@ namespace Gear.Geometry
             float weight = 1.0f / vectors.Length;
             Vector3f r = Vector3f.Zero;
             for (int i = 0; i < vectors.Length; i++)
+            {
                 r += vectors[i] * weight;
+            }
 
             return r;
         }
@@ -603,7 +639,10 @@ namespace Gear.Geometry
         public bool IsParallelTo(Vector3f other)
         {
             if (Vector3f.CrossProduct(this, other) == Vector3f.Zero)
+            {
                 return true;
+            }
+
             return false;
         }
 
@@ -626,6 +665,7 @@ namespace Gear.Geometry
         {
             return this - other;
         }
+
         public Vector3f Normalize()
         {
             return Vector3f.Normalize(this);

@@ -18,7 +18,6 @@ namespace Gear.Modeling.Parametrics
     /// </summary>
     public class Entity
     {
-
         private List<Entity> children;
 
         /// <summary>
@@ -26,21 +25,21 @@ namespace Gear.Modeling.Parametrics
         /// </summary>
         public Entity Parent { get; set; }
 
-
         public long Id { get; set; }
-
 
         public int GetLevel()
         {
             if (this.Parent != null)
+            {
                 return this.Parent.GetLevel() + 1;
+            }
 
             return 0;
         }
 
         public bool AddChild(Entity value)
         {
-            //sif (value.GetLevel() < this.GetLevel())
+            // sif (value.GetLevel() < this.GetLevel())
 
             throw new NotImplementedException();
         }

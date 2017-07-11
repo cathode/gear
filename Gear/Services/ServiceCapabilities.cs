@@ -37,7 +37,5 @@ namespace Gear.Services
         /// </summary>
         [ProtoMember(3)]
         public ulong TotalMemory { get; set; }
-
-
     }
 }

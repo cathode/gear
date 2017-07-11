@@ -16,6 +16,5 @@ namespace Gear.Modeling
 {
     public class SliceModifier
     {
-        
     }
 }

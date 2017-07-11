@@ -73,10 +73,11 @@ namespace Gear.Net
 
             this.txFlushGate = new AutoResetEvent(true);
             this.isRxQueueIdle = true;
-            //this.rxFlushGate = new AutoResetEvent(true);
+            // this.rxFlushGate = new AutoResetEvent(true);
         }
 
         public abstract IPEndPoint LocalEndPoint { get; }
+
         public abstract IPEndPoint RemoteEndPoint { get; }
 
         public ChannelState State { get; protected set; }
@@ -120,6 +121,7 @@ namespace Gear.Net
 
                 this.messageHandlers[dispatchId].Add(reg);
             }
+
             // Any recieved messages that didnt' have a handler when they arrived, might be handled now.
             this.ProcessRxQueue();
         }
@@ -148,10 +150,12 @@ namespace Gear.Net
                 foreach (var kvp in this.messageHandlers)
                 {
                     foreach (var h in handlers)
+                    {
                         if (kvp.Value.Contains(h))
                         {
                             kvp.Value.Remove(h);
                         }
+                    }
 
                     if (kvp.Value.Count == 0)
                     {
@@ -265,7 +269,6 @@ namespace Gear.Net
                         this.rxBuffer = q;
                         this.rxQueue = b;
                     }
-
 
                     while (this.rxBuffer.Count > 0)
                     {

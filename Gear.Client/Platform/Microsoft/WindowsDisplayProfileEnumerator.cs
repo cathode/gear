@@ -25,15 +25,16 @@ namespace Gear.Client.Platform.Microsoft
             List<DisplayProfile> profiles = new List<DisplayProfile>();
             for (uint id = 0; EnumDisplayDevices(null, id, ref d, 0); id++)
             {
-                //Console.WriteLine("--- Display Device {0} ---\r\nDeviceName: {1}\r\nDeviceString: {2}\r\nStateFlags: {3}\r\nDeviceID: {4}\r\nDeviceKey: {5}",
+                // Console.WriteLine("--- Display Device {0} ---\r\nDeviceName: {1}\r\nDeviceString: {2}\r\nStateFlags: {3}\r\nDeviceID: {4}\r\nDeviceKey: {5}",
                 //             id, d.DeviceName, d.DeviceString, d.StateFlags, d.DeviceID, d.DeviceKey);
                 int i = 0;
                 DEVMODE devmode = new DEVMODE();
                 while (EnumDisplaySettings(d.DeviceName, i++, ref devmode))
                 {
-                    //Console.WriteLine("Device Mode {0}: {1}x{2}, {3}-bit, {4}hz",
+                    // Console.WriteLine("Device Mode {0}: {1}x{2}, {3}-bit, {4}hz",
                     //                  i, devmode.dmPelsWidth, devmode.dmPelsHeight, devmode.dmBitsPerPel, devmode.dmDisplayFrequency);
                     if (devmode.dmPelsWidth > 0 && devmode.dmPelsHeight > 0)
+                    {
                         profiles.Add(new DisplayProfile(devmode.dmPelsWidth, devmode.dmPelsHeight)
                         {
                             DeviceId = (int)id,
@@ -41,15 +42,19 @@ namespace Gear.Client.Platform.Microsoft
                             Depth = devmode.dmBitsPerPel,
                             ProfileId = i,
                         });
+                    }
                 }
+
                 d.cb = Marshal.SizeOf(d);
             }
+
             return profiles.ToArray();
         }
 
         #region Methods
         [DllImport("user32.dll")]
         private static extern bool EnumDisplayDevices(string lpDevice, uint iDevNum, ref DISPLAY_DEVICE lpDisplayDevice, uint dwFlags);
+
         [DllImport("user32.dll")]
         private static extern bool EnumDisplaySettings(string deviceName, int modeNum, ref DEVMODE devMode);
 
@@ -71,25 +76,32 @@ namespace Gear.Client.Platform.Microsoft
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
             public string DeviceKey;
         }
+
         [Flags]
         enum DisplayDeviceStateFlags : int
         {
             /// <summary>The device is part of the desktop.</summary>
             AttachedToDesktop = 0x1,
             MultiDriver = 0x2,
+
             /// <summary>The device is part of the desktop.</summary>
             PrimaryDevice = 0x4,
+
             /// <summary>Represents a pseudo device used to mirror application drawing for remoting or other purposes.</summary>
             MirroringDriver = 0x8,
+
             /// <summary>The device is VGA compatible.</summary>
             VGACompatible = 0x16,
+
             /// <summary>The device is removable; it cannot be the primary display.</summary>
             Removable = 0x20,
+
             /// <summary>The device has more display modes than its output devices support.</summary>
             ModesPruned = 0x8000000,
             Remote = 0x4000000,
             Disconnect = 0x2000000
         }
+
         [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
         struct DEVMODE
         {
@@ -99,37 +111,37 @@ namespace Gear.Client.Platform.Microsoft
             [FieldOffset(0)]
             public string dmDeviceName;
             [FieldOffset(32)]
-            public Int16 dmSpecVersion;
+            public short dmSpecVersion;
             [FieldOffset(34)]
-            public Int16 dmDriverVersion;
+            public short dmDriverVersion;
             [FieldOffset(36)]
-            public Int16 dmSize;
+            public short dmSize;
             [FieldOffset(38)]
-            public Int16 dmDriverExtra;
+            public short dmDriverExtra;
             [FieldOffset(40)]
             public DM dmFields;
             [FieldOffset(44)]
-            Int16 dmOrientation;
+            short dmOrientation;
             [FieldOffset(46)]
-            Int16 dmPaperSize;
+            short dmPaperSize;
             [FieldOffset(48)]
-            Int16 dmPaperLength;
+            short dmPaperLength;
             [FieldOffset(50)]
-            Int16 dmPaperWidth;
+            short dmPaperWidth;
             [FieldOffset(52)]
-            Int16 dmScale;
+            short dmScale;
             [FieldOffset(54)]
-            Int16 dmCopies;
+            short dmCopies;
             [FieldOffset(56)]
-            Int16 dmDefaultSource;
+            short dmDefaultSource;
             [FieldOffset(58)]
-            Int16 dmPrintQuality;
+            short dmPrintQuality;
             [FieldOffset(44)]
             public POINTL dmPosition;
             [FieldOffset(52)]
-            public Int32 dmDisplayOrientation;
+            public int dmDisplayOrientation;
             [FieldOffset(56)]
-            public Int32 dmDisplayFixedOutput;
+            public int dmDisplayFixedOutput;
             [FieldOffset(60)]
             public short dmColor;
             [FieldOffset(62)]
@@ -144,25 +156,27 @@ namespace Gear.Client.Platform.Microsoft
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = CCHFORMNAME)]
             public string dmFormName;
             [FieldOffset(102)]
-            public Int16 dmLogPixels;
+            public short dmLogPixels;
             [FieldOffset(104)]
-            public Int32 dmBitsPerPel;
+            public int dmBitsPerPel;
             [FieldOffset(108)]
-            public Int32 dmPelsWidth;
+            public int dmPelsWidth;
             [FieldOffset(112)]
-            public Int32 dmPelsHeight;
+            public int dmPelsHeight;
             [FieldOffset(116)]
-            public Int32 dmDisplayFlags;
+            public int dmDisplayFlags;
             [FieldOffset(116)]
-            public Int32 dmNup;
+            public int dmNup;
             [FieldOffset(120)]
-            public Int32 dmDisplayFrequency;
+            public int dmDisplayFrequency;
         }
+
         struct POINTL
         {
-            public Int32 x;
-            public Int32 y;
+            public int x;
+            public int y;
         }
+
         [Flags()]
         enum DM : int
         {

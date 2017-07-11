@@ -19,6 +19,7 @@ namespace Gear.Modeling.Primitives
     public class MengerSponge : Mesh3
     {
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MengerSponge"/> class.
         /// </summary>

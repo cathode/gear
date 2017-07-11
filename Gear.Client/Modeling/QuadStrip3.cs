@@ -17,6 +17,7 @@ namespace Gear.Modeling
     public class QuadStrip3 : Polygon3d
     {
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="QuadStrip3"/> class.
         /// </summary>
@@ -27,6 +28,7 @@ namespace Gear.Modeling
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets the <see cref="PrimitiveKind"/> of the current primitive.
         /// </summary>

@@ -13,10 +13,9 @@ using System.Text;
 namespace Gear.Modeling
 {
     /// <summary>
-    /// Represents an interface for a type that produces geometry based 
+    /// Represents an interface for a type that produces geometry based
     /// </summary>
     public interface IGeometrySource
     {
-        
     }
 }

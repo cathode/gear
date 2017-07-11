@@ -15,6 +15,5 @@ namespace Gear.Client.Authentication
 {
     public class AuthenticationToken
     {
-
     }
 }

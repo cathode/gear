@@ -15,14 +15,15 @@ namespace Gear.Modeling
     public class Quad2d : Polygon2d
     {
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Quad2d"/> class.
         /// </summary>
         public Quad2d()
             : base(4)
         {
-        }     
-        
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Quad2d"/> class.
         /// </summary>
@@ -30,8 +31,8 @@ namespace Gear.Modeling
         public Quad2d(double size)
             : this(size, size)
         {
-        }  
-        
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Quad2d"/> class.
         /// </summary>
@@ -52,6 +53,7 @@ namespace Gear.Modeling
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets or sets the upper-left vertex of the quad.
         /// </summary>
@@ -61,12 +63,13 @@ namespace Gear.Modeling
             {
                 return this[0];
             }
+
             set
             {
                 this[0] = value;
             }
-        }     
-        
+        }
+
         /// <summary>
         /// Gets or sets the upper-right vertex of the quad.
         /// </summary>
@@ -76,12 +79,13 @@ namespace Gear.Modeling
             {
                 return this[1];
             }
+
             set
             {
                 this[1] = value;
             }
-        }     
-        
+        }
+
         /// <summary>
         /// Gets or sets the lower-right vertex of the quad.
         /// </summary>
@@ -91,12 +95,13 @@ namespace Gear.Modeling
             {
                 return this[2];
             }
+
             set
             {
                 this[2] = value;
             }
-        }     
-        
+        }
+
         /// <summary>
         /// Gets or sets the lower-left vertex of the quad.
         /// </summary>
@@ -106,6 +111,7 @@ namespace Gear.Modeling
             {
                 return this[3];
             }
+
             set
             {
                 this[3] = value;

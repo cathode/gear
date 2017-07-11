@@ -19,6 +19,7 @@ namespace Gear.Geometry
     public interface IRenderable
     {
         #region Properties
+
         /// <summary>
         /// Gets a collection of vertices to render.
         /// </summary>
@@ -43,7 +44,9 @@ namespace Gear.Geometry
     {
         #region Properties
         Vector3f Position { get; }
+
         Vector3f Normal { get; }
+
         Vector2f TexCoords { get; }
         #endregion
     }

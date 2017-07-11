@@ -16,6 +16,7 @@ namespace Gear.Client.Rendering
     public class RenderEventArgs : EventArgs
     {
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RenderEventArgs"/> class.
         /// </summary>
@@ -24,7 +25,7 @@ namespace Gear.Client.Rendering
         }
         #endregion
         #region Properties
-        
+
         #endregion
     }
 }

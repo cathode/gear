@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace Gear.Model
 {
-
     [Flags]
     public enum BlockFlags : byte
     {

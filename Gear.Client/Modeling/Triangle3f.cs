@@ -24,8 +24,11 @@ namespace Gear.Modeling
         }
 
         public Vertex3f A { get; set; }
+
         public Vertex3f B { get; set; }
+
         public Vertex3f C { get; set; }
+
         public Vector3f Normal
         {
             get

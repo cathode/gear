@@ -12,7 +12,6 @@ using System.Text;
 using System.Threading.Tasks;
 using ProtoBuf;
 
-
 namespace Gear.Net.Messages
 {
     [ProtoContract]
@@ -23,7 +22,7 @@ namespace Gear.Net.Messages
         {
             get
             {
-                //return BuiltinMessageIds.LocatorRequest;
+                // return BuiltinMessageIds.LocatorRequest;
                 throw new NotImplementedException();
             }
         }

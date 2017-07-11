@@ -20,6 +20,7 @@ namespace Gear.Modeling
     {
         #region Fields
         private Vertex3f[] vertices;
+
         #endregion
         #region Constructors
         public Mesh()
@@ -28,7 +29,7 @@ namespace Gear.Modeling
             this.Triangles = new Triangle3f[0];
         }
 
-        //public Mesh(IEnumerable<Triangle3f> )
+        // public Mesh(IEnumerable<Triangle3f> )
 
         #endregion
         #region Properties
@@ -39,11 +40,13 @@ namespace Gear.Modeling
             {
                 return this.vertices;
             }
+
             protected set
             {
                 this.vertices = value;
             }
         }
+
         public Triangle3f[] Triangles { get; set; }
 
         #endregion
@@ -71,39 +74,38 @@ namespace Gear.Modeling
             // top
             ts[0] = new byte[] { 0, 1, 2 };
             ts[1] = new byte[] { 2, 3, 0 };
-            //ts[2] = new byte[]
+            // ts[2] = new byte[]
 
-
-            //var edges = new Edge3[]
-            //{
+            // var edges = new Edge3[]
+            // {
             //    new Edge3(verts, 0, 1),
             //    new Edge3(verts, 1, 2),
             //    new Edge3(verts, 2, 3),
             //    new Edge3(verts, 3, 0),
 
-            //    new Edge3(verts, 4, 5),
+            // new Edge3(verts, 4, 5),
             //    new Edge3(verts, 5, 6),
             //    new Edge3(verts, 6, 7),
             //    new Edge3(verts, 7, 4),
 
-            //    new Edge3(verts, 0, 6),
+            // new Edge3(verts, 0, 6),
             //    new Edge3(verts, 1, 5),
             //    new Edge3(verts, 2, 4),
             //    new Edge3(verts, 3, 7),
-            //};
+            // };
 
-            var triangles = new Triangle3f[] { 
+            var triangles = new Triangle3f[] {
                 // Top and bottom
                 new Triangle3f(verts[0], verts[1], verts[2]),
                 new Triangle3f(verts[2], verts[3], verts[0])
             };
-                //new Quad3(edges,  
-                //new Triangle3f(verts, 0, 3, 7, 4),
-                //new Triangle3f(verts, 1, 0, 4, 5),
-                //new Triangle3f(verts, 2, 1, 5, 6),
-                //new Triangle3f(verts, 3, 2, 6, 7),
-                
-            //};
+                // new Quad3(edges,
+                // new Triangle3f(verts, 0, 3, 7, 4),
+                // new Triangle3f(verts, 1, 0, 4, 5),
+                // new Triangle3f(verts, 2, 1, 5, 6),
+                // new Triangle3f(verts, 3, 2, 6, 7),
+
+            // };
             mesh.Triangles = triangles;
 
             return mesh;
@@ -143,6 +145,7 @@ namespace Gear.Modeling
                 verts[i] = new Vertex3f(x, y, z);
                 the += the72;
             }
+
             var polys = new Triangle3f[20];
 
             polys[0] = new Triangle3f(verts[0], verts[1], verts[2]);
@@ -166,7 +169,6 @@ namespace Gear.Modeling
             polys[18] = new Triangle3f(verts[9], verts[10], verts[5]);
             polys[19] = new Triangle3f(verts[10], verts[6], verts[1]);
 
-            
             var result = new Mesh();
             result.vertices = verts;
             result.Triangles = polys;
@@ -175,7 +177,6 @@ namespace Gear.Modeling
 
         public void Optimize()
         {
-
         }
 
         [ContractInvariantMethod]
@@ -191,7 +192,6 @@ namespace Gear.Modeling
 
         public void LoadMeshIntoBuffer(Gear.Client.Rendering.VBO vbo)
         {
-
         }
 
         #endregion

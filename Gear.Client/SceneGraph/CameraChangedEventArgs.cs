@@ -19,9 +19,11 @@ namespace Gear.Client.SceneGraph
         {
             this.camera = camera;
         }
+
         #endregion
         #region Fields
         private Camera camera;
+
         #endregion
         #region Properties
         public Camera Camera

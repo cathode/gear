@@ -21,7 +21,7 @@ namespace Gear.Client.UI
     {
         public GearLauncher()
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
             Log.BindOutput(new LogMessageHandler(this.DisplayLogMessage));
         }
@@ -29,16 +29,18 @@ namespace Gear.Client.UI
         private void DisplayLogMessage(LogMessage message)
         {
             if (this.logDisplay.InvokeRequired)
+            {
                 this.logDisplay.Invoke((MethodInvoker)(() => this.DisplayLogMessage(message)));
+            }
             else
+            {
                 this.logDisplay.Items.Add(message.ToString());
-
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            
-            //LanServerScanner.BeginDiscovery(5);
+            // LanServerScanner.BeginDiscovery(5);
         }
     }
 }

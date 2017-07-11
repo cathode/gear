@@ -51,12 +51,10 @@ namespace Gear.Net
         /// </summary>
         public DateTime ReceivedAt { get; set; }
 
-
         [ContractInvariantMethod]
         private void Invariants()
         {
             Contract.Invariant(this.Data != null);
-
         }
     }
 }

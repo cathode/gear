@@ -17,6 +17,7 @@ namespace Gear.Modeling
     public class Triangle3d : Polygon3d
     {
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Triangle3d"/> class.
         /// </summary>
@@ -51,6 +52,7 @@ namespace Gear.Modeling
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets or sets the first vertex position.
         /// </summary>
@@ -60,6 +62,7 @@ namespace Gear.Modeling
             {
                 return this[0];
             }
+
             set
             {
                 Contract.Requires(value != null);
@@ -77,6 +80,7 @@ namespace Gear.Modeling
             {
                 return this[1];
             }
+
             set
             {
                 Contract.Requires(value != null);
@@ -94,6 +98,7 @@ namespace Gear.Modeling
             {
                 return this[2];
             }
+
             set
             {
                 Contract.Requires(value != null);
@@ -125,12 +130,16 @@ namespace Gear.Modeling
                 return true;
             }
         }
+
         #endregion
         #region Methods
         public override bool Equals(object obj)
         {
             if (obj is Triangle3d)
+            {
                 return this == (Triangle3d)obj;
+            }
+
             return false;
         }
 
@@ -138,10 +147,12 @@ namespace Gear.Modeling
         {
             return base.GetHashCode();
         }
+
         public override string ToString()
         {
             return string.Format("({0}, {1}, {2})", this.A, this.B, this.C);
         }
+
         /// <summary>
         /// Gets the position on the current polygon at which the specified edge intersects it.
         /// </summary>
@@ -218,7 +229,7 @@ namespace Gear.Modeling
             }
 
             throw new NotImplementedException();
-            //return null;
+            // return null;
         }
 
         /// <summary>
@@ -229,7 +240,9 @@ namespace Gear.Modeling
         public Edge3 GetIntersection(Triangle3d other)
         {
             if (other == null)
+            {
                 return null;
+            }
 
             var q1 = this.A.ToVector3();
             var q2 = this.B.ToVector3();
@@ -258,6 +271,7 @@ namespace Gear.Modeling
         }
         #endregion
         #region Operators
+
         /// <summary>
         /// Compares the vertices of two triangles and determines if they represent the same triangle.
         /// </summary>
@@ -267,12 +281,20 @@ namespace Gear.Modeling
         public static bool operator ==(Triangle3d t1, Triangle3d t2)
         {
             if (Triangle3d.ReferenceEquals(t1, null) || Triangle3d.ReferenceEquals(t2, null))
+            {
                 if (Triangle3d.ReferenceEquals(t1, t2))
+                {
                     return true;
+                }
                 else
+                {
                     return false;
+                }
+            }
             else
+            {
                 return t1.A == t2.A && t1.B == t2.B && t1.C == t2.C;
+            }
         }
 
         /// <summary>
@@ -284,12 +306,20 @@ namespace Gear.Modeling
         public static bool operator !=(Triangle3d t1, Triangle3d t2)
         {
             if (Triangle3d.ReferenceEquals(t1, null) || Triangle3d.ReferenceEquals(t2, null))
+            {
                 if (Triangle3d.ReferenceEquals(t1, t2))
+                {
                     return false;
+                }
                 else
+                {
                     return true;
+                }
+            }
             else
+            {
                 return t1.A != t2.A || t1.B != t2.B || t1.C != t2.C;
+            }
         }
         #endregion
     }

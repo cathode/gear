@@ -17,6 +17,7 @@ namespace Gear.Client.SceneGraph
     public sealed class Scene
     {
         #region Fields
+
         /// <summary>
         /// Backing field for the <see cref="Scene.Root"/> property.
         /// </summary>
@@ -25,6 +26,7 @@ namespace Gear.Client.SceneGraph
         private Vector4f ambientLight;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Scene"/> class.
         /// </summary>
@@ -34,6 +36,7 @@ namespace Gear.Client.SceneGraph
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets or sets a color used to control the global ambient lighting in the scene.
         /// </summary>
@@ -43,12 +46,12 @@ namespace Gear.Client.SceneGraph
             {
                 return this.ambientLight;
             }
+
             set
             {
                 this.ambientLight = value;
             }
         }
-   
 
         /// <summary>
         /// Gets the root node of the scene.
@@ -59,6 +62,7 @@ namespace Gear.Client.SceneGraph
             {
                 return this.root;
             }
+
             set
             {
                 this.root = value;

@@ -17,6 +17,7 @@ namespace Gear.Client.UI
     public sealed class ElementChildrenCollection : ICollection<Element>
     {
         #region Fields
+
         /// <summary>
         /// Backing field for the <see cref="ElementChildrenCollection.Parent"/> property.
         /// </summary>
@@ -28,6 +29,7 @@ namespace Gear.Client.UI
         private readonly Collection<Element> children;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ElementChildrenCollection"/> class.
         /// </summary>
@@ -37,6 +39,7 @@ namespace Gear.Client.UI
             this.parent = parent;
             this.children = new Collection<Element>();
         }
+
         #endregion
         #region Indexers
         public Element this[int index]
@@ -48,6 +51,7 @@ namespace Gear.Client.UI
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets the <see cref="Element"/> that the children contained in this collection belong to.
         /// </summary>
@@ -82,6 +86,7 @@ namespace Gear.Client.UI
         }
         #endregion
         #region Methods
+
         /// <summary>
         /// Adds an item to the <see cref="ElementChildrenCollection"/>.
         /// </summary>
@@ -90,13 +95,17 @@ namespace Gear.Client.UI
         public void Add(Element item)
         {
             if (this.IsReadOnly)
+            {
                 throw new NotSupportedException("TODO: return localized exception message string.");
+            }
         }
 
         public void Clear()
         {
             while (this.Count > 0)
+            {
                 this.Remove(this.children[0]);
+            }
         }
 
         public bool Contains(Element item)
@@ -122,16 +131,26 @@ namespace Gear.Client.UI
         public bool Remove(Element item)
         {
             if (this.IsReadOnly)
+            {
                 throw new NotSupportedException();
+            }
+
             if (item == null)
+            {
                 return false;
+            }
+
             if (item.Parent != this.Parent)
+            {
                 return false;
+            }
+
             if (this.children.Remove(item))
             {
                 item.Parent = null;
                 return true;
             }
+
             return false;
         }
 

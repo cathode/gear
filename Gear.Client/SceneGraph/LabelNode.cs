@@ -23,6 +23,7 @@ namespace Gear.Client.SceneGraph
         #region Fields
         private string text;
         private double fontSize;
+
         #endregion
         #region Constructors
         public LabelNode(string text)
@@ -32,6 +33,7 @@ namespace Gear.Client.SceneGraph
 
             this.RegenerateBitmap();
         }
+
         #endregion
         #region Properties
         public string Text
@@ -40,6 +42,7 @@ namespace Gear.Client.SceneGraph
             {
                 return this.text;
             }
+
             set
             {
                 this.text = value;
@@ -53,6 +56,7 @@ namespace Gear.Client.SceneGraph
             {
                 return this.fontSize;
             }
+
             set
             {
                 this.fontSize = value;
@@ -65,6 +69,7 @@ namespace Gear.Client.SceneGraph
             get;
             set;
         }
+
         #endregion
         #region Methods
         private unsafe void RegenerateBitmap()

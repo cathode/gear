@@ -17,13 +17,13 @@ namespace Gear.Modeling
     /// </summary>
     public class SelectVolumeModifier : ISelectionModifier
     {
-
         public SelectionAction Action
         {
             get
             {
                 throw new NotImplementedException();
             }
+
             set
             {
                 throw new NotImplementedException();
@@ -36,6 +36,7 @@ namespace Gear.Modeling
             {
                 throw new NotImplementedException();
             }
+
             set
             {
                 throw new NotImplementedException();

@@ -15,6 +15,5 @@ namespace Gear.Modeling
 {
     public class ModifierNode : Node
     {
-
     }
 }

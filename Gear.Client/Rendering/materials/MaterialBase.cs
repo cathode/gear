@@ -17,6 +17,5 @@ namespace Gear.Client.Rendering.Materials
     /// </summary>
     public abstract class MaterialBase
     {
-
     }
 }

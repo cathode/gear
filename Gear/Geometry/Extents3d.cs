@@ -34,6 +34,7 @@ namespace Gear.Geometry
         private readonly double back;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Extents3d"/> class.
         /// </summary>
@@ -76,7 +77,6 @@ namespace Gear.Geometry
             Contract.Requires(a.X >= b.X);
             Contract.Requires(a.Y >= b.Y);
             Contract.Requires(a.Z >= b.Z);
-
         }
 
         /// <summary>
@@ -101,6 +101,7 @@ namespace Gear.Geometry
             this.bottom = bottom;
             this.back = back;
         }
+
         #endregion
         #region Properties
         public Vector3d A
@@ -117,7 +118,6 @@ namespace Gear.Geometry
             {
                 return new Vector3d(this.left, this.bottom, this.back);
             }
-
         }
 
         public double Right
@@ -191,22 +191,31 @@ namespace Gear.Geometry
                 return this.Top - this.Bottom;
             }
         }
+
         #endregion
         #region Methods
         public static bool Equals(Extents3d e1, Extents3d e2)
         {
             if (Extents3d.ReferenceEquals(e1, null))
+            {
                 return Extents3d.ReferenceEquals(e2, null);
+            }
             else if (Extents3d.ReferenceEquals(e2, null))
+            {
                 return Extents3d.ReferenceEquals(e1, null);
+            }
             else
+            {
                 return e1 == e2;
+            }
         }
 
         public override bool Equals(object obj)
         {
             if (obj is Extents3d)
+            {
                 return this == (Extents3d)obj;
+            }
 
             return false;
         }
@@ -246,6 +255,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Operators
+
         /// <summary>
         /// Determines if the current <see cref="Extents3d"/> fully contains the space defined by the specified <see cref="Extents3d"/>.
         /// </summary>
@@ -263,7 +273,8 @@ namespace Gear.Geometry
 
         public static Extents3d operator |(Extents3d e1, Extents3d e2)
         {
-            return new Extents3d(e1.Right >= e2.Right ? e1.Right : e2.Right,
+            return new Extents3d(
+                e1.Right >= e2.Right ? e1.Right : e2.Right,
                                 e1.Top >= e2.Top ? e1.Top : e2.Top,
                                 e1.Front >= e2.Front ? e1.Front : e2.Front,
 
@@ -275,12 +286,20 @@ namespace Gear.Geometry
         public static bool operator ==(Extents3d e1, Extents3d e2)
         {
             if (object.ReferenceEquals(e1, null))
+            {
                 if (object.ReferenceEquals(e2, null))
+                {
                     return true;
+                }
                 else
+                {
                     return false;
+                }
+            }
             else if (object.ReferenceEquals(e2, null))
+            {
                 return false;
+            }
 
             return e1.right == e2.right
                 && e1.left == e2.left
@@ -288,7 +307,6 @@ namespace Gear.Geometry
                 && e1.back == e2.back
                 && e1.top == e2.top
                 && e1.bottom == e2.bottom;
-
         }
 
         public static bool operator !=(Extents3d e1, Extents3d e2)
@@ -301,7 +319,6 @@ namespace Gear.Geometry
                 || e1.bottom != e2.bottom;
         }
         #endregion
-
 
     }
 }

@@ -29,6 +29,7 @@ namespace Gear.Geometry
 
             return new Triangle3d(array[a], array[b], array[c]);
         }
+
         public static Quad3d Quad(this Vertex3d[] array, int a, int b, int c, int d)
         {
             Contract.Requires(array.Length >= 4);

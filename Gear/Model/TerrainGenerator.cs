@@ -11,7 +11,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace Gear.Model
 {
     /// <summary>
@@ -20,7 +19,6 @@ namespace Gear.Model
     public abstract class TerrainGenerator
     {
         private Queue<ChunkGenerationRequest> requestedChunks;
-
 
         /// <summary>
         /// Generates the terrain comprising the chunk at the specified coordinates. This method is thread-safe.
@@ -38,7 +36,9 @@ namespace Gear.Model
                 var req = this.requestedChunks.FirstOrDefault(e => e.Location == location);
                 // Create a generation request if it isn't already queued
                 if (req == null)
+                {
                     req = new ChunkGenerationRequest { Location = location, Callbacks = new List<Func<Chunk>>() };
+                }
 
                 // Add the callback to the generation request
                 req.Callbacks.Add(callback);
@@ -54,7 +54,6 @@ namespace Gear.Model
         /// <param name="chunkId"></param>
         public void PopulateDoodads(ChunkLocation location)
         {
-
         }
 
         protected abstract void FillChunk(Chunk chunk);

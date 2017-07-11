@@ -10,14 +10,15 @@ namespace Gear.Geometry
     /// <summary>
     /// Represents a vertex of a polygon in two-dimensional space.
     /// </summary>
-    public sealed class Vertex2d 
+    public sealed class Vertex2d
     {
         #region Fields - Private
+
         /// <summary>
         /// Backing field for the <see cref="Vertex2d.Color"/> property.
         /// </summary>
         private Vector4f color;
-        
+
         /// <summary>
         /// Backing field for the <see cref="Vertex2d.Flags"/> property.
         /// </summary>
@@ -26,21 +27,22 @@ namespace Gear.Geometry
         /// <summary>
         /// Backing field for the <see cref="Vertex2d.X"/> property.
         /// </summary>
-        private double x;       
-        
+        private double x;
+
         /// <summary>
         /// Backing field for the <see cref="Vertex2d.Y"/> property.
         /// </summary>
         private double y;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Vertex2d"/> class.
         /// </summary>
         public Vertex2d()
         {
-        }      
-        
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Vertex2d"/> class.
         /// </summary>
@@ -53,6 +55,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Properties - Public
+
         /// <summary>
         /// Gets or sets the color of the vertex.
         /// </summary>
@@ -62,6 +65,7 @@ namespace Gear.Geometry
             {
                 return this.color;
             }
+
             set
             {
                 this.color = value;
@@ -74,6 +78,7 @@ namespace Gear.Geometry
             {
                 return this.flags;
             }
+
             set
             {
                 this.flags = value;
@@ -89,12 +94,13 @@ namespace Gear.Geometry
             {
                 return this.x;
             }
+
             set
             {
                 this.x = value;
             }
-        }     
-        
+        }
+
         /// <summary>
         /// Gets or sets the y-coordinate of the current <see cref="Vertex2d"/>.
         /// </summary>
@@ -104,13 +110,13 @@ namespace Gear.Geometry
             {
                 return this.y;
             }
+
             set
             {
                 this.y = value;
             }
         }
         #endregion
-
 
         public Vector2d ToVector2()
         {

@@ -27,6 +27,7 @@ namespace Gear.Geometry
         private readonly double z;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Quaternion"/> class.
         /// </summary>
@@ -54,7 +55,7 @@ namespace Gear.Geometry
             var y = axis.Y * res;
             var z = axis.Z * res;
 
-            var len = Math.Sqrt(w * w + x * x + y * y + z * z);
+            var len = Math.Sqrt((w * w) + (x * x) + (y * y) + (z * z));
             w = w / len;
             x = x / len;
             y = y / len;
@@ -104,6 +105,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets the W component of the quaternion.
         /// </summary>
@@ -155,9 +157,10 @@ namespace Gear.Geometry
         {
             get
             {
-                return Math.Sqrt(w * w + x * x + y * y + z * z);
+                return Math.Sqrt((this.w * this.w) + (this.x * this.x) + (this.y * this.y) + (this.z * this.z));
             }
         }
+
         #endregion
         #region Methods
         public static Quaternion Create(double x, double y, double z, double a)
@@ -176,22 +179,20 @@ namespace Gear.Geometry
 
             w = Math.Sqrt(w) * 0.5;
 
-
             var w4Recip = 1.0 / (4.0 * w);
             var x = (up.Z - forward.Y) * w4Recip;
             var y = (forward.X - right.Z) * w4Recip;
             var z = (right.Y - up.X) * w4Recip;
 
             return new Quaternion(w, x, y, z).Normalized();
-
         }
 
         public static Quaternion Multiply(Quaternion q1, Quaternion q2)
         {
-            var w = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z;
-            var x = q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y;
-            var y = q1.w * q2.y - q1.x * q2.z + q1.y * q2.w + q1.z * q2.x;
-            var z = q1.w * q2.z + q1.x * q2.y - q1.y * q2.x + q1.z * q2.w;
+            var w = (q1.w * q2.w) - (q1.x * q2.x) - (q1.y * q2.y) - (q1.z * q2.z);
+            var x = (q1.w * q2.x) + (q1.x * q2.w) + (q1.y * q2.z) - (q1.z * q2.y);
+            var y = (q1.w * q2.y) - (q1.x * q2.z) + (q1.y * q2.w) + (q1.z * q2.x);
+            var z = (q1.w * q2.z) + (q1.x * q2.y) - (q1.y * q2.x) + (q1.z * q2.w);
 
             return new Quaternion(w, x, y, z);
         }
@@ -205,18 +206,17 @@ namespace Gear.Geometry
             var z = q.z;
             var s = q.w;
             return new Matrix4(
-                1 - 2 * ((y * y) + (z * z)), 2 * ((x * y) - (s * z)), 2 * ((x * z) + (s * y)), 0,
-                2 * ((x * y) + (s * z)), 1 - 2 * ((x * x) + (z * z)), 2 * ((y * z) - (s * x)), 0,
-                2 * ((x * z) - (s * y)), 2 * ((y * z) + (s * x)), 1 - 2 * ((x * x) + (y * y)), 0,
+                1 - (2 * ((y * y) + (z * z))), 2 * ((x * y) - (s * z)), 2 * ((x * z) + (s * y)), 0,
+                2 * ((x * y) + (s * z)), 1 - (2 * ((x * x) + (z * z))), 2 * ((y * z) - (s * x)), 0,
+                2 * ((x * z) - (s * y)), 2 * ((y * z) + (s * x)), 1 - (2 * ((x * x) + (y * y))), 0,
                 0, 0, 0, 1);
         }
 
         public Quaternion Normalized()
         {
-            var m = Math.Sqrt(w * w + x * x + y * y + z * z);
-            return new Quaternion(w / m, x / m, y / m, z / m);
+            var m = Math.Sqrt((this.w * this.w) + (this.x * this.x) + (this.y * this.y) + (this.z * this.z));
+            return new Quaternion(this.w / m, this.x / m, this.y / m, this.z / m);
         }
-
 
         public Quaternion RotateBy(double degrees)
         {
@@ -229,7 +229,9 @@ namespace Gear.Geometry
         public Vector3d GetAxis()
         {
             if (this.w == 1.0)
+            {
                 return Vector3d.Up;
+            }
 
             var m = Math.Sqrt(1 - (this.w * this.w));
 
@@ -243,7 +245,7 @@ namespace Gear.Geometry
 
         public Quaternion GetConjugate()
         {
-            return new Quaternion(w, -x, -y, -z);
+            return new Quaternion(this.w, -this.x, -this.y, -this.z);
         }
 
         public void GetAxisAngle(out Vector3d axis, out Angle angle)
@@ -256,6 +258,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Operators
+
         /// <summary>
         /// Multiplies two quaternions. Quaternion multiplication is not commutative, so order matters.
         /// </summary>

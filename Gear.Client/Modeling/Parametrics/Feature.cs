@@ -14,6 +14,5 @@ namespace Gear.Modeling.Parametrics
 {
     public class Feature
     {
-
     }
 }

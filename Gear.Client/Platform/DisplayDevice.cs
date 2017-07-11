@@ -17,6 +17,7 @@ namespace Gear.Client.Platform
     public abstract class DisplayDevice
     {
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DisplayDevice"/> class.
         /// </summary>
@@ -25,6 +26,7 @@ namespace Gear.Client.Platform
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets a <see cref="DisplayProfile"/> that represents the native display settings for
         /// the current <see cref="DisplayDevice"/>.
@@ -48,6 +50,7 @@ namespace Gear.Client.Platform
         }
         #endregion
         #region Methods
+
         /// <summary>
         /// When overridden in a derived class, queries the system or display hardware for a list of
         /// supported full-screen display profile configurations.

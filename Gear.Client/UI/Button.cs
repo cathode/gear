@@ -16,6 +16,5 @@ namespace Gear.Client.UI
     /// </summary>
     public class Button : Element
     {
-
     }
 }

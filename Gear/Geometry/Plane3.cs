@@ -22,6 +22,7 @@ namespace Gear.Geometry
         private Vector3d origin;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Plane3"/> struct with the specified normal.
         /// </summary>
@@ -43,7 +44,8 @@ namespace Gear.Geometry
             this.origin = origin;
         }
         #endregion
-        #region Properties 
+        #region Properties
+
         /// <summary>
         /// Gets or sets a <see cref="Vector3d"/> describing the normal of the plane.
         /// </summary>
@@ -53,6 +55,7 @@ namespace Gear.Geometry
             {
                 return this.normal;
             }
+
             set
             {
                 this.normal = value;
@@ -68,6 +71,7 @@ namespace Gear.Geometry
             {
                 return this.origin;
             }
+
             set
             {
                 this.origin = value;

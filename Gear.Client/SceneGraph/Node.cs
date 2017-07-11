@@ -24,19 +24,21 @@ namespace Gear.Client.SceneGraph
         private readonly LinkedList<Node> parents = new LinkedList<Node>();
         private readonly List<Node> children = new List<Node>();
         private readonly List<Constraint> constraints = new List<Constraint>();
-       
+
         private Vector3d position = Node.DefaultPosition;
         private Vector3d scale = Node.DefaultScale;
         private Quaternion orientation = Node.DefaultOrientation;
         private NodeRenderFlags renderFlags;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Node"/> class.
         /// </summary>
         public Node()
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Node"/> class.
         /// </summary>
@@ -46,8 +48,12 @@ namespace Gear.Client.SceneGraph
             Contract.Requires(children != null);
 
             foreach (var c in children)
+            {
                 if (c != null)
+                {
                     this.Add(c);
+                }
+            }
         }
 
         public Node(Mesh mesh)
@@ -56,6 +62,7 @@ namespace Gear.Client.SceneGraph
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets the number of child in the current <see cref="Node"/>.
         /// </summary>
@@ -117,6 +124,7 @@ namespace Gear.Client.SceneGraph
             {
                 return this.orientation;
             }
+
             set
             {
                 this.orientation = value;
@@ -132,6 +140,7 @@ namespace Gear.Client.SceneGraph
             {
                 return this.position;
             }
+
             set
             {
                 this.position = value;
@@ -147,6 +156,7 @@ namespace Gear.Client.SceneGraph
             {
                 return this.renderFlags;
             }
+
             set
             {
                 this.renderFlags = value;
@@ -162,6 +172,7 @@ namespace Gear.Client.SceneGraph
             {
                 return this.scale;
             }
+
             set
             {
                 this.scale = value;
@@ -214,8 +225,12 @@ namespace Gear.Client.SceneGraph
             get
             {
                 foreach (var node in this.children)
+                {
                     if (node != null && !node.IsGeometryStatic)
+                    {
                         return false;
+                    }
+                }
 
                 return true;
             }
@@ -257,9 +272,13 @@ namespace Gear.Client.SceneGraph
             get
             {
                 if (this.parents.Count > 0)
+                {
                     return this.parents.First.Value;
+                }
                 else
+                {
                     return null;
+                }
             }
         }
 
@@ -275,6 +294,7 @@ namespace Gear.Client.SceneGraph
         }
         #endregion
         #region Methods
+
         /// <summary>
         /// Adds a child <see cref="Node"/> to the current <see cref="Node"/>.
         /// </summary>
@@ -284,7 +304,9 @@ namespace Gear.Client.SceneGraph
             Contract.Requires(item != null);
 
             if (item.ContainsDeep(this))
+            {
                 throw new InvalidOperationException("A recursive node addition was detected");
+            }
 
             if (!this.ContainsDeep(item))
             {
@@ -309,7 +331,9 @@ namespace Gear.Client.SceneGraph
         public bool Contains(Node item)
         {
             if (!Node.ReferenceEquals(item, null))
+            {
                 return this.children.Contains(item);
+            }
 
             return false;
         }
@@ -323,10 +347,18 @@ namespace Gear.Client.SceneGraph
         public bool ContainsDeep(Node item)
         {
             if (!Node.ReferenceEquals(item, null))
+            {
                 foreach (var node in this.children)
+                {
                     if (node != null)
+                    {
                         if (node == item || node.ContainsDeep(item))
+                        {
                             return true;
+                        }
+                    }
+                }
+            }
 
             return false;
         }
@@ -358,8 +390,12 @@ namespace Gear.Client.SceneGraph
         public bool Remove(Node item)
         {
             if (item != null)
+            {
                 if (this.children.Remove(item))
+                {
                     return item.parents.Remove(this);
+                }
+            }
 
             return false;
         }
@@ -389,7 +425,7 @@ namespace Gear.Client.SceneGraph
 
                 foreach (var vt in this.Renderable.Vertices)
                 {
-                    //Vertex3 v = null;
+                    // Vertex3 v = null;
 
                     Vertex3d v = m * new Vertex3d(vt.Position.X, vt.Position.Y, vt.Position.Z);
 
@@ -403,14 +439,15 @@ namespace Gear.Client.SceneGraph
                     z2 = (v.Z < z2) ? v.Z : z2;
                 }
 
-
                 var v1 = new Vector3d(x1, y1, z1);
                 var v2 = new Vector3d(x2, y2, z2);
 
                 return new Extents3d(v1, v2);
             }
             else
+            {
                 return new Extents3d(0, 0, 0);
+            }
         }
 
         /// <summary>
@@ -419,9 +456,10 @@ namespace Gear.Client.SceneGraph
         /// <returns></returns>
         public Quaternion GetWorldOrientation()
         {
-
             if (this.parents.Count == 0)
+            {
                 return this.Orientation;
+            }
 
             var parent = this.Parent;
 
@@ -439,8 +477,12 @@ namespace Gear.Client.SceneGraph
             var ext = this.GetExtents();
 
             foreach (var node in this.children)
+            {
                 if (node != null)
+                {
                     ext |= node.GetGraphExtents();
+                }
+            }
 
             return ext;
         }
@@ -452,7 +494,9 @@ namespace Gear.Client.SceneGraph
         public Vector3d GetWorldPosition()
         {
             if (this.parents.Count == 0)
+            {
                 return this.Position;
+            }
 
             var parent = this.Parent;
 
@@ -474,7 +518,6 @@ namespace Gear.Client.SceneGraph
         {
             Contract.Invariant(this.children != null);
             Contract.Invariant(this.parents != null);
-
         }
         #endregion
     }

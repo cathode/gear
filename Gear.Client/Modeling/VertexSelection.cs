@@ -14,6 +14,5 @@ namespace Gear.Modeling
 {
     public class VertexSelection
     {
-
     }
 }

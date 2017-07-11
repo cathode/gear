@@ -11,13 +11,13 @@ namespace Gear.Model
     {
         public InfinityWorld(int seed) : base(seed)
         {
-
         }
+
         public override Vector3d GetGravityVector(Vector3d location)
         {
             return Vector3d.Down;
-
         }
+
         public override Chunk GenerateChunk(Vector3d location)
         {
             throw new NotImplementedException();

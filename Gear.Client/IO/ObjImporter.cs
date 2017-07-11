@@ -28,7 +28,9 @@ namespace Gear.Client.IO
                 var line = reader.ReadLine();
 
                 if (line.Length == 0)
+                {
                     continue;
+                }
 
                 var cmd = line.Substring(0, line.IndexOf(' '));
 

@@ -15,6 +15,7 @@ namespace Gear.Geometry
     public struct Angle
     {
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Angle"/> struct.
         /// </summary>
@@ -27,12 +28,17 @@ namespace Gear.Geometry
         private Angle(double value, AngleUnit unit)
         {
             if (unit == AngleUnit.Radians)
+            {
                 this.rads = value;
+            }
             else
+            {
                 this.rads = Angle.RadiansFromDegrees(value);
+            }
         }
         #endregion
         #region Fields - Private
+
         /// <summary>
         /// Holds an angle with zero degrees.
         /// </summary>
@@ -40,6 +46,7 @@ namespace Gear.Geometry
         private readonly double rads;
         #endregion
         #region Properties - Public
+
         /// <summary>
         /// Gets the cosine of the current <see cref="Angle"/>.
         /// </summary>
@@ -85,6 +92,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Methods
+
         /// <summary>
         /// Adds the current <see cref="Angle"/> and a second <see cref="Angle"/> and returns the result.
         /// </summary>
@@ -133,7 +141,9 @@ namespace Gear.Geometry
         public override bool Equals(object obj)
         {
             if (obj is Angle)
+            {
                 return Angle.Equals(this, (Angle)obj);
+            }
 
             return false;
         }
@@ -217,6 +227,7 @@ namespace Gear.Geometry
 
         #endregion
         #region Operators
+
         /// <summary>
         /// Determines if two angles are equal.
         /// </summary>
@@ -225,7 +236,7 @@ namespace Gear.Geometry
         /// <returns></returns>
         public static bool operator ==(Angle a, Angle b)
         {
-            return (a.rads == b.rads);
+            return a.rads == b.rads;
         }
 
         /// <summary>
@@ -236,7 +247,7 @@ namespace Gear.Geometry
         /// <returns></returns>
         public static bool operator !=(Angle a, Angle b)
         {
-            return (a.rads != b.rads);
+            return a.rads != b.rads;
         }
 
         /// <summary>
@@ -260,6 +271,7 @@ namespace Gear.Geometry
         {
             return Angle.FromDegrees(a.Degrees - b.Degrees);
         }
+
         #endregion
         #region Types
         private enum AngleUnit

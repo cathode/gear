@@ -8,7 +8,7 @@ namespace Gear.Client.Rendering
 {
     public class VBO
     {
-        public uint Id; 
+        public uint Id;
         public uint IndexBufferId;
         public int ElementCount;
     }

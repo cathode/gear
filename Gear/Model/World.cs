@@ -22,7 +22,6 @@ namespace Gear.Model
     {
         protected World(int seed)
         {
-
         }
 
         /// <summary>
@@ -54,10 +53,8 @@ namespace Gear.Model
 
         public abstract double GetSurfaceElevation(Vector3d location);
 
-        //public abstract double[] GetElevationMap();
+        // public abstract double[] GetElevationMap();
     }
-
-
 
     /// <summary>
     /// Represents the implementation of a given type of block.
@@ -81,6 +78,5 @@ namespace Gear.Model
             get;
             set;
         }
-
     }
 }

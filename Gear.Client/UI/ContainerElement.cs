@@ -21,18 +21,22 @@ namespace Gear.Client.UI
         {
             throw new NotImplementedException();
         }
+
         public void Clear()
         {
             throw new NotImplementedException();
         }
+
         public bool Contains(Element item)
         {
             throw new NotImplementedException();
         }
+
         public void CopyTo(Element[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
+
         public int Count
         {
             get
@@ -40,6 +44,7 @@ namespace Gear.Client.UI
                 throw new NotImplementedException();
             }
         }
+
         public bool IsReadOnly
         {
             get
@@ -47,14 +52,17 @@ namespace Gear.Client.UI
                 return false;
             }
         }
+
         public bool Remove(Element item)
         {
             throw new NotImplementedException();
         }
+
         public IEnumerator<Element> GetEnumerator()
         {
             throw new NotImplementedException();
         }
+
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();

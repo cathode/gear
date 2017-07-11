@@ -37,6 +37,7 @@ namespace Gear.Geometry
         private readonly double cy;
         [FieldOffset(0x40)]
         private readonly double cz;
+
         #endregion
         #region Constructors
         public Matrix3(Vector3d a, Vector3d b, Vector3d c)
@@ -72,6 +73,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Indexers
+
         /// <summary>
         /// Gets or sets the value at the specified row and column within the matrix.
         /// </summary>
@@ -85,21 +87,25 @@ namespace Gear.Geometry
                 // Using unsafe code and pointers should speed things up a lot.
                 // The modulo of the index is used to prevent overflow without branching logic.
                 fixed (Matrix3* ptr = &this)
-                    return *((double*)ptr + (row * 3 + col) % 9);
+                {
+                    return *((double*)ptr + (((row * 3) + col) % 9));
+                }
             }
         }
-
 
         public unsafe double this[int index]
         {
             get
             {
                 fixed (Matrix3* ptr = &this)
+                {
                     return *((double*)ptr + (index % 9));
+                }
             }
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets or sets the value at column A, row 0.
         /// </summary>
@@ -151,6 +157,7 @@ namespace Gear.Geometry
                 return this.by;
             }
         }
+
         public double BZ
         {
             get

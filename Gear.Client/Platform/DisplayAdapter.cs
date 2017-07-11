@@ -20,6 +20,7 @@ namespace Gear.Client.Platform
 
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets an array of all <see cref="DisplayDevice" />s connected to the current <see cref="DisplayAdapter"/>.
         /// </summary>
@@ -36,6 +37,7 @@ namespace Gear.Client.Platform
             get;
             protected set;
         }
+
         #endregion
         #region Methods
         public abstract DisplayDevice[] GetDevices();

@@ -16,45 +16,47 @@ namespace Gear.Geometry
     /// <remarks>
     /// This type is immutable.
     /// </remarks>
-    public struct Vector2d 
+    public struct Vector2d
     {
         #region Fields
+
         /// <summary>
         /// Backing field for the <see cref="Vector2d.North"/> property.
         /// </summary>
-        private static readonly Vector2d north = new Vector2d(0.0, 1.0);     
-       
+        private static readonly Vector2d north = new Vector2d(0.0, 1.0);
+
         /// <summary>
         /// Backing field for the <see cref="Vector2d.East"/> property.
         /// </summary>
-        private static readonly Vector2d east = new Vector2d(1.0, 0.0);     
-        
+        private static readonly Vector2d east = new Vector2d(1.0, 0.0);
+
         /// <summary>
         /// Backing field for the <see cref="Vector2d.South"/> property.
         /// </summary>
-        private static readonly Vector2d south = new Vector2d(0.0, -1.0);     
-        
+        private static readonly Vector2d south = new Vector2d(0.0, -1.0);
+
         /// <summary>
         /// Backing field for the <see cref="Vector2d.West"/> property.
         /// </summary>
-        private static readonly Vector2d west = new Vector2d(-1.0, 0.0);    
-        
+        private static readonly Vector2d west = new Vector2d(-1.0, 0.0);
+
         /// <summary>
         /// Backing field for the <see cref="Vector2d.Zero"/> property.
         /// </summary>
-        private static readonly Vector2d zero = new Vector2d(0.0, 0.0);     
-        
+        private static readonly Vector2d zero = new Vector2d(0.0, 0.0);
+
         /// <summary>
         /// Backing field for the <see cref="Vector2d.X"/> property.
         /// </summary>
-        private readonly double x;     
-        
+        private readonly double x;
+
         /// <summary>
         /// Backing field for the <see cref="Vector2d.Y"/> property.
         /// </summary>
         private readonly double y;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Vector2d"/> struct.
         /// </summary>
@@ -77,6 +79,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets a unit vector pointing due east.
         /// </summary>
@@ -155,6 +158,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Methods
+
         /// <summary>
         /// Converts the current <see cref="Vector2d"/> to it's absolute value.
         /// </summary>
@@ -244,7 +248,10 @@ namespace Gear.Geometry
         public override bool Equals(object obj)
         {
             if (obj is Vector2d)
+            {
                 return Vector2d.Equals(this, (Vector2d)obj);
+            }
+
             return false;
         }
 
@@ -381,6 +388,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Operators
+
         /// <summary>
         /// Multiplies a <see cref="Vector2d"/> by a scalar value.
         /// </summary>

@@ -18,6 +18,7 @@ namespace Gear.Modeling
     public class Triangle2d : Polygon2d
     {
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Triangle2d"/> class.
         /// </summary>
@@ -46,6 +47,7 @@ namespace Gear.Modeling
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets or sets the first vertex.
         /// </summary>
@@ -55,6 +57,7 @@ namespace Gear.Modeling
             {
                 return this[0];
             }
+
             set
             {
                 this[0] = value;
@@ -70,6 +73,7 @@ namespace Gear.Modeling
             {
                 return this[1];
             }
+
             set
             {
                 this[1] = value;
@@ -85,6 +89,7 @@ namespace Gear.Modeling
             {
                 return this[2];
             }
+
             set
             {
                 this[2] = value;

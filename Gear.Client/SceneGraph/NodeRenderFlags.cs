@@ -19,14 +19,17 @@ namespace Gear.Client.SceneGraph
         /// The node will not be rendered.
         /// </summary>
         None = 0x0,
+
         /// <summary>
         /// The node is visible and can be rendered.
         /// </summary>
         Visible = 0x1,
+
         /// <summary>
         /// Edges of the object are highlighted.
         /// </summary>
         EdgeHighlight = 0x2,
+
         /// <summary>
         /// Vertices of the object are highlighted.
         /// </summary>

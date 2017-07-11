@@ -22,6 +22,7 @@ namespace Gear.Model
         /// Gets the name of the element.
         /// </summary>
         string Name { get; }
+
         /// <summary>
         /// Gets the designated atomic number of the element.
         /// </summary>
@@ -32,10 +33,10 @@ namespace Gear.Model
         /// </summary>
         decimal StandardAtomicWeight { get; }
 
-        
-
         ushort ProtonCount { get; }
+
         ushort NeutronCount { get; }
+
         ushort ElectronCount { get; }
 
         /// <summary>

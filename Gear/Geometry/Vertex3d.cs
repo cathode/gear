@@ -24,6 +24,7 @@ namespace Gear.Geometry
         private VertexFlags flags;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Vertex3d"/> class.
         /// </summary>
@@ -45,6 +46,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets or sets the color of the vertex.
         /// </summary>
@@ -54,6 +56,7 @@ namespace Gear.Geometry
             {
                 return this.color;
             }
+
             set
             {
                 this.color = value;
@@ -66,6 +69,7 @@ namespace Gear.Geometry
             {
                 return this.flags;
             }
+
             set
             {
                 this.flags = value;
@@ -114,6 +118,7 @@ namespace Gear.Geometry
             {
                 return this.position;
             }
+
             set
             {
                 this.position = value;
@@ -129,6 +134,7 @@ namespace Gear.Geometry
             {
                 return this.normal;
             }
+
             set
             {
                 this.normal = value;
@@ -141,17 +147,20 @@ namespace Gear.Geometry
             {
                 return this.textureCoordinates;
             }
+
             set
             {
                 this.textureCoordinates = value;
             }
         }
+
         #endregion
         #region Methods
         public override string ToString()
         {
             return string.Format("({0}, {1}, {2})", this.X, this.Y, this.Z);
         }
+
         #endregion
         #region Operators
         public static explicit operator Vector3d(Vertex3d vertex)

@@ -25,6 +25,7 @@ namespace Gear.Client.SceneGraph
         {
             this.OrientationSpace = ReferenceSpace.View;
         }
+
         #endregion
         #region Properties
         public Vector4f[] Bitmap
@@ -55,10 +56,11 @@ namespace Gear.Client.SceneGraph
             {
                 for (int x = 0; x < bmpData.Width; ++x)
                 {
-                    var c = new Vector4f((byte)(b0[++i]) / 255.0f, (byte)(b0[++i]) / 255.0f, (byte)(b0[++i]) / 255.0f, (byte)(b0[++i]) / 255f);
+                    var c = new Vector4f((byte)b0[++i] / 255.0f, (byte)b0[++i] / 255.0f, (byte)b0[++i] / 255.0f, (byte)b0[++i] / 255f);
                     vb[++n] = c;
                 }
             }
+
             this.Bitmap = vb;
             bitmap.UnlockBits(bmpData);
         }

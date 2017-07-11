@@ -27,9 +27,9 @@ namespace Gear.Modeling
         private Polygon3d[] polygons;
         private Vertex3d[] vertices;
 
-       
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Mesh3"/> class.
         /// </summary>
@@ -42,9 +42,10 @@ namespace Gear.Modeling
         public Mesh3(params Polygon3d[] polygons)
         {
             this.polygons = polygons;
-            //TODO: fixme
+            // TODO: fixme
             this.vertices = new Vertex3d[0];
         }
+
         #endregion
         #region Properties
         public Polygon3d[] Polygons
@@ -53,6 +54,7 @@ namespace Gear.Modeling
             {
                 return this.polygons;
             }
+
             set
             {
                 this.polygons = value;
@@ -65,8 +67,11 @@ namespace Gear.Modeling
         public IEnumerator<Polygon3d> GetEnumerator()
         {
             foreach (var poly in this.polygons)
+            {
                 yield return poly;
+            }
         }
+
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();

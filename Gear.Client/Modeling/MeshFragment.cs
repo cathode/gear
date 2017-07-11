@@ -15,6 +15,6 @@ namespace Gear.Modeling
 {
     public class MeshFragment
     {
-        //public 
+        // public
     }
 }

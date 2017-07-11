@@ -12,8 +12,8 @@ using System.Text;
 using Gear.Client.SceneGraph;
 using Gear.Geometry;
 using System.Diagnostics.Contracts;
-//using Gear.Client.Platform.Microsoft;
-//using Gear.Client.Platform.Microsoft.OpenGL;
+// using Gear.Client.Platform.Microsoft;
+// using Gear.Client.Platform.Microsoft.OpenGL;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Input;
@@ -69,6 +69,7 @@ namespace Gear.Client.Rendering
         private double currentRate;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GLRenderer"/> class.
         /// </summary>
@@ -117,6 +118,7 @@ namespace Gear.Client.Rendering
         }
         #endregion
         #region Events
+
         /// <summary>
         /// Raised when the <see cref="Renderer"/> is performing it's initial set-up.
         /// </summary>
@@ -156,6 +158,7 @@ namespace Gear.Client.Rendering
         /// Raised when the renderer is stopped.
         /// </summary>
         public event EventHandler Stopping;
+
         #endregion
         #region Properties
         public bool IsDisposed
@@ -165,6 +168,7 @@ namespace Gear.Client.Rendering
                 return this.isDisposed;
             }
         }
+
         /// <summary>
         /// Gets or sets the background color of the scene.
         /// </summary>
@@ -174,11 +178,13 @@ namespace Gear.Client.Rendering
             {
                 return this.backgroundColor;
             }
+
             set
             {
                 this.backgroundColor = value;
             }
         }
+
         /// <summary>
         /// Gets a value indicating whether the current renderer has been initialized.
         /// </summary>
@@ -210,6 +216,7 @@ namespace Gear.Client.Rendering
             {
                 return this.profile;
             }
+
             set
             {
                 Contract.Requires(value != null);
@@ -228,6 +235,7 @@ namespace Gear.Client.Rendering
             {
                 return this.scene;
             }
+
             set
             {
                 Contract.Requires(value != null);
@@ -243,6 +251,7 @@ namespace Gear.Client.Rendering
             {
                 return this.activeCamera;
             }
+
             set
             {
                 Contract.Requires(value != null);
@@ -252,6 +261,7 @@ namespace Gear.Client.Rendering
         }
         #endregion
         #region Methods
+
         /// <summary>
         /// Sets up the renderer.
         /// </summary>
@@ -272,7 +282,7 @@ namespace Gear.Client.Rendering
         /// </summary>
         public void RenderFrame()
         {
-            //var options = this.CreateFrameOptions();
+            // var options = this.CreateFrameOptions();
             var e = new RenderEventArgs();
 
             this.OnPreRender(e);
@@ -286,14 +296,16 @@ namespace Gear.Client.Rendering
         public virtual void Start()
         {
             if (this.isRunning)
+            {
                 return;
+            }
 
             this.isRunning = true;
             this.Initialize(RendererOptions.Empty);
 
             this.OnStarting(EventArgs.Empty);
 
-            this.gameWindow.Closed += gameWindow_Closed;
+            this.gameWindow.Closed += this.gameWindow_Closed;
             this.gameWindow.Run(60.0);
         }
 
@@ -303,7 +315,9 @@ namespace Gear.Client.Rendering
         public virtual void Stop()
         {
             if (!this.isRunning)
+            {
                 return;
+            }
 
             this.OnStopping(EventArgs.Empty);
 
@@ -317,9 +331,11 @@ namespace Gear.Client.Rendering
         protected virtual void OnInitializing(RendererInitializationEventArgs e)
         {
             if (this.Initializing != null)
+            {
                 this.Initializing(this, e);
+            }
 
-            gameWindow.Title = "Gear.Client Sample Application";
+            this.gameWindow.Title = "Gear.Client Sample Application";
 
             float[] mat_specular = { 1.0f, 1.0f, 1.0f, 1.0f };
             float[] mat_shininess = { 50.0f };
@@ -333,7 +349,6 @@ namespace Gear.Client.Rendering
             GL.Light(LightName.Light0, LightParameter.Ambient, light_ambient);
             GL.Light(LightName.Light0, LightParameter.Diffuse, mat_specular);
 
-
             GL.Enable(EnableCap.Lighting);
             GL.Enable(EnableCap.Light0);
             GL.Enable(EnableCap.DepthTest);
@@ -343,23 +358,22 @@ namespace Gear.Client.Rendering
             this.mesh = Gear.Modeling.Mesh.NewIcosahedron(1.0f);
             this.vboId = new uint[2];
 
-
-            GL.GenBuffers(2, vboId);
+            GL.GenBuffers(2, this.vboId);
             GL.BindBuffer(BufferTarget.ArrayBuffer, this.vboId[0]);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, this.vboId[1]);
 
-            var indices = new ushort[mesh.Triangles.Length];
+            var indices = new ushort[this.mesh.Triangles.Length];
 
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * sizeof(ushort)), indices, BufferUsageHint.StaticDraw);
             this.elementCount = (ushort)indices.Length;
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, this.vboId[0]);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(mesh.Vertices.Length * 8 * sizeof(float)), this.mesh.Vertices, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(this.mesh.Vertices.Length * 8 * sizeof(float)), this.mesh.Vertices, BufferUsageHint.StaticDraw);
 
-
-            //GL.Translate(0, 0, -0.25);
-            //GL.Scale(0.5, 0.5, 0.5);
+            // GL.Translate(0, 0, -0.25);
+            // GL.Scale(0.5, 0.5, 0.5);
         }
+
         private Gear.Modeling.Mesh mesh;
         private uint[] vboId;
         private ushort elementCount;
@@ -371,7 +385,9 @@ namespace Gear.Client.Rendering
         protected virtual void OnPostRender(RenderEventArgs e)
         {
             if (this.PostRender != null)
+            {
                 this.PostRender(this, e);
+            }
 
             ++this.frameCount;
 
@@ -391,7 +407,9 @@ namespace Gear.Client.Rendering
         protected virtual void OnPreRender(RenderEventArgs e)
         {
             if (this.PreRender != null)
+            {
                 this.PreRender(this, e);
+            }
         }
 
         /// <summary>
@@ -401,14 +419,16 @@ namespace Gear.Client.Rendering
         protected virtual void OnProfileChanged(EventArgs e)
         {
             if (this.ProfileChanged != null)
+            {
                 this.ProfileChanged(this, e);
+            }
 
-            //GL.Viewport(0, 0, this.Profile.Width, this.Profile.Height);
-            //GL.MatrixMode(MatrixMode.Projection);
+            // GL.Viewport(0, 0, this.Profile.Width, this.Profile.Height);
+            // GL.MatrixMode(MatrixMode.Projection);
 
-            //GLU.Perspective(45.0, (double)this.Profile.Width / (double)this.Profile.Height, 0.1, 100.0);
-            //GL.MatrixMode(MatrixMode.ModelView);
-            //GL.LoadIdentity();
+            // GLU.Perspective(45.0, (double)this.Profile.Width / (double)this.Profile.Height, 0.1, 100.0);
+            // GL.MatrixMode(MatrixMode.ModelView);
+            // GL.LoadIdentity();
         }
 
         /// <summary>
@@ -418,95 +438,91 @@ namespace Gear.Client.Rendering
         protected virtual void OnRender(RenderEventArgs e)
         {
             if (this.Render != null)
+            {
                 this.Render(this, e);
-
+            }
 
             // render graphics
             GL.ClearColor(0.15f, 0.15f, 0.15f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            // GL.Scale(0.5, 0.5, 0.5);
+            // GL.Rotate(this.r += 0.2f, 0, 1, 1);
+            // GL.Translate(0f, 0f, -1f);
 
-
-            //GL.Scale(0.5, 0.5, 0.5);
-            //GL.Rotate(this.r += 0.2f, 0, 1, 1);
-            //GL.Translate(0f, 0f, -1f);
-
-            //GL.Begin(PrimitiveType.Quads);
+            // GL.Begin(PrimitiveType.Quads);
             //// Front Face
-            //GL.Normal3(0.0f, 0.0f, 0.5f);
-            //GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 1.0f);
-            //GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 1.0f);
-            //GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, 1.0f);
-            //GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, 1.0f);
+            // GL.Normal3(0.0f, 0.0f, 0.5f);
+            // GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 1.0f);
+            // GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 1.0f);
+            // GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, 1.0f);
+            // GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, 1.0f);
             //// Back Face
-            //GL.Normal3(0.0f, 0.0f, -0.5f);
-            //GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            //GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            //GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, -1.0f);
-            //GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, -1.0f);
+            // GL.Normal3(0.0f, 0.0f, -0.5f);
+            // GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, -1.0f);
+            // GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, -1.0f);
+            // GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, -1.0f);
+            // GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, -1.0f);
             //// Top Face
-            //GL.Normal3(0.0f, 0.5f, 0.0f);
-            //GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            //GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(-1.0f, 1.0f, 1.0f);
-            //GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(1.0f, 1.0f, 1.0f);
-            //GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, -1.0f);
+            // GL.Normal3(0.0f, 0.5f, 0.0f);
+            // GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, -1.0f);
+            // GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(-1.0f, 1.0f, 1.0f);
+            // GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(1.0f, 1.0f, 1.0f);
+            // GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, -1.0f);
             //// Bottom Face
-            //GL.Normal3(0.0f, -0.5f, 0.0f);
-            //GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            //GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(1.0f, -1.0f, -1.0f);
-            //GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 1.0f);
-            //GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 1.0f);
+            // GL.Normal3(0.0f, -0.5f, 0.0f);
+            // GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(-1.0f, -1.0f, -1.0f);
+            // GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(1.0f, -1.0f, -1.0f);
+            // GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 1.0f);
+            // GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 1.0f);
             //// Right Face
-            //GL.Normal3(0.5f, 0.0f, 0.0f);
-            //GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, -1.0f);
-            //GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, -1.0f);
-            //GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, 1.0f);
-            //GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 1.0f);
+            // GL.Normal3(0.5f, 0.0f, 0.0f);
+            // GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, -1.0f);
+            // GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, -1.0f);
+            // GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(1.0f, 1.0f, 1.0f);
+            // GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 1.0f);
             //// Left Face
-            //GL.Normal3(-0.5f, 0.0f, 0.0f);
-            //GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            //GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 1.0f);
-            //GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, 1.0f);
-            //GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            //GL.End();
-
-
+            // GL.Normal3(-0.5f, 0.0f, 0.0f);
+            // GL.TexCoord2(0.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, -1.0f);
+            // GL.TexCoord2(1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 1.0f);
+            // GL.TexCoord2(1.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, 1.0f);
+            // GL.TexCoord2(0.0f, 1.0f); GL.Vertex3(-1.0f, 1.0f, -1.0f);
+            // GL.End();
 
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
 
-            //GL.Scale(0.1, 0.1, 0.1);
+            // GL.Scale(0.1, 0.1, 0.1);
 
-            //var ct = this.ActiveCamera.Position;
+            // var ct = this.ActiveCamera.Position;
 
-            //GL.Translate(-ct.X, -ct.Y, -ct.Z);
+            // GL.Translate(-ct.X, -ct.Y, -ct.Z);
 
-            //var rt = this.ActiveCamera.Orientation;
+            // var rt = this.ActiveCamera.Orientation;
 
-            //this.ActiveCamera.Orientation = rt.RotateBy(1.5);
-            //GL.Rotate(rt.W, rt.X, rt.Y, rt.Z);
+            // this.ActiveCamera.Orientation = rt.RotateBy(1.5);
+            // GL.Rotate(rt.W, rt.X, rt.Y, rt.Z);
 
             // TEST CODE:
 
-            //GL.BindBuffer(BufferTarget.ArrayBuffer, this.vboId[0]);
-            //GL.BindBuffer(BufferTarget.ElementArrayBuffer, this.vboId[1]);
+            // GL.BindBuffer(BufferTarget.ArrayBuffer, this.vboId[0]);
+            // GL.BindBuffer(BufferTarget.ElementArrayBuffer, this.vboId[1]);
 
-            //GL.EnableClientState(ArrayCap.VertexArray);
-            //GL.VertexPointer(3, VertexPointerType.Float, 0, IntPtr.Zero);
+            // GL.EnableClientState(ArrayCap.VertexArray);
+            // GL.VertexPointer(3, VertexPointerType.Float, 0, IntPtr.Zero);
 
-            //GL.DrawElements(BeginMode.Triangles, this.elementCount * 3, DrawElementsType.UnsignedShort, IntPtr.Zero);
+            // GL.DrawElements(BeginMode.Triangles, this.elementCount * 3, DrawElementsType.UnsignedShort, IntPtr.Zero);
 
-            //GL.DisableClientState(ArrayCap.VertexArray);
-            //GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-            //GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
-
+            // GL.DisableClientState(ArrayCap.VertexArray);
+            // GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            // GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
 
             this.ProcessNode(this.Scene.Root);
 
             // Render frame time
-            //OpenTK.Graphics.OpenGL4.gl
+            // OpenTK.Graphics.OpenGL4.gl
 
-            gameWindow.SwapBuffers();
+            this.gameWindow.SwapBuffers();
         }
 
         /// <summary>
@@ -516,7 +532,9 @@ namespace Gear.Client.Rendering
         protected virtual void OnSceneChanged(EventArgs e)
         {
             if (this.SceneChanged != null)
+            {
                 this.SceneChanged(this, e);
+            }
         }
 
         /// <summary>
@@ -526,7 +544,9 @@ namespace Gear.Client.Rendering
         protected virtual void OnStarting(EventArgs e)
         {
             if (this.Starting != null)
+            {
                 this.Starting(this, e);
+            }
         }
 
         /// <summary>
@@ -536,7 +556,9 @@ namespace Gear.Client.Rendering
         protected virtual void OnStopping(EventArgs e)
         {
             if (this.Stopping != null)
+            {
                 this.Stopping(this, e);
+            }
         }
 
         [ContractInvariantMethod]
@@ -544,7 +566,7 @@ namespace Gear.Client.Rendering
         {
             Contract.Invariant(this.Scene != null);
             Contract.Invariant(this.ActiveCamera != null);
-            //Contract.Invariant(this.Profile != null);
+            // Contract.Invariant(this.Profile != null);
         }
 
         public void Dispose()
@@ -556,8 +578,8 @@ namespace Gear.Client.Rendering
 
         protected virtual void Dispose(bool disposing)
         {
-            //WGL.MakeCurrent(this.deviceContext, IntPtr.Zero);
-            //WGL.DeleteContext(this.renderingContext);
+            // WGL.MakeCurrent(this.deviceContext, IntPtr.Zero);
+            // WGL.DeleteContext(this.renderingContext);
         }
 
         void gameWindow_Closed(object sender, EventArgs e)
@@ -567,12 +589,9 @@ namespace Gear.Client.Rendering
             System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
 
-
         private void Idle()
         {
-
         }
-
 
         double r = 10.0;
 
@@ -583,11 +602,10 @@ namespace Gear.Client.Rendering
             GL.Rotate(node.Orientation.GetAngle().Degrees, axis.X, axis.Y, axis.Z);
             GL.Translate(node.Position.X, node.Position.Y, node.Position.Z);
 
-
             if (node.Renderable != null)
+            {
                 foreach (var poly in node.Renderable.Triangles)
                 {
-
                     GL.Begin(PrimitiveType.Triangles);
                     var n = poly.Normal;
 
@@ -598,21 +616,22 @@ namespace Gear.Client.Rendering
                         var p = v.Position;
                         GL.Vertex3(p.X, p.Y, p.Z);
                     }
+
                     GL.End();
                 }
-
+            }
 
             foreach (var child in node.Children)
             {
                 this.ProcessNode(child);
             }
-            GL.PopMatrix();
 
+            GL.PopMatrix();
         }
 
         private void IdleFunc_Callback()
         {
-            //GLUT.PostRedisplay();
+            // GLUT.PostRedisplay();
             return;
         }
 

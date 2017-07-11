@@ -17,6 +17,7 @@ namespace Gear.Modeling.Primitives
     public class Cone : Mesh
     {
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Cone"/> class.
         /// </summary>
@@ -25,7 +26,6 @@ namespace Gear.Modeling.Primitives
         public Cone(float radius, float height)
             : this(radius, height, 12)
         {
-
         }
 
         /// <summary>
@@ -61,9 +61,10 @@ namespace Gear.Modeling.Primitives
                 polys.Add(new Triangle3f(vertices[tipIndex], vertices[i - 1], vertices[i]));
                 polys.Add(new Triangle3f(vertices[i], vertices[i - 1], vertices[baseIndex]));
             }
+
             this.Vertices = vertices;
 
-            //this.Polygons = polys.ToArray();
+            // this.Polygons = polys.ToArray();
         }
         #endregion
     }

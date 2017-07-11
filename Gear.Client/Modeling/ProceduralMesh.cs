@@ -20,12 +20,14 @@ namespace Gear.Modeling
     public abstract class ProceduralMesh : Mesh3
     {
         #region Fields
+
         /// <summary>
         /// Backing field for the <see cref="Parameters"/> property.
         /// </summary>
         private readonly ProcedureParameterCollection parameters;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ProceduralMesh"/> class.
         /// </summary>
@@ -36,8 +38,11 @@ namespace Gear.Modeling
             var pl = this.InitializeParameters();
 
             foreach (var p in pl)
+            {
                 this.parameters.Add(p);
+            }
         }
+
         #endregion
         #region Properties
         protected ProcedureParameterCollection Parameters
@@ -47,6 +52,7 @@ namespace Gear.Modeling
                 return this.parameters;
             }
         }
+
         #endregion
         #region Methods
         public object GetParameterValue(string name)

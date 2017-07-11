@@ -23,7 +23,9 @@ namespace Gear.Services
         public ClusterSupervisorService(ushort port)
         {
             if (port == 0)
+            {
                 port = ClusterSupervisorService.DefaultServicePort;
+            }
 
             this.ListenPort = port;
         }

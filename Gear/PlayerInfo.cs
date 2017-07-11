@@ -14,7 +14,5 @@ namespace Gear
         public string Name { get; set; }
 
         public Guid PlayerId { get; set; }
-
-       
     }
 }

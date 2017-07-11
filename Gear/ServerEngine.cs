@@ -17,13 +17,14 @@ namespace Gear
     public class ServerEngine : EngineBase
     {
         #region Fields
-        //private readonly ConnectionListener listener;
+        // private readonly ConnectionListener listener;
         private UdpClient udpClient;
+
         #endregion
         #region Constructors
         public ServerEngine()
         {
-            //this.listener = new ConnectionListener();
+            // this.listener = new ConnectionListener();
 
             // this.InitGShell();
         }
@@ -37,24 +38,31 @@ namespace Gear
             base.OnStarting(e);
 
             if (this.udpClient != null)
+            {
                 this.udpClient.Close();
+            }
 
             var client = new UdpClient(new IPEndPoint(IPAddress.Any, 21073));
             client.EnableBroadcast = true;
 
             client.BeginReceive(new System.AsyncCallback(this.ReceiveCallback), client);
-            //this.listener.Start();
+            // this.listener.Start();
         }
 
         private void ReceiveCallback(System.IAsyncResult ar)
         {
             if (ar == null)
+            {
                 throw new NotImplementedException();
+            }
 
             var client = ar.AsyncState as UdpClient;
 
             if (client == null)
+            {
                 return;
+            }
+
             var ep = new IPEndPoint(IPAddress.Any, 21073);
 
             var rec = client.EndReceive(ar, ref ep);
@@ -67,7 +75,7 @@ namespace Gear
         /// </summary>
         private void InitGShell()
         {
-            //this.Shell.Register(new GShellCommand("sv_maxplayers", this.
+            // this.Shell.Register(new GShellCommand("sv_maxplayers", this.
         }
         #endregion
     }

@@ -26,7 +26,7 @@ namespace Gear.Services
         [ServiceMessageHandler]
         public void Handler_ClientRequestingZoneData(ZoneDataRequestMessage message)
         {
-            //TODO: Implement some type of transactional locking so that any block updates for the zone are sent to the client.
+            // TODO: Implement some type of transactional locking so that any block updates for the zone are sent to the client.
             // 1. Determine if this zone node is authoritative for the requested zone data.
 
             // 2. Retrieve the zone data
@@ -38,7 +38,6 @@ namespace Gear.Services
             // 3. Push the zone data into a message
 
             // 4. Queue the message for sending
-
         }
 
         /// <summary>
@@ -48,7 +47,6 @@ namespace Gear.Services
         [ServiceMessageHandler]
         public void Handler_PeerSendingBlockUpdate(BlockUpdateMessage message)
         {
-
         }
     }
 }

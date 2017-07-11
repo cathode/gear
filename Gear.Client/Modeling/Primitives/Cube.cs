@@ -18,6 +18,7 @@ namespace Gear.Modeling.Primitives
     public sealed class Cube : Mesh3
     {
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Cube"/> class using the default size.
         /// </summary>
@@ -25,6 +26,7 @@ namespace Gear.Modeling.Primitives
             : this(Cube.DefaultSize)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Cube"/> class using the specified size.
         /// </summary>
@@ -63,27 +65,29 @@ namespace Gear.Modeling.Primitives
                 new Edge3(verts, 3, 7),
             };
 
-            this.Polygons = new Quad3d[] { 
+            this.Polygons = new Quad3d[] {
                 // Top and bottom
                 new Quad3d(edges, 0, 1, 2, 3),
                 new Quad3d(edges, 4, 5, 6, 7),
-                //new Quad3(edges,  
+                // new Quad3(edges,
                 new Quad3d(verts, 0, 3, 7, 4),
                 new Quad3d(verts, 1, 0, 4, 5),
                 new Quad3d(verts, 2, 1, 5, 6),
                 new Quad3d(verts, 3, 2, 6, 7),
-                
             };
         }
+
         #endregion
         #region Fields
         private double size;
+
         /// <summary>
         /// Holds the default size of a new <see cref="Cube"/>, if none is specified when the object is created.
         /// </summary>
         public const double DefaultSize = 1.0;
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets the size of the current <see cref="Cube"/>.
         /// </summary>

@@ -29,7 +29,7 @@ namespace Gear.Services
         private List<ServiceBase> managedServices;
 
         private List<ServiceInfo> remoteServices;
-        //private List<ServiceInfo> localServices;
+        // private List<ServiceInfo> localServices;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceManager"/> class.
@@ -43,7 +43,7 @@ namespace Gear.Services
 
             this.managedServices = new List<ServiceBase>();
             this.remoteServices = new List<ServiceInfo>();
-            //this.localServices = new List<ServiceInfo>();
+            // this.localServices = new List<ServiceInfo>();
         }
 
         /// <summary>
@@ -115,41 +115,42 @@ namespace Gear.Services
 
             svc.Run();
 
-            //this.localServices.Add(new ServiceInfo { ServiceType = serviceType, ListenPort = port });
+            // this.localServices.Add(new ServiceInfo { ServiceType = serviceType, ListenPort = port });
 
-            //this.EnsureServiceAnnouncerIsRunning();
+            // this.EnsureServiceAnnouncerIsRunning();
         }
-
 
         public void EnsureServiceLocatorIsRunning()
         {
             if (!this.locator.Running)
+            {
                 lock (this.locator)
                     if (!this.locator.Running)
                     {
                         this.locatorTask = new Task(this.locator.Run, CancellationToken.None, TaskCreationOptions.LongRunning);
-                        this.locator.ServiceDiscovered += finder_ServiceDiscovered;
+                        this.locator.ServiceDiscovered += this.finder_ServiceDiscovered;
                         this.locatorTask.Start();
                     }
+            }
         }
 
         public void EnsureServiceAnnouncerIsRunning()
         {
             if (!this.announcer.Running)
+            {
                 lock (this.announcer)
                     if (!this.announcer.Running)
                     {
                         this.announcerTask = new Task(this.announcer.Run, CancellationToken.None, TaskCreationOptions.LongRunning);
                         this.announcerTask.Start();
                     }
+            }
         }
 
         void finder_ServiceDiscovered(object sender, ServiceDiscoveredEventArgs e)
         {
-
         }
 
-        
         [ContractInvariantMethod]
         private void Invariants()
         {

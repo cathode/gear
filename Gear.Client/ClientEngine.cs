@@ -23,19 +23,21 @@ namespace Gear
         #region Constructors
         public ClientEngine()
         {
-
         }
+
         #endregion
         #region Methods
         public override void Run()
         {
             if (!this.IsInitialized)
+            {
                 this.Initialize();
-
+            }
         }
+
         protected override void OnInitializing(EventArgs e)
         {
-            //TODO: Perform initialization steps:
+            // TODO: Perform initialization steps:
             // 1. read / load configuration
             // 2. Perform base engine init process.
         }

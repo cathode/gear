@@ -22,6 +22,7 @@ namespace Gear.Modeling
         private EdgeFlags flags;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Edge3"/> class.
         /// </summary>
@@ -35,6 +36,7 @@ namespace Gear.Modeling
             this.P = p;
             this.Q = q;
         }
+
         public Edge3(Vertex3d[] vertices, int p, int q)
         {
             Contract.Requires(vertices != null);
@@ -46,6 +48,7 @@ namespace Gear.Modeling
             this.P = vertices[p];
             this.Q = vertices[q];
         }
+
         #endregion
         #region Properties
         public Vertex3d P
@@ -53,6 +56,7 @@ namespace Gear.Modeling
             get;
             set;
         }
+
         public Vertex3d Q
         {
             get;
@@ -77,11 +81,13 @@ namespace Gear.Modeling
             {
                 return this.flags;
             }
+
             set
             {
                 this.flags = value;
             }
         }
+
         #endregion
         #region Methods
         public Vector3d GetMidpoint()
@@ -135,9 +141,9 @@ namespace Gear.Modeling
             var k2 = 1 - k1;
             var xf = 1.0 / (x2 - x1);
 
-            //var xdist = 
-            //k1 *= x;
-            //k2 *= 1.0 - x;
+            // var xdist =
+            // k1 *= x;
+            // k2 *= 1.0 - x;
             var isect = ((k1 * this.P.ToVector3()) + (this.Q.ToVector3() * k2)) * xf;
 
             return isect;
@@ -174,7 +180,7 @@ namespace Gear.Modeling
             var zd = Math.Abs(this.P.Z - this.Q.Z);
 
             // Pythagorean forumla in 3 dimensions
-            var dist = Math.Sqrt(xd * xd + yd * yd + zd * zd);
+            var dist = Math.Sqrt((xd * xd) + (yd * yd) + (zd * zd));
 
             return dist;
         }

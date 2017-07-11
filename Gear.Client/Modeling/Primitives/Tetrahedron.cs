@@ -19,6 +19,7 @@ namespace Gear.Modeling.Primitives
         private RadiusMode mode;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Tetrahedron"/> class.
         /// </summary>
@@ -54,7 +55,6 @@ namespace Gear.Modeling.Primitives
         {
             this.radius = (double)this.GetParameterValue("radius");
             this.mode = (RadiusMode)this.GetParameterValue("mode");
-                
         }
     }
 }

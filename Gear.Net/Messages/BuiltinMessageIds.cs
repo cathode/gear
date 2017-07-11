@@ -28,6 +28,7 @@ namespace Gear.Net.Messages
         public static readonly int TransferFileReceipt = 0x0102;
 
         // Networked collections
+
         /// <summary>
         /// Dispatch id for the <see cref="Gear.Net.Collections.NetworkedCollectionUpdateMessage"/> type.
         /// </summary>

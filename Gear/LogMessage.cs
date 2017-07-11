@@ -18,6 +18,7 @@ namespace Gear
     public sealed class LogMessage
     {
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LogMessage"/> class.
         /// </summary>
@@ -31,6 +32,7 @@ namespace Gear
             this.Message = message;
             this.Level = level;
         }
+
         #endregion
         #region Fields
         internal DateTime Timestamp;

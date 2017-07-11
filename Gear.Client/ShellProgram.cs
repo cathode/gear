@@ -18,7 +18,7 @@ namespace Gear.Client
     /// </summary>
     public class ShellProgram
     {
-        //public static Dictionary<string, object> RegisteredCommands;
+        // public static Dictionary<string, object> RegisteredCommands;
 
         public static void Run()
         {
@@ -50,7 +50,9 @@ namespace Gear.Client
             var cleaned = line.Trim();
 
             if (cleaned.Equals("exit", StringComparison.OrdinalIgnoreCase))
+            {
                 return true;
+            }
 
             var spi = cleaned.IndexOf(' ');
             if (spi == -1)

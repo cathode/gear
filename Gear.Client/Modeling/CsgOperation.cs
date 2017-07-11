@@ -29,7 +29,7 @@ namespace Gear.Modeling
         Difference,
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Intersection,
     }

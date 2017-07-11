@@ -20,6 +20,7 @@ namespace Gear.Modeling
     public class Quad3d : Polygon3d
     {
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Quad3d"/> class.
         /// </summary>
@@ -57,8 +58,8 @@ namespace Gear.Modeling
         public Quad3d(Vertex3d a, Vertex3d b, Vertex3d c, Vertex3d d)
             : base(a, b, c, d)
         {
-            
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Quad3d"/> class.
         /// </summary>
@@ -104,6 +105,7 @@ namespace Gear.Modeling
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets or sets the top-left vertex of the quad.
         /// </summary>
@@ -113,6 +115,7 @@ namespace Gear.Modeling
             {
                 return this[0];
             }
+
             set
             {
                 Contract.Requires(value != null);
@@ -130,6 +133,7 @@ namespace Gear.Modeling
             {
                 return this[1];
             }
+
             set
             {
                 Contract.Requires(value != null);
@@ -147,6 +151,7 @@ namespace Gear.Modeling
             {
                 return this[2];
             }
+
             set
             {
                 Contract.Requires(value != null);
@@ -164,6 +169,7 @@ namespace Gear.Modeling
             {
                 return this[3];
             }
+
             set
             {
                 Contract.Requires(value != null);
@@ -195,6 +201,7 @@ namespace Gear.Modeling
                 return this.edges[2];
             }
         }
+
         public Edge3 DA
         {
             get
@@ -213,6 +220,7 @@ namespace Gear.Modeling
                 return PrimitiveKind.Quad;
             }
         }
+
         #endregion
         #region Methods
         [ContractInvariantMethod]

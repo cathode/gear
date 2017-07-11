@@ -11,52 +11,61 @@ using System.Collections.Generic;
 namespace Gear.Client.UI
 {
     /// <summary>
-    /// A user-interface element that exists as a quad in 3d space. 
+    /// A user-interface element that exists as a quad in 3d space.
     /// </summary>
     public abstract class Element
     {
         #region Fields
+
         /// <summary>
         /// Backing field for the <see cref="Element.Enabled"/> property.
         /// </summary>
-        private bool enabled;        /// <summary>
+        private bool enabled;        
+/// <summary>
         /// Backing field for the <see cref="Element.Visible"/> property.
         /// </summary>
-        private bool visible;        /// <summary>
+        private bool visible;        
+/// <summary>
         /// Backing field for the <see cref="Element.Children"/> property.
         /// </summary>
-        private readonly ElementChildrenCollection children;        /// <summary>
+        private readonly ElementChildrenCollection children;        
+/// <summary>
         /// Backing field for the <see cref="Element.Parent"/> property.
         /// </summary>
         private Element parent;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Gear.Client.UI.Element"/> class.
         /// </summary>
         public Element()
         {
             this.children = new ElementChildrenCollection(this);
-        }        /// <summary>
+        }        
+
+/// <summary>
         /// Initializes a new instance of the <see cref="Gear.Client.UI.Element"/> class with the specified controls as children.
         /// </summary>
         /// <param name="children">Child elements of the new <see cref="Element"/>.</param>
         public Element(params Element[] children)
             : this()
         {
-
         }
         #endregion
         #region Events
+
         /// <summary>
         /// Raised when the current <see cref="Gear.Client.UI.Element"/> becomes enabled or disabled.
         /// </summary>
-        public event EventHandler EnabledChanged;        /// <summary>
+        public event EventHandler EnabledChanged;        
+/// <summary>
         /// Raised when the current <see cref="Gear.Client.UI.Element"/> becomes visible or hidden.
         /// </summary>
         public event EventHandler VisibleChanged;
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets a list of all the child elements.
         /// </summary>
@@ -66,8 +75,8 @@ namespace Gear.Client.UI
             {
                 return this.children;
             }
-        }      
-        
+        }
+
         /// <summary>
         /// Gets the parent-child depth of the current <see cref="Element"/>.
         /// </summary>
@@ -77,8 +86,8 @@ namespace Gear.Client.UI
             {
                 return this.HasParent ? this.Parent.Depth + 1 : 0;
             }
-        }      
-        
+        }
+
         /// <summary>
         /// Gets the <see cref="Element"/> that is the parent of the current <see cref="Element"/>.
         /// </summary>
@@ -88,12 +97,13 @@ namespace Gear.Client.UI
             {
                 return this.parent;
             }
+
             internal set
             {
                 this.parent = value;
             }
-        }     
-        
+        }
+
         /// <summary>
         /// Gets a value indicating whether the current <see cref="Element"/> has a parent element relationship.
         /// </summary>
@@ -103,8 +113,8 @@ namespace Gear.Client.UI
             {
                 return this.parent != null;
             }
-        }      
-        
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether the current <see cref="Element"/> can receive user input.
         /// </summary>
@@ -117,6 +127,7 @@ namespace Gear.Client.UI
             {
                 return this.enabled;
             }
+
             set
             {
                 if (this.enabled != value)
@@ -125,8 +136,8 @@ namespace Gear.Client.UI
                     this.OnEnabledChanged(EventArgs.Empty);
                 }
             }
-        }   
-        
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether the current <see cref="Element"/> will be rendered.
         /// </summary>
@@ -139,6 +150,7 @@ namespace Gear.Client.UI
             {
                 return this.visible;
             }
+
             set
             {
                 if (this.visible != value)
@@ -150,6 +162,7 @@ namespace Gear.Client.UI
         }
         #endregion
         #region Methods
+
         /// <summary>
         /// Raises the <see cref="Element.EnabledChanged"/> event.
         /// </summary>
@@ -157,9 +170,11 @@ namespace Gear.Client.UI
         protected virtual void OnEnabledChanged(EventArgs e)
         {
             if (this.EnabledChanged != null)
+            {
                 this.EnabledChanged(this, e);
-        }       
-        
+            }
+        }
+
         /// <summary>
         /// Raises the <see cref="Element.VisibleChanged"/> event.
         /// </summary>
@@ -167,7 +182,9 @@ namespace Gear.Client.UI
         protected virtual void OnVisibleChanged(EventArgs e)
         {
             if (this.VisibleChanged != null)
+            {
                 this.VisibleChanged(this, e);
+            }
         }
         #endregion
     }

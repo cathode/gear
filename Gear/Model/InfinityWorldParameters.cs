@@ -9,7 +9,5 @@ namespace Gear.Model
     public class InfinityWorldParameters
     {
         public double SurfaceBaseHeight { get; set; }
-
-        
     }
 }

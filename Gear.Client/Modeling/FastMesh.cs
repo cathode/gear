@@ -23,6 +23,7 @@ namespace Gear.Modeling
         private int[] indices;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FastMesh"/> class.
         /// </summary>
@@ -50,6 +51,7 @@ namespace Gear.Modeling
         private Vector2d texCoords;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FastVertex"/> struct.
         /// </summary>
@@ -71,6 +73,7 @@ namespace Gear.Modeling
             {
                 return this.position;
             }
+
             set
             {
                 this.position = value;
@@ -85,6 +88,7 @@ namespace Gear.Modeling
         private uint a;
         private uint b;
         private uint c;
+
         #endregion
         #region Constructors
         public FastFace(uint p1, uint p2, uint p3)
@@ -93,6 +97,7 @@ namespace Gear.Modeling
             this.b = p2;
             this.c = p3;
         }
+
         #endregion
         #region Properties
         public uint A
@@ -101,6 +106,7 @@ namespace Gear.Modeling
             {
                 return this.a;
             }
+
             set
             {
                 this.a = value;
@@ -113,6 +119,7 @@ namespace Gear.Modeling
             {
                 return this.b;
             }
+
             set
             {
                 this.b = value;
@@ -125,6 +132,7 @@ namespace Gear.Modeling
             {
                 return this.c;
             }
+
             set
             {
                 this.c = value;
@@ -140,6 +148,7 @@ namespace Gear.Modeling
         private uint q;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FastEdge"/> class.
         /// </summary>
@@ -150,6 +159,7 @@ namespace Gear.Modeling
             this.p = p;
             this.q = q;
         }
+
         #endregion
         #region Properties
         public uint P
@@ -158,6 +168,7 @@ namespace Gear.Modeling
             {
                 return this.p;
             }
+
             internal set
             {
                 this.p = value;
@@ -170,6 +181,7 @@ namespace Gear.Modeling
             {
                 return this.q;
             }
+
             set
             {
                 this.q = value;

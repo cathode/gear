@@ -18,6 +18,7 @@ namespace Gear.Client
     public sealed class Matrix
     {
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Matrix"/> type with the specified number of rowCount and columnCount.
         /// </summary>
@@ -27,14 +28,19 @@ namespace Gear.Client
         public Matrix(int rowCount, int columnCount)
         {
             if (rowCount < 1)
+            {
                 throw new ArgumentOutOfRangeException("rowCount", "Row count must be nonzero.");
+            }
             else if (columnCount < 1)
+            {
                 throw new ArgumentOutOfRangeException("columnCount", "Column count must be nonzero.");
+            }
 
             this.elements = new double[rowCount * columnCount];
             this.rowCount = rowCount;
             this.columnCount = columnCount;
         }
+
         #endregion
         #region Fields
         private readonly double[] elements;
@@ -42,12 +48,13 @@ namespace Gear.Client
         private readonly int columnCount;
         #endregion
         #region Indexers
+
         /// <summary>
         /// Gets the value within the current <see cref="Matrix"/> at the specified row and column intersection.
         /// </summary>
         /// <param name="row">The zero-based row index of the value to get or set.</param>
         /// <param name="column">The zero-based column index of the value to get or set.</param>
-        /// <returns>The <see cref="Double"/> value at the specified row and column intersection.</returns>
+        /// <returns>The <see cref="double"/> value at the specified row and column intersection.</returns>
         /// <remarks>
         /// Elements of a matrix are indexed starting from zero, not one as with normal matrices.
         /// </remarks>
@@ -57,6 +64,7 @@ namespace Gear.Client
             {
                 return this.elements[(row * this.ColumnCount) + column]; // Row-major ordering
             }
+
             set
             {
                 this.elements[(row * this.ColumnCount) + column] = value; // Row-major ordering
@@ -64,6 +72,7 @@ namespace Gear.Client
         }
         #endregion
         #region Methods
+
         /// <summary>
         /// Calculates the product of a <see cref="Matrix"/> and a scalar value. The result
         /// is returned as a new <see cref="Matrix"/>.
@@ -85,6 +94,7 @@ namespace Gear.Client
 
             return result;
         }
+
         /// <summary>
         /// Calculates the product of two <see cref="Matrix">matrices</see>. The result
         /// is returned as a new <see cref="Matrix"/>.
@@ -97,14 +107,17 @@ namespace Gear.Client
         public static Matrix Product(Matrix first, Matrix second)
         {
             if (first == null)
+            {
                 throw new ArgumentNullException("first");
-
+            }
             else if (second == null)
+            {
                 throw new ArgumentNullException("second");
-
+            }
             else if (first.ColumnCount != second.RowCount)
+            {
                 throw new ArgumentException("Column count on first matrix does not match row count on second matrix - behavior is undefined.");
-
+            }
 
             Matrix result = new Matrix(first.RowCount, second.ColumnCount);
 
@@ -157,29 +170,41 @@ namespace Gear.Client
 
             return result;
         }
+
         #endregion
         #region Operators
         public static Matrix operator +(Matrix a, Matrix b)
         {
             if (a == null)
+            {
                 throw new ArgumentNullException("a");
+            }
             else if (b == null)
+            {
                 throw new ArgumentNullException("b");
+            }
             else if (a.RowCount != b.RowCount || a.ColumnCount != b.ColumnCount)
+            {
                 throw new ArgumentException("Matrices of different dimensions cannot be added.");
+            }
 
             Matrix m = new Matrix(a.RowCount, a.ColumnCount);
 
             for (int i = 0; i < a.elements.Length; i++)
+            {
                 m.elements[i] = a.elements[i] + b.elements[i];
+            }
+
             return m;
         }
+
         public static Matrix operator *(Matrix m, double scalar)
         {
             return Matrix.Product(m, scalar);
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets the number of columns in the current <see cref="Matrix"/>.
         /// </summary>
@@ -190,6 +215,7 @@ namespace Gear.Client
                 return this.columnCount;
             }
         }
+
         /// <summary>
         /// Indicates if the current <see cref="Matrix"/> is square.
         /// </summary>
@@ -197,9 +223,10 @@ namespace Gear.Client
         {
             get
             {
-                return (this.ColumnCount == this.RowCount);
+                return this.ColumnCount == this.RowCount;
             }
         }
+
         /// <summary>
         /// Gets the number of rows in the current <see cref="Matrix"/>.
         /// </summary>

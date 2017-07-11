@@ -21,6 +21,7 @@ namespace Gear
     public abstract class EngineBase
     {
         #region Fields
+
         /// <summary>
         /// Backing field for the <see cref="EngineBase.IsRunning"/> property.
         /// </summary>
@@ -44,6 +45,7 @@ namespace Gear
         private readonly HashSet<BlockDefinition> blocks;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EngineBase"/> class.
         /// </summary>
@@ -52,7 +54,6 @@ namespace Gear
             this.resourceSearchPaths = new HashSet<string>();
             this.pluginSearchPaths = new HashSet<string>();
             this.blocks = new HashSet<BlockDefinition>();
-         
 
             this.WorkingDirectory = Environment.CurrentDirectory;
 
@@ -64,6 +65,7 @@ namespace Gear
         }
         #endregion
         #region Events
+
         /// <summary>
         /// Raised before the engine performs loading tasks.
         /// </summary>
@@ -90,6 +92,7 @@ namespace Gear
         public event EventHandler Starting;
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets a value indicating whether the engine is running.
         /// </summary>
@@ -165,6 +168,7 @@ namespace Gear
         }
         #endregion
         #region Methods
+
         /// <summary>
         /// Initializes the <see cref="EngineBase"/> instance.
         /// </summary>
@@ -172,9 +176,9 @@ namespace Gear
         public bool Initialize()
         {
             if (this.IsInitialized)
+            {
                 return true;
-
-            
+            }
 
             try
             {
@@ -198,7 +202,9 @@ namespace Gear
             Contract.Requires(paths != null);
 
             foreach (var path in paths.Where(p => p != null).Select(p => System.IO.Path.GetFullPath(p)))
+            {
                 this.pluginSearchPaths.Add(path);
+            }
         }
 
         /// <summary>
@@ -210,7 +216,9 @@ namespace Gear
             Contract.Requires(paths != null);
 
             foreach (var path in paths.Where(p => p != null).Select(p => System.IO.Path.GetFullPath(p)))
+            {
                 this.resourceSearchPaths.Add(path);
+            }
         }
 
         /// <summary>
@@ -222,7 +230,9 @@ namespace Gear
             Contract.Requires(blocks != null);
 
             foreach (var block in blocks.Where(b => b != null))
+            {
                 this.blocks.Add(block);
+            }
         }
 
         /// <summary>
@@ -231,12 +241,14 @@ namespace Gear
         public virtual void Run()
         {
             if (!this.IsInitialized)
+            {
                 this.Initialize();
+            }
 
             this.OnStarting(EventArgs.Empty);
             while (true)
             {
-                //Log.Write("Update.", "engine", LogMessageGroup.Debug);
+                // Log.Write("Update.", "engine", LogMessageGroup.Debug);
                 this.OnUpdate(EventArgs.Empty);
                 Thread.Sleep(100);
             }
@@ -249,11 +261,14 @@ namespace Gear
         protected virtual void OnInitializing(EventArgs e)
         {
             if (this.Initializing != null)
+            {
                 this.Initializing(this, e);
+            }
 
             if (this.UseBuiltinBlocks)
             {
-                this.RegisterBlock(new BlockDefinition
+                this.RegisterBlock(
+                    new BlockDefinition
                 {
                     Name = "air",
                     TypeId = 0x0000
@@ -274,7 +289,9 @@ namespace Gear
         protected virtual void OnPlayerConnected(PlayerEventArgs e)
         {
             if (this.PlayerConnected != null)
+            {
                 this.PlayerConnected(this, e);
+            }
         }
 
         /// <summary>
@@ -284,7 +301,9 @@ namespace Gear
         protected virtual void OnPlayerDisconnected(PlayerEventArgs e)
         {
             if (this.PlayerDisconnected != null)
+            {
                 this.PlayerDisconnected(this, e);
+            }
         }
 
         /// <summary>
@@ -294,7 +313,9 @@ namespace Gear
         protected virtual void OnUpdate(EventArgs e)
         {
             if (this.Update != null)
+            {
                 this.Update(this, e);
+            }
         }
 
         /// <summary>
@@ -304,7 +325,9 @@ namespace Gear
         protected virtual void OnStarting(EventArgs e)
         {
             if (this.Starting != null)
+            {
                 this.Starting(this, e);
+            }
         }
 
         [ContractInvariantMethod]

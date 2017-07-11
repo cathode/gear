@@ -17,7 +17,6 @@ namespace Gear.Net.Messages
     [ProtoContract]
     public class LocatorResponseMessage : IMessage
     {
-
         [ProtoMember(1)]
         public Gear.Services.ServiceInfo[] Services { get; set; }
 
@@ -26,10 +25,9 @@ namespace Gear.Net.Messages
         {
             get
             {
-                //return BuiltinMessageIds.LocatorResponse;
+                // return BuiltinMessageIds.LocatorResponse;
                 throw new NotImplementedException();
             }
-
         }
 
         public bool IsBroadcastMessage

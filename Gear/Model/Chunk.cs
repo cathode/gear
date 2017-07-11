@@ -34,7 +34,7 @@ namespace Gear.Model
         }
 
         /// <summary>
-        /// Gets or sets the block data 
+        /// Gets or sets the block data
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -50,6 +50,7 @@ namespace Gear.Model
 
                 return this.data[x | y << 10 | z << 5];
             }
+
             set
             {
                 Contract.Requires(x < 32);

@@ -5,17 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
-
 namespace Gear.Geometry
 {
     [StructLayout(LayoutKind.Sequential, Pack=1)]
     public struct Vertex3f : IRenderableVertex
     {
-        //[FieldOffset(0)]
+        // [FieldOffset(0)]
         private Vector3f position;
-        //[FieldOffset(12)]
+        // [FieldOffset(12)]
         private Vector3f normal;
-        //[FieldOffset(24)]
+        // [FieldOffset(24)]
         private Vector2f texCoords;
 
         public Vertex3f(float x, float y, float z)
@@ -30,7 +29,6 @@ namespace Gear.Geometry
             this.position = position;
             this.normal = normal;
             this.texCoords = texCoords;
-
         }
 
         public Vector3f Normal
@@ -39,6 +37,7 @@ namespace Gear.Geometry
             {
                 return this.normal;
             }
+
             set
             {
                 this.normal = value;
@@ -51,6 +50,7 @@ namespace Gear.Geometry
             {
                 return this.position;
             }
+
             set
             {
                 this.position = value;
@@ -63,6 +63,7 @@ namespace Gear.Geometry
             {
                 return this.texCoords;
             }
+
             set
             {
                 this.texCoords = value;

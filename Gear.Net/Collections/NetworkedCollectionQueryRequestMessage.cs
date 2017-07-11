@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using ProtoBuf;
 
-
 namespace Gear.Net.Collections
 {
     /// <summary>
@@ -22,6 +21,5 @@ namespace Gear.Net.Collections
                 return Gear.Net.Messages.BuiltinMessageIds.NetworkedCollectionQueryRequest;
             }
         }
-
     }
 }

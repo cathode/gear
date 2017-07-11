@@ -14,11 +14,11 @@ namespace Gear.Model
     {
         public PlanetWorld(int seed) : base(seed)
         {
-            //this.Generator = generator;
+            // this.Generator = generator;
         }
 
         /// <summary>
-        /// Gets the 
+        /// Gets the
         /// </summary>
         public PlanetWorldParameters GeneratedParameters { get; set; }
 
@@ -35,40 +35,37 @@ namespace Gear.Model
 
             // Calculate the diameter of the new planet.
             double factor = (double)int.MaxValue / rng.Next();
-            p.DiameterKm = factor * (pmax.DiameterKm - pmin.DiameterKm) + pmin.DiameterKm;
+            p.DiameterKm = (factor * (pmax.DiameterKm - pmin.DiameterKm)) + pmin.DiameterKm;
 
             // Calculate the average density of the new planet.
             factor = (double)int.MaxValue / rng.Next();
-            p.AverageDensity = factor * (pmax.AverageDensity - pmin.AverageDensity) + pmin.AverageDensity;
+            p.AverageDensity = (factor * (pmax.AverageDensity - pmin.AverageDensity)) + pmin.AverageDensity;
 
             // Calculate axial tilt (clamped between 0 and 180 degrees)
-            factor = ((double)int.MaxValue / rng.Next());
-            p.AxialTilt = factor * (pmax.AxialTilt - pmin.AxialTilt) + pmin.AxialTilt;
+            factor = (double)int.MaxValue / rng.Next();
+            p.AxialTilt = (factor * (pmax.AxialTilt - pmin.AxialTilt)) + pmin.AxialTilt;
 
             // Calculate rotational velocity
-            factor = ((double)int.MaxValue / rng.Next());
-            p.RotationalVelocity = factor * (pmax.RotationalVelocity - pmin.RotationalVelocity) + pmin.RotationalVelocity;
+            factor = (double)int.MaxValue / rng.Next();
+            p.RotationalVelocity = (factor * (pmax.RotationalVelocity - pmin.RotationalVelocity)) + pmin.RotationalVelocity;
 
             // Calculate planet oblateness
-            factor = ((double)int.MaxValue / rng.Next());
-            p.Oblateness = factor * (pmax.Oblateness - pmin.Oblateness) + pmin.Oblateness;
+            factor = (double)int.MaxValue / rng.Next();
+            p.Oblateness = (factor * (pmax.Oblateness - pmin.Oblateness)) + pmin.Oblateness;
 
             // Calculate mean atmosphere height
-            factor = ((double)int.MaxValue / rng.Next());
-            p.AtmosphereHeightKm = factor * (pmax.AtmosphereHeightKm - pmin.AtmosphereHeightKm) + pmin.AtmosphereHeightKm;
-
+            factor = (double)int.MaxValue / rng.Next();
+            p.AtmosphereHeightKm = (factor * (pmax.AtmosphereHeightKm - pmin.AtmosphereHeightKm)) + pmin.AtmosphereHeightKm;
 
             // Calculate orbital speed
-            //factor = ((double)int.MaxValue / rng.Next());
-            //double orbitalVelocity = factor * (0);
+            // factor = ((double)int.MaxValue / rng.Next());
+            // double orbitalVelocity = factor * (0);
 
             // Calculate orbital eccentricity
 
             // Calculate orbital inclination
 
-
             this.GeneratedParameters = p;
-
         }
 
         public override Chunk GenerateChunk(Vector3d location)

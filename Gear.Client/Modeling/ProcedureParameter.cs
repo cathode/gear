@@ -32,11 +32,12 @@ namespace Gear.Modeling
         private object value;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcedureParameter"/> class.
         /// </summary>
         /// <param name="name"></param>
-        /// 
+        ///
         public ProcedureParameter(string name)
         {
             Contract.Requires(name != null);
@@ -44,6 +45,7 @@ namespace Gear.Modeling
             this.name = name;
             this.validator = ProcedureParameter.DefaultValidator;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcedureParameter"/> class.
         /// </summary>
@@ -59,6 +61,7 @@ namespace Gear.Modeling
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets or sets the name of the parameter.
         /// </summary>
@@ -79,12 +82,17 @@ namespace Gear.Modeling
             {
                 return this.value;
             }
+
             set
             {
                 if (this.validator(this, value))
+                {
                     this.value = value;
+                }
                 else
+                {
                     throw new NotImplementedException();
+                }
             }
         }
 
@@ -94,6 +102,7 @@ namespace Gear.Modeling
             {
                 return this.owner;
             }
+
             internal set
             {
                 Contract.Requires(value != null);
@@ -101,6 +110,7 @@ namespace Gear.Modeling
                 this.owner = value;
             }
         }
+
         #endregion
         #region Methods
         [ContractInvariantMethod]

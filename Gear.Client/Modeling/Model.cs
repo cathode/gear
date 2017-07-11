@@ -18,9 +18,11 @@ namespace Gear.Modeling
         public Model()
         {
         }
+
         #endregion
         #region Fields
         private Mesh3 geometry;
+
         #endregion
         #region Properties
         public Mesh3 Geometry
@@ -29,6 +31,7 @@ namespace Gear.Modeling
             {
                 return this.geometry;
             }
+
             set
             {
                 this.geometry = value;

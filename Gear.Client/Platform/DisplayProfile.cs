@@ -76,6 +76,7 @@ namespace Gear.Client.Platform
         private int width;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DisplayProfile"/> class.
         /// </summary>
@@ -93,6 +94,7 @@ namespace Gear.Client.Platform
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets the default <see cref="DisplayProfile"/>.
         /// </summary>
@@ -199,6 +201,7 @@ namespace Gear.Client.Platform
                 return DisplayProfile.genericWQHD;
             }
         }
+
         /// <summary>
         /// Gets a generic <see cref="DisplayProfile"/> for WQXGA (2560 x 1600).
         /// </summary>
@@ -220,6 +223,7 @@ namespace Gear.Client.Platform
             {
                 return this.deviceId;
             }
+
             set
             {
                 this.deviceId = value;
@@ -235,6 +239,7 @@ namespace Gear.Client.Platform
             {
                 return this.fullscreen;
             }
+
             set
             {
                 this.fullscreen = value;
@@ -250,6 +255,7 @@ namespace Gear.Client.Platform
             {
                 return this.profileId;
             }
+
             set
             {
                 this.profileId = value;
@@ -265,6 +271,7 @@ namespace Gear.Client.Platform
             {
                 return this.depth;
             }
+
             set
             {
                 this.depth = value;
@@ -280,6 +287,7 @@ namespace Gear.Client.Platform
             {
                 return this.refreshRate;
             }
+
             set
             {
                 this.refreshRate = value;
@@ -311,6 +319,7 @@ namespace Gear.Client.Platform
                 return this.width;
             }
         }
+
         #endregion
         #region Methods
         [ContractInvariantMethod]

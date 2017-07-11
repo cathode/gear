@@ -21,7 +21,7 @@ namespace Gear.Client.Platform.Microsoft
     {
         #region Fields
         public const string DLL = "User32.dll";
-      
+
         public const uint WS_EX_APPWINDOW = 0x00040000;
         public const uint WS_EX_WINDOWEDGE = 0x00000100;
         public const uint WS_OVERLAPPEDWINDOW = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
@@ -34,7 +34,7 @@ namespace Gear.Client.Platform.Microsoft
         public const uint WS_POPUP = 0x80000000;
         public const uint WS_CLIPCHILDREN = 0x02000000;
         public const uint WS_CLIPSIBLINGS = 0x04000000;
-     
+
         #endregion
         [DllImport(User32.DLL)]
         public static extern DISP_CHANGE ChangeDisplaySettings(ref DEVMODE devMode, int flags);
@@ -71,39 +71,39 @@ namespace Gear.Client.Platform.Microsoft
             [System.Runtime.InteropServices.FieldOffset(0)]
             public string dmDeviceName;
             [System.Runtime.InteropServices.FieldOffset(32)]
-            public Int16 dmSpecVersion;
+            public short dmSpecVersion;
             [System.Runtime.InteropServices.FieldOffset(34)]
-            public Int16 dmDriverVersion;
+            public short dmDriverVersion;
             [System.Runtime.InteropServices.FieldOffset(36)]
-            public Int16 dmSize;
+            public short dmSize;
             [System.Runtime.InteropServices.FieldOffset(38)]
-            public Int16 dmDriverExtra;
+            public short dmDriverExtra;
             [System.Runtime.InteropServices.FieldOffset(40)]
             public DM dmFields;
 
             [System.Runtime.InteropServices.FieldOffset(44)]
-            public Int16 dmOrientation;
+            public short dmOrientation;
             [System.Runtime.InteropServices.FieldOffset(46)]
-            public Int16 dmPaperSize;
+            public short dmPaperSize;
             [System.Runtime.InteropServices.FieldOffset(48)]
-            public Int16 dmPaperLength;
+            public short dmPaperLength;
             [System.Runtime.InteropServices.FieldOffset(50)]
-            public Int16 dmPaperWidth;
+            public short dmPaperWidth;
             [System.Runtime.InteropServices.FieldOffset(52)]
-            public Int16 dmScale;
+            public short dmScale;
             [System.Runtime.InteropServices.FieldOffset(54)]
-            public Int16 dmCopies;
+            public short dmCopies;
             [System.Runtime.InteropServices.FieldOffset(56)]
-            public Int16 dmDefaultSource;
+            public short dmDefaultSource;
             [System.Runtime.InteropServices.FieldOffset(58)]
-            public Int16 dmPrintQuality;
+            public short dmPrintQuality;
 
             [System.Runtime.InteropServices.FieldOffset(44)]
             public POINTL dmPosition;
             [System.Runtime.InteropServices.FieldOffset(52)]
-            public Int32 dmDisplayOrientation;
+            public int dmDisplayOrientation;
             [System.Runtime.InteropServices.FieldOffset(56)]
-            public Int32 dmDisplayFixedOutput;
+            public int dmDisplayFixedOutput;
 
             [System.Runtime.InteropServices.FieldOffset(60)]
             public short dmColor;
@@ -119,27 +119,27 @@ namespace Gear.Client.Platform.Microsoft
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = CCHFORMNAME)]
             public string dmFormName;
             [System.Runtime.InteropServices.FieldOffset(102)]
-            public Int16 dmLogPixels;
+            public short dmLogPixels;
             [System.Runtime.InteropServices.FieldOffset(104)]
-            public Int32 dmBitsPerPel;
+            public int dmBitsPerPel;
             [System.Runtime.InteropServices.FieldOffset(108)]
-            public Int32 dmPelsWidth;
+            public int dmPelsWidth;
             [System.Runtime.InteropServices.FieldOffset(112)]
-            public Int32 dmPelsHeight;
+            public int dmPelsHeight;
             [System.Runtime.InteropServices.FieldOffset(116)]
-            public Int32 dmDisplayFlags;
+            public int dmDisplayFlags;
             [System.Runtime.InteropServices.FieldOffset(116)]
-            public Int32 dmNup;
+            public int dmNup;
             [System.Runtime.InteropServices.FieldOffset(120)]
-            public Int32 dmDisplayFrequency;
-
-
+            public int dmDisplayFrequency;
         }
+
         public struct POINTL
         {
             public int x;
             public int y;
         }
+
         public enum DISP_CHANGE : int
         {
             Successful = 0,

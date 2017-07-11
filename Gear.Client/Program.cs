@@ -25,7 +25,7 @@ namespace Gear.Client
             /* Gear Client main entry point.
 
              * Initialization process:
-             * 
+             *
              * 1. Set up environment
              * 2. Set up logging
              * 3. ???
@@ -38,8 +38,8 @@ namespace Gear.Client
                 {
                     ShellProgram.Run();
                 }
-
             }
+
             // test, generate world:
             var seed = 1234;
             // Init planet generator
@@ -54,11 +54,10 @@ namespace Gear.Client
 
             world.Initialize(pmin, pmax);
 
-
             Gear.Net.MessageSerializationHelper.AddMessageSubtypes();
 
             var renderer = new Gear.Client.Rendering.GLRenderer();
-            //var renderer = new Gear.Client.Rendering.Software.SoftwareRenderer();
+            // var renderer = new Gear.Client.Rendering.Software.SoftwareRenderer();
             renderer.Initialize(new Rendering.RendererOptions());
 
             var scene = new SceneGraph.Scene();
@@ -72,7 +71,6 @@ namespace Gear.Client
 
             renderer.PreRender += (o, e) => { scene.Root.Orientation.RotateBy(20); };
             renderer.Start();
-
         }
     }
 }

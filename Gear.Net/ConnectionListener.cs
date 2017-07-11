@@ -24,9 +24,9 @@ namespace Gear.Net
     {
         private bool isRunning;
         private readonly Socket listener;
-        //private Task t;
+        // private Task t;
 
-        //private CancellationToken token;
+        // private CancellationToken token;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectionListener"/> class.
@@ -75,9 +75,7 @@ namespace Gear.Net
             this.listener.Bind(new IPEndPoint(IPAddress.Any, this.ListenPort));
             this.listener.Listen(32);
 
-
-
-            //while (!this.token.IsCancellationRequested)
+            // while (!this.token.IsCancellationRequested)
             while (this.isRunning)
             {
                 try
@@ -100,7 +98,6 @@ namespace Gear.Net
             }
         }
 
-
         public void StartInBackground()
         {
             Task.Run(() => this.Start());
@@ -117,7 +114,6 @@ namespace Gear.Net
         {
             Contract.Requires(e != null);
 
-
             if (this.ChannelConnected != null)
             {
                 this.ChannelConnected(sender, e);
@@ -130,8 +126,7 @@ namespace Gear.Net
         private void Invariants()
         {
             Contract.Invariant(this.listener != null);
-            //Contract.Invariant(this.)
-
+            // Contract.Invariant(this.)
         }
     }
 }

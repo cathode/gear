@@ -43,8 +43,6 @@ namespace Gear.Net
             this.cachedRemoteEP = remoteEP;
         }
 
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectedChannel"/> class.
         /// </summary>
@@ -145,7 +143,6 @@ namespace Gear.Net
                 this.OnConnected();
                 this.Setup();
                 return true;
-
             }
             catch (Exception ex)
             {
@@ -177,7 +174,7 @@ namespace Gear.Net
 
             var args = new ChannelDisconnectedEventArgs();
 
-            //Raise the event.
+            // Raise the event.
             this.Disconnected?.Invoke(this, args);
 
             if ((args.ReconnectCount == -1 || args.ReconnectCount > 0) && args.ReconnectInterval.TotalMilliseconds > 0)
@@ -198,8 +195,8 @@ namespace Gear.Net
 
         protected override int SendMessages(Queue<IMessage> messages)
         {
-            //Contract.Requires(messages != null);
-            //Contract.Requires(this.State == ChannelState.Connected);
+            // Contract.Requires(messages != null);
+            // Contract.Requires(this.State == ChannelState.Connected);
 
             int sent = 0;
 
@@ -231,6 +228,7 @@ namespace Gear.Net
                     }
                 }
             }
+
             return sent;
         }
 
@@ -251,7 +249,7 @@ namespace Gear.Net
                 return;
             }
 
-            //TODO: Evaluate need for locking
+            // TODO: Evaluate need for locking
             lock (this.reconnectTimer)
             {
                 // attempt reconnect
@@ -281,7 +279,7 @@ namespace Gear.Net
 
                 var rxCount = this.socket.EndReceive(result);
 
-                //Console.WriteLine("Read {0} bytes for message prefix", rxCount);
+                // Console.WriteLine("Read {0} bytes for message prefix", rxCount);
                 IMessage msg = null;
 
                 // Did we at least get the length prefix?
@@ -312,7 +310,6 @@ namespace Gear.Net
                     }
                     while (state.ReceivedBytes < bsize);
 
-
                     if (state.ReceivedBytes == bsize)
                     {
                         // Entire message available
@@ -339,8 +336,6 @@ namespace Gear.Net
                     // Pause for a millisecond to give the NIC a chance to fill up the buffer if data is enroute
                     Thread.Sleep(1);
                 }
-
-
             }
             catch (IOException ioe)
             {

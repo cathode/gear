@@ -14,7 +14,6 @@ using ProtoBuf;
 using System.Diagnostics.Contracts;
 using System.Net;
 
-
 namespace Gear.Net
 {
     /// <summary>
@@ -29,9 +28,8 @@ namespace Gear.Net
         {
             ProtoBuf.Meta.RuntimeTypeModel.Default.AutoAddMissingTypes = true;
             ProtoBuf.Meta.RuntimeTypeModel.Default.Add(typeof(MessageContainer), true);
-            //var t = RuntimeTypeModel.Default.Add(typeof(IMessage), true);
-            //t.AddSubType(1, typeof(ClientGreetingMessage));
-
+            // var t = RuntimeTypeModel.Default.Add(typeof(IMessage), true);
+            // t.AddSubType(1, typeof(ClientGreetingMessage));
         }
 
         public MessageContainer()
@@ -80,6 +78,7 @@ namespace Gear.Net
             {
                 return this.contents;
             }
+
             set
             {
                 Contract.Requires(value != null);
@@ -92,6 +91,4 @@ namespace Gear.Net
         [ProtoIgnore]
         public IPEndPoint Destination { get; set; }
     }
-
-
 }

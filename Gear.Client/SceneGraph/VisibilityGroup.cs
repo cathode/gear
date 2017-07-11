@@ -35,7 +35,7 @@ namespace Gear.Client.SceneGraph
         G13 = 0x2000,
         G14 = 0x4000,
         G15 = 0x8000,
-        
+
         /// <summary>
         /// Camera visibility group 0.
         /// </summary>
@@ -43,7 +43,7 @@ namespace Gear.Client.SceneGraph
         Camera1 = 0x2000000000000000,
         Camera2 = 0x4000000000000000,
         Camera3 = 0x8000000000000000,
-        
+
         All     = 0xFFFFFFFFFFFFFFFF,
     }
 }

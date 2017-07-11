@@ -17,10 +17,15 @@ namespace Gear.Modeling
     {
         #region Properties
         IHalfEdge Next { get; set; }
+
         IHalfEdge Previous { get; set; }
+
         IHalfEdge Opposite { get; set; }
+
         IVertex Start { get; set; }
+
         IVertex End { get; set; }
+
         IFace Face { get; set; }
         #endregion
     }

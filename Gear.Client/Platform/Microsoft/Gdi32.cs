@@ -18,6 +18,7 @@ namespace Gear.Client.Platform.Microsoft
     {
         #region Fields
         public const string DLL = "Gdi32.dll";
+
         #endregion
         #region Methods
         [DllImport(Gdi32.DLL)]

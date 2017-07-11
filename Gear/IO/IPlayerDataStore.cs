@@ -8,6 +8,5 @@ namespace Gear.IO
 {
     public interface IPlayerDataStore
     {
-        
     }
 }

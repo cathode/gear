@@ -14,6 +14,5 @@ namespace Gear
 {
     public sealed class PlayerEventArgs : EventArgs
     {
-
     }
 }

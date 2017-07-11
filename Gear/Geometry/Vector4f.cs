@@ -18,6 +18,7 @@ namespace Gear.Geometry
     public struct Vector4f
     {
         #region Fields
+
         /// <summary>
         /// Gets the value of the X component.
         /// </summary>
@@ -39,6 +40,7 @@ namespace Gear.Geometry
         public readonly float W;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Vector4f"/> struct.
         /// </summary>
@@ -53,6 +55,7 @@ namespace Gear.Geometry
             this.Z = z;
             this.W = w;
         }
+
         #endregion
         #region Methods
         public static Vector4f Color(float red, float green, float blue, float alpha)
@@ -67,7 +70,8 @@ namespace Gear.Geometry
         /// <returns>A new <see cref="Vector4f"/> instance that is the result of the addition.</returns>
         public Vector4f Add(Vector4f other)
         {
-            return new Vector4f(this.X + other.X,
+            return new Vector4f(
+                this.X + other.X,
                                 this.Y + other.Y,
                                 this.Z + other.Z,
                                 this.W + other.W);
@@ -108,6 +112,7 @@ namespace Gear.Geometry
 
             return new Vector4f(x, y, z, w);
         }
+
         #endregion
         #region Operators
         public static Vector4f operator +(Vector4f left, Vector4f right)

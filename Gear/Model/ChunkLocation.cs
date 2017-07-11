@@ -37,6 +37,7 @@ namespace Gear.Model
 
             return cloc;
         }
+
         public static bool operator ==(ChunkLocation left, ChunkLocation right)
         {
             return left.ZoneX == right.ZoneX

@@ -18,6 +18,7 @@ namespace Gear.Client.SceneGraph
     public sealed class Camera : Node
     {
         #region Fields
+
         /// <summary>
         /// Backing field for the <see cref="Camera.FieldOfView"/> property.
         /// </summary>
@@ -39,6 +40,7 @@ namespace Gear.Client.SceneGraph
         private CameraModifierLock modifierLock;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Gear.Client.SceneGraph.Camera"/> class.
         /// </summary>
@@ -60,6 +62,7 @@ namespace Gear.Client.SceneGraph
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets or sets the field-of-view of the current <see cref="Gear.Client.SceneGraph.Camera"/>.
         /// </summary>
@@ -69,6 +72,7 @@ namespace Gear.Client.SceneGraph
             {
                 return this.fieldOfView;
             }
+
             set
             {
                 this.fieldOfView = value;
@@ -84,6 +88,7 @@ namespace Gear.Client.SceneGraph
             {
                 return this.focalDistance;
             }
+
             set
             {
                 this.focalDistance = value;
@@ -100,6 +105,7 @@ namespace Gear.Client.SceneGraph
             {
                 return this.mode;
             }
+
             set
             {
                 this.mode = value;
@@ -112,6 +118,7 @@ namespace Gear.Client.SceneGraph
             {
                 return this.modifierLock;
             }
+
             set
             {
                 this.modifierLock = value;
@@ -127,7 +134,6 @@ namespace Gear.Client.SceneGraph
             set;
         }
 
-       
         public VisibilityGroup VisibleGroups
         {
             get;
@@ -135,6 +141,7 @@ namespace Gear.Client.SceneGraph
         }
         #endregion
         #region Methods
+
         /// <summary>
         /// Creates a camera that provides an isometric view of the scene.
         /// </summary>

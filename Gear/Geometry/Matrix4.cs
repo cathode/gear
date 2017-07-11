@@ -9,6 +9,8 @@ using System;
 using System.Runtime.InteropServices;
 using System.Diagnostics.Contracts;
 
+#pragma warning disable SA1117 // Parameters must be on same line or separate lines
+
 namespace Gear.Geometry
 {
     /// <summary>
@@ -18,7 +20,7 @@ namespace Gear.Geometry
     /// Values are internally represented using row-major ordering, and are addressed with A-D for rows and X-W for columns.
     /// <code>
     ///        Columns
-    ///        
+    ///
     ///   | X  | Y  | Z  | W  |
     /// --+----+----+----+----+
     /// A |  0 |  1 |  2 |  3 |
@@ -34,6 +36,7 @@ namespace Gear.Geometry
     public struct Matrix4 : IEquatable<Matrix4>
     {
         #region Fields
+
         /// <summary>
         /// Holds the identity matrix.
         /// </summary>
@@ -41,6 +44,7 @@ namespace Gear.Geometry
                                                               0, 1, 0, 0,
                                                               0, 0, 1, 0,
                                                               0, 0, 0, 1);
+
         /// <summary>
         /// Element at the first row, fourth column.
         /// </summary>
@@ -138,6 +142,7 @@ namespace Gear.Geometry
         private readonly double dz;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Matrix4"/> struct.
         /// </summary>
@@ -212,6 +217,7 @@ namespace Gear.Geometry
             this.dz = dz;
             this.dw = dw;
         }
+
         #endregion
         #region Indexers
         public unsafe double this[int row, int col]
@@ -219,19 +225,25 @@ namespace Gear.Geometry
             get
             {
                 fixed (Matrix4* ptr = &this)
+                {
                     return *((double*)ptr + (((row * 4) + col) % 16));
+                }
             }
         }
+
         public unsafe double this[int index]
         {
             get
             {
                 fixed (Matrix4* ptr = &this)
+                {
                     return *((double*)ptr + (index % 16));
+                }
             }
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets the first row of the matrix.
         /// </summary>
@@ -239,7 +251,7 @@ namespace Gear.Geometry
         {
             get
             {
-                return new Vector4d(ax, ay, az, aw);
+                return new Vector4d(this.ax, this.ay, this.az, this.aw);
             }
         }
 
@@ -250,7 +262,7 @@ namespace Gear.Geometry
         {
             get
             {
-                return new Vector4d(bx, by, bz, bw);
+                return new Vector4d(this.bx, this.by, this.bz, this.bw);
             }
         }
 
@@ -261,7 +273,7 @@ namespace Gear.Geometry
         {
             get
             {
-                return new Vector4d(cx, cy, cz, cw);
+                return new Vector4d(this.cx, this.cy, this.cz, this.cw);
             }
         }
 
@@ -272,7 +284,7 @@ namespace Gear.Geometry
         {
             get
             {
-                return new Vector4d(dx, dy, dz, dw);
+                return new Vector4d(this.dx, this.dy, this.dz, this.dw);
             }
         }
 
@@ -283,7 +295,7 @@ namespace Gear.Geometry
         {
             get
             {
-                return new Vector4d(ax, bx, cx, dx);
+                return new Vector4d(this.ax, this.bx, this.cx, this.dx);
             }
         }
 
@@ -294,7 +306,7 @@ namespace Gear.Geometry
         {
             get
             {
-                return new Vector4d(ay, by, cy, dy);
+                return new Vector4d(this.ay, this.by, this.cy, this.dy);
             }
         }
 
@@ -305,7 +317,7 @@ namespace Gear.Geometry
         {
             get
             {
-                return new Vector4d(az, bz, cz, dz);
+                return new Vector4d(this.az, this.bz, this.cz, this.dz);
             }
         }
 
@@ -316,24 +328,27 @@ namespace Gear.Geometry
         {
             get
             {
-                return new Vector4d(aw, bw, cw, dw);
+                return new Vector4d(this.aw, this.bw, this.cw, this.dw);
             }
         }
         #endregion
         #region Methods
         #region Utility Methods
+
         /// <summary>
-        /// Overridden. Determines whether the specified <see cref="System.Object"/>
+        /// Overridden. Determines whether the specified <see cref="object"/>
         /// is equal to the current <see cref="Gear.Client.Matrix4"/>.
         /// </summary>
-        /// <param name="obj">The <see cref="System.Object"/> to compare with the
+        /// <param name="obj">The <see cref="object"/> to compare with the
         /// current <see cref="Gear.Client.Matrix4"/>.</param>
-        /// <returns>true if the specified <see cref="System.Object"/> is equal to
+        /// <returns>true if the specified <see cref="object"/> is equal to
         /// the current <see cref="Gear.Client.Matrix4"/>; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
             if (obj is Matrix4)
+            {
                 return this.Equals((Matrix4)obj);
+            }
 
             return false;
         }
@@ -366,6 +381,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Arithmetic Methods
+
         /// <summary>
         /// Adds the current matrix and the specified matrix.
         /// </summary>
@@ -402,26 +418,26 @@ namespace Gear.Geometry
         /// <returns></returns>
         public static Matrix4 Multiply(Matrix4 left, Matrix4 right)
         {
-            return new Matrix4(left.ax * right.ax + left.ay * right.bx + left.az * right.cx + left.aw * right.dx,
-                               left.ax * right.ay + left.ay * right.by + left.az * right.cy + left.aw * right.dy,
-                               left.ax * right.az + left.ay * right.bz + left.az * right.cz + left.aw * right.dz,
-                               left.ax * right.aw + left.ay * right.bw + left.az * right.cw + left.aw * right.dw,
+            return new Matrix4(
+                (left.ax * right.ax) + (left.ay * right.bx) + (left.az * right.cx) + (left.aw * right.dx),
+                (left.ax * right.ay) + (left.ay * right.by) + (left.az * right.cy) + (left.aw * right.dy),
+                (left.ax * right.az) + (left.ay * right.bz) + (left.az * right.cz) + (left.aw * right.dz),
+                (left.ax * right.aw) + (left.ay * right.bw) + (left.az * right.cw) + (left.aw * right.dw),
 
-                               left.bx * right.ax + left.by * right.bx + left.bz * right.cx + left.bw * right.dx,
-                               left.bx * right.ay + left.by * right.by + left.bz * right.cy + left.bw * right.dy,
-                               left.bx * right.az + left.by * right.bz + left.bz * right.cz + left.bw * right.dz,
-                               left.bx * right.aw + left.by * right.bw + left.bz * right.cw + left.bw * right.dw,
+                (left.bx * right.ax) + (left.by * right.bx) + (left.bz * right.cx) + (left.bw * right.dx),
+                (left.bx * right.ay) + (left.by * right.by) + (left.bz * right.cy) + (left.bw * right.dy),
+                (left.bx * right.az) + (left.by * right.bz) + (left.bz * right.cz) + (left.bw * right.dz),
+                (left.bx * right.aw) + (left.by * right.bw) + (left.bz * right.cw) + (left.bw * right.dw),
 
-                               left.cx * right.ax + left.cy * right.bx + left.cz * right.cx + left.cw * right.dx,
-                               left.cx * right.ay + left.cy * right.by + left.cz * right.cy + left.cw * right.dy,
-                               left.cx * right.az + left.cy * right.bz + left.cz * right.cz + left.cw * right.dz,
-                               left.cx * right.aw + left.cy * right.bw + left.cz * right.cw + left.cw * right.dw,
+                (left.cx * right.ax) + (left.cy * right.bx) + (left.cz * right.cx) + (left.cw * right.dx),
+                (left.cx * right.ay) + (left.cy * right.by) + (left.cz * right.cy) + (left.cw * right.dy),
+                (left.cx * right.az) + (left.cy * right.bz) + (left.cz * right.cz) + (left.cw * right.dz),
+                (left.cx * right.aw) + (left.cy * right.bw) + (left.cz * right.cw) + (left.cw * right.dw),
 
-                               left.dx * right.ax + left.dy * right.bx + left.dz * right.cx + left.dw * right.dx,
-                               left.dx * right.ay + left.dy * right.by + left.dz * right.cy + left.dw * right.dy,
-                               left.dx * right.az + left.dy * right.bz + left.dz * right.cz + left.dw * right.dz,
-                               left.dx * right.aw + left.dy * right.bw + left.dz * right.cw + left.dw * right.dw);
-
+                (left.dx * right.ax) + (left.dy * right.bx) + (left.dz * right.cx) + (left.dw * right.dx),
+                (left.dx * right.ay) + (left.dy * right.by) + (left.dz * right.cy) + (left.dw * right.dy),
+                (left.dx * right.az) + (left.dy * right.bz) + (left.dz * right.cz) + (left.dw * right.dz),
+                (left.dx * right.aw) + (left.dy * right.bw) + (left.dz * right.cw) + (left.dw * right.dw));
         }
 
         public Matrix4 Multiply(double s)
@@ -441,12 +457,13 @@ namespace Gear.Geometry
                                m.bx * s, m.by * s, m.bz * s, m.bw * s,
                                m.cx * s, m.cy * s, m.cz * s, m.cw * s,
                                m.dx * s, m.dy * s, m.dz * s, m.dw * s);
-
         }
+
         public Vector3d Multiply(Vector3d vector)
         {
             return Matrix4.Multiply(this, vector);
         }
+
         public static Vector3d Multiply(Matrix4 matrix, Vector3d vector)
         {
             var v4 = matrix * new Vector4d(vector.X, vector.Y, vector.Z, 1.0);
@@ -460,10 +477,11 @@ namespace Gear.Geometry
 
         public static Vector4d Multiply(Matrix4 m, Vector4d v)
         {
-            return new Vector4d(m.ax * v.X + m.ay * v.Y + m.az * v.Z + m.aw * v.W,
-                               m.bx * v.X + m.by * v.Y + m.bz * v.Z + m.bw * v.W,
-                               m.cx * v.X + m.cy * v.Y + m.cz * v.Z + m.cw * v.W,
-                               m.dx * v.X + m.dy * v.Y + m.dz * v.Z + m.dw * v.W);
+            return new Vector4d(
+                (m.ax * v.X) + (m.ay * v.Y) + (m.az * v.Z) + (m.aw * v.W),
+                               (m.bx * v.X) + (m.by * v.Y) + (m.bz * v.Z) + (m.bw * v.W),
+                               (m.cx * v.X) + (m.cy * v.Y) + (m.cz * v.Z) + (m.cw * v.W),
+                               (m.dx * v.X) + (m.dy * v.Y) + (m.dz * v.Z) + (m.dw * v.W));
         }
 
         public Matrix4 Subtract(Matrix4 other)
@@ -478,6 +496,7 @@ namespace Gear.Geometry
                                a.cx - b.cx, a.cy - b.cy, a.cz - b.cz, a.cw - b.cw,
                                a.dx - b.dx, a.dy - b.dy, a.dz - b.dz, a.dw - b.dw);
         }
+
         /// <summary>
         /// Transposes the current matrix and returns the result as a new instance.
         /// </summary>
@@ -509,15 +528,14 @@ namespace Gear.Geometry
         /// <returns>A <see cref="Matrix4"/> that is the orthographic projection matrix for the specified width and height.</returns>
         public static Matrix4 CreateOrthographicProjectionMatrix(double width, double height, double near, double far)
         {
-            //var left = (width / -2.0);
-            //var right = (width / 2.0);
-            //var top = (height / 2.0);
-            //var bottom = (height / -2.0);
+            // var left = (width / -2.0);
+            // var right = (width / 2.0);
+            // var top = (height / 2.0);
+            // var bottom = (height / -2.0);
 
-            //return Matrix4.CreateOrthographicProjectionMatrix(right, top, far, left, bottom, near);
+            // return Matrix4.CreateOrthographicProjectionMatrix(right, top, far, left, bottom, near);
 
             return Matrix4.CreateOrthographicProjectionMatrix(1, 1, 1, -1, -1, -1);
-
         }
 
         /// <summary>
@@ -540,7 +558,7 @@ namespace Gear.Geometry
             var b = (top + bottom) / (top - bottom) * -1.0;
             var c = (far + near) / (far - near) * -1.0;
 
-            //TODO: Fix orthographic projection
+            // TODO: Fix orthographic projection
             a = b = c = 0;
             x = y = z = 1.0;
 
@@ -564,12 +582,12 @@ namespace Gear.Geometry
 
             double fovyDegrees = 60;
             double fovy = Angle.RadiansFromDegrees(fovyDegrees);
-            //var width = 800.0;
-            //var height = 600.0;
-            //var aspect = width / height;
+            // var width = 800.0;
+            // var height = 600.0;
+            // var aspect = width / height;
 
-            //var near = 1.0;
-            //var far = 1000.0;
+            // var near = 1.0;
+            // var far = 1000.0;
 
             double f = Math.Cos(fovy) / Math.Sin(fovy);
 
@@ -597,7 +615,6 @@ namespace Gear.Geometry
                                0, (2 * near) / height, 0, 0,
                                0, 0, far / (far - near), 1,
                                0, 0, (-far * near) / (far - near), 0);
-
         }
 
         /// <summary>
@@ -686,9 +703,9 @@ namespace Gear.Geometry
             var s = q.W;
 
             return new Matrix4(
-                1 - 2 * ((y * y) + (z * z)), 2 * ((x * y) - (s * z)), 2 * ((x * z) + (s * y)), 0,
-                2 * ((x * y) + (s * z)), 1 - 2 * ((x * x) + (z * z)), 2 * ((y * z) - (s * x)), 0,
-                2 * ((x * z) - (s * y)), 2 * ((y * z) + (s * x)), 1 - 2 * ((x * x) + (y * y)), 0,
+                1 - (2 * ((y * y) + (z * z))), 2 * ((x * y) - (s * z)), 2 * ((x * z) + (s * y)), 0,
+                2 * ((x * y) + (s * z)), 1 - (2 * ((x * x) + (z * z))), 2 * ((y * z) - (s * x)), 0,
+                2 * ((x * z) - (s * y)), 2 * ((y * z) + (s * x)), 1 - (2 * ((x * x) + (y * y))), 0,
                 0, 0, 0, 1);
         }
 
@@ -703,19 +720,18 @@ namespace Gear.Geometry
         public static Matrix4 CreateRotationMatrix(double x, double y, double z, double a)
         {
             throw new NotImplementedException();
-            //var q = new Quaternion(new Vector3(x, y, z), a);
-            //var q = (q.Length == 1) ? q : q.Normalized();
+            // var q = new Quaternion(new Vector3(x, y, z), a);
+            // var q = (q.Length == 1) ? q : q.Normalized();
 
-            //var x = q.X;
-            //var y = q.Y;
-            //var z = q.Z;
-            //var s = q.W;
-            //return new Matrix4(
+            // var x = q.X;
+            // var y = q.Y;
+            // var z = q.Z;
+            // var s = q.W;
+            // return new Matrix4(
             //    1 - 2 * ((y * y) + (z * z)), 2 * ((x * y) - (s * z)), 2 * ((x * z) + (s * y)), 0,
             //    2 * ((x * y) + (s * z)), 1 - 2 * ((x * x) + (z * z)), 2 * ((y * z) - (s * x)), 0,
             //    2 * ((x * z) - (s * y)), 2 * ((y * z) + (s * x)), 1 - 2 * ((x * x) + (y * y)), 0,
             //    0, 0, 0, 1);
-
         }
 
         public static Matrix4 CreateRotationMatrix(Vector3d vec)
@@ -748,7 +764,9 @@ namespace Gear.Geometry
                                 0, sinX, cosX, 0,
                                 0, 0, 0, 1);
             var Y = new Matrix4(cosY, 0, sinY, 0,
+
                                 0, 1, 0, 0,
+
                                 -sinY, 0, cosY, 0,
                                 0, 0, 0, 1);
             var Z = new Matrix4(cosZ, -sinZ, 0, 0,
@@ -773,6 +791,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Operators
+
         /// <summary>
         /// Calculates the sum of two matrices.
         /// </summary>
@@ -917,3 +936,5 @@ namespace Gear.Geometry
         #endregion
     }
 }
+
+#pragma warning restore SA1117 // Parameters must be on same line or separate lines

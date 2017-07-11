@@ -25,16 +25,20 @@ namespace Gear.Net.Messages
             get
             {
                 throw new NotImplementedException();
-                //return BuiltinMessageIds.ZoneDataRequest;
+                // return BuiltinMessageIds.ZoneDataRequest;
             }
         }
 
         public long ZoneX { get; set; }
+
         public long ZoneY { get; set; }
+
         public long ZoneZ { get; set; }
 
         public byte ChunkX { get; set; }
+
         public byte ChunkY { get; set; }
+
         public byte ChunkZ { get; set; }
     }
 }

@@ -42,8 +42,6 @@ namespace Gear.Services
 
         public TimeSpan Timeout { get; set; }
 
-        
-
         public void Run()
         {
             // Create a client that binds to a random local port.
@@ -52,13 +50,10 @@ namespace Gear.Services
             this.Running = true;
             var ep = new IPEndPoint(IPAddress.Broadcast, Ports.Locator);
 
-            // Generate the location request 
+            // Generate the location request
             var req = new Gear.Net.Messages.LocatorRequestMessage();
 
-
-
             return;
-
 
             while (this.Running)
             {
@@ -90,7 +85,9 @@ namespace Gear.Services
         private void OnServiceDiscovered(ServiceDiscoveredEventArgs e)
         {
             if (this.ServiceDiscovered != null)
+            {
                 this.ServiceDiscovered(null, e);
+            }
         }
     }
 

@@ -18,6 +18,7 @@ namespace Gear.Geometry
     public struct Vector3d : IEquatable<Vector3d>
     {
         #region Fields
+
         /// <summary>
         /// Backing field for the static <see cref="Vector3d.Zero"/> property.
         /// </summary>
@@ -39,6 +40,7 @@ namespace Gear.Geometry
         private readonly double z;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Vector3d"/> struct.
         /// </summary>
@@ -74,6 +76,7 @@ namespace Gear.Geometry
             this.y = y;
             this.z = z;
         }
+
         #endregion
         #region Indexers
         public double this[int element]
@@ -84,17 +87,26 @@ namespace Gear.Geometry
                 Contract.Requires(element < 3);
 
                 if (element == 0)
+                {
                     return this.x;
+                }
                 else if (element == 1)
+                {
                     return this.y;
+                }
                 else if (element == 2)
+                {
                     return this.z;
+                }
                 else
+                {
                     throw new NotImplementedException();
+                }
             }
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets the zero vector.
         /// </summary>
@@ -206,6 +218,7 @@ namespace Gear.Geometry
         }
         #endregion
         #region Operators
+
         /// <summary>
         /// Subtracts vector b from vector a and returns a new vector as the result.
         /// </summary>
@@ -282,6 +295,7 @@ namespace Gear.Geometry
         {
             return left.X == right.X && left.Y == right.Y && left.Z == right.Z;
         }
+
         #endregion
         #region Methods
         public Vector3d Absolute()
@@ -312,7 +326,8 @@ namespace Gear.Geometry
         /// <returns></returns>
         public static Vector3d Add(Vector3d a, Vector3d b)
         {
-            return new Vector3d(a.X + b.X,
+            return new Vector3d(
+                a.X + b.X,
                                a.Y + b.Y,
                                a.Z + b.Z);
         }
@@ -326,7 +341,8 @@ namespace Gear.Geometry
         /// <returns></returns>
         public static Vector3d Add(Vector3d a, Vector3d b, Vector3d c)
         {
-            return new Vector3d(a.X + b.X + c.X,
+            return new Vector3d(
+                a.X + b.X + c.X,
                                a.Y + b.Y + c.Y,
                                a.Z + b.Z + c.Z);
         }
@@ -341,7 +357,8 @@ namespace Gear.Geometry
         /// <returns>A new <see cref="Vector3d"/> that is the result of the addition.</returns>
         public static Vector3d Add(Vector3d a, Vector3d b, Vector3d c, Vector3d d)
         {
-            return new Vector3d(a.X + b.X + c.X + d.X,
+            return new Vector3d(
+                a.X + b.X + c.X + d.X,
                                a.Y + b.Y + c.Y + d.Y,
                                a.Z + b.Z + c.Z + d.Z);
         }
@@ -354,14 +371,23 @@ namespace Gear.Geometry
         public static Vector3d Add(Vector3d[] vectors)
         {
             if (vectors == null)
+            {
                 throw new ArgumentNullException("vectors");
+            }
             else if (vectors.Length < 1)
+            {
                 return Vector3d.Zero;
+            }
             else if (vectors.Length == 1)
+            {
                 return vectors[0];
+            }
+
             var r = vectors[0];
             for (int i = 1; i < vectors.Length; i++)
+            {
                 r += vectors[i];
+            }
 
             return r;
         }
@@ -371,7 +397,8 @@ namespace Gear.Geometry
         /// </summary>
         public Vector3d Ceiling()
         {
-            return new Vector3d(Math.Ceiling(this.X),
+            return new Vector3d(
+                Math.Ceiling(this.X),
                                Math.Ceiling(this.Y),
                                Math.Ceiling(this.Z));
         }
@@ -383,7 +410,8 @@ namespace Gear.Geometry
         /// <returns></returns>
         public static Vector3d Ceiling(Vector3d vector)
         {
-            return new Vector3d(Math.Ceiling(vector.X),
+            return new Vector3d(
+                Math.Ceiling(vector.X),
                                Math.Ceiling(vector.Y),
                                Math.Ceiling(vector.Z));
         }
@@ -394,7 +422,8 @@ namespace Gear.Geometry
         /// <param name="other">The other <see cref="Vector3d"/> instance.</param>
         public Vector3d CrossProduct(Vector3d other)
         {
-            return new Vector3d((this.Y * other.Z) - (this.Z * other.Y),
+            return new Vector3d(
+                (this.Y * other.Z) - (this.Z * other.Y),
                                     (this.Z * other.X) - (this.X * other.Z),
                                     (this.X * other.Y) - (this.Y * other.X));
         }
@@ -435,7 +464,7 @@ namespace Gear.Geometry
             var yd = b.y - a.y;
             var zd = b.z - a.z;
 
-            return Math.Sqrt(xd * xd + yd * yd + zd * zd);
+            return Math.Sqrt((xd * xd) + (yd * yd) + (zd * zd));
         }
 
         /// <summary>
@@ -456,7 +485,9 @@ namespace Gear.Geometry
         public override bool Equals(object obj)
         {
             if (obj is Vector3d)
+            {
                 return Vector3d.Equals(this, (Vector3d)obj);
+            }
 
             return false;
         }
@@ -471,7 +502,6 @@ namespace Gear.Geometry
 
             tangent = tangent.Normalize();
         }
-
 
         /// <summary>
         /// Compares the current <see cref="Vector3d"/> and the specified <see cref="Vector3d"/> for equality.
@@ -511,7 +541,8 @@ namespace Gear.Geometry
         /// <returns></returns>
         public static Vector3d Interpolate(Vector3d a, Vector3d b)
         {
-            return new Vector3d((a.X * 0.5) + (b.X * 0.5),
+            return new Vector3d(
+                (a.X * 0.5) + (b.X * 0.5),
                                (a.Y * 0.5) + (b.Y * 0.5),
                                (a.Z * 0.5) + (b.Z * 0.5));
         }
@@ -526,8 +557,12 @@ namespace Gear.Geometry
         public static Vector3d Interpolate(Vector3d a, Vector3d b, double weight)
         {
             if (weight < 0.0 || weight > 1.0)
+            {
                 throw new ArgumentOutOfRangeException("weight", "Weight must be between 0.0 and 1.0");
-            return new Vector3d((a.X * (1.0 - weight)) + (b.X * weight),
+            }
+
+            return new Vector3d(
+                (a.X * (1.0 - weight)) + (b.X * weight),
                 (a.Y * (1.0 - weight)) + (b.Y * weight),
                 (a.Z * (1.0 - weight)) + (b.Z * weight));
         }
@@ -551,7 +586,9 @@ namespace Gear.Geometry
             double weight = 1.0 / vectors.Length;
             Vector3d r = Vector3d.Zero;
             for (int i = 0; i < vectors.Length; i++)
+            {
                 r += vectors[i] * weight;
+            }
 
             return r;
         }
@@ -596,7 +633,10 @@ namespace Gear.Geometry
         public bool IsParallelTo(Vector3d other)
         {
             if (Vector3d.CrossProduct(this, other) == Vector3d.Zero)
+            {
                 return true;
+            }
+
             return false;
         }
 
@@ -619,6 +659,7 @@ namespace Gear.Geometry
         {
             return this - other;
         }
+
         public Vector3d Normalize()
         {
             return Vector3d.Normalize(this);

@@ -18,6 +18,5 @@ namespace Gear.Modeling
         Arc,
         Spline,
         Vertex,
-
     }
 }

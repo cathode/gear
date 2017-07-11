@@ -31,27 +31,26 @@ namespace Gear.Services
         public ServiceAnnouncer(ServiceManager manager)
         {
             this.manager = manager;
-            //this.announcements = new List<ServiceInfo>();
-            //this.ClusterId = manager.ClusterId; 
+            // this.announcements = new List<ServiceInfo>();
+            // this.ClusterId = manager.ClusterId;
         }
 
         public bool Running { get; set; }
 
-       
         /// <summary>
         /// Adds a service announcement to the current announcer.
         /// </summary>
         /// <param name="announcement"></param>
         public void AddServiceAnnouncement(ServiceInfo announcement)
         {
-            //lock (this.announcements)
-            //{
+            // lock (this.announcements)
+            // {
             //    // Only allow one subscription per port
             //    if (!this.announcements.Any(e => e.ListenPort == announcement.ListenPort))
             //    {
             //        this.announcements.Add(announcement);
             //    }
-            //}
+            // }
         }
 
         public void Run()
@@ -63,12 +62,12 @@ namespace Gear.Services
 
             var client = new System.Net.Sockets.UdpClient();
             client.EnableBroadcast = true;
-            //client.
-            //client.Connect(new IPEndPoint(IPAddress.Broadcast, ServiceAnnouncer.AnnouncePort));
+            // client.
+            // client.Connect(new IPEndPoint(IPAddress.Broadcast, ServiceAnnouncer.AnnouncePort));
             ulong n = 0;
             while (this.Running)
             {
-                //Log.Write("Sending announce packet #" + (n++).ToString(), "ServiceAnnouncer", LogMessageGroup.Debug);
+                // Log.Write("Sending announce packet #" + (n++).ToString(), "ServiceAnnouncer", LogMessageGroup.Debug);
                 var anc = new ServiceAnnouncement()
                 {
                     Version = "1.0-alpha",
@@ -91,7 +90,6 @@ namespace Gear.Services
 
         public void EnsureServiceAnnouncerIsRunning()
         {
-
         }
     }
 }

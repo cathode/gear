@@ -15,7 +15,7 @@ using ProtoBuf;
 namespace Gear.Services
 {
     /// <summary>
-    /// Represents a message sent by a service that 
+    /// Represents a message sent by a service that
     /// </summary>
     [ProtoContract]
     public class ServiceDetail

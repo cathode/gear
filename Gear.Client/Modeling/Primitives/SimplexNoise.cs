@@ -25,12 +25,14 @@ namespace Gear.Modeling.Primitives
     {
         #region Fields
         private byte[] perm;
+
         #endregion
         #region Constructors
         public SimplexNoise(object seed)
         {
-            this.Seed = (seed ?? new Object()).GetHashCode();
+            this.Seed = (seed ?? new object()).GetHashCode();
         }
+
         #endregion
         #region Properties
         public int Seed
@@ -38,13 +40,16 @@ namespace Gear.Modeling.Primitives
             get;
             set;
         }
+
         #endregion
         #region Methods
         public void Initialize()
         {
             var p = new byte[256];
             for (byte i = 255; i != 0; ++i)
+            {
                 p[i] = i;
+            }
 
             var rng = new Random(this.Seed);
             int n = 256;
@@ -56,6 +61,7 @@ namespace Gear.Modeling.Primitives
                 p[k] = p[n];
                 p[n] = v;
             }
+
             this.perm = p;
         }
 
@@ -63,7 +69,6 @@ namespace Gear.Modeling.Primitives
         {
             throw new NotImplementedException();
         }
-
 
         #endregion
     }

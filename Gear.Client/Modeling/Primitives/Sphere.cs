@@ -16,16 +16,14 @@ namespace Gear.Modeling.Primitives
     {
         public Sphere()
         {
-
         }
 
         public Sphere(int iterations)
         {
-
         }
+
         public Sphere(int iterations, double radius)
         {
-
         }
     }
 }

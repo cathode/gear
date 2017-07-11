@@ -16,11 +16,13 @@ namespace Gear.Model
     public interface IPhysical
     {
         decimal MeltingPoint { get; }
+
         decimal BoilingPoint { get; }
+
         decimal Density { get; }
 
         /// <summary>
-        /// Gets a value indicating the substance's ability to conduct thermal energy (heat). Measured in Watts per Meter Kelvin. 
+        /// Gets a value indicating the substance's ability to conduct thermal energy (heat). Measured in Watts per Meter Kelvin.
         /// </summary>
         decimal ThermalConductivity { get; }
 

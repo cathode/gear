@@ -15,13 +15,14 @@ namespace Gear
     public sealed class LogOutput
     {
         #region Constructors
-       
+
         public LogOutput(Stream stream, string format, LogMessageGroup filter)
         {
             this.Stream = stream;
             this.Format = format;
             this.Filter = filter;
         }
+
         #endregion
         #region Properties
         public Stream Stream
@@ -29,11 +30,13 @@ namespace Gear
             get;
             set;
         }
+
         public string Format
         {
             get;
             set;
         }
+
         public LogMessageGroup Filter
         {
             get;

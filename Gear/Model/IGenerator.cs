@@ -10,7 +10,5 @@ namespace Gear.Model
     public interface IGenerator
     {
         World GenerateWorld(int seed);
-
-        
     }
 }

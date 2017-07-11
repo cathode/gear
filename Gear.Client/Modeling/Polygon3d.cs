@@ -20,6 +20,7 @@ namespace Gear.Modeling
     public class Polygon3d : IEnumerable<Vertex3d>, IRenderableFace
     {
         #region Fields
+
         /// <summary>
         /// Holds the vertices of the current <see cref="Polygon3d"/>.
         /// </summary>
@@ -29,6 +30,7 @@ namespace Gear.Modeling
         private int vertexCount;
         #endregion
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Polygon3d"/> class.
         /// </summary>
@@ -119,11 +121,16 @@ namespace Gear.Modeling
             this.edges = new Edge3[indices.Length];
 
             for (int i = 0; i < indices.Length; ++i)
+            {
                 if (indices[i] < verts.Length)
+                {
                     this.vertices[i] = verts[indices[i]];
+                }
                 else
+                {
                     throw new NotImplementedException();
-
+                }
+            }
 
             this.RegenerateEdges();
         }
@@ -148,6 +155,7 @@ namespace Gear.Modeling
         }
         #endregion
         #region Properties
+
         /// <summary>
         /// Gets a value indicating whether the vertices of the current <see cref="Polygon3d"/> lie on the same plane in 3d-space.
         /// </summary>
@@ -156,10 +164,13 @@ namespace Gear.Modeling
             get
             {
                 if (this.Vertices.Length == 3)
+                {
                     return true;
-
+                }
                 else
+                {
                     return false;
+                }
             }
         }
 
@@ -240,6 +251,7 @@ namespace Gear.Modeling
         }
         #endregion
         #region Indexers
+
         /// <summary>
         /// Gets or sets the <see cref="Vertex3d"/> at the specified index.
         /// </summary>
@@ -255,6 +267,7 @@ namespace Gear.Modeling
 
                 return this.vertices[index];
             }
+
             set
             {
                 Contract.Requires(index >= 0);
@@ -264,6 +277,7 @@ namespace Gear.Modeling
                 this.vertices[index] = value;
             }
         }
+
         #endregion
         #region Methods
         public void RegenerateEdges()
@@ -271,8 +285,9 @@ namespace Gear.Modeling
             var m = this.vertices.Length;
 
             for (int i = 0; i < m; ++i)
+            {
                 this.edges[i] = new Edge3(this.vertices[i], this.vertices[(i + 1) % m]);
-
+            }
         }
 
         /// <summary>
@@ -285,7 +300,7 @@ namespace Gear.Modeling
         }
 
         /// <summary>
-        /// Returns an enumerator for the current <see cref="Polygon3d"/>. 
+        /// Returns an enumerator for the current <see cref="Polygon3d"/>.
         /// </summary>
         /// <returns>An enumerator that allows enumeration of the vertices of the current <see cref="Polygon3d"/>.</returns>
         public IEnumerator<Vertex3d> GetEnumerator()
@@ -307,7 +322,7 @@ namespace Gear.Modeling
                      select v).First();
 
             yield return new Triangle3d(this.vertices[0], this.vertices[1], this.vertices[2]);
-            //throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         /// <summary>
@@ -342,7 +357,6 @@ namespace Gear.Modeling
         /// <param name="value"></param>
         public void Translate(Vector3d value)
         {
-
             foreach (var v in this.vertices)
             {
                 v.Position += value;
@@ -361,7 +375,7 @@ namespace Gear.Modeling
         private void Invariants()
         {
             Contract.Invariant(this.Vertices != null);
-            //Contract.Invariant(this.VertexCount >= 2);
+            // Contract.Invariant(this.VertexCount >= 2);
             Contract.Invariant(Contract.ForAll(this.vertices, v => v != null));
             Contract.Invariant(this.Edges != null);
             Contract.Invariant(this.Edges.Length == this.VertexCount);

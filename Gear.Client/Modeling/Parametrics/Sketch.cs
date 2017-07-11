@@ -16,11 +16,10 @@ namespace Gear.Modeling.Parametrics
     /// <summary>
     /// Represents a 2-dimensional set of lines defined by relationships.
     /// </summary>
-    public class Sketch 
+    public class Sketch
     {
         public void Solve()
         {
-
         }
     }
 }

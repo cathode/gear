@@ -13,7 +13,5 @@ namespace Gear.IO
     public interface IDataStore
     {
         IEnumerable<World> GetWorlds();
-
-        
     }
 }

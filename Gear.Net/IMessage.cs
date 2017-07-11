@@ -20,7 +20,7 @@ namespace Gear.Net
         [ProtoIgnore]
         int DispatchId { get; }
 
-        //[ProtoIgnore]
-        //bool IsBroadcastMessage { get; }
+        // [ProtoIgnore]
+        // bool IsBroadcastMessage { get; }
     }
 }

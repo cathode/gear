@@ -18,6 +18,7 @@ namespace Gear.Client.Rendering
         {
             this.Options = options;
         }
+
         public RendererOptions Options
         {
             get;
