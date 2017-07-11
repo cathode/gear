@@ -25,7 +25,7 @@ namespace Gear.Net.Collections
         /// Indicates that an item is being removed from the collection.
         /// </summary>
         Remove  = 0x02,
-        
+
         /// <summary>
         /// Indicates that a collection instance is joining a synchronization group.
         /// </summary>

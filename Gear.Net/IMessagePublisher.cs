@@ -26,5 +26,5 @@ namespace Gear.Net
         event EventHandler ShuttingDown;
     }
 
-   
+
 }

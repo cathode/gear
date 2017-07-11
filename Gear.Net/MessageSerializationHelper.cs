@@ -22,7 +22,9 @@ namespace Gear.Net
         public static void AddMessageSubtypes(Assembly asm = null)
         {
             if (asm == null)
+            {
                 asm = Assembly.GetExecutingAssembly();
+            }
 
             var types = asm.GetTypes();
             var meta = ProtoBuf.Meta.RuntimeTypeModel.Default.Add(typeof(IMessage), true);

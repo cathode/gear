@@ -8,6 +8,5 @@ namespace Gear.Net.Collections
 {
     public class NetworkCollectionManager
     {
-
     }
 }

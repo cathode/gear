@@ -49,9 +49,13 @@ namespace Gear.Net
             this.contents = contents;
 
             if (contents.DispatchId != 0)
+            {
                 this.DispatchId = contents.DispatchId;
+            }
             else
+            {
                 this.DispatchId = contents.GetType().GetHashCode();
+            }
         }
 
         /// <summary>

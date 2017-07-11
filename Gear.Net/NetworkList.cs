@@ -18,6 +18,5 @@ namespace Gear.Net
     /// </summary>
     public class NetworkList
     {
-
     }
 }

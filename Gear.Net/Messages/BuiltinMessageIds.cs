@@ -19,7 +19,7 @@ namespace Gear.Net.Messages
     public static class BuiltinMessageIds
     {
         // System
-        public static readonly int EndpointGreeting = 0x0001; 
+        public static readonly int EndpointGreeting = 0x0001;
         public static readonly int TeardownChannel = 0x0002;
 
         // File transfer

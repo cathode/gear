@@ -25,7 +25,6 @@ namespace Gear.Net
         /// <param name="port"></param>
         public DatagramChannel(ushort port)
         {
-
         }
 
         private UdpClient endpoint;

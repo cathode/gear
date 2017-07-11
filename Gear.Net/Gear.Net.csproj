@@ -152,6 +152,7 @@
     <Compile Include="ConnectionListener.cs" />
     <Compile Include="DatagramChannel.cs" />
     <Compile Include="EndPointKind.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IMessage.cs" />
     <Compile Include="IMessagePublisher.cs" />
     <Compile Include="MessageContainer.cs" />

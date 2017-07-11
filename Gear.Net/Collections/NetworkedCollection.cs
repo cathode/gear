@@ -24,14 +24,12 @@ namespace Gear.Net.Collections
         /// </summary>
         public NetworkedCollection()
         {
-
         }
 
         public long CollectionId { get; internal set; }
 
         public ReplicationMode Mode { get; set; }
 
-        #region Methods
 
         /// <summary>
         /// Becomes a consumer for a remote networked collection with the specified id.
@@ -42,20 +40,15 @@ namespace Gear.Net.Collections
         public bool Consume(Guid id, Channel channel)
         {
             var msg = new NetworkedCollectionUpdateMessage();
-            
+
 
             return false;
         }
-        
+
         protected virtual void OnMessageAvailable(MessageEventArgs e)
         {
             this.MessageAvailable?.Invoke(this, e);
         }
-
-        #endregion
-
-
-        #region ICollection<T> members
 
         public int Count
         {
@@ -70,16 +63,22 @@ namespace Gear.Net.Collections
             get
             {
                 if (this.Mode == ReplicationMode.Producer)
+                {
                     return false;
+                }
                 else
+                {
                     return true;
+                }
             }
         }
 
         public void Add(T item)
         {
             if (this.IsReadOnly)
+            {
                 throw new InvalidOperationException("This collection is read-only.");
+            }
 
             // Add the item to the wrapped collection:
             var k = item.GetHashCode();
@@ -89,14 +88,16 @@ namespace Gear.Net.Collections
             var msg = new NetworkedCollectionUpdateMessage();
             msg.CollectionId = this.CollectionId;
             msg.Action = NetworkedCollectionAction.Add;
-            
+
 
         }
 
         public void Clear()
         {
             if (this.IsReadOnly)
+            {
                 throw new InvalidOperationException("This collection is read-only.");
+            }
         }
 
         public bool Contains(T item)
@@ -122,26 +123,27 @@ namespace Gear.Net.Collections
         public bool Remove(T item)
         {
             if (this.IsReadOnly)
+            {
                 throw new InvalidOperationException("This collection is read-only.");
+            }
 
             if (!this.items.Values.Contains(item))
+            {
                 return true;
-            
+            }
 
             var msg = new NetworkedCollectionUpdateMessage();
 
-            
+
 
             return true;
         }
-        
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.items.Values.GetEnumerator();
         }
-        #endregion
 
-        
         public IDisposable Subscribe(IObserver<T> observer)
         {
             throw new NotImplementedException();

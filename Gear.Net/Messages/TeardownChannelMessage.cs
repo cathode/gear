@@ -17,7 +17,6 @@ namespace Gear.Net.Messages
     [ProtoContract]
     public class TeardownChannelMessage : IMessage
     {
-
         [ProtoMember(1)]
         public bool Confirmation { get; set; }
 

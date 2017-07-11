@@ -33,7 +33,7 @@ namespace Gear.Net.Collections
         public NetworkedCollectionAction Action { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [ProtoMember(3)]
         public string Data { get; set; }

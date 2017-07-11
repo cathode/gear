@@ -18,6 +18,5 @@ namespace Gear.Net.Messages
     /// </summary>
     public class ConfigurationMessage
     {
-
     }
 }

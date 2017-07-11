@@ -61,19 +61,21 @@ namespace Gear.Net
         public event EventHandler<ChannelEventArgs> ChannelConnected;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void Start()
         {
             if (this.isRunning)
+            {
                 return;
+            }
 
             this.isRunning = true;
 
             this.listener.Bind(new IPEndPoint(IPAddress.Any, this.ListenPort));
             this.listener.Listen(32);
 
-            
+
 
             //while (!this.token.IsCancellationRequested)
             while (this.isRunning)
@@ -93,7 +95,6 @@ namespace Gear.Net
                 }
                 catch (SocketException ex)
                 {
-
                     break;
                 }
             }
@@ -118,7 +119,9 @@ namespace Gear.Net
 
 
             if (this.ChannelConnected != null)
+            {
                 this.ChannelConnected(sender, e);
+            }
 
             e.Channel.Setup();
         }

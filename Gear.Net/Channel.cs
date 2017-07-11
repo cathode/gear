@@ -24,7 +24,6 @@ namespace Gear.Net
     /// </summary>
     public abstract class Channel
     {
-        #region Fields
         /// <summary>
         /// Holds the messages that are being serialized and flushed to the socket.
         /// </summary>
@@ -55,10 +54,6 @@ namespace Gear.Net
 
         private readonly Dictionary<int, List<MessageHandlerRegistration>> messageHandlers = new Dictionary<int, List<MessageHandlerRegistration>>();
 
-        #endregion
-
-        #region Constructors
-
         static Channel()
         {
             Contract.Assume(RuntimeTypeModel.Default != null);
@@ -81,8 +76,6 @@ namespace Gear.Net
             //this.rxFlushGate = new AutoResetEvent(true);
         }
 
-        #endregion
-
         public abstract IPEndPoint LocalEndPoint { get; }
         public abstract IPEndPoint RemoteEndPoint { get; }
 
@@ -101,8 +94,8 @@ namespace Gear.Net
         {
             Contract.Requires(publisher != null);
 
-            publisher.MessageAvailable += publisher_MessageAvailable;
-            publisher.ShuttingDown += publisher_ShuttingDown;
+            publisher.MessageAvailable += this.publisher_MessageAvailable;
+            publisher.ShuttingDown += this.publisher_ShuttingDown;
         }
 
         /// <summary>
@@ -121,7 +114,9 @@ namespace Gear.Net
             lock (this.metaLock)
             {
                 if (!this.messageHandlers.ContainsKey(dispatchId))
+                {
                     this.messageHandlers.Add(dispatchId, new List<MessageHandlerRegistration>());
+                }
 
                 this.messageHandlers[dispatchId].Add(reg);
             }
@@ -154,10 +149,14 @@ namespace Gear.Net
                 {
                     foreach (var h in handlers)
                         if (kvp.Value.Contains(h))
+                        {
                             kvp.Value.Remove(h);
+                        }
 
                     if (kvp.Value.Count == 0)
+                    {
                         rem.Add(kvp.Key);
+                    }
                 }
 
                 foreach (var id in rem)
@@ -231,14 +230,18 @@ namespace Gear.Net
                         }
 
                         if (this.txBuffer.Count > 0)
+                        {
                             this.SendMessages(this.txBuffer);
+                        }
                     }
                 }
             }
             finally
             {
                 if (Monitor.IsEntered(this.txFlushGate))
+                {
                     Monitor.Exit(this.txFlushGate);
+                }
             }
         }
 
@@ -309,7 +312,9 @@ namespace Gear.Net
             lock (this.txQueue)
             {
                 foreach (var m in messages)
+                {
                     this.txQueue.Enqueue(m);
+                }
             }
 
             this.ProcessTxQueue();
@@ -327,7 +332,9 @@ namespace Gear.Net
             lock (this.rxQueue)
             {
                 foreach (var m in messages)
+                {
                     this.rxQueue.Enqueue(m);
+                }
             }
 
             this.ProcessRxQueue();
@@ -340,8 +347,8 @@ namespace Gear.Net
             if (publisher != null)
             {
                 // Remove event bindings
-                publisher.ShuttingDown -= publisher_ShuttingDown;
-                publisher.MessageAvailable -= publisher_MessageAvailable;
+                publisher.ShuttingDown -= this.publisher_ShuttingDown;
+                publisher.MessageAvailable -= this.publisher_MessageAvailable;
             }
         }
 
@@ -362,15 +369,11 @@ namespace Gear.Net
             Contract.Invariant(this.messageHandlers != null);
         }
 
-        #region Inner Types
-
         public class MessageHandlerRegistration
         {
             public object Owner { get; set; }
 
             public Action<MessageEventArgs, IMessage> Action { get; set; }
         }
-
-        #endregion
     }
 }

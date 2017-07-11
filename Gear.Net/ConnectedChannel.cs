@@ -20,7 +20,7 @@ using System.Threading;
 namespace Gear.Net
 {
     /// <summary>
-    /// Represents a communication channel that 
+    /// Represents a communication channel that
     /// </summary>
     public class ConnectedChannel : Channel
     {
@@ -55,7 +55,9 @@ namespace Gear.Net
 
             this.socket = socket;
             if (this.socket.Connected)
+            {
                 this.State = ChannelState.Connected;
+            }
 
             this.cachedRemoteEP = this.socket.RemoteEndPoint as IPEndPoint;
         }
@@ -86,7 +88,6 @@ namespace Gear.Net
         /// </summary>
         public event EventHandler<ChannelDisconnectedEventArgs> Disconnected;
 
-        #region Properties
         /// <summary>
         /// Gets or sets the unique id of the client or server that the channel is connected to.
         /// </summary>
@@ -103,7 +104,6 @@ namespace Gear.Net
         {
             get { return this.socket.RemoteEndPoint as IPEndPoint; }
         }
-        #endregion
 
         public static ConnectedChannel ConnectTo(IPEndPoint remoteEP)
         {
@@ -119,15 +119,23 @@ namespace Gear.Net
         public bool Connect(IPEndPoint ep = null)
         {
             if (this.State == ChannelState.Connected)
+            {
                 throw new InvalidOperationException();
+            }
 
             if (ep == null)
+            {
                 ep = this.cachedRemoteEP;
+            }
             else
+            {
                 this.cachedRemoteEP = ep;
+            }
 
             if (this.socket != null)
+            {
                 this.socket.Dispose();
+            }
 
             this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
@@ -202,7 +210,9 @@ namespace Gear.Net
                     var msg = messages.Dequeue();
 
                     if (msg == null)
+                    {
                         throw new NotImplementedException("Null message in send buffer");
+                    }
 
                     Serializer.SerializeWithLengthPrefix(ms, msg, PrefixStyle.Fixed32BigEndian);
                 }
@@ -237,7 +247,9 @@ namespace Gear.Net
             var args = state as ChannelDisconnectedEventArgs;
 
             if (args == null)
+            {
                 return;
+            }
 
             //TODO: Evaluate need for locking
             lock (this.reconnectTimer)
@@ -278,7 +290,9 @@ namespace Gear.Net
                     // Check if we have the entire message
                     var msgSize = 0;
                     if (!Serializer.TryReadLengthPrefix(state.Buffer, 0, 4, PrefixStyle.Fixed32BigEndian, out msgSize))
+                    {
                         throw new NotImplementedException();
+                    }
 
                     var bsize = msgSize + 4;
 
@@ -330,7 +344,6 @@ namespace Gear.Net
             }
             catch (IOException ioe)
             {
-
             }
             catch (SocketException se)
             {
