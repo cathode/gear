@@ -12,42 +12,33 @@ namespace Gear.Net.Collections
     /// </summary>
     public class NetworkedCollection<T> : ICollection<T>, IObservable<T>, IMessagePublisher
     {
+        #region Fields
         private readonly object syncLock = new object();
 
-        private System.Collections.Generic.Dictionary<int, T> items;
+        private readonly System.Collections.Generic.Dictionary<int, T> items = new Dictionary<int, T>();
 
-        public event EventHandler<MessageEventArgs> MessageAvailable;
+        private Channel source;
+        #endregion
 
-        public event EventHandler ShuttingDown;
-
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkedCollection"/> class.
         /// </summary>
         public NetworkedCollection()
         {
         }
+        #endregion
 
-        public long CollectionId { get; internal set; }
+        #region Events
+        public event EventHandler<MessageEventArgs> MessageAvailable;
+
+        public event EventHandler ShuttingDown;
+        #endregion
+
+        #region Properties
+        public long CollectionId { get; set; }
 
         public ReplicationMode Mode { get; set; }
-
-        /// <summary>
-        /// Becomes a consumer for a remote networked collection with the specified id.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="channel"></param>
-        /// <returns></returns>
-        public bool Consume(Guid id, Channel channel)
-        {
-            var msg = new NetworkedCollectionUpdateMessage();
-
-            return false;
-        }
-
-        protected virtual void OnMessageAvailable(MessageEventArgs e)
-        {
-            this.MessageAvailable?.Invoke(this, e);
-        }
 
         public int Count
         {
@@ -70,6 +61,29 @@ namespace Gear.Net.Collections
                     return true;
                 }
             }
+        }
+
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Becomes a consumer for a remote networked collection with the specified id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="channel"></param>
+        /// <returns></returns>
+        public bool Consume(long id, Channel channel)
+        {
+            var msg = new NetworkedCollectionUpdateMessage();
+
+            msg.Action = NetworkedCollectionAction.Join;
+            msg.CollectionId = id;
+            msg.Data = null;
+
+            this.source = channel;
+
+            this.source.RegisterHandler<NetworkedCollectionUpdateMessage>(null, this);
+            return false;
         }
 
         public void Add(T item)
@@ -143,5 +157,16 @@ namespace Gear.Net.Collections
         {
             throw new NotImplementedException();
         }
+
+        protected virtual void OnMessageAvailable(MessageEventArgs e)
+        {
+            this.MessageAvailable?.Invoke(this, e);
+        }
+
+        private void MessageHandler_NetworkedCollectionUpdate(MessageEventArgs e, NetworkedCollectionUpdateMessage msg)
+        {
+
+        }
+        #endregion
     }
 }

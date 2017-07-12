@@ -25,6 +25,8 @@ namespace Gear.Server
         public static DateTime perfCountStart;
         public static DateTime perfCountLastUpdate;
 
+        private static Gear.Net.Collections.NetworkedCollection<string> netStrings = new Net.Collections.NetworkedCollection<string>();
+
         public static void Main(string[] args)
         {
             Console.WriteLine("Gear Server - v" + Assembly.GetExecutingAssembly().GetName().Version.ToString());
@@ -62,6 +64,10 @@ namespace Gear.Server
             // manager.StartService(ServerService.ClusterManager, 14123);
             // manager.StartService(ServerService.ZoneNode, 14124);
 
+            netStrings.Mode = Net.Collections.ReplicationMode.Producer;
+            netStrings.CollectionId = 1234;
+
+
             var listener = new Net.ConnectionListener(9888);
             listener.ChannelConnected += listener_ChannelConnected;
             listener.Start();
@@ -83,30 +89,34 @@ namespace Gear.Server
             perfCountLastUpdate = DateTime.Now;
 
             e.Channel.MessageReceived += Channel_MessageReceived;
+
+            e.Channel.SubscribeToPublisher(netStrings);
+
+            netStrings.Add("test");
         }
 
         static void Channel_MessageReceived(object sender, Net.MessageEventArgs e)
         {
-            // Update stats:
-            var count = Interlocked.Increment(ref Program.msgRecvCount);
+            //// Update stats:
+            //var count = Interlocked.Increment(ref Program.msgRecvCount);
 
-            if (count % 100 == 0)
-            {
-                var periodTime = DateTime.Now - perfCountLastUpdate;
-                if (periodTime.TotalSeconds > 1)
-                {
-                    Program.perfCountLastUpdate = DateTime.Now;
-                    var last = Program.msgRecvCountAtLastUpdate;
-                    Program.msgRecvCountAtLastUpdate = count;
-                    var countPeriod = count - last;
-                    var msgsPerSec = countPeriod / periodTime.TotalSeconds;
+            //if (count % 100 == 0)
+            //{
+            //    var periodTime = DateTime.Now - perfCountLastUpdate;
+            //    if (periodTime.TotalSeconds > 1)
+            //    {
+            //        Program.perfCountLastUpdate = DateTime.Now;
+            //        var last = Program.msgRecvCountAtLastUpdate;
+            //        Program.msgRecvCountAtLastUpdate = count;
+            //        var countPeriod = count - last;
+            //        var msgsPerSec = countPeriod / periodTime.TotalSeconds;
 
-                    Log.Write(string.Format("Recieved {0} messages in the last {1}ms. {2} msg/s. {3} total messages received.", countPeriod, periodTime.TotalMilliseconds, msgsPerSec, count));
-                }
-            }
+            //        Log.Write(string.Format("Recieved {0} messages in the last {1}ms. {2} msg/s. {3} total messages received.", countPeriod, periodTime.TotalMilliseconds, msgsPerSec, count));
+            //    }
+            //}
 
-            var ch = sender as Net.ConnectedChannel;
-            ch.Send(new Net.Messages.BlockUpdateMessage { X = 1, Y = 2, Z = 3, NewBlockId = int.MaxValue });
+            //var ch = sender as Net.ConnectedChannel;
+            //ch.Send(new Net.Messages.BlockUpdateMessage { X = 1, Y = 2, Z = 3, NewBlockId = int.MaxValue });
         }
     }
 }

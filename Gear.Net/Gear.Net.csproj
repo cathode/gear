@@ -168,6 +168,7 @@
     <None Include="Messages\TransferFileDataMessage.cs" />
     <None Include="Messages\TransferFileMessage.cs" />
     <None Include="Messages\TransferFileReceiptMessage.cs" />
+    <Compile Include="MessagingServer.cs" />
     <Compile Include="NetworkList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

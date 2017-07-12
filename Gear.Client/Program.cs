@@ -15,6 +15,9 @@ using Gear.Client.UI;
 using Gear.Model;
 using Gear.Geometry;
 using Gear.Modeling.Primitives;
+using Gear.Net;
+using System.Net;
+using System.Threading;
 
 namespace Gear.Client
 {
@@ -22,15 +25,20 @@ namespace Gear.Client
     {
         static void Main(string[] args)
         {
-            /* Gear Client main entry point.
+            // For testing
+            Thread.Sleep(5000);
 
-             * Initialization process:
-             *
-             * 1. Set up environment
-             * 2. Set up logging
-             * 3. ???
-             * 4. PROFIT!!!
-             */
+            var channel = ConnectedChannel.ConnectTo(new System.Net.IPEndPoint(IPAddress.Loopback, 9888));
+
+            var ns = new Gear.Net.Collections.NetworkedCollection<string>();
+            ns.Consume(1234, channel);
+
+            
+        }
+
+        /*
+        static void Main(string[] args)
+        {
             if (args.Length > 0)
             {
                 // Check if the client is being invoked in 'shell-only' mode.
@@ -72,5 +80,6 @@ namespace Gear.Client
             renderer.PreRender += (o, e) => { scene.Root.Orientation.RotateBy(20); };
             renderer.Start();
         }
+    */
     }
 }
