@@ -52,7 +52,9 @@ namespace Gear.Server
 
             Log.Write("Message log initialized", "system", LogMessageGroup.Info);
 
-            Gear.Net.MessageSerializationHelper.AddMessageSubtypes();
+            //Gear.Net.MessageSerializationHelper.AddMessageSubtypes();
+            Gear.Net.MessageSerializationHelper.AddMessageSubtypes(typeof(Gear.Net.Channel).Assembly);
+
             // var engine = new ServerEngine();
             // engine.Run();
 
@@ -66,7 +68,6 @@ namespace Gear.Server
 
             netStrings.Mode = Net.Collections.ReplicationMode.Producer;
             netStrings.CollectionId = 1234;
-
 
             var listener = new Net.ConnectionListener(9888);
             listener.ChannelConnected += listener_ChannelConnected;

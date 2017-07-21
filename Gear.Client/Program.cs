@@ -25,6 +25,9 @@ namespace Gear.Client
     {
         static void Main(string[] args)
         {
+            //MessageSerializationHelper.AddMessageSubtypes();
+            MessageSerializationHelper.AddMessageSubtypes(typeof(Channel).Assembly);
+
             // For testing
             Thread.Sleep(5000);
 
@@ -33,7 +36,10 @@ namespace Gear.Client
             var ns = new Gear.Net.Collections.NetworkedCollection<string>();
             ns.Consume(1234, channel);
 
-            
+            while (true)
+            {
+                Thread.Sleep(10000);
+            }
         }
 
         /*

@@ -10,6 +10,13 @@ namespace Gear.Net.Collections
     [ProtoContract]
     public class NetworkedCollectionUpdateMessage : IMessage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetworkedCollectionUpdateMessage"/> class.
+        /// </summary>
+        public NetworkedCollectionUpdateMessage()
+        {
+        }
+
         [ProtoIgnore]
         int IMessage.DispatchId
         {

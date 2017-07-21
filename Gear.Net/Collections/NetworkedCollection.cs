@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,16 +75,25 @@ namespace Gear.Net.Collections
         /// <returns></returns>
         public bool Consume(long id, Channel channel)
         {
+            if (this.Mode != ReplicationMode.None)
+            {
+                throw new NotImplementedException();
+            }
+
             var msg = new NetworkedCollectionUpdateMessage();
 
             msg.Action = NetworkedCollectionAction.Join;
             msg.CollectionId = id;
             msg.Data = null;
 
+            this.Mode = ReplicationMode.Consumer;
+            this.CollectionId = id;
             this.source = channel;
 
-            this.source.RegisterHandler<NetworkedCollectionUpdateMessage>(null, this);
-            return false;
+            this.source.RegisterHandler<NetworkedCollectionUpdateMessage>(MessageHandler_NetworkedCollectionUpdate, this);
+
+            this.source.Send(msg);
+            return true;
         }
 
         public void Add(T item)
@@ -94,13 +104,16 @@ namespace Gear.Net.Collections
             }
 
             // Add the item to the wrapped collection:
-            var k = item.GetHashCode();
+            var k = this.GetItemKey(item);
             this.items.Add(k, item);
 
             // Build update message:
             var msg = new NetworkedCollectionUpdateMessage();
             msg.CollectionId = this.CollectionId;
             msg.Action = NetworkedCollectionAction.Add;
+            msg.Data = this.SerializeItem(item);
+
+            this.OnMessageAvailable(new MessageEventArgs(msg));
         }
 
         public void Clear()
@@ -158,6 +171,21 @@ namespace Gear.Net.Collections
             throw new NotImplementedException();
         }
 
+        protected virtual string SerializeItem(T item)
+        {
+            return JsonConvert.SerializeObject(item);
+        }
+
+        protected virtual T DeserializeItem(string item)
+        {
+            return JsonConvert.DeserializeObject<T>(item);
+        }
+
+        protected virtual int GetItemKey(T item)
+        {
+            return item.GetHashCode();
+        }
+
         protected virtual void OnMessageAvailable(MessageEventArgs e)
         {
             this.MessageAvailable?.Invoke(this, e);
@@ -165,7 +193,23 @@ namespace Gear.Net.Collections
 
         private void MessageHandler_NetworkedCollectionUpdate(MessageEventArgs e, NetworkedCollectionUpdateMessage msg)
         {
+            if (msg == null)
+            {
+                return;
+            }
+            else if (msg.CollectionId != this.CollectionId)
+            {
+                return;
+            }
 
+            if (this.Mode == ReplicationMode.Consumer)
+            {
+                if (msg.Action == NetworkedCollectionAction.Add)
+                {
+                    var item = this.DeserializeItem(msg.Data);
+                    this.items.Add(this.GetItemKey(item), item);
+                }
+            }
         }
         #endregion
     }
