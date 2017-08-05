@@ -148,7 +148,8 @@
     <Compile Include="ChannelDisconnectedEventArgs.cs" />
     <Compile Include="ChannelEventArgs.cs" />
     <Compile Include="ChannelState.cs" />
-    <Compile Include="Collections\NetworkCollectionManager.cs" />
+    <Compile Include="Collections\NetworkedCollectionGroupMetadata.cs" />
+    <Compile Include="Collections\NetworkedCollectionManager.cs" />
     <Compile Include="Collections\NetworkedCollection.cs" />
     <Compile Include="Collections\NetworkedCollectionAction.cs" />
     <Compile Include="Collections\NetworkedCollectionQueryRequestMessage.cs" />

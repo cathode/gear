@@ -30,7 +30,7 @@ namespace Gear.Net.Collections
         /// Gets or sets a value that determines which collection the update applies to.
         /// </summary>
         [ProtoMember(1)]
-        public long CollectionId { get; set; }
+        public long CollectionGroupId { get; set; }
 
         /// <summary>
         /// Gets or sets the update action.

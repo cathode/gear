@@ -67,7 +67,7 @@ namespace Gear.Server
             // manager.StartService(ServerService.ZoneNode, 14124);
 
             netStrings.Mode = Net.Collections.ReplicationMode.Producer;
-            netStrings.CollectionId = 1234;
+            netStrings.CollectionGroupId = 1234;
 
             var listener = new Net.ConnectionListener(9888);
             listener.ChannelConnected += listener_ChannelConnected;

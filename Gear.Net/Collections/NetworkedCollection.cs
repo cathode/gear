@@ -18,26 +18,41 @@ namespace Gear.Net.Collections
 
         private readonly System.Collections.Generic.Dictionary<int, T> items = new Dictionary<int, T>();
 
+        private readonly List<object> consumers;
+
         private Channel source;
         #endregion
 
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkedCollection"/> class.
         /// </summary>
         public NetworkedCollection()
         {
         }
-        #endregion
 
+        #endregion
         #region Events
+
+        /// <summary>
+        /// Raised when a network message is published by this message publisher.
+        /// </summary>
         public event EventHandler<MessageEventArgs> MessageAvailable;
 
         public event EventHandler ShuttingDown;
         #endregion
 
         #region Properties
-        public long CollectionId { get; set; }
+        public Guid CollectionInstanceId { get; set; }
+
+        /// <summary>
+        /// Gets the numeric id of the group that the collection belongs to.
+        /// </summary>
+        /// <remarks></remarks>
+        public long CollectionGroupId { get; set; }
+
+        public string Name { get; set; }
 
         public ReplicationMode Mode { get; set; }
 
@@ -83,19 +98,23 @@ namespace Gear.Net.Collections
             var msg = new NetworkedCollectionUpdateMessage();
 
             msg.Action = NetworkedCollectionAction.Join;
-            msg.CollectionId = id;
+            msg.CollectionGroupId = id;
             msg.Data = null;
 
             this.Mode = ReplicationMode.Consumer;
-            this.CollectionId = id;
+            this.CollectionGroupId = id;
             this.source = channel;
 
-            this.source.RegisterHandler<NetworkedCollectionUpdateMessage>(MessageHandler_NetworkedCollectionUpdate, this);
+            this.source.RegisterHandler<NetworkedCollectionUpdateMessage>(this.MessageHandler_NetworkedCollectionUpdate, this);
 
             this.source.Send(msg);
             return true;
         }
 
+        /// <summary>
+        /// Adds the specified item to the collection.
+        /// </summary>
+        /// <param name="item"></param>
         public void Add(T item)
         {
             if (this.IsReadOnly)
@@ -109,7 +128,7 @@ namespace Gear.Net.Collections
 
             // Build update message:
             var msg = new NetworkedCollectionUpdateMessage();
-            msg.CollectionId = this.CollectionId;
+            msg.CollectionGroupId = this.CollectionGroupId;
             msg.Action = NetworkedCollectionAction.Add;
             msg.Data = this.SerializeItem(item);
 
@@ -166,6 +185,11 @@ namespace Gear.Net.Collections
             return this.items.Values.GetEnumerator();
         }
 
+        public void ChangeMode(ReplicationMode mode)
+        {
+
+        }
+
         public IDisposable Subscribe(IObserver<T> observer)
         {
             throw new NotImplementedException();
@@ -197,7 +221,7 @@ namespace Gear.Net.Collections
             {
                 return;
             }
-            else if (msg.CollectionId != this.CollectionId)
+            else if (msg.CollectionGroupId != this.CollectionGroupId)
             {
                 return;
             }
