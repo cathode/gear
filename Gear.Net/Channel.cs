@@ -7,15 +7,15 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
-using System.Diagnostics.Contracts;
+using System.Text;
 using System.Threading;
-using ProtoBuf.Meta;
+using System.Threading.Tasks;
 using ProtoBuf;
+using ProtoBuf.Meta;
 
 namespace Gear.Net
 {
@@ -24,26 +24,7 @@ namespace Gear.Net
     /// </summary>
     public abstract class Channel
     {
-        /// <summary>
-        /// Holds the messages that are being serialized and flushed to the socket.
-        /// </summary>
-        protected Queue<IMessage> txBuffer;
-
-        /// <summary>
-        /// Holds the messages that have been queued for sending.
-        /// </summary>
-        protected Queue<IMessage> txQueue;
-
-        /// <summary>
-        /// Holds the messages that are being processed by message handlers / event subscribers.
-        /// </summary>
-        protected Queue<IMessage> rxBuffer;
-
-        /// <summary>
-        /// Holds the messages that have been deserialized and received from the socket.
-        /// </summary>
-        protected Queue<IMessage> rxQueue;
-
+        #region Fields
         private readonly object txLock = new object();
         private readonly object rxLock = new object();
 
@@ -54,6 +35,28 @@ namespace Gear.Net
 
         private readonly Dictionary<int, List<MessageHandlerRegistration>> messageHandlers = new Dictionary<int, List<MessageHandlerRegistration>>();
 
+        /// <summary>
+        /// Holds the messages that are being serialized and flushed to the socket.
+        /// </summary>
+        private Queue<IMessage> txBuffer;
+
+        /// <summary>
+        /// Holds the messages that have been queued for sending.
+        /// </summary>
+        private Queue<IMessage> txQueue;
+
+        /// <summary>
+        /// Holds the messages that are being processed by message handlers / event subscribers.
+        /// </summary>
+        private Queue<IMessage> rxBuffer;
+
+        /// <summary>
+        /// Holds the messages that have been deserialized and received from the socket.
+        /// </summary>
+        private Queue<IMessage> rxQueue;
+
+        #endregion
+        #region Constructors
         static Channel()
         {
             Contract.Assume(RuntimeTypeModel.Default != null);
@@ -73,19 +76,33 @@ namespace Gear.Net
 
             this.txFlushGate = new AutoResetEvent(true);
             this.isRxQueueIdle = true;
-            // this.rxFlushGate = new AutoResetEvent(true);
         }
+        #endregion
 
+        #region Events
+        public event EventHandler<MessageEventArgs> MessageReceived;
+        #endregion
+        #region Properties
+
+        /// <summary>
+        /// Gets the <see cref="IPEndPoint"/> that represents the local network endpoint for this communication channel.
+        /// </summary>
         public abstract IPEndPoint LocalEndPoint { get; }
 
+        /// <summary>
+        /// Gets the <see cref="IPEndPoint"/> that represents the remote peer's network endpoint for this communication channel.
+        /// </summary>
         public abstract IPEndPoint RemoteEndPoint { get; }
 
+        /// <summary>
+        /// Gets or sets the <see cref="ChannelState"/> for this communication channel.
+        /// </summary>
         public ChannelState State { get; protected set; }
 
-        public event EventHandler<MessageEventArgs> MessageReceived;
-
         public bool InvokeHandlersAsync { get; set; }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// All messages published by the specified publisher will be forwarded
         /// to the remote endpoint via this channel.
@@ -104,7 +121,6 @@ namespace Gear.Net
         /// </summary>
         /// <param name="dispatchId"></param>
         /// <param name="handler"></param>
-        /// <returns>The guid of the handler registration, used for unregistering</returns>
         public void RegisterHandler(int dispatchId, Action<MessageEventArgs, IMessage> handlerAction, object owner = null)
         {
             var reg = new MessageHandlerRegistration();
@@ -129,10 +145,11 @@ namespace Gear.Net
         /// <summary>
         /// Registers a handler for the specified message dispatch ID.
         /// </summary>
-        /// <param name="dispatchId"></param>
-        /// <param name="handler"></param>
-        /// <returns>The guid of the handler registration, used for unregistering the handler.</returns>
-        public void RegisterHandler<T>(Action<MessageEventArgs, T> handlerAction, object owner = null) where T : IMessage
+        /// <param name="handlerAction"></param>
+        /// <param name="owner"></param>
+        /// <typeparam name="T">The message implementation type to register the handler for.</typeparam>
+        public void RegisterHandler<T>(Action<MessageEventArgs, T> handlerAction, object owner = null)
+            where T : IMessage
         {
             var inst = Activator.CreateInstance<T>();
 
@@ -378,5 +395,6 @@ namespace Gear.Net
 
             public Action<MessageEventArgs, IMessage> Action { get; set; }
         }
+        #endregion
     }
 }

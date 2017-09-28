@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
-    <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
+    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -149,6 +149,7 @@
     <Compile Include="ChannelEventArgs.cs" />
     <Compile Include="ChannelState.cs" />
     <Compile Include="Collections\NetworkedCollectionGroupMetadata.cs" />
+    <Compile Include="Collections\NetworkedCollectionItemEventArgs.cs" />
     <Compile Include="Collections\NetworkedCollectionManager.cs" />
     <Compile Include="Collections\NetworkedCollection.cs" />
     <Compile Include="Collections\NetworkedCollectionAction.cs" />
@@ -162,7 +163,7 @@
     <Compile Include="EndPointKind.cs" />
     <Compile Include="IMessage.cs" />
     <Compile Include="IMessagePublisher.cs" />
-    <Compile Include="MessageContainer.cs" />
+    <None Include="MessageContainer.cs" />
     <Compile Include="MessageEventArgs.cs" />
     <Compile Include="MessageQueue.cs" />
     <Compile Include="MessageSerializationHelper.cs" />
@@ -175,6 +176,7 @@
     <None Include="Messages\TransferFileReceiptMessage.cs" />
     <Compile Include="MessagingServer.cs" />
     <Compile Include="NetworkList.cs" />
+    <Compile Include="PeerMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

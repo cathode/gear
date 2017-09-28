@@ -7,12 +7,12 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using ProtoBuf;
-using System.Diagnostics.Contracts;
-using System.Net;
 
 namespace Gear.Net
 {
@@ -26,12 +26,16 @@ namespace Gear.Net
 
         static MessageContainer()
         {
+            Contract.Assume(ProtoBuf.Meta.RuntimeTypeModel.Default != null);
+
+            // Perform setup of protobuf.
             ProtoBuf.Meta.RuntimeTypeModel.Default.AutoAddMissingTypes = true;
             ProtoBuf.Meta.RuntimeTypeModel.Default.Add(typeof(MessageContainer), true);
-            // var t = RuntimeTypeModel.Default.Add(typeof(IMessage), true);
-            // t.AddSubType(1, typeof(ClientGreetingMessage));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageContainer"/> class.
+        /// </summary>
         public MessageContainer()
         {
         }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics.Contracts;
 
 namespace Gear.Net.Collections
 {
@@ -34,6 +35,8 @@ namespace Gear.Net.Collections
 
         #endregion
         #region Events
+
+        public event EventHandler<NetworkedCollectionItemEventArgs<T>> ItemAdded;
 
         /// <summary>
         /// Raised when a network message is published by this message publisher.
@@ -82,14 +85,16 @@ namespace Gear.Net.Collections
         #endregion
 
         #region Methods
+
         /// <summary>
         /// Becomes a consumer for a remote networked collection with the specified id.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="channel"></param>
-        /// <returns></returns>
-        public bool Consume(long id, Channel channel)
+        /// <param name="id">The numeric id of the remote collection to subscribe to.</param>
+        /// <param name="channel">A <see cref="Channel"/> that represents the remote endpoint where the collection exists.</param>
+        public void Consume(long id, Channel channel)
         {
+            Contract.Requires<ArgumentNullException>(channel != null);
+
             if (this.Mode != ReplicationMode.None)
             {
                 throw new NotImplementedException();
@@ -108,7 +113,6 @@ namespace Gear.Net.Collections
             this.source.RegisterHandler<NetworkedCollectionUpdateMessage>(this.MessageHandler_NetworkedCollectionUpdate, this);
 
             this.source.Send(msg);
-            return true;
         }
 
         /// <summary>
@@ -195,6 +199,11 @@ namespace Gear.Net.Collections
             throw new NotImplementedException();
         }
 
+        protected virtual void OnItemAdded(T item)
+        {
+            this.ItemAdded?.Invoke(this, new NetworkedCollectionItemEventArgs<T> { Action = NetworkedCollectionAction.Add, Items = new[] { item } });
+        }
+
         protected virtual string SerializeItem(T item)
         {
             return JsonConvert.SerializeObject(item);
@@ -232,8 +241,16 @@ namespace Gear.Net.Collections
                 {
                     var item = this.DeserializeItem(msg.Data);
                     this.items.Add(this.GetItemKey(item), item);
+
+                    this.OnItemAdded(item);
                 }
             }
+        }
+
+        [ContractInvariantMethod]
+        private void ContractInvariants()
+        {
+            Contract.Invariant(this.items != null);
         }
         #endregion
     }

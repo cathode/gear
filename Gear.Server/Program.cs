@@ -7,14 +7,14 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Gear.Services;
 using Newtonsoft.Json;
-using System.Reflection;
 
 namespace Gear.Server
 {
@@ -71,16 +71,20 @@ namespace Gear.Server
 
             var listener = new Net.ConnectionListener(9888);
             listener.ChannelConnected += listener_ChannelConnected;
-            listener.Start();
+            listener.StartInBackground();
 
+            var rand = new Random();
             while (true)
             {
-                var k = Console.ReadKey();
+                netStrings.Add(DateTime.Now.ToString());
+                Thread.Sleep(rand.Next(500, 10000));
 
-                if (k.KeyChar == 'q')
-                {
-                    return;
-                }
+                //var k = Console.ReadKey();
+
+                //if (k.KeyChar == 'q')
+                //{
+                //    return;
+                //}
             }
         }
 

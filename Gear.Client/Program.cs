@@ -8,16 +8,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gear.Client.UI;
-using Gear.Model;
 using Gear.Geometry;
+using Gear.Model;
 using Gear.Modeling.Primitives;
 using Gear.Net;
-using System.Net;
-using System.Threading;
 
 namespace Gear.Client
 {
@@ -25,6 +25,10 @@ namespace Gear.Client
     {
         static void Main(string[] args)
         {
+            // Log to console.
+            Log.BindOutput(Console.OpenStandardOutput());
+            Log.Write("Message log initialized", "system", LogMessageGroup.Info);
+
             //MessageSerializationHelper.AddMessageSubtypes();
             MessageSerializationHelper.AddMessageSubtypes(typeof(Channel).Assembly);
 
@@ -36,10 +40,17 @@ namespace Gear.Client
             var ns = new Gear.Net.Collections.NetworkedCollection<string>();
             ns.Consume(1234, channel);
 
+            ns.ItemAdded += Ns_ItemAdded;
+
             while (true)
             {
                 Thread.Sleep(10000);
             }
+        }
+
+        private static void Ns_ItemAdded(object sender, Gear.Net.Collections.NetworkedCollectionItemEventArgs<string> e)
+        {
+            Log.Write(string.Format("Item added to collection: {0}", e.Items.FirstOrDefault()));
         }
 
         /*
