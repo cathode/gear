@@ -7,20 +7,20 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
-using System.IO;
-using System.Diagnostics.Contracts;
-using ProtoBuf;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using ProtoBuf;
 
 namespace Gear.Net
 {
     /// <summary>
-    /// Represents a communication channel that
+    /// Represents a communication channel that utilizes TCP/IP to maintain an active connection with the remote endpoint.
     /// </summary>
     public class ConnectedChannel : Channel
     {
@@ -93,11 +93,17 @@ namespace Gear.Net
 
         public EndPointKind RemoteEndPointKind { get; set; }
 
+        /// <summary>
+        /// Gets the <see cref="IPEndPoint"/> representing the locally bound address of the channel.
+        /// </summary>
         public override IPEndPoint LocalEndPoint
         {
             get { return this.socket.LocalEndPoint as IPEndPoint; }
         }
 
+        /// <summary>
+        /// Gets the <see cref="IPEndPoint"/> representing the remote address of the peer this channel is connected to.
+        /// </summary>
         public override IPEndPoint RemoteEndPoint
         {
             get { return this.socket.RemoteEndPoint as IPEndPoint; }
@@ -305,6 +311,7 @@ namespace Gear.Net
                     do
                     {
                         int readRemain = bsize - state.ReceivedBytes;
+
                         // Blocking receive from socket
                         state.ReceivedBytes += this.socket.Receive(state.Buffer, state.ReceivedBytes, readRemain, SocketFlags.None);
                     }

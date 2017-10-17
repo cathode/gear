@@ -35,6 +35,8 @@ namespace Gear.Net
 
         private readonly Dictionary<int, List<MessageHandlerRegistration>> messageHandlers = new Dictionary<int, List<MessageHandlerRegistration>>();
 
+        private volatile bool isRxQueueIdle;
+
         /// <summary>
         /// Holds the messages that are being serialized and flushed to the socket.
         /// </summary>
@@ -99,10 +101,17 @@ namespace Gear.Net
         /// </summary>
         public ChannelState State { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether message handlers will be called in an async (non-blocking), or synchronous (blocking) fashion.
+        /// </summary>
+        /// <remarks>
+        /// When handlers are called in an async fashion, they can be invoked in any order and care should be taken to avoid race conditions in handler action code.
+        /// </remarks>
         public bool InvokeHandlersAsync { get; set; }
         #endregion
 
         #region Methods
+
         /// <summary>
         /// All messages published by the specified publisher will be forwarded
         /// to the remote endpoint via this channel.
@@ -119,8 +128,9 @@ namespace Gear.Net
         /// <summary>
         /// Registers a handler for the specified message dispatch ID.
         /// </summary>
-        /// <param name="dispatchId"></param>
-        /// <param name="handler"></param>
+        /// <param name="dispatchId">The dispatch id to register the handler for.</param>
+        /// <param name="handlerAction">The delegate to be invoked, which will handle a received message with the specified dispatch id.</param>
+        /// <param name="owner">The object associated with this registration (for cleanup purposes).</param>
         public void RegisterHandler(int dispatchId, Action<MessageEventArgs, IMessage> handlerAction, object owner = null)
         {
             var reg = new MessageHandlerRegistration();
@@ -145,8 +155,8 @@ namespace Gear.Net
         /// <summary>
         /// Registers a handler for the specified message dispatch ID.
         /// </summary>
-        /// <param name="handlerAction"></param>
-        /// <param name="owner"></param>
+        /// <param name="handlerAction">The delegate to be invoked, which will handle a received message of the specified implementation type.</param>
+        /// <param name="owner">The object associated with this registration (for cleanup purposes).</param>
         /// <typeparam name="T">The message implementation type to register the handler for.</typeparam>
         public void RegisterHandler<T>(Action<MessageEventArgs, T> handlerAction, object owner = null)
             where T : IMessage
@@ -156,6 +166,10 @@ namespace Gear.Net
             this.RegisterHandler(inst.DispatchId, (e, m) => { handlerAction(e, (T)m); }, owner);
         }
 
+        /// <summary>
+        /// Removes message handlers associated with the specified object owner.
+        /// </summary>
+        /// <param name="owner">The owning object related to the message handlers to unregister.</param>
         public void UnregisterHandler(object owner)
         {
             lock (this.metaLock)
@@ -190,7 +204,7 @@ namespace Gear.Net
         /// <summary>
         /// Queues one or more messages on the channel, to be sent to the remote endpoint.
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="messages">The message(s) to be sent.</param>
         public void Send(params IMessage[] messages)
         {
             Contract.Requires(messages != null);
@@ -266,8 +280,6 @@ namespace Gear.Net
             }
         }
 
-        private volatile bool isRxQueueIdle;
-
         /// <summary>
         /// Runs through the the queue of messages that have been receives and invokes the appropriate events / message handlers.
         /// </summary>
@@ -299,6 +311,10 @@ namespace Gear.Net
             }
         }
 
+        /// <summary>
+        /// Raises the <see cref="MessageReceived"/> event, and invokes any registered handlers for the received message's dispatch id.
+        /// </summary>
+        /// <param name="e"></param>
         protected virtual void OnMessageReceived(MessageEventArgs e)
         {
             Contract.Requires(e != null);

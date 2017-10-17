@@ -7,12 +7,12 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
+using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
-using System.Runtime;
-using System.Diagnostics;
-using System.Reflection;
 using ProtoBuf;
 
 namespace Gear.Net
@@ -45,10 +45,5 @@ namespace Gear.Net
         public static event EventHandler<MessageTypeDiscoveredEventArgs> MessageTypeDiscovered;
     }
 
-    public sealed class MessageTypeDiscoveredEventArgs : EventArgs
-    {
-        public int DispatchId { get; set; }
-
-        public Type DiscoveredType { get; set; }
-    }
+    
 }

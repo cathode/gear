@@ -98,11 +98,17 @@ namespace Gear.Net
             }
         }
 
+        /// <summary>
+        /// Starts the <see cref="ConnectionListener"/> as a background task and returns immediately.
+        /// </summary>
         public void StartInBackground()
         {
             Task.Run(() => this.Start());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Stop()
         {
             this.isRunning = false;

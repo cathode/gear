@@ -12,6 +12,7 @@ namespace Gear.Net.Collections
     /// <summary>
     /// Implements a generic collection that is synchronized with a remote endpoint. This class is thread-safe.
     /// </summary>
+    /// <typeparam name="T">The type of the elements in the collection.</typeparam>
     public class NetworkedCollection<T> : ICollection<T>, IObservable<T>, IMessagePublisher
     {
         #region Fields
@@ -36,29 +37,52 @@ namespace Gear.Net.Collections
         #endregion
         #region Events
 
+        /// <summary>
+        /// Raised when an item is added to the collection.
+        /// </summary>
+        /// <remarks>
+        /// This event is raised when items are added to the collection by code running locally,
+        /// and also when a tracked peer adds an item to a collection.
+        /// </remarks>
         public event EventHandler<NetworkedCollectionItemEventArgs<T>> ItemAdded;
 
         /// <summary>
         /// Raised when a network message is published by this message publisher.
         /// </summary>
+        /// <see cref="IMessagePublisher"/>
         public event EventHandler<MessageEventArgs> MessageAvailable;
 
+        /// <summary>
+        /// Raised when the <see cref="NetworkedCollection{T}"/> ceases synchronizing contents with peers.
+        /// </summary>
         public event EventHandler ShuttingDown;
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the unique id of the current <see cref="NetworkedCollection{T}"/> instance.
+        /// </summary>
         public Guid CollectionInstanceId { get; set; }
 
         /// <summary>
         /// Gets the numeric id of the group that the collection belongs to.
         /// </summary>
-        /// <remarks></remarks>
         public long CollectionGroupId { get; set; }
 
-        public string Name { get; set; }
+        /// <summary>
+        /// Gets or sets a name identifier for the collection group.
+        /// </summary>
+        public string CollectionGroupName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the <see cref="ReplicationMode"/> that determines how the current networked collection instance should operate.
+        /// </summary>
         public ReplicationMode Mode { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating the number of items held in the collection.
+        /// </summary>
         public int Count
         {
             get
@@ -67,6 +91,12 @@ namespace Gear.Net.Collections
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the collection is read-only.
+        /// </summary>
+        /// <remarks>
+        /// The collection may be read-only depending on the <see cref="Mode"/> it is in.
+        /// </remarks>
         public bool IsReadOnly
         {
             get
@@ -118,7 +148,9 @@ namespace Gear.Net.Collections
         /// <summary>
         /// Adds the specified item to the collection.
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="item">The item to add to the colllection.</param>
+        /// <exception cref="InvalidOperationException">Thrown when the networked collection is read-only,
+        /// typically because the <see cref="Mode"/> is <see cref="ReplicationMode.Consumer"/>.</exception>
         public void Add(T item)
         {
             if (this.IsReadOnly)
@@ -139,6 +171,9 @@ namespace Gear.Net.Collections
             this.OnMessageAvailable(new MessageEventArgs(msg));
         }
 
+        /// <summary>
+        /// Removes all the items from the collection.
+        /// </summary>
         public void Clear()
         {
             if (this.IsReadOnly)
@@ -147,6 +182,11 @@ namespace Gear.Net.Collections
             }
         }
 
+        /// <summary>
+        /// Returns a value indicating whether the specified item exists in the collection.
+        /// </summary>
+        /// <param name="item">The item to check.</param>
+        /// <returns>true if the collection contains the item; otherwise false.</returns>
         public bool Contains(T item)
         {
             return this.items.Values.Contains(item);
@@ -180,6 +220,9 @@ namespace Gear.Net.Collections
             }
 
             var msg = new NetworkedCollectionUpdateMessage();
+
+            msg.Action = NetworkedCollectionAction.Remove;
+            msg.Data = this.GetItemKey(item).ToString();
 
             return true;
         }
