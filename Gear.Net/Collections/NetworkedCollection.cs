@@ -66,7 +66,7 @@ namespace Gear.Net.Collections
         public Guid CollectionInstanceId { get; set; }
 
         /// <summary>
-        /// Gets the numeric id of the group that the collection belongs to.
+        /// Gets or sets the numeric id of the group that the collection belongs to.
         /// </summary>
         public long CollectionGroupId { get; set; }
 
@@ -242,6 +242,11 @@ namespace Gear.Net.Collections
             throw new NotImplementedException();
         }
 
+        public void BindToChannel(Channel channel)
+        {
+            channel.RegisterHandler<NetworkedCollectionUpdateMessage>(this.MessageHandler_NetworkedCollectionUpdate, this);
+        }
+
         protected virtual void OnItemAdded(T item)
         {
             this.ItemAdded?.Invoke(this, new NetworkedCollectionItemEventArgs<T> { Action = NetworkedCollectionAction.Add, Items = new[] { item } });
@@ -257,6 +262,16 @@ namespace Gear.Net.Collections
             return JsonConvert.DeserializeObject<T>(item);
         }
 
+        protected virtual string SerializeItems(IEnumerable<T> items)
+        {
+            return JsonConvert.SerializeObject(items);
+        }
+
+        protected virtual IEnumerable<T> DeserializeItems(string items)
+        {
+            return JsonConvert.DeserializeObject<T[]>(items);
+        }
+
         protected virtual int GetItemKey(T item)
         {
             return item.GetHashCode();
@@ -265,6 +280,40 @@ namespace Gear.Net.Collections
         protected virtual void OnMessageAvailable(MessageEventArgs e)
         {
             this.MessageAvailable?.Invoke(this, e);
+        }
+
+        protected void SendItems(IEnumerable<T> items, Channel sendTo = null)
+        {
+            if (items == null || items.Count() == 0)
+            {
+                return;
+            }
+
+            // Build update message:
+            var msg = new NetworkedCollectionUpdateMessage();
+            msg.CollectionGroupId = this.CollectionGroupId;
+            msg.Action = NetworkedCollectionAction.Add;
+            if (items.Count() > 1)
+            {
+                msg.DataHints = MessageDataHint.MultipleItems;
+                msg.Data = this.SerializeItems(items);
+            }
+            else
+            {
+                var item = items.Single();
+                msg.Data = this.SerializeItem(item);
+            }
+
+            if (sendTo != null)
+            {
+                // Send items to specific endpoint
+                sendTo.Send(msg);
+            }
+            else
+            {
+                // Publish messasge to all subscribers
+                this.OnMessageAvailable(new MessageEventArgs(msg));
+            }
         }
 
         private void MessageHandler_NetworkedCollectionUpdate(MessageEventArgs e, NetworkedCollectionUpdateMessage msg)
@@ -282,12 +331,38 @@ namespace Gear.Net.Collections
             {
                 if (msg.Action == NetworkedCollectionAction.Add)
                 {
-                    var item = this.DeserializeItem(msg.Data);
-                    this.items.Add(this.GetItemKey(item), item);
+                    if (msg.DataHints == MessageDataHint.MultipleItems)
+                    {
+                        var items = this.DeserializeItems(msg.Data);
+                        foreach (var item in items)
+                        {
+                            var key = this.GetItemKey(item);
 
-                    this.OnItemAdded(item);
+                            if (!this.items.ContainsKey(key))
+                            {
+                                this.items.Add(key, item);
+                                this.OnItemAdded(item);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var item = this.DeserializeItem(msg.Data);
+                        this.items.Add(this.GetItemKey(item), item);
+
+                        this.OnItemAdded(item);
+                    }
                 }
             }
+            else if (this.Mode == ReplicationMode.Producer)
+            {
+                if (msg.Action == NetworkedCollectionAction.Join)
+                {
+                    // The remote endpoint is joining as a consumer or peer to this networked collection instance.
+                    this.SendItems(this.items.Values, e.Channel);
+                }
+            }
+
         }
 
         [ContractInvariantMethod]

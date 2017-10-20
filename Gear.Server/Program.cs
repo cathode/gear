@@ -68,6 +68,7 @@ namespace Gear.Server
 
             netStrings.Mode = Net.Collections.ReplicationMode.Producer;
             netStrings.CollectionGroupId = 1234;
+            netStrings.Add("initial data");
 
             var listener = new Net.ConnectionListener(9888);
             listener.ChannelConnected += listener_ChannelConnected;
@@ -76,7 +77,11 @@ namespace Gear.Server
             var rand = new Random();
             while (true)
             {
-                netStrings.Add(DateTime.Now.ToString());
+                var str = DateTime.Now.ToString();
+                Console.WriteLine("Adding {0} to collection...", str);
+                netStrings.Add(str);
+
+
                 Thread.Sleep(rand.Next(500, 10000));
 
                 //var k = Console.ReadKey();
@@ -97,6 +102,7 @@ namespace Gear.Server
 
             e.Channel.SubscribeToPublisher(netStrings);
 
+            netStrings.BindToChannel(e.Channel);
             netStrings.Add("test");
         }
 

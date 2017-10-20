@@ -164,8 +164,10 @@
     <Compile Include="IMessage.cs" />
     <Compile Include="IMessagePublisher.cs" />
     <None Include="MessageContainer.cs" />
+    <Compile Include="MessageDataHint.cs" />
     <Compile Include="MessageEventArgs.cs" />
-    <Compile Include="MessageQueue.cs" />
+    <Compile Include="MessageHandlerRegistration.cs" />
+    <None Include="MessageQueue.cs" />
     <Compile Include="MessageSerializationHelper.cs" />
     <Compile Include="Messages\BuiltinMessageIds.cs" />
     <Compile Include="Messages\ConfigurationMessage.cs" />

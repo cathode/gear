@@ -82,6 +82,10 @@ namespace Gear.Net
         #endregion
 
         #region Events
+
+        /// <summary>
+        /// Raised when a network message sent by the remote endpoint is received locally by this <see cref="Channel"/>.
+        /// </summary>
         public event EventHandler<MessageEventArgs> MessageReceived;
         #endregion
         #region Properties
@@ -238,6 +242,11 @@ namespace Gear.Net
         /// </summary>
         protected abstract void BeginBackgroundReceive();
 
+        /// <summary>
+        /// When implemented in a derived class, performs the relevant actions to write the messages to be sent to the remote endpoint.
+        /// </summary>
+        /// <param name="messages"></param>
+        /// <returns></returns>
         protected abstract int SendMessages(Queue<IMessage> messages);
 
         /// <summary>
@@ -303,7 +312,7 @@ namespace Gear.Net
                     {
                         var item = this.rxBuffer.Dequeue();
 
-                        this.OnMessageReceived(new MessageEventArgs(item) { ReceivedAt = DateTime.Now, Sender = this.RemoteEndPoint });
+                        this.OnMessageReceived(new MessageEventArgs(item) { ReceivedAt = DateTime.Now, Sender = this.RemoteEndPoint, Channel = this });
                     }
                 }
 
@@ -314,7 +323,7 @@ namespace Gear.Net
         /// <summary>
         /// Raises the <see cref="MessageReceived"/> event, and invokes any registered handlers for the received message's dispatch id.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">Event data for the event.</param>
         protected virtual void OnMessageReceived(MessageEventArgs e)
         {
             Contract.Requires(e != null);
@@ -359,7 +368,7 @@ namespace Gear.Net
         /// <summary>
         /// Adds messages to the receive queue with thread safety checks.
         /// </summary>
-        /// <param name="messages"></param>
+        /// <param name="messages">The messages to add to the receive queue.</param>
         protected void QueueRxMessageThreadSafe(params IMessage[] messages)
         {
             Contract.Requires(messages != null);
@@ -403,13 +412,6 @@ namespace Gear.Net
             Contract.Invariant(this.rxBuffer != null);
 
             Contract.Invariant(this.messageHandlers != null);
-        }
-
-        public class MessageHandlerRegistration
-        {
-            public object Owner { get; set; }
-
-            public Action<MessageEventArgs, IMessage> Action { get; set; }
         }
         #endregion
     }

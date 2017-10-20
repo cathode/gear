@@ -17,8 +17,21 @@ using ProtoBuf;
 
 namespace Gear.Net
 {
+    /// <summary>
+    /// Provides utility functionality that configures the networking system.
+    /// </summary>
     public static class MessageSerializationHelper
     {
+        /// <summary>
+        /// Notifies subscribers that a new network message implementation type was discovered.
+        /// </summary>
+        public static event EventHandler<MessageTypeDiscoveredEventArgs> MessageTypeDiscovered;
+
+        /// <summary>
+        /// Scans an assembly for classes implementing the <see cref="IMessage"/> interface, and adds them to the
+        /// ProtoBuf runtime type model.
+        /// </summary>
+        /// <param name="asm">An <see cref="Assembly"/> to scan for message types.</param>
         public static void AddMessageSubtypes(Assembly asm = null)
         {
             if (asm == null)
@@ -37,13 +50,14 @@ namespace Gear.Net
             }
         }
 
+        /// <summary>
+        /// Raises the <see cref="MessageTypeDiscovered"/> event.
+        /// </summary>
+        /// <param name="dispatchId">The numeric dispatch id of the message type.</param>
+        /// <param name="t">The discovered <see cref="System.Type"/> of the message implmementation.</param>
         private static void OnMessageTypeDiscovered(int dispatchId, Type t)
         {
             MessageSerializationHelper.MessageTypeDiscovered?.Invoke(null, new MessageTypeDiscoveredEventArgs { DispatchId = dispatchId, DiscoveredType = t });
         }
-
-        public static event EventHandler<MessageTypeDiscoveredEventArgs> MessageTypeDiscovered;
     }
-
-    
 }

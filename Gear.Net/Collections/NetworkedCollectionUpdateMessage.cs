@@ -38,10 +38,16 @@ namespace Gear.Net.Collections
         [ProtoMember(2)]
         public NetworkedCollectionAction Action { get; set; }
 
+        [ProtoMember(3)]
+        public MessageDataHint DataHints { get; set; }
+
         /// <summary>
         ///
         /// </summary>
-        [ProtoMember(3)]
+        [ProtoMember(4)]
         public string Data { get; set; }
+
+        [ProtoMember(5)]
+        public byte[] DataBinary { get; set; }
     }
 }
