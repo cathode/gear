@@ -81,15 +81,7 @@ namespace Gear.Server
                 Console.WriteLine("Adding {0} to collection...", str);
                 netStrings.Add(str);
 
-
-                Thread.Sleep(rand.Next(500, 10000));
-
-                //var k = Console.ReadKey();
-
-                //if (k.KeyChar == 'q')
-                //{
-                //    return;
-                //}
+                Thread.Sleep(rand.Next(1050, 5000));
             }
         }
 
@@ -103,7 +95,6 @@ namespace Gear.Server
             e.Channel.SubscribeToPublisher(netStrings);
 
             netStrings.BindToChannel(e.Channel);
-            netStrings.Add("test");
         }
 
         static void Channel_MessageReceived(object sender, Net.MessageEventArgs e)

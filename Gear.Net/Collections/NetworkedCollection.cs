@@ -158,8 +158,15 @@ namespace Gear.Net.Collections
                 throw new InvalidOperationException("This collection is read-only.");
             }
 
-            // Add the item to the wrapped collection:
             var k = this.GetItemKey(item);
+
+            if (this.items.ContainsKey(k))
+            {
+                throw new InvalidOperationException("Item with the specified key already exists in this collection.");
+                //return;
+            }
+
+            // Add the item to the wrapped collection:
             this.items.Add(k, item);
 
             // Build update message:
