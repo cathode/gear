@@ -37,7 +37,7 @@ namespace Gear.Client
 
             var channel = ConnectedChannel.ConnectTo(new System.Net.IPEndPoint(IPAddress.Loopback, 9888));
 
-            var ns = new Gear.Net.Collections.NetworkedCollection<string>();
+            var ns = new Gear.Net.Collections.NetworkedCollection<DateTime>();
             ns.Consume(1234, channel);
 
             ns.ItemAdded += Ns_ItemAdded;
@@ -48,7 +48,7 @@ namespace Gear.Client
             }
         }
 
-        private static void Ns_ItemAdded(object sender, Gear.Net.Collections.NetworkedCollectionItemEventArgs<string> e)
+        private static void Ns_ItemAdded(object sender, Gear.Net.Collections.NetworkedCollectionItemEventArgs<DateTime> e)
         {
             Log.Write(string.Format("Item added to collection: {0}", e.Items.FirstOrDefault()));
         }

@@ -14,6 +14,9 @@ using ProtoBuf;
 
 namespace Gear.Net
 {
+    /// <summary>
+    /// Provides an interface for network messages.
+    /// </summary>
     [ProtoBuf.ProtoContract]
     public interface IMessage
     {

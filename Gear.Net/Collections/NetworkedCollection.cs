@@ -145,6 +145,11 @@ namespace Gear.Net.Collections
             this.source.Send(msg);
         }
 
+        //public void SyncOnce(long id, Channel channel)
+        //{
+
+        //}
+
         /// <summary>
         /// Adds the specified item to the collection.
         /// </summary>

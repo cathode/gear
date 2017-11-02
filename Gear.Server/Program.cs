@@ -25,7 +25,7 @@ namespace Gear.Server
         public static DateTime perfCountStart;
         public static DateTime perfCountLastUpdate;
 
-        private static Gear.Net.Collections.NetworkedCollection<string> netStrings = new Net.Collections.NetworkedCollection<string>();
+        private static Gear.Net.Collections.NetworkedCollection<DateTime> netStrings = new Net.Collections.NetworkedCollection<DateTime>();
 
         public static void Main(string[] args)
         {
@@ -68,7 +68,7 @@ namespace Gear.Server
 
             netStrings.Mode = Net.Collections.ReplicationMode.Producer;
             netStrings.CollectionGroupId = 1234;
-            netStrings.Add("initial data");
+            netStrings.Add(DateTime.MinValue);
 
             var listener = new Net.ConnectionListener(9888);
             listener.ChannelConnected += listener_ChannelConnected;
@@ -77,7 +77,7 @@ namespace Gear.Server
             var rand = new Random();
             while (true)
             {
-                var str = DateTime.Now.ToString();
+                var str = DateTime.Now;
                 Console.WriteLine("Adding {0} to collection...", str);
                 netStrings.Add(str);
 
