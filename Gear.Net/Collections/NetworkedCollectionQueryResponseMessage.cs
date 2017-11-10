@@ -19,6 +19,9 @@ namespace Gear.Net.Collections
             }
         }
 
+        /// <summary>
+        /// Gets or sets an array of the collection id
+        /// </summary>
         public long[] CollectionIds { get; set; }
     }
 }

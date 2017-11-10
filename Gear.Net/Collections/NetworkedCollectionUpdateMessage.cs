@@ -7,6 +7,9 @@ using ProtoBuf;
 
 namespace Gear.Net.Collections
 {
+    /// <summary>
+    /// Representing a message conveying updates for a <see cref="NetworkedCollection{T}"/>.
+    /// </summary>
     [ProtoContract]
     public class NetworkedCollectionUpdateMessage : IMessage
     {
@@ -36,13 +39,13 @@ namespace Gear.Net.Collections
         /// Gets or sets the update action.
         /// </summary>
         [ProtoMember(2)]
-        public NetworkedCollectionAction Action { get; set; }
+        public NetworkedCollectionUpdateAction Action { get; set; }
 
         [ProtoMember(3)]
         public MessageDataHint DataHints { get; set; }
 
         /// <summary>
-        ///
+        /// 
         /// </summary>
         [ProtoMember(4)]
         public string Data { get; set; }

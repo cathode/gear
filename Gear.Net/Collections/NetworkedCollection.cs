@@ -28,7 +28,7 @@ namespace Gear.Net.Collections
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NetworkedCollection"/> class.
+        /// Initializes a new instance of the <see cref="NetworkedCollection{T}"/> class.
         /// </summary>
         public NetworkedCollection()
         {
@@ -130,11 +130,11 @@ namespace Gear.Net.Collections
                 throw new NotImplementedException();
             }
 
-            var msg = new NetworkedCollectionUpdateMessage();
+            var msg = new NetworkedCollectionStateMessage();
 
-            msg.Action = NetworkedCollectionAction.Join;
-            msg.CollectionGroupId = id;
-            msg.Data = null;
+            //msg.Action = NetworkedCollectionAction.Join;
+            //msg.CollectionGroupId = id;
+            //msg.Data = null;
 
             this.Mode = ReplicationMode.Consumer;
             this.CollectionGroupId = id;
@@ -145,10 +145,24 @@ namespace Gear.Net.Collections
             this.source.Send(msg);
         }
 
-        //public void SyncOnce(long id, Channel channel)
-        //{
+        /// <summary>
+        /// Performs a manual pull synchronization with a remote peer.
+        /// </summary>
+        /// <param name="id">The collection id on the remote peer to pull from.</param>
+        /// <param name="remote">The <see cref="Channel"/> that will be used for communication with the remote peer.</param>
+        public void PullOnce(long id, Channel remote)
+        {
+            throw new NotImplementedException();
+        }
 
-        //}
+        /// <summary>
+        /// Performs a manual push synchronization with a remote peer.
+        /// </summary>
+        /// <param name="remote">The <see cref="Channel"/> that will be used for communication with the remote peer.</param>
+        public void PushOnce(Channel remote)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Adds the specified item to the collection.
@@ -177,7 +191,7 @@ namespace Gear.Net.Collections
             // Build update message:
             var msg = new NetworkedCollectionUpdateMessage();
             msg.CollectionGroupId = this.CollectionGroupId;
-            msg.Action = NetworkedCollectionAction.Add;
+            msg.Action = NetworkedCollectionUpdateAction.Add;
             msg.Data = this.SerializeItem(item);
 
             this.OnMessageAvailable(new MessageEventArgs(msg));
@@ -233,7 +247,7 @@ namespace Gear.Net.Collections
 
             var msg = new NetworkedCollectionUpdateMessage();
 
-            msg.Action = NetworkedCollectionAction.Remove;
+            msg.Action = NetworkedCollectionUpdateAction.Remove;
             msg.Data = this.GetItemKey(item).ToString();
 
             return true;
@@ -261,7 +275,7 @@ namespace Gear.Net.Collections
 
         protected virtual void OnItemAdded(T item)
         {
-            this.ItemAdded?.Invoke(this, new NetworkedCollectionItemEventArgs<T> { Action = NetworkedCollectionAction.Add, Items = new[] { item } });
+            this.ItemAdded?.Invoke(this, new NetworkedCollectionItemEventArgs<T> { Action = NetworkedCollectionUpdateAction.Add, Items = new[] { item } });
         }
 
         protected virtual string SerializeItem(T item)
@@ -304,7 +318,7 @@ namespace Gear.Net.Collections
             // Build update message:
             var msg = new NetworkedCollectionUpdateMessage();
             msg.CollectionGroupId = this.CollectionGroupId;
-            msg.Action = NetworkedCollectionAction.Add;
+            msg.Action = NetworkedCollectionUpdateAction.Add;
             if (items.Count() > 1)
             {
                 msg.DataHints = MessageDataHint.MultipleItems;
@@ -341,7 +355,7 @@ namespace Gear.Net.Collections
 
             if (this.Mode == ReplicationMode.Consumer)
             {
-                if (msg.Action == NetworkedCollectionAction.Add)
+                if (msg.Action == NetworkedCollectionUpdateAction.Add)
                 {
                     if (msg.DataHints == MessageDataHint.MultipleItems)
                     {
@@ -368,11 +382,11 @@ namespace Gear.Net.Collections
             }
             else if (this.Mode == ReplicationMode.Producer)
             {
-                if (msg.Action == NetworkedCollectionAction.Join)
-                {
-                    // The remote endpoint is joining as a consumer or peer to this networked collection instance.
-                    this.SendItems(this.items.Values, e.Channel);
-                }
+                //if (msg.Action == NetworkedCollectionAction.Join)
+                //{
+                //    // The remote endpoint is joining as a consumer or peer to this networked collection instance.
+                //    this.SendItems(this.items.Values, e.Channel);
+                //}
             }
 
         }

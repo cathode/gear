@@ -43,5 +43,10 @@ namespace Gear.Net.Messages
         /// Dispatch id for the <see cref="Gear.Net.Collections.NetworkedCollectionUpdateMessage"/> type.
         /// </summary>
         public static readonly int NetworkedCollectionQueryResponse = 0x0182;
+
+        /// <summary>
+        /// Dispatch id for the <see cref="Gear.Net.Collections.NetworkedCollectionStateMessage"/> type.
+        /// </summary>
+        public static readonly int NetworkedCollectionAction = 0x0183;
     }
 }

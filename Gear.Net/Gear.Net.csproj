@@ -148,15 +148,18 @@
     <Compile Include="ChannelDisconnectedEventArgs.cs" />
     <Compile Include="ChannelEventArgs.cs" />
     <Compile Include="ChannelState.cs" />
+    <Compile Include="Collections\NetworkedCollectionStateMessage.cs" />
     <Compile Include="Collections\NetworkedCollectionGroupMetadata.cs" />
     <Compile Include="Collections\NetworkedCollectionItemEventArgs.cs" />
     <Compile Include="Collections\NetworkedCollectionManager.cs" />
     <Compile Include="Collections\NetworkedCollection.cs" />
-    <Compile Include="Collections\NetworkedCollectionAction.cs" />
+    <Compile Include="Collections\NetworkedCollectionStateAction.cs" />
+    <Compile Include="Collections\NetworkedCollectionProxy.cs" />
     <Compile Include="Collections\NetworkedCollectionQueryRequestMessage.cs" />
     <Compile Include="Collections\NetworkedCollectionQueryResponseMessage.cs" />
     <Compile Include="Collections\NetworkedCollectionUpdateMessage.cs" />
     <Compile Include="Collections\ReplicationMode.cs" />
+    <Compile Include="Collections\NetworkedCollectionUpdateAction.cs" />
     <Compile Include="ConnectedChannel.cs" />
     <Compile Include="ConnectionListener.cs" />
     <Compile Include="DatagramChannel.cs" />
@@ -179,7 +182,10 @@
     <Compile Include="MessageTypeDiscoveredEventArgs.cs" />
     <Compile Include="MessagingServer.cs" />
     <Compile Include="NetworkList.cs" />
+    <Compile Include="PeerEventArgs.cs" />
     <Compile Include="PeerMetadata.cs" />
+    <Compile Include="PeerRole.cs" />
+    <Compile Include="PeerStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

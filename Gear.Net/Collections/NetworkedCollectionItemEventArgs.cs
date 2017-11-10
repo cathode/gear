@@ -8,7 +8,7 @@ namespace Gear.Net.Collections
 {
     public class NetworkedCollectionItemEventArgs<T> : EventArgs
     {
-        public NetworkedCollectionAction Action { get; set; }
+        public NetworkedCollectionUpdateAction Action { get; set; }
 
         public IEnumerable<T> Items { get; set; }
     }
