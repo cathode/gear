@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace Gear.Net
         private ushort listenPort;
 
         private ConnectionListener listener;
+        private readonly ObservableCollection<PeerMetadata> peers = new ObservableCollection<PeerMetadata>();
         #endregion
         #region Constructors
 
@@ -85,6 +87,14 @@ namespace Gear.Net
                 }
             }
         }
+
+        public ObservableCollection<PeerMetadata> Peers
+        {
+            get
+            {
+                return this.peers;
+            }
+        }
         #endregion
         #region Methods
 
@@ -115,6 +125,7 @@ namespace Gear.Net
         [ContractInvariantMethod]
         private void ContractInvariants()
         {
+            Contract.Invariant(this.Peers != null);
         }
         #endregion
     }

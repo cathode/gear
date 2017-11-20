@@ -22,6 +22,8 @@ namespace Gear.Net.Messages
         public static readonly int EndpointGreeting = 0x0001;
         public static readonly int TeardownChannel = 0x0002;
 
+        public static readonly int PeerHandoff = 0x0010;
+
         // File transfer
         public static readonly int TransferFile = 0x0100;
         public static readonly int TransferFileData = 0x0101;

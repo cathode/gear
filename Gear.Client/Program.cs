@@ -35,6 +35,12 @@ namespace Gear.Client
             // For testing
             Thread.Sleep(5000);
 
+            var target = new IPTarget("controller", 9888);
+
+            var ep = target.GetNextReachableEndPoint();
+
+            var tgt = IPTarget.FromIPEndPoint(ep);
+
             var channel = ConnectedChannel.ConnectTo(new System.Net.IPEndPoint(IPAddress.Loopback, 9888));
 
             var ns = new Gear.Net.Collections.NetworkedCollection<DateTime>();

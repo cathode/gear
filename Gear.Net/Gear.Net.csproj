@@ -147,6 +147,8 @@
     <Compile Include="Channel.cs" />
     <Compile Include="ChannelDisconnectedEventArgs.cs" />
     <Compile Include="ChannelEventArgs.cs" />
+    <Compile Include="ChannelPlugins\ChannelPlugin.cs" />
+    <Compile Include="ChannelPlugins\ClusteringPlugin.cs" />
     <Compile Include="ChannelState.cs" />
     <Compile Include="Collections\NetworkedCollectionStateMessage.cs" />
     <Compile Include="Collections\NetworkedCollectionGroupMetadata.cs" />
@@ -163,7 +165,7 @@
     <Compile Include="ConnectedChannel.cs" />
     <Compile Include="ConnectionListener.cs" />
     <Compile Include="DatagramChannel.cs" />
-    <Compile Include="EndPointKind.cs" />
+    <Compile Include="IPTarget.cs" />
     <Compile Include="IMessage.cs" />
     <Compile Include="IMessagePublisher.cs" />
     <None Include="MessageContainer.cs" />
@@ -175,6 +177,7 @@
     <Compile Include="Messages\BuiltinMessageIds.cs" />
     <Compile Include="Messages\ConfigurationMessage.cs" />
     <None Include="Messages\EndpointGreetingMessage.cs" />
+    <Compile Include="Messages\PeerHandoffMessage.cs" />
     <Compile Include="Messages\TeardownChannelMessage.cs" />
     <None Include="Messages\TransferFileDataMessage.cs" />
     <None Include="Messages\TransferFileMessage.cs" />
@@ -194,6 +197,9 @@
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="FileTransfer\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
