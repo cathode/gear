@@ -7,7 +7,7 @@ using Gear.Net;
 using Gear.Net.Messages;
 using ProtoBuf;
 
-namespace DB2Library.Net.Messages
+namespace Gear.Net.ChannelPlugins.FileTransfer
 {
     [ProtoContract]
     public class TransferFileMessage : IMessage
@@ -17,35 +17,26 @@ namespace DB2Library.Net.Messages
         {
             get
             {
-                return Ids.TransferFile;
+                return BuiltinMessageIds.TransferFile;
             }
         }
 
         [ProtoMember(1)]
-        public string Name { get; set; }
+        public Guid TransferId { get; set; }
 
         [ProtoMember(2)]
-        public string SourcePath { get; set; }
+        public string Name { get; set; }
 
         [ProtoMember(3)]
-        public long Length { get; set; }
+        public string SourcePath { get; set; }
 
         [ProtoMember(4)]
-        public int CRC32 { get; set; }
+        public long Length { get; set; }
 
         [ProtoMember(5)]
-        public Guid FileId { get; set; }
+        public int CRC32 { get; set; }
 
         [ProtoMember(6)]
-        public int ChunkSize { get; set; }
-
-        [ProtoIgnore]
-        public int ChunkCount
-        {
-            get
-            {
-                return (int)Math.Ceiling((double)this.Length / this.ChunkSize);
-            }
-        }
+        public Dictionary<string, string> ExtendedAttributes { get; set; }
     }
 }

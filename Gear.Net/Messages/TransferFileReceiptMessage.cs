@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Gear.Net;
 
-namespace DB2Library.Net.Messages
+namespace Gear.Net.Messages
 {
     /// <summary>
     /// Represents a receipt sent back to the sender of a file after the receiver confirms all chunks of the file.
@@ -20,6 +20,7 @@ namespace DB2Library.Net.Messages
             }
         }
 
-        public Guid FileId { get; set; }
+        
+        public long FileId { get; set; }
     }
 }

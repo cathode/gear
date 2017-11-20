@@ -149,6 +149,10 @@
     <Compile Include="ChannelEventArgs.cs" />
     <Compile Include="ChannelPlugins\ChannelPlugin.cs" />
     <Compile Include="ChannelPlugins\ClusteringPlugin.cs" />
+    <Compile Include="ChannelPlugins\FileTransfer\FileDataPortReadyMessage.cs" />
+    <Compile Include="ChannelPlugins\FileTransfer\FileTransferProgressManager.cs" />
+    <Compile Include="ChannelPlugins\FileTransfer\FileTransferState.cs" />
+    <Compile Include="ChannelPlugins\FileTransfer\TransferDirection.cs" />
     <Compile Include="ChannelState.cs" />
     <Compile Include="Collections\NetworkedCollectionStateMessage.cs" />
     <Compile Include="Collections\NetworkedCollectionGroupMetadata.cs" />
@@ -165,6 +169,7 @@
     <Compile Include="ConnectedChannel.cs" />
     <Compile Include="ConnectionListener.cs" />
     <Compile Include="DatagramChannel.cs" />
+    <Compile Include="ChannelPlugins\FileTransfer\FileTransferPlugin.cs" />
     <Compile Include="IPTarget.cs" />
     <Compile Include="IMessage.cs" />
     <Compile Include="IMessagePublisher.cs" />
@@ -180,7 +185,7 @@
     <Compile Include="Messages\PeerHandoffMessage.cs" />
     <Compile Include="Messages\TeardownChannelMessage.cs" />
     <None Include="Messages\TransferFileDataMessage.cs" />
-    <None Include="Messages\TransferFileMessage.cs" />
+    <Compile Include="ChannelPlugins\FileTransfer\TransferFileMessage.cs" />
     <None Include="Messages\TransferFileReceiptMessage.cs" />
     <Compile Include="MessageTypeDiscoveredEventArgs.cs" />
     <Compile Include="MessagingServer.cs" />
@@ -198,9 +203,7 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="FileTransfer\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

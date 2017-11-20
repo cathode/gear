@@ -8,5 +8,8 @@ namespace Gear.Net.ChannelPlugins
 {
     public abstract class ChannelPlugin
     {
+        public abstract void Attach(Channel channel);
+
+        public abstract void Detach(Channel channel);
     }
 }

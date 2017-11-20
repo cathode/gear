@@ -8,6 +8,14 @@ namespace Gear.Net.ChannelPlugins
 {
     public class ClusteringPlugin : ChannelPlugin
     {
-        
+        public override void Attach(Channel channel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Detach(Channel channel)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
