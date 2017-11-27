@@ -10,7 +10,7 @@ using ProtoBuf;
 namespace Gear.Net.ChannelPlugins.FileTransfer
 {
     [ProtoContract]
-    public class TransferFileMessage : IMessage
+    public class TransferStreamMessage : IMessage
     {
         [ProtoIgnore]
         int IMessage.DispatchId

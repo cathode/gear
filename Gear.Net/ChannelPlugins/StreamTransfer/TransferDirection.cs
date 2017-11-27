@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Gear.Net.ChannelPlugins.FileTransfer
 {
     /// <summary>
-    /// Represents direction of a file transfer.
+    /// Represents direction of a stream transfer.
     /// </summary>
     public enum TransferDirection
     {

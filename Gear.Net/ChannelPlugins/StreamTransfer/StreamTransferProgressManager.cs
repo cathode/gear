@@ -7,12 +7,12 @@ using System.IO;
 
 namespace Gear.Net.ChannelPlugins.FileTransfer
 {
-    public class FileTransferProgressManager
+    public class StreamTransferProgressManager
     {
         private Stream source;
         private Stream target;
 
-        public FileTransferProgressManager(Stream source, Stream target)
+        public StreamTransferProgressManager(Stream source, Stream target)
         {
 
         }

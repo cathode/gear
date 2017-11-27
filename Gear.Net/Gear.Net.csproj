@@ -149,10 +149,10 @@
     <Compile Include="ChannelEventArgs.cs" />
     <Compile Include="ChannelPlugins\ChannelPlugin.cs" />
     <Compile Include="ChannelPlugins\ClusteringPlugin.cs" />
-    <Compile Include="ChannelPlugins\FileTransfer\FileDataPortReadyMessage.cs" />
-    <Compile Include="ChannelPlugins\FileTransfer\FileTransferProgressManager.cs" />
-    <Compile Include="ChannelPlugins\FileTransfer\FileTransferState.cs" />
-    <Compile Include="ChannelPlugins\FileTransfer\TransferDirection.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\FileDataPortReadyMessage.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\StreamTransferProgressManager.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\StreamTransferState.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\TransferDirection.cs" />
     <Compile Include="ChannelState.cs" />
     <Compile Include="Collections\NetworkedCollectionStateMessage.cs" />
     <Compile Include="Collections\NetworkedCollectionGroupMetadata.cs" />
@@ -169,7 +169,7 @@
     <Compile Include="ConnectedChannel.cs" />
     <Compile Include="ConnectionListener.cs" />
     <Compile Include="DatagramChannel.cs" />
-    <Compile Include="ChannelPlugins\FileTransfer\FileTransferPlugin.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\StreamTransferPlugin.cs" />
     <Compile Include="IPTarget.cs" />
     <Compile Include="IMessage.cs" />
     <Compile Include="IMessagePublisher.cs" />
@@ -185,7 +185,7 @@
     <Compile Include="Messages\PeerHandoffMessage.cs" />
     <Compile Include="Messages\TeardownChannelMessage.cs" />
     <None Include="Messages\TransferFileDataMessage.cs" />
-    <Compile Include="ChannelPlugins\FileTransfer\TransferFileMessage.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\TransferStreamMessage.cs" />
     <None Include="Messages\TransferFileReceiptMessage.cs" />
     <Compile Include="MessageTypeDiscoveredEventArgs.cs" />
     <Compile Include="MessagingServer.cs" />

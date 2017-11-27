@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Gear.Net.ChannelPlugins.FileTransfer
 {
-    public class FileTransferState
+    public class StreamTransferState
     {
         public long TransferId { get; set; }
     }
