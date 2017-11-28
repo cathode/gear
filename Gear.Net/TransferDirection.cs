@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gear.Net.ChannelPlugins.FileTransfer
+namespace Gear.Net
 {
     /// <summary>
     /// Represents direction of a stream transfer.

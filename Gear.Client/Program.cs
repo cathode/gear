@@ -35,18 +35,18 @@ namespace Gear.Client
             // For testing
             Thread.Sleep(5000);
 
-            var target = new IPTarget("controller", 9888);
+            //var target = new IPTarget("localhost", 9888);
 
-            var ep = target.GetNextReachableEndPoint();
+            //var ep = target.GetNextReachableEndPoint();
 
-            var tgt = IPTarget.FromIPEndPoint(ep);
+            //var tgt = IPTarget.FromIPEndPoint(ep);
 
             var channel = ConnectedChannel.ConnectTo(new System.Net.IPEndPoint(IPAddress.Loopback, 9888));
 
-            var ns = new Gear.Net.Collections.NetworkedCollection<DateTime>();
-            ns.Consume(1234, channel);
+            //var ns = new Gear.Net.Collections.NetworkedCollection<DateTime>();
+            //ns.Consume(1234, channel);
 
-            ns.ItemAdded += Ns_ItemAdded;
+            //ns.ItemAdded += Ns_ItemAdded;
 
             while (true)
             {

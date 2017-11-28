@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Gear.Net;
 using Gear.Services;
 using Newtonsoft.Json;
 
@@ -65,36 +66,32 @@ namespace Gear.Server
             // manager.StartService(ServerService.ConnectionBroker, 14122);
             // manager.StartService(ServerService.ClusterManager, 14123);
             // manager.StartService(ServerService.ZoneNode, 14124);
-
-            netStrings.Mode = Net.Collections.ReplicationMode.Producer;
-            netStrings.CollectionGroupId = 1234;
-            netStrings.Add(DateTime.MinValue);
-
-            var listener = new Net.ConnectionListener(9888);
-            listener.ChannelConnected += listener_ChannelConnected;
+            var listener = new ConnectionListener(9888);
+            listener.ChannelConnected += Listener_ChannelConnected;
             listener.StartInBackground();
 
-            var rand = new Random();
             while (true)
             {
-                var str = DateTime.Now;
-                Console.WriteLine("Adding {0} to collection...", str);
-                netStrings.Add(str);
+                var k = Console.ReadKey();
 
-                Thread.Sleep(rand.Next(1050, 5000));
+                if (k.KeyChar == 'q')
+                {
+                    return;
+                }
             }
         }
 
-        static void listener_ChannelConnected(object sender, Net.ChannelEventArgs e)
+        private static void Listener_ChannelConnected(object sender, ChannelEventArgs e)
         {
+            var stp = new Gear.Net.ChannelPlugins.StreamTransfer.StreamTransferPlugin();
+            stp.Attach(e.Channel);
+
+            stp.CanHostActiveTransfers = true;
+
             perfCountStart = DateTime.Now;
             perfCountLastUpdate = DateTime.Now;
 
             e.Channel.MessageReceived += Channel_MessageReceived;
-
-            e.Channel.SubscribeToPublisher(netStrings);
-
-            netStrings.BindToChannel(e.Channel);
         }
 
         static void Channel_MessageReceived(object sender, Net.MessageEventArgs e)

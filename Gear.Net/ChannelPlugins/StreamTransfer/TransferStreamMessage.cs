@@ -7,7 +7,7 @@ using Gear.Net;
 using Gear.Net.Messages;
 using ProtoBuf;
 
-namespace Gear.Net.ChannelPlugins.FileTransfer
+namespace Gear.Net.ChannelPlugins.StreamTransfer
 {
     [ProtoContract]
     public class TransferStreamMessage : IMessage
@@ -22,21 +22,8 @@ namespace Gear.Net.ChannelPlugins.FileTransfer
         }
 
         [ProtoMember(1)]
-        public Guid TransferId { get; set; }
+        public StreamTransferState TransferState { get; set; }
 
-        [ProtoMember(2)]
-        public string Name { get; set; }
 
-        [ProtoMember(3)]
-        public string SourcePath { get; set; }
-
-        [ProtoMember(4)]
-        public long Length { get; set; }
-
-        [ProtoMember(5)]
-        public int CRC32 { get; set; }
-
-        [ProtoMember(6)]
-        public Dictionary<string, string> ExtendedAttributes { get; set; }
     }
 }

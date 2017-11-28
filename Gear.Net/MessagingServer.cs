@@ -107,6 +107,8 @@ namespace Gear.Net
             {
                 this.listener = new ConnectionListener(this.ListenPort);
             }
+
+            this.listener.StartInBackground();
         }
 
         /// <summary>

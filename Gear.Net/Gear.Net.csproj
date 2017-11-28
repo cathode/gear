@@ -149,10 +149,10 @@
     <Compile Include="ChannelEventArgs.cs" />
     <Compile Include="ChannelPlugins\ChannelPlugin.cs" />
     <Compile Include="ChannelPlugins\ClusteringPlugin.cs" />
-    <Compile Include="ChannelPlugins\StreamTransfer\FileDataPortReadyMessage.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\StreamDataPortReadyMessage.cs" />
     <Compile Include="ChannelPlugins\StreamTransfer\StreamTransferProgressManager.cs" />
     <Compile Include="ChannelPlugins\StreamTransfer\StreamTransferState.cs" />
-    <Compile Include="ChannelPlugins\StreamTransfer\TransferDirection.cs" />
+    <Compile Include="TransferDirection.cs" />
     <Compile Include="ChannelState.cs" />
     <Compile Include="Collections\NetworkedCollectionStateMessage.cs" />
     <Compile Include="Collections\NetworkedCollectionGroupMetadata.cs" />

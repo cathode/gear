@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Gear.Net.ChannelPlugins.FileTransfer
+namespace Gear.Net.ChannelPlugins.StreamTransfer
 {
     public class StreamTransferProgressManager
     {

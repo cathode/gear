@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using Gear.Net.Messages;
 using ProtoBuf;
 
-namespace Gear.Net.ChannelPlugins.FileTransfer
+namespace Gear.Net.ChannelPlugins.StreamTransfer
 {
     /// <summary>
     /// Represents a network message that indicates to the passive peer that a data port is opened on the active peer for transfering file data.
     /// </summary>
     [ProtoContract]
-    public class FileDataPortReadyMessage : IMessage
+    public class StreamDataPortReadyMessage : IMessage
     {
         [ProtoIgnore]
         int IMessage.DispatchId

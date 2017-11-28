@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gear.Net.ChannelPlugins.FileTransfer
+namespace Gear.Net.ChannelPlugins.StreamTransfer
 {
     /// <summary>
     /// Implements a <see cref="ChannelPlugin"/> that handles file and data stream transfer tasks for the attached <see cref="Channel"/>.
@@ -38,7 +38,7 @@ namespace Gear.Net.ChannelPlugins.FileTransfer
         public static int MaxGlobalSimultaneousTransfers { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the system this <see cref="FileTransferPlugin"/> is running on is capable of
+        /// Gets or sets a value indicating whether the system this <see cref="StreamTransferPlugin"/> is running on is capable of
         /// hosting active transfers.
         /// </summary>
         /// <remarks>
@@ -47,7 +47,7 @@ namespace Gear.Net.ChannelPlugins.FileTransfer
         public bool CanHostActiveTransfers { get; set; }
 
         /// <summary>
-        /// Gets an observable collection of all file transfers associated with this <see cref="FileTransferPlugin"/> in it's lifetime.
+        /// Gets an observable collection of all file transfers associated with this <see cref="StreamTransferPlugin"/> in it's lifetime.
         /// </summary>
         public ReadOnlyObservableCollection<StreamTransferState> FileTransfers
         {
@@ -61,7 +61,7 @@ namespace Gear.Net.ChannelPlugins.FileTransfer
         #region Methods
         public override void Attach(Channel channel)
         {
-            channel.RegisterHandler<FileDataPortReadyMessage>(this.Handle_FileDataPortReadyMessage, this);
+            channel.RegisterHandler<StreamDataPortReadyMessage>(this.Handle_StreamDataPortReadyMessage, this);
             channel.RegisterHandler<TransferStreamMessage>(this.Handle_TransferFileMessage, this);
         }
 
@@ -70,7 +70,7 @@ namespace Gear.Net.ChannelPlugins.FileTransfer
             channel.UnregisterHandler(this);
         }
 
-        protected virtual void Handle_FileDataPortReadyMessage(MessageEventArgs e, FileDataPortReadyMessage message)
+        protected virtual void Handle_StreamDataPortReadyMessage(MessageEventArgs e, StreamDataPortReadyMessage message)
         {
 
         }
