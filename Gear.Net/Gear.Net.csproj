@@ -184,9 +184,7 @@
     <None Include="Messages\EndpointGreetingMessage.cs" />
     <Compile Include="Messages\PeerHandoffMessage.cs" />
     <Compile Include="Messages\TeardownChannelMessage.cs" />
-    <None Include="Messages\TransferFileDataMessage.cs" />
     <Compile Include="ChannelPlugins\StreamTransfer\TransferStreamMessage.cs" />
-    <None Include="Messages\TransferFileReceiptMessage.cs" />
     <Compile Include="MessageTypeDiscoveredEventArgs.cs" />
     <Compile Include="MessagingServer.cs" />
     <Compile Include="NetworkList.cs" />

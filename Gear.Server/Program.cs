@@ -85,8 +85,8 @@ namespace Gear.Server
         {
             var stp = new Gear.Net.ChannelPlugins.StreamTransfer.StreamTransferPlugin();
             stp.Attach(e.Channel);
-
             stp.CanHostActiveTransfers = true;
+
 
             perfCountStart = DateTime.Now;
             perfCountLastUpdate = DateTime.Now;

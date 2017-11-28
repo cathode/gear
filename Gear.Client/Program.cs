@@ -43,6 +43,11 @@ namespace Gear.Client
 
             var channel = ConnectedChannel.ConnectTo(new System.Net.IPEndPoint(IPAddress.Loopback, 9888));
 
+            var stp = new Gear.Net.ChannelPlugins.StreamTransfer.StreamTransferPlugin();
+            stp.Attach(channel);
+            stp.CanHostActiveTransfers = false;
+
+            stp.SendFile("Gear.Client.exe.config");
             //var ns = new Gear.Net.Collections.NetworkedCollection<DateTime>();
             //ns.Consume(1234, channel);
 

@@ -24,6 +24,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         [ProtoMember(1)]
         public StreamTransferState TransferState { get; set; }
 
-
+        [ProtoMember(2)]
+        public ushort? DataPort { get; set; }
     }
 }
