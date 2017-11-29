@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ProtoBuf;
 
-namespace Gear.Net.ChannelPlugins.StreamTransfer
+namespace Gear.Net.ChannelPlugins
 {
     /// <summary>
     /// Implements a state tracking structure for pending, in-progress, and completed stream transfers.
@@ -83,5 +83,14 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
         [ProtoIgnore]
         public Socket DataConnection { get; set; }
+
+        [ProtoIgnore]
+        public DateTime TransferInitiated { get; set; }
+
+        [ProtoIgnore]
+        public DateTime? TransferStarted { get; set; }
+
+        [ProtoIgnore]
+        public DateTime? TransferCompleted { get; set; }
     }
 }

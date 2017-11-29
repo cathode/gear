@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Gear.Net.Messages;
 using ProtoBuf;
 
-namespace Gear.Net.ChannelPlugins.StreamTransfer
+namespace Gear.Net.ChannelPlugins
 {
     /// <summary>
     /// Represents a network message that indicates to the passive peer that a data port is opened on the active peer for transfering file data.

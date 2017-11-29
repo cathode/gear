@@ -9,7 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gear.Net.ChannelPlugins.StreamTransfer
+namespace Gear.Net.ChannelPlugins
 {
     /// <summary>
     /// Implements a <see cref="ChannelPlugin"/> that handles file and data stream transfer tasks for the attached <see cref="Channel"/>.
@@ -17,17 +17,19 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
     public class StreamTransferPlugin : ChannelPlugin
     {
         #region Fields
+        private static readonly object poolLock = new object();
+        private static ushort lastAssignedDataPort;
+
         private readonly ObservableCollection<StreamTransferState> transfers;
         private readonly ReadOnlyObservableCollection<StreamTransferState> transfersRO;
-
-        private Channel attachedChannel;
 
         #endregion
         #region Constructors
         static StreamTransferPlugin()
         {
-            MaxGlobalSimultaneousTransfers = 900;
-            TransferPortPoolStart = 55100;
+            MaxGlobalSimultaneousTransfers = 16;
+            TransferPortPoolStart = 55000;
+            TransferPortPoolEnd = 55999;
         }
 
         /// <summary>
@@ -49,7 +51,26 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         /// </summary>
         public static int MaxGlobalSimultaneousTransfers { get; set; }
 
+        /// <summary>
+        /// Gets or sets the lowest port number that will be used for stream transfer connections.
+        /// </summary>
         public static ushort TransferPortPoolStart { get; set; }
+
+        /// <summary>
+        /// Gets or sets the highest port number that will be used for stream transfer connections.
+        /// </summary>
+        public static ushort TransferPortPoolEnd { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating how many live (connected) sockets exist for data transfer between the local endpoint and the remote peer.
+        /// </summary>
+        public int LiveDataConnectionCount
+        {
+            get
+            {
+                return 0;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether the system this <see cref="StreamTransferPlugin"/> is running on is capable of
@@ -73,28 +94,83 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
         #endregion
         #region Methods
-        public override void Attach(Channel channel)
-        {
-            channel.RegisterHandler<StreamDataPortReadyMessage>(this.Handle_StreamDataPortReadyMessage, this);
-            channel.RegisterHandler<TransferStreamMessage>(this.Handle_TransferStreamMessage, this);
 
-            this.attachedChannel = channel;
+        /// <summary>
+        /// Returns a new <see cref="Socket"/> instance, which is already in a listening state.
+        /// The new socket is bound to the next available port number in the configured data port pool.
+        /// </summary>
+        /// <returns>A new <see cref="Socket"/> instance, or null if the data port pool is exhausted.</returns>
+        public static Socket GetNextDataPortListener()
+        {
+            lock (StreamTransferPlugin.poolLock)
+            {
+                int tries = 0;
+                int max = Math.Abs(StreamTransferPlugin.TransferPortPoolStart - StreamTransferPlugin.TransferPortPoolEnd);
+
+                while (tries < max)
+                {
+                    var port = StreamTransferPlugin.lastAssignedDataPort++;
+
+                    var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+                    try
+                    {
+                        socket.Bind(new IPEndPoint(IPAddress.Any, port));
+                        socket.Listen(1);
+
+                        return socket;
+                    }
+                    catch
+                    {
+                        socket.Close();
+                        socket.Dispose();
+                        continue;
+                    }
+                }
+
+                return null;
+            }
         }
 
+        /// <summary>
+        /// Overridden. Attaches this <see cref="StreamTransferPlugin"/> instance to the specified <see cref="Channel"/>.
+        /// </summary>
+        /// <param name="channel">The <see cref="Channel"/> to attach to.</param>
+        public override void Attach(Channel channel)
+        {
+            this.Detach(this.AttachedChannel);
+
+            if (channel != null)
+            {
+                channel.RegisterHandler<StreamDataPortReadyMessage>(this.Handle_StreamDataPortReadyMessage, this);
+                channel.RegisterHandler<TransferStreamMessage>(this.Handle_TransferStreamMessage, this);
+            }
+
+            this.AttachedChannel = channel;
+        }
+
+        /// <summary>
+        /// Overridden. Detaches this <see cref="StreamTransferPlugin"/> instance from the specified <see cref="Channel"/>.
+        /// </summary>
+        /// <param name="channel">The <see cref="Channel"/> to detach from.</param>
         public override void Detach(Channel channel)
         {
-            channel.UnregisterHandler(this);
+            if (channel != null)
+            {
+                channel.UnregisterHandler(this);
+            }
 
-            this.attachedChannel = null;
+            this.AttachedChannel = null;
         }
 
         /// <summary>
         /// Initiates a stream transfer of the file at the specified path.
         /// </summary>
-        /// <param name="filePath"></param>
-        public void SendFile(string filePath)
+        /// <param name="filePath">The local path of the file to send.</param>
+        public StreamTransferState SendFile(string filePath)
         {
             Contract.Requires<ArgumentNullException>(filePath != null);
+            Contract.Requires<InvalidOperationException>(this.IsAttached);
 
             // Sanity checking:
             if (!File.Exists(filePath))
@@ -113,7 +189,9 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             var msg = new TransferStreamMessage();
             msg.TransferState = state;
 
-            this.attachedChannel.Send(msg);
+            this.AttachedChannel.Send(msg);
+
+            return state;
         }
 
         protected virtual void Handle_StreamDataPortReadyMessage(MessageEventArgs e, StreamDataPortReadyMessage message)
@@ -122,7 +200,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
             var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-            socket.Connect(new IPEndPoint(this.attachedChannel.RemoteEndPoint.Address, message.DataPort));
+            socket.Connect(new IPEndPoint(this.AttachedChannel.RemoteEndPoint.Address, message.DataPort));
 
             var buffer = File.ReadAllBytes(state.LocalPath);
             socket.Send(buffer);
@@ -132,10 +210,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         {
             var state = message.TransferState;
 
-        
-
             // Two modes - spawn data port and wait, or connect to peer's data port.
-
             if (message.DataPort.HasValue && message.DataPort > 0)
             {
                 // we connect to them
@@ -153,7 +228,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                 var msg = new StreamDataPortReadyMessage();
                 msg.TransferId = state.TransferId;
                 msg.DataPort = 55100;
-                this.attachedChannel.Send(msg);
+                this.AttachedChannel.Send(msg);
 
                 state.DataConnection = listener.Accept();
 
@@ -170,6 +245,13 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
                 File.WriteAllBytes(path, buffer);
             }
+        }
+
+        [ContractInvariantMethod]
+        private void ContractInvariants()
+        {
+            Contract.Invariant(this.transfers != null);
+            Contract.Invariant(this.FileTransfers != null);
         }
         #endregion
     }

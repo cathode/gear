@@ -83,7 +83,7 @@ namespace Gear.Server
 
         private static void Listener_ChannelConnected(object sender, ChannelEventArgs e)
         {
-            var stp = new Gear.Net.ChannelPlugins.StreamTransfer.StreamTransferPlugin();
+            var stp = new Gear.Net.ChannelPlugins.StreamTransferPlugin();
             stp.Attach(e.Channel);
             stp.CanHostActiveTransfers = true;
 

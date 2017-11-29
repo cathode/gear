@@ -7,7 +7,7 @@ using Gear.Net;
 using Gear.Net.Messages;
 using ProtoBuf;
 
-namespace Gear.Net.ChannelPlugins.StreamTransfer
+namespace Gear.Net.ChannelPlugins
 {
     [ProtoContract]
     public class TransferStreamMessage : IMessage
