@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gear.Net", "Gear.Net\Gear.N
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Gear API Documentation", "Gear API Documentation\Gear API Documentation.shfbproj", "{8FCEFD45-85F9-427B-AEB9-A7556138079C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{BC508D5D-8C2F-4E8A-A74F-81EB0C9A946E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

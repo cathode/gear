@@ -290,7 +290,7 @@ namespace Gear.Net
         }
 
         /// <summary>
-        /// Runs through the the queue of messages that have been receives and invokes the appropriate events / message handlers.
+        /// Runs through the the queue of messages that have been received and invokes the appropriate events / message handlers.
         /// </summary>
         protected void ProcessRxQueue()
         {

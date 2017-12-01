@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 namespace Gear.Net
 {
     /// <summary>
-    /// Implements a low-level framework for coordinating connections from clients.
+    /// Implements a framework for coordinating connections from clients.
     /// </summary>
     public class MessagingServer
     {
         #region Fields
+        private readonly ObservableCollection<PeerMetadata> peers;
+        private readonly ReadOnlyObservableCollection<PeerMetadata> peersRO;
         private ushort listenPort;
-
         private ConnectionListener listener;
-        private readonly ObservableCollection<PeerMetadata> peers = new ObservableCollection<PeerMetadata>();
         #endregion
         #region Constructors
 
@@ -26,6 +26,9 @@ namespace Gear.Net
         /// </summary>
         public MessagingServer()
         {
+            this.peers = new ObservableCollection<PeerMetadata>();
+            this.peersRO = new ReadOnlyObservableCollection<PeerMetadata>(this.peers);
+
         }
 
         #endregion
@@ -61,38 +64,11 @@ namespace Gear.Net
         /// </summary>
         public TimeSpan DeadExpirationThreshold { get; set; }
 
-        /// <summary>
-        /// Gets or sets the internet protocol port number that the messaging server will accept connections on.
-        /// </summary>
-        public ushort ListenPort
+        public ReadOnlyObservableCollection<PeerMetadata> Peers
         {
             get
             {
-                return this.listenPort;
-            }
-
-            set
-            {
-                if (this.listener != null && this.listener.IsListening)
-                {
-                    throw new InvalidOperationException();
-                }
-                else
-                {
-                    this.listenPort = value;
-                    if (this.listener != null)
-                    {
-                        this.listener.ListenPort = value;
-                    }
-                }
-            }
-        }
-
-        public ObservableCollection<PeerMetadata> Peers
-        {
-            get
-            {
-                return this.peers;
+                return this.peersRO;
             }
         }
         #endregion
@@ -105,7 +81,7 @@ namespace Gear.Net
         {
             if (this.listener == null)
             {
-                this.listener = new ConnectionListener(this.ListenPort);
+                //this.listener = new ConnectionListener(this.ListenPort);
             }
 
             this.listener.StartInBackground();
