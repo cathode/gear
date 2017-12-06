@@ -16,7 +16,6 @@ namespace Gear.Net
         #region Fields
         private readonly ObservableCollection<PeerMetadata> peers;
         private readonly ReadOnlyObservableCollection<PeerMetadata> peersRO;
-        private ushort listenPort;
         private ConnectionListener listener;
         #endregion
         #region Constructors
@@ -24,16 +23,20 @@ namespace Gear.Net
         /// <summary>
         /// Initializes a new instance of the <see cref="MessagingServer"/> class.
         /// </summary>
-        public MessagingServer()
+        /// <param name="port">The TCP port number that peers will connect on.</param>
+        public MessagingServer(ushort port)
         {
+            this.listener = new ConnectionListener(port);
             this.peers = new ObservableCollection<PeerMetadata>();
             this.peersRO = new ReadOnlyObservableCollection<PeerMetadata>(this.peers);
-
         }
 
         #endregion
-
         #region Events
+
+        /// <summary>
+        /// Notifies subscribes when a new peer connects to this messaging server.
+        /// </summary>
         public event EventHandler<PeerEventArgs> PeerConnected;
         #endregion
 
@@ -64,6 +67,20 @@ namespace Gear.Net
         /// </summary>
         public TimeSpan DeadExpirationThreshold { get; set; }
 
+        /// <summary>
+        /// Gets the <see cref="ConnectionListener"/> that the messaging server is using to listen for new connections.
+        /// </summary>
+        public ConnectionListener Listener
+        {
+            get
+            {
+                return this.listener;
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of peers that are known to the messaging server.
+        /// </summary>
         public ReadOnlyObservableCollection<PeerMetadata> Peers
         {
             get
@@ -79,11 +96,6 @@ namespace Gear.Net
         /// </summary>
         public void Start()
         {
-            if (this.listener == null)
-            {
-                //this.listener = new ConnectionListener(this.ListenPort);
-            }
-
             this.listener.StartInBackground();
         }
 
@@ -104,6 +116,7 @@ namespace Gear.Net
         private void ContractInvariants()
         {
             Contract.Invariant(this.Peers != null);
+            Contract.Invariant(this.Listener != null);
         }
         #endregion
     }

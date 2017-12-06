@@ -18,8 +18,8 @@ namespace Gear.Net.ChannelPlugins
     {
         #region Fields
         private static readonly object poolLock = new object();
+        private static readonly Collection<StreamTransferProgressWorker> workers = new Collection<StreamTransferProgressWorker>();
         private static ushort lastAssignedDataPort;
-
         private readonly ObservableCollection<StreamTransferState> transfers;
         private readonly ReadOnlyObservableCollection<StreamTransferState> transfersRO;
 
@@ -30,6 +30,8 @@ namespace Gear.Net.ChannelPlugins
             MaxGlobalSimultaneousTransfers = 16;
             TransferPortPoolStart = 55000;
             TransferPortPoolEnd = 55999;
+
+            UpdateTransferWorkerPool();
         }
 
         /// <summary>
@@ -94,6 +96,16 @@ namespace Gear.Net.ChannelPlugins
 
         #endregion
         #region Methods
+
+        public static StreamTransferProgressWorker GetAvailableTransferWorker()
+        {
+            lock (StreamTransferPlugin.workers)
+            {
+                var available = workers.FirstOrDefault(e => e.IsIdle);
+
+                return available;
+            }
+        }
 
         /// <summary>
         /// Returns a new <see cref="Socket"/> instance, which is already in a listening state.
@@ -167,6 +179,7 @@ namespace Gear.Net.ChannelPlugins
         /// Initiates a stream transfer of the file at the specified path.
         /// </summary>
         /// <param name="filePath">The local path of the file to send.</param>
+        /// <returns>A <see cref="StreamTransferState"/> object that can be used to track the transfer operation.</returns>
         public StreamTransferState SendFile(string filePath)
         {
             Contract.Requires<ArgumentNullException>(filePath != null);
@@ -192,6 +205,42 @@ namespace Gear.Net.ChannelPlugins
             this.AttachedChannel.Send(msg);
 
             return state;
+        }
+
+        protected static void UpdateTransferWorkerPool()
+        {
+            lock (workers)
+            {
+                if (workers.Count < MaxGlobalSimultaneousTransfers)
+                {
+                    // Add workers up to the max
+                    var add = MaxGlobalSimultaneousTransfers - workers.Count;
+
+                    for (int i = 0; i < add; ++i)
+                    {
+                        var worker = new StreamTransferProgressWorker();
+
+                        workers.Add(worker);
+                    }
+                }
+                else if (workers.Count > MaxGlobalSimultaneousTransfers)
+                {
+                    // Purge extra workers
+                    var remove = workers.Count - MaxGlobalSimultaneousTransfers;
+
+                    var extra = workers.OrderBy(k => k.IsIdle).Take(remove).ToArray();
+
+                    foreach (var worker in extra)
+                    {
+                        worker.FlagDestroyed();
+
+                        if (worker.IsIdle)
+                        {
+                            workers.Remove(worker);
+                        }
+                    }
+                }
+            }
         }
 
         protected virtual void Handle_StreamDataPortReadyMessage(MessageEventArgs e, StreamDataPortReadyMessage message)

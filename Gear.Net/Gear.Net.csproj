@@ -150,7 +150,7 @@
     <Compile Include="ChannelPlugins\ChannelPlugin.cs" />
     <Compile Include="ChannelPlugins\ClusteringPlugin.cs" />
     <Compile Include="ChannelPlugins\StreamDataPortReadyMessage.cs" />
-    <Compile Include="ChannelPlugins\StreamTransferProgressManager.cs" />
+    <Compile Include="ChannelPlugins\StreamTransferProgressWorker.cs" />
     <Compile Include="ChannelPlugins\StreamTransferState.cs" />
     <Compile Include="TransferDirection.cs" />
     <Compile Include="ChannelState.cs" />

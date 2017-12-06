@@ -239,6 +239,11 @@ namespace Gear.Net
 
         protected override int SendMessages(Queue<IMessage> messages)
         {
+            if (messages == null || messages.Count == 0)
+            {
+                return 0;
+            }
+
             int sent = 0;
 
             using (var ms = new MemoryStream())

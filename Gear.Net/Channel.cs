@@ -149,6 +149,8 @@ namespace Gear.Net
                     this.messageHandlers.Add(dispatchId, new List<MessageHandlerRegistration>());
                 }
 
+                Contract.Assume(this.messageHandlers[dispatchId] != null);
+
                 this.messageHandlers[dispatchId].Add(reg);
             }
 
