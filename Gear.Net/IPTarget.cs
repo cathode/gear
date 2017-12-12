@@ -72,6 +72,7 @@ namespace Gear.Net
         public static IPTarget FromIPAddress(IPAddress address, ushort port)
         {
             Contract.Requires<ArgumentNullException>(address != null);
+            Contract.Ensures(Contract.Result<IPTarget>() != null);
 
             return IPTarget.FromIPEndPoint(new IPEndPoint(address, port));
         }
@@ -88,10 +89,19 @@ namespace Gear.Net
         public static IPTarget FromIPEndPoint(IPEndPoint ep)
         {
             Contract.Requires<ArgumentNullException>(ep != null);
+            Contract.Ensures(Contract.Result<IPTarget>() != null);
 
             var hostEntry = Dns.GetHostEntry(ep.Address);
 
             return new IPTarget(hostEntry.HostName, (ushort)ep.Port);
+        }
+
+        public IPEndPoint GetEndPoint()
+        {
+            var hostEntry = Dns.GetHostEntry(this.Hostname);
+            var addresses = hostEntry.AddressList.ToArray();
+
+            return new IPEndPoint(addresses[0], this.Port);
         }
 
         /// <summary>
@@ -133,7 +143,7 @@ namespace Gear.Net
                 }
             }
 
-            return null;
+            return new IPEndPoint(addresses[0], this.Port);
         }
     }
 }

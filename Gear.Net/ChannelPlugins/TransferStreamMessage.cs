@@ -17,7 +17,7 @@ namespace Gear.Net.ChannelPlugins
         {
             get
             {
-                return BuiltinMessageIds.TransferFile;
+                return BuiltinMessageIds.TransferStream;
             }
         }
 
@@ -26,5 +26,8 @@ namespace Gear.Net.ChannelPlugins
 
         [ProtoMember(2)]
         public ushort? DataPort { get; set; }
+
+        [ProtoMember(3)]
+        public bool RequestDataPort { get; set; }
     }
 }

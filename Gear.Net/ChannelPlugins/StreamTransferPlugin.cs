@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Gear.Net.ChannelPlugins
@@ -17,21 +18,23 @@ namespace Gear.Net.ChannelPlugins
     public class StreamTransferPlugin : ChannelPlugin
     {
         #region Fields
+
         private static readonly object poolLock = new object();
         private static readonly Collection<StreamTransferProgressWorker> workers = new Collection<StreamTransferProgressWorker>();
         private static ushort lastAssignedDataPort;
+        private static int maxGlobalSimultaneousTransfers;
         private readonly ObservableCollection<StreamTransferState> transfers;
         private readonly ReadOnlyObservableCollection<StreamTransferState> transfersRO;
-
+        private readonly Dictionary<int, StreamTransferProgressWorker> boundWorkers = new Dictionary<int, StreamTransferProgressWorker>();
+        private readonly Queue<StreamTransferState> newStates = new Queue<StreamTransferState>();
         #endregion
         #region Constructors
+
         static StreamTransferPlugin()
         {
-            MaxGlobalSimultaneousTransfers = 16;
             TransferPortPoolStart = 55000;
             TransferPortPoolEnd = 55999;
-
-            UpdateTransferWorkerPool();
+            MaxGlobalSimultaneousTransfers = 1;
         }
 
         /// <summary>
@@ -51,7 +54,20 @@ namespace Gear.Net.ChannelPlugins
         /// <summary>
         /// Gets or sets a maximum number of global stream transfers across all instances.
         /// </summary>
-        public static int MaxGlobalSimultaneousTransfers { get; set; }
+        public static int MaxGlobalSimultaneousTransfers
+        {
+            get
+            {
+                return StreamTransferPlugin.maxGlobalSimultaneousTransfers;
+            }
+
+            set
+            {
+                StreamTransferPlugin.maxGlobalSimultaneousTransfers = value;
+
+                StreamTransferPlugin.UpdateTransferWorkerPool();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the lowest port number that will be used for stream transfer connections.
@@ -97,11 +113,16 @@ namespace Gear.Net.ChannelPlugins
         #endregion
         #region Methods
 
-        public static StreamTransferProgressWorker GetAvailableTransferWorker()
+        public static StreamTransferProgressWorker BindNextAvailableTransferWorker(StreamTransferState transferState)
         {
             lock (StreamTransferPlugin.workers)
             {
                 var available = workers.FirstOrDefault(e => e.IsIdle);
+
+                if (available != null)
+                {
+                    available.TransferState = transferState;
+                }
 
                 return available;
             }
@@ -196,13 +217,31 @@ namespace Gear.Net.ChannelPlugins
 
             // Build transfer state:
             var state = new StreamTransferState(finfo);
-
+            state.LocalDirection = TransferDirection.Outgoing;
             this.transfers.Add(state);
+            this.newStates.Enqueue(state);
+
+            this.ProcessNewStates();
 
             var msg = new TransferStreamMessage();
             msg.TransferState = state;
 
+            if (!this.CanHostActiveTransfers)
+            {
+                msg.RequestDataPort = true;
+            }
+            else
+            {
+                var listener = StreamTransferPlugin.GetNextDataPortListener();
+                state.DataConnection = listener;
+
+                msg.RequestDataPort = false;
+                msg.DataPort = (ushort)((IPEndPoint)listener.LocalEndPoint).Port;
+            }
+
             this.AttachedChannel.Send(msg);
+
+            StreamTransferPlugin.BindNextAvailableTransferWorker(state);
 
             return state;
         }
@@ -257,42 +296,52 @@ namespace Gear.Net.ChannelPlugins
 
         protected virtual void Handle_TransferStreamMessage(MessageEventArgs e, TransferStreamMessage message)
         {
+            Contract.Requires<ArgumentNullException>(message != null);
+
             var state = message.TransferState;
+            state.Parent = this;
+            state.LocalDirection = TransferDirection.Incoming;
+            state.TransferInitiatedAt = DateTime.Now;
 
-            // Two modes - spawn data port and wait, or connect to peer's data port.
-            if (message.DataPort.HasValue && message.DataPort > 0)
+            this.transfers.Add(state);
+            this.newStates.Enqueue(state);
+
+            this.ProcessNewStates();
+        }
+
+        protected void ProcessNewStates()
+        {
+            try
             {
-                // we connect to them
-            }
-            else
-            {
-                // spawn data port and send ready message:
-
-                this.transfers.Add(state);
-
-                var listener = new System.Net.Sockets.Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-                listener.Bind(new IPEndPoint(IPAddress.Any, 55100));
-                listener.Listen(1);
-                var msg = new StreamDataPortReadyMessage();
-                msg.TransferId = state.TransferId;
-                msg.DataPort = 55100;
-                this.AttachedChannel.Send(msg);
-
-                state.DataConnection = listener.Accept();
-
-                byte[] buffer = new byte[Math.Min(state.Length, 65536)];
-
-                var recvd = state.DataConnection.Receive(buffer);
-
-                var path = Path.GetFullPath(Path.Combine("./transfers", state.Name));
-
-                if (!Directory.Exists(Path.GetDirectoryName(path)))
+                if (Monitor.TryEnter(this.newStates))
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(path));
-                }
+                    while (this.newStates.Count > 0)
+                    {
+                        var state = this.newStates.Peek();
+                        var worker = StreamTransferPlugin.BindNextAvailableTransferWorker(state);
 
-                File.WriteAllBytes(path, buffer);
+                        if (worker != null)
+                        {
+                            Contract.Assume(state != null);
+                            Contract.Assume(this.newStates.Count > 0);
+
+                            this.newStates.Dequeue();
+                            this.boundWorkers.Add(state.TransferId, worker);
+                        }
+                        else
+                        {
+                            // Bail out because we're out of available workers.
+                            return;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                if (Monitor.IsEntered(this.newStates))
+                {
+                    Monitor.Exit(this.newStates);
+                }
             }
         }
 
@@ -301,6 +350,8 @@ namespace Gear.Net.ChannelPlugins
         {
             Contract.Invariant(this.transfers != null);
             Contract.Invariant(this.FileTransfers != null);
+            Contract.Invariant(this.newStates != null);
+            Contract.Invariant(this.boundWorkers != null);
         }
         #endregion
     }

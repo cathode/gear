@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -13,7 +15,7 @@ namespace Gear.Net.ChannelPlugins
     /// Implements a state tracking structure for pending, in-progress, and completed stream transfers.
     /// </summary>
     [ProtoContract]
-    public class StreamTransferState
+    public class StreamTransferState : INotifyPropertyChanged
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StreamTransferState"/> class.
@@ -30,11 +32,18 @@ namespace Gear.Net.ChannelPlugins
         public StreamTransferState(FileInfo finfo)
             : this()
         {
+            Contract.Requires<ArgumentNullException>(finfo != null);
+
             this.Length = finfo.Length;
             this.Name = finfo.Name;
 
             this.LocalPath = finfo.FullName;
         }
+
+        /// <summary>
+        /// Raised when a property value changes.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Gets or sets the numeric id of the transfer.
@@ -85,12 +94,21 @@ namespace Gear.Net.ChannelPlugins
         public Socket DataConnection { get; set; }
 
         [ProtoIgnore]
-        public DateTime TransferInitiated { get; set; }
+        public DateTime TransferInitiatedAt { get; set; }
 
         [ProtoIgnore]
-        public DateTime? TransferStarted { get; set; }
+        public DateTime? TransferStartedAt { get; set; }
 
         [ProtoIgnore]
-        public DateTime? TransferCompleted { get; set; }
+        public DateTime? TransferCompletedAt { get; set; }
+
+        [ProtoIgnore]
+        public TransferDirection LocalDirection { get; set; }
+
+        [ProtoIgnore]
+        public TransferProgressHint ProgressHint { get; set; }
+
+        [ProtoIgnore]
+        public StreamTransferPlugin Parent { get; set; }
     }
 }

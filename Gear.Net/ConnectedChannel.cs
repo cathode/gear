@@ -169,11 +169,6 @@ namespace Gear.Net
 
             var ep = this.connectionTarget.GetNextReachableEndPoint();
 
-            if (ep == null)
-            {
-                throw new NotImplementedException("No reachable end point");
-            }
-
             if (this.socket != null)
             {
                 this.socket.Dispose();

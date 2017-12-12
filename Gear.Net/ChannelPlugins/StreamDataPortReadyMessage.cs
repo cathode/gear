@@ -19,7 +19,7 @@ namespace Gear.Net.ChannelPlugins
         {
             get
             {
-                return BuiltinMessageIds.FileDataPortReady;
+                return BuiltinMessageIds.StreamDataPortReady;
             }
         }
 

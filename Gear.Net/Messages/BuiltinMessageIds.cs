@@ -25,11 +25,16 @@ namespace Gear.Net.Messages
         public static readonly int PeerHandoff = 0x0010;
 
         // File transfer
-        public static readonly int TransferFile = 0x0100;
-        public static readonly int TransferFileData = 0x0101;
+        public static readonly int TransferStream = 0x0100;
+        public static readonly int TransferStreamData = 0x0101;
         public static readonly int TransferFileReceipt = 0x0102;
-        public static readonly int FileDataPortReady = 0x0103;
+        public static readonly int StreamDataPortReady = 0x0103;
         public static readonly int FileReceiveComplete = 0x0104;
+
+        /// <summary>
+        /// Dispatch id for the <see cref="Gear.Net.ChannelPlugins.RequestStreamMessage"/> type.
+        /// </summary>
+        public static readonly int RequestStream = 0x0105;
 
         // Networked collections
 

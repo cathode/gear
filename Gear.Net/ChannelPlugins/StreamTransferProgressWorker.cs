@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,10 +12,8 @@ namespace Gear.Net.ChannelPlugins
     public class StreamTransferProgressWorker
     {
         #region Fields
-        private Stream source;
-        private Stream target;
         private Thread workThread;
-        private StreamTransferState workState;
+        private StreamTransferState transferState;
         private AutoResetEvent workAvailable;
         private bool isPendingDestruction;
         #endregion
@@ -32,21 +31,17 @@ namespace Gear.Net.ChannelPlugins
 
         #endregion
         #region Properties
-        public StreamTransferState WorkState
+        public StreamTransferState TransferState
         {
             get
             {
-                return this.workState;
+                return this.transferState;
             }
 
             internal set
             {
-                this.workState = value;
-
-                if (value != null)
-                {
-                    this.workAvailable.Set();
-                }
+                this.transferState = value;
+                this.workAvailable.Set();
             }
         }
 
@@ -54,7 +49,7 @@ namespace Gear.Net.ChannelPlugins
         {
             get
             {
-                return false;
+                return this.TransferState == null;
             }
         }
 
@@ -77,14 +72,47 @@ namespace Gear.Net.ChannelPlugins
                 // Check if the worker needs to be shut down:
                 if (this.isPendingDestruction)
                 {
-                    this.workThread.Abort();
+                    return;
                 }
 
                 // Work on the transfer
+                if (this.TransferState != null)
+                {
+                    this.TransferState.TransferStartedAt = DateTime.Now;
 
+                    if (this.TransferState.LocalDirection == TransferDirection.Outgoing)
+                    {
+                        this.WorkTransferStateOutbound();
+                    }
+                    else if (this.TransferState.LocalDirection == TransferDirection.Incoming)
+                    {
+                        this.WorkTransferStateInbound();
+                    }
+
+                    this.TransferState.TransferCompletedAt = DateTime.Now;
+
+                }
+
+                this.workAvailable.Reset();
             }
         }
 
+        private void WorkTransferStateInbound()
+        {
+
+        }
+
+        private void WorkTransferStateOutbound()
+        {
+
+        }
+
+        [ContractInvariantMethod]
+        private void ContractInvariants()
+        {
+            Contract.Invariant(this.workAvailable != null);
+            Contract.Invariant(this.workThread != null);
+        }
         #endregion
     }
 }
