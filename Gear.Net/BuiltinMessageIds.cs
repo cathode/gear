@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gear.Net.Messages
+namespace Gear.Net
 {
     /// <summary>
     /// Contains static definitions of message dispatch id's for 1st party message types.
@@ -19,7 +19,11 @@ namespace Gear.Net.Messages
     public static class BuiltinMessageIds
     {
         // System
-        public static readonly int EndpointGreeting = 0x0001;
+
+        /// <summary>
+        /// Dispatch id for the <see cref="Gear.Net.Messages.PeerGreetingMessage"/> type.
+        /// </summary>
+        public static readonly int PeerGreeting = 0x0001;
         public static readonly int TeardownChannel = 0x0002;
 
         public static readonly int PeerHandoff = 0x0010;
@@ -35,6 +39,9 @@ namespace Gear.Net.Messages
         /// Dispatch id for the <see cref="Gear.Net.ChannelPlugins.RequestStreamMessage"/> type.
         /// </summary>
         public static readonly int RequestStream = 0x0105;
+
+        // Clustering
+        public static readonly int Retarget = 0x0200;
 
         // Networked collections
 

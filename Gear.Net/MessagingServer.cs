@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Gear.Net.Messages;
 
 namespace Gear.Net
 {
@@ -14,9 +16,10 @@ namespace Gear.Net
     public class MessagingServer
     {
         #region Fields
-        private readonly ObservableCollection<PeerMetadata> peers;
-        private readonly ReadOnlyObservableCollection<PeerMetadata> peersRO;
-        private ConnectionListener listener;
+        private readonly ObservableCollection<PeerSession> peers;
+        private readonly List<MessagingServerPendingClient> pending;
+        private readonly ConnectionListener listener;
+        private readonly object syncLock = new object();
         #endregion
         #region Constructors
 
@@ -27,8 +30,11 @@ namespace Gear.Net
         public MessagingServer(ushort port)
         {
             this.listener = new ConnectionListener(port);
-            this.peers = new ObservableCollection<PeerMetadata>();
-            this.peersRO = new ReadOnlyObservableCollection<PeerMetadata>(this.peers);
+            this.peers = new ObservableCollection<PeerSession>();
+
+            this.pending = new List<MessagingServerPendingClient>();
+
+            this.listener.ChannelConnected += this.Listener_ChannelConnected;
         }
 
         #endregion
@@ -78,14 +84,16 @@ namespace Gear.Net
             }
         }
 
+        public ServerMetadata ServerMetadata { get; private set; }
+
         /// <summary>
         /// Gets a collection of peers that are known to the messaging server.
         /// </summary>
-        public ReadOnlyObservableCollection<PeerMetadata> Peers
+        public ObservableCollection<PeerSession> Peers
         {
             get
             {
-                return this.peersRO;
+                return this.peers;
             }
         }
         #endregion
@@ -109,7 +117,74 @@ namespace Gear.Net
         /// </remarks>
         public void Stop(bool closeExistingConnections = true, bool immediate = false)
         {
-            throw new NotImplementedException();
+        }
+
+        protected virtual void Listener_ChannelConnected(object sender, ChannelEventArgs e)
+        {
+            var cc = e.Channel as ConnectedChannel;
+
+            if (cc != null)
+            {
+                var pc = new MessagingServerPendingClient();
+                pc.ConnectedAt = DateTime.Now;
+                pc.Connection = cc;
+
+                lock (this.syncLock)
+                {
+                    this.pending.Add(pc);
+                }
+
+                cc.RegisterHandler<PeerGreetingMessage>(this.MessageHandler_PeerGreeting, this);
+            }
+        }
+
+        protected virtual void MessageHandler_PeerGreeting(MessageEventArgs e, PeerGreetingMessage message)
+        {
+            // Check if the connection is still a pending client:
+            lock (this.syncLock)
+            {
+                var pc = this.pending.FirstOrDefault(p => p.Connection == e.Channel);
+
+                if (pc != null)
+                {
+
+                }
+            }
+
+            if (message.IsResponseRequested)
+            {
+                var reply = new PeerGreetingMessage();
+                reply.IsResponseRequested = false;
+                reply.Metadata = this.ServerMetadata;
+
+                e.Channel.Send(reply);
+            }
+        }
+
+        protected virtual void PendingGC()
+        {
+            // Drop connections that have exceeded the idle threshold.
+
+            if (Monitor.TryEnter(this.syncLock))
+            {
+                try
+                {
+                    var now = DateTime.Now;
+
+                    var deads = new List<MessagingServerPendingClient>();
+
+                    foreach (var pc in this.pending)
+                    {
+                        var delta = pc.ConnectedAt - now;
+
+                        // (pc.ConnectedAt - now)
+                    }
+                }
+                catch
+                {
+
+                }
+            }
         }
 
         [ContractInvariantMethod]

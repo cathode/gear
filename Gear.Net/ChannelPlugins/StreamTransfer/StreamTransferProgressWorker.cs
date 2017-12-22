@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Gear.Net.ChannelPlugins
+namespace Gear.Net.ChannelPlugins.StreamTransfer
 {
     public class StreamTransferProgressWorker
     {

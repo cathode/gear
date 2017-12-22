@@ -14,37 +14,25 @@ using ProtoBuf;
 
 namespace Gear.Net.Messages
 {
+    /// <summary>
+    /// Represents a greeting sent to a peer. The receiving side should reply with a greeting message.
+    /// </summary>
     [ProtoContract]
-    public class EndPointGreetingMessage : IMessage
+    public class PeerGreetingMessage : IMessage
     {
-        [ProtoMember(1)]
-        public Guid EndPointId { get; set; }
-
-        [ProtoMember(2)]
-        public EndPointKind Kind { get; set; }
-        //public 
-
-        public ushort DispatchId
-        {
-            get { return 0; }
-        }
-
-        public bool IsBroadcastMessage
+        [ProtoIgnore]
+        int IMessage.DispatchId
         {
             get
             {
-                return false;
+                return BuiltinMessageIds.PeerGreeting;
             }
         }
 
-        ushort IMessage.DispatchId
-        {
-            get { return Ids.ConnectionSetup; }
-        }
+        [ProtoMember(1)]
+        public PeerMetadata Metadata { get; set; }
 
-        bool IMessage.IsBroadcastMessage
-        {
-            get { return false; }
-        }
+        [ProtoMember(2)]
+        public bool IsResponseRequested { get; set; }
     }
 }

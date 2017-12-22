@@ -96,12 +96,12 @@ namespace Gear.Net
             return new IPTarget(hostEntry.HostName, (ushort)ep.Port);
         }
 
-        public IPEndPoint GetEndPoint()
+        public IPEndPoint[] ResolveEndPoints()
         {
             var hostEntry = Dns.GetHostEntry(this.Hostname);
             var addresses = hostEntry.AddressList.ToArray();
 
-            return new IPEndPoint(addresses[0], this.Port);
+            return addresses.Select(e => new IPEndPoint(e, this.Port)).ToArray();
         }
 
         /// <summary>

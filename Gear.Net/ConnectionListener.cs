@@ -49,6 +49,8 @@ namespace Gear.Net
         /// Raised when an incoming connection is accepted and forked off into a new <see cref="Channel"/> instance.
         /// </summary>
         public event EventHandler<ChannelEventArgs> ChannelConnected;
+
+        public event EventHandler ListenError;
         #endregion
 
         #region Properties
@@ -86,30 +88,32 @@ namespace Gear.Net
             this.isListening = true;
 
             this.listener.Bind(new IPEndPoint(IPAddress.Any, this.ListenPort));
-            this.listener.Listen(32);
+            this.listener.Listen(this.BacklogSize);
 
             // while (!this.token.IsCancellationRequested)
             while (this.isListening)
             {
-                try
-                {
-                    var sock = this.listener.Accept();
+                //try
+                //{
+                var sock = this.listener.Accept();
 
+                Task.Run(() =>
+                {
                     var channel = new ConnectedChannel(sock);
-
                     this.OnChannelConnected(this, new ChannelEventArgs(channel));
-                }
-                catch (TimeoutException ex)
-                {
-                    // TODO: Add logging.
-                    this.isListening = false;
-                    break;
-                }
-                catch (SocketException ex)
-                {
-                    this.isListening = false;
-                    break;
-                }
+                });
+                //}
+                //catch (TimeoutException ex)
+                //{
+                //    // TODO: Add logging.
+                //    this.isListening = false;
+                //    break;
+                //}
+                //catch (SocketException ex)
+                //{
+                //    this.isListening = false;
+                //    break;
+                //}
             }
         }
 

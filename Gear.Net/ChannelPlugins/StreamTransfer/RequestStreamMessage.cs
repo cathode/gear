@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ProtoBuf;
 
-namespace Gear.Net.ChannelPlugins
+namespace Gear.Net.ChannelPlugins.StreamTransfer
 {
     [ProtoContract]
     public class RequestStreamMessage : IMessage
@@ -15,7 +15,7 @@ namespace Gear.Net.ChannelPlugins
         {
             get
             {
-                return Gear.Net.Messages.BuiltinMessageIds.RequestStream;
+                return BuiltinMessageIds.RequestStream;
             }
         }
 

@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Gear.Net.ChannelPlugins
+namespace Gear.Net.ChannelPlugins.StreamTransfer
 {
     /// <summary>
     /// Implements a <see cref="ChannelPlugin"/> that handles file and data stream transfer tasks for the attached <see cref="Channel"/>.

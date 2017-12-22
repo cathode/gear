@@ -167,7 +167,7 @@ namespace Gear.Net
                 throw new InvalidOperationException();
             }
 
-            var ep = this.connectionTarget.GetNextReachableEndPoint();
+            var eps = this.connectionTarget.ResolveEndPoints();
 
             if (this.socket != null)
             {
@@ -176,19 +176,28 @@ namespace Gear.Net
 
             this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-            try
+            foreach (var ep in eps)
             {
-                this.socket.Connect(ep);
-                this.OnConnected();
-                this.Setup();
-                return true;
+                try
+                {
+                    this.socket.Connect(ep);
+                    this.OnConnected();
+                    this.Setup();
+                    return true;
+                }
+                catch
+                {
+                }
             }
-            catch (Exception ex)
-            {
-                // TODO: Handle failed connection attempt
-                this.OnDisconnected();
-                return false;
-            }
+
+            // TODO: Handle failed connection attempt
+            this.OnDisconnected();
+            return false;
+        }
+
+        public void Disconnect()
+        {
+            this.socket.Disconnect(false);
         }
 
         /// <summary>
@@ -198,10 +207,7 @@ namespace Gear.Net
         {
             this.State = ChannelState.Connected;
 
-            if (this.Connected != null)
-            {
-                this.Connected(this, EventArgs.Empty);
-            }
+            this.Connected?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -401,7 +407,6 @@ namespace Gear.Net
         {
             Contract.Invariant(this.connectionTarget != null);
         }
-
         #endregion
 
         protected class RxState

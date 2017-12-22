@@ -5,19 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using ProtoBuf;
 
-namespace Gear.Net.Collections
+namespace Gear.Net.ChannelPlugins.Clustering
 {
-    public class NetworkedCollectionStateMessage : IMessage
+    [ProtoContract]
+    public class RetargetMessage : IMessage
     {
         int IMessage.DispatchId
         {
             get
             {
-                return BuiltinMessageIds.NetworkedCollectionAction;
+                return BuiltinMessageIds.Retarget;
             }
         }
 
         [ProtoMember(1)]
-        public NetworkedCollectionStateAction Action { get; set; }
+        public IPTarget NewTarget { get; set; }
     }
 }
