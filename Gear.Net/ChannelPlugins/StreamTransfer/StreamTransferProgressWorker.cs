@@ -41,7 +41,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             internal set
             {
                 this.transferState = value;
-                this.workAvailable.Set();
+                //this.workAvailable.Set();
             }
         }
 
@@ -55,6 +55,11 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
         #endregion
         #region Methods
+
+        internal void Start()
+        {
+            this.workAvailable.Set();
+        }
 
         /// <summary>
         /// Flags the worker as destroyed so that when it's done processing it will shut down gracefully.
@@ -104,7 +109,11 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
         private void WorkTransferStateOutbound()
         {
+            var sm = this.TransferState.LocalStream;
 
+            //var netStream = new System.Net.Sockets.NetworkStream(this.TransferState.DataConnection);
+
+            //sm.CopyTo(netStream);
         }
 
         [ContractInvariantMethod]

@@ -110,5 +110,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
         [ProtoIgnore]
         public StreamTransferPlugin Parent { get; set; }
+
+        [ProtoIgnore]
+        public StreamTransferProgressWorker Worker { get; set; }
     }
 }

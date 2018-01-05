@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ using Gear.Geometry;
 using Gear.Model;
 using Gear.Modeling.Primitives;
 using Gear.Net;
+using GSCore;
 
 namespace Gear.Client
 {
@@ -26,14 +28,14 @@ namespace Gear.Client
         static void Main(string[] args)
         {
             // Log to console.
-            Log.BindOutput(Console.OpenStandardOutput());
-            Log.Write("Message log initialized", "system", LogMessageGroup.Info);
+            Log.Write(LogMessageGroup.Critical, "Initializing logging...");
+            Log.Write(LogMessageGroup.Important, "Gear Client - v{0}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
             //MessageSerializationHelper.AddMessageSubtypes();
             MessageSerializationHelper.AddMessageSubtypes(typeof(Channel).Assembly);
 
             // For testing
-            Thread.Sleep(5000);
+            Thread.Sleep(1000);
 
             //var target = new IPTarget("localhost", 9888);
 

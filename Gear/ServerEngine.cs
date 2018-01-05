@@ -8,6 +8,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System;
+using GSCore;
 
 namespace Gear
 {

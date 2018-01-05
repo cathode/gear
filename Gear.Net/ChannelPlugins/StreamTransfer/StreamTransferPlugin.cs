@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GSCore;
 
 namespace Gear.Net.ChannelPlugins.StreamTransfer
 {
@@ -115,16 +116,23 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
         public static StreamTransferProgressWorker BindNextAvailableTransferWorker(StreamTransferState transferState)
         {
-            lock (StreamTransferPlugin.workers)
+            if (transferState.Worker == null)
             {
-                var available = workers.FirstOrDefault(e => e.IsIdle);
-
-                if (available != null)
+                lock (StreamTransferPlugin.workers)
                 {
-                    available.TransferState = transferState;
-                }
+                    var available = workers.FirstOrDefault(e => e.IsIdle);
 
-                return available;
+                    if (available != null)
+                    {
+                        available.TransferState = transferState;
+                    }
+
+                    return available;
+                }
+            }
+            else
+            {
+                return transferState.Worker;
             }
         }
 
@@ -205,6 +213,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         {
             Contract.Requires<ArgumentNullException>(filePath != null);
             Contract.Requires<InvalidOperationException>(this.IsAttached);
+            
+            //Log.Write("Sending {0}")
 
             // Sanity checking:
             if (!File.Exists(filePath))
@@ -218,10 +228,9 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             // Build transfer state:
             var state = new StreamTransferState(finfo);
             state.LocalDirection = TransferDirection.Outgoing;
+            state.LocalStream = finfo.OpenRead();
             this.transfers.Add(state);
             this.newStates.Enqueue(state);
-
-            this.ProcessNewStates();
 
             var msg = new TransferStreamMessage();
             msg.TransferState = state;
@@ -242,6 +251,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             this.AttachedChannel.Send(msg);
 
             StreamTransferPlugin.BindNextAvailableTransferWorker(state);
+
+            this.ProcessNewStates();
 
             return state;
         }
@@ -298,6 +309,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         {
             Contract.Requires<ArgumentNullException>(message != null);
 
+            Log.Write(LogMessageGroup.Debug, "Received stream transfer request for file {0} from {1}", message.TransferState.Name, e.Sender);
+
             var state = message.TransferState;
             state.Parent = this;
             state.LocalDirection = TransferDirection.Incoming;
@@ -327,6 +340,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
                             this.newStates.Dequeue();
                             this.boundWorkers.Add(state.TransferId, worker);
+
+                            worker.Start();
                         }
                         else
                         {

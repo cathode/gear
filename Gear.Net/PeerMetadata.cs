@@ -48,7 +48,7 @@ namespace Gear.Net
         /// <summary>
         /// Gets or sets the unique id of the peer.
         /// </summary>
-        [ProtoMember(0)]
+        [ProtoMember(1)]
         public Guid PeerId
         {
             get
@@ -69,7 +69,7 @@ namespace Gear.Net
         /// <remarks>
         /// This is not necessarily the same as the version of the Gear.Net library.
         /// </remarks>
-        [ProtoMember(1)]
+        [ProtoMember(2)]
         public Version SoftwareVersion
         {
             get
@@ -87,7 +87,7 @@ namespace Gear.Net
         /// <summary>
         /// Gets or sets the <see cref="DateTime"/> that the current connection to this peer was established.
         /// </summary>
-        [ProtoMember(2)]
+        [ProtoMember(3)]
         public DateTime ConnectedAt
         {
             get
@@ -106,7 +106,7 @@ namespace Gear.Net
         /// <summary>
         /// Gets or sets the <see cref="DateTime"/> that indicates when the last message was sent by the peer.
         /// </summary>
-        [ProtoMember(3)]
+        [ProtoMember(4)]
         public DateTime LastSeenAt
         {
             get
@@ -124,7 +124,7 @@ namespace Gear.Net
         /// <summary>
         /// Gets or sets the <see cref="IPEndPoint"/> that describes the client's network address.
         /// </summary>
-        [ProtoMember(4)]
+        [ProtoMember(5)]
         public IPEndPoint PeerAddress
         {
             get

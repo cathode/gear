@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using Gear.Net;
 using Gear.Services;
 using Newtonsoft.Json;
+using GSCore;
 
 namespace Gear.Server
 {
@@ -30,7 +31,11 @@ namespace Gear.Server
 
         public static void Main(string[] args)
         {
-            Console.WriteLine("Gear Server - v" + Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            // Init logging first:
+            Log.Write(LogMessageGroup.Critical, "Initializing logging...");
+            Log.Write(LogMessageGroup.Important, "Gear Server - v{0}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
+            //Console.WriteLine("Gear Server - v" + Assembly.GetExecutingAssembly().GetName().Version.ToString());
             // Read configuration.
 
             var ser = new JsonSerializer();
@@ -43,16 +48,12 @@ namespace Gear.Server
 
             var clusterId = config.ClusterId;
 
-            // Log to console.
-            Log.BindOutput(Console.OpenStandardOutput());
-
             if (!string.IsNullOrEmpty(config.LogFile))
             {
                 Log.BindOutput(File.Open(config.LogFile, FileMode.Append, FileAccess.Write, FileShare.None));
             }
 
-            Log.Write("Message log initialized", "system", LogMessageGroup.Info);
-
+            Gear.Net.MessageSerializationHelper.MessageTypeDiscovered += (o, e) => { Log.Write(LogMessageGroup.Debug, "Discovered network message type: {0}", e.DiscoveredType.Name); };
             //Gear.Net.MessageSerializationHelper.AddMessageSubtypes();
             Gear.Net.MessageSerializationHelper.AddMessageSubtypes(typeof(Gear.Net.Channel).Assembly);
 
@@ -86,7 +87,6 @@ namespace Gear.Server
             var stp = new Gear.Net.ChannelPlugins.StreamTransfer.StreamTransferPlugin();
             stp.Attach(e.Channel);
             stp.CanHostActiveTransfers = true;
-
 
             perfCountStart = DateTime.Now;
             perfCountLastUpdate = DateTime.Now;
