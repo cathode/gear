@@ -14,6 +14,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GSCore;
 using ProtoBuf;
 using ProtoBuf.Meta;
 
@@ -76,8 +77,8 @@ namespace Gear.Net
             this.rxQueue = new Queue<IMessage>();
             this.rxBuffer = new Queue<IMessage>();
 
-            this.txFlushGate = new AutoResetEvent(true);
-            this.isRxQueueIdle = true;
+            //this.txFlushGate = new AutoResetEvent(true);
+            //this.isRxQueueIdle = true;
         }
         #endregion
 
@@ -273,11 +274,11 @@ namespace Gear.Net
                             var b = this.txBuffer;
                             this.txBuffer = q;
                             this.txQueue = b;
-                        }
 
-                        if (this.txBuffer.Count > 0)
-                        {
-                            this.SendMessages(this.txBuffer);
+                            if (this.txBuffer.Count > 0)
+                            {
+                                this.SendMessages(this.txBuffer);
+                            }
                         }
                     }
                 }
@@ -296,29 +297,44 @@ namespace Gear.Net
         /// </summary>
         protected void ProcessRxQueue()
         {
-            if (this.isRxQueueIdle)
+            try
             {
-                this.isRxQueueIdle = false;
-
-                if (this.State == ChannelState.Connected)
+                // Ensure method is limited to a single active call.
+                // If another call to FlushMessage is running (has txFlushGate locked), we just abort.
+                if (Monitor.TryEnter(this.rxFlushGate, 50))
                 {
-                    lock (this.rxQueue)
+
+                    if (this.State == ChannelState.Connected)
                     {
-                        var q = this.rxQueue;
-                        var b = this.rxBuffer;
-                        this.rxBuffer = q;
-                        this.rxQueue = b;
+                        lock (this.rxQueue)
+                        {
+                            var q = this.rxQueue;
+                            var b = this.rxBuffer;
+                            this.rxBuffer = q;
+                            this.rxQueue = b;
+                        }
+
+                        while (this.rxBuffer.Count > 0)
+                        {
+                            var item = this.rxBuffer.Dequeue();
+
+                            this.OnMessageReceived(new MessageEventArgs(item) { ReceivedAt = DateTime.Now, Sender = this.RemoteEndPoint, Channel = this });
+                        }
                     }
 
-                    while (this.rxBuffer.Count > 0)
-                    {
-                        var item = this.rxBuffer.Dequeue();
-
-                        this.OnMessageReceived(new MessageEventArgs(item) { ReceivedAt = DateTime.Now, Sender = this.RemoteEndPoint, Channel = this });
-                    }
+                    this.isRxQueueIdle = true;
                 }
-
-                this.isRxQueueIdle = true;
+                else
+                {
+                    //Log.Write(LogMessageGroup.Debug, "Another thread already processing RxQueue");
+                }
+            }
+            finally
+            {
+                if (Monitor.IsEntered(this.rxFlushGate))
+                {
+                    Monitor.Exit(this.rxFlushGate);
+                }
             }
         }
 

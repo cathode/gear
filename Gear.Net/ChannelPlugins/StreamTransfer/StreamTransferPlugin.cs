@@ -27,7 +27,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         private readonly ObservableCollection<StreamTransferState> transfers;
         private readonly ReadOnlyObservableCollection<StreamTransferState> transfersRO;
         private readonly Dictionary<int, StreamTransferProgressWorker> boundWorkers = new Dictionary<int, StreamTransferProgressWorker>();
-        private readonly Queue<StreamTransferState> newStates = new Queue<StreamTransferState>();
+        //private readonly Queue<StreamTransferState> newStates = new Queue<StreamTransferState>();
+        private readonly object processLock = new object();
         #endregion
         #region Constructors
 
@@ -35,7 +36,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         {
             TransferPortPoolStart = 55000;
             TransferPortPoolEnd = 55999;
-            MaxGlobalSimultaneousTransfers = 1;
+            MaxGlobalSimultaneousTransfers = 2;
         }
 
         /// <summary>
@@ -120,11 +121,14 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             {
                 lock (StreamTransferPlugin.workers)
                 {
+                    StreamTransferPlugin.UpdateTransferWorkerPool();
+
                     var available = workers.FirstOrDefault(e => e.IsIdle);
 
                     if (available != null)
                     {
                         available.TransferState = transferState;
+                        transferState.Worker = available;
                     }
 
                     return available;
@@ -213,8 +217,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         {
             Contract.Requires<ArgumentNullException>(filePath != null);
             Contract.Requires<InvalidOperationException>(this.IsAttached);
-            
-            //Log.Write("Sending {0}")
+
+            Log.Write(LogMessageGroup.Informational, "Queuing {0} for sending to remote peer", filePath);
 
             // Sanity checking:
             if (!File.Exists(filePath))
@@ -229,38 +233,88 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             var state = new StreamTransferState(finfo);
             state.LocalDirection = TransferDirection.Outgoing;
             state.LocalStream = finfo.OpenRead();
-            this.transfers.Add(state);
-            this.newStates.Enqueue(state);
+            state.ProgressHint = TransferProgressHint.Queued;
 
-            var msg = new TransferStreamMessage();
-            msg.TransferState = state;
+            // Queue transfer
+            this.AddTransferState(state);
 
-            if (!this.CanHostActiveTransfers)
-            {
-                msg.RequestDataPort = true;
-            }
-            else
-            {
-                var listener = StreamTransferPlugin.GetNextDataPortListener();
-                state.DataConnection = listener;
-
-                msg.RequestDataPort = false;
-                msg.DataPort = (ushort)((IPEndPoint)listener.LocalEndPoint).Port;
-            }
-
-            this.AttachedChannel.Send(msg);
-
-            StreamTransferPlugin.BindNextAvailableTransferWorker(state);
-
-            this.ProcessNewStates();
+            Task.Run(() => this.ProcessStateQueue());
 
             return state;
+        }
+
+        protected void ProcessStateQueue()
+        {
+            try
+            {
+                if (Monitor.TryEnter(this.processLock))
+                {
+                    // Collect any queued (but not initiated) transfers)
+                    var waiting = this.transfers.Where(e => e.ProgressHint == TransferProgressHint.Queued).ToArray();
+
+                    Log.Write(LogMessageGroup.Debug, "Processing state queue on thread {0} - {1} queued waiting.", Thread.CurrentThread.ManagedThreadId, waiting.Length);
+                    foreach (var state in waiting)
+                    {
+                        if (state == null)
+                        {
+                            Log.Write(LogMessageGroup.Critical, "Null stream transfer state object in collection.");
+                            throw new Exception();
+                        }
+
+                        if (state.Parent != null)
+                        {
+                            if (state.Parent != this)
+                            {
+                                Log.Write(LogMessageGroup.Critical, "Incorrect transfer state <-> plugin parent relationship.");
+                                throw new Exception();
+                            }
+                        }
+                        else
+                        {
+                            state.Parent = this;
+                        }
+
+                        // Attempt to attach the new state to a transfer worker.
+                        var worker = StreamTransferPlugin.BindNextAvailableTransferWorker(state);
+
+                        if (worker != null)
+                        {
+                            state.ProgressHint = TransferProgressHint.Initiated;
+
+                            worker.Start();
+                        }
+                        else
+                        {
+                            // Bail out because we're out of available workers.
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    Log.Write(LogMessageGroup.Debug, "Another thread already processing state queue.");
+                }
+            }
+            finally
+            {
+                if (Monitor.IsEntered(this.processLock))
+                {
+                    Monitor.Exit(this.processLock);
+                }
+            }
         }
 
         protected static void UpdateTransferWorkerPool()
         {
             lock (workers)
             {
+                // Clean up dead workers
+                var dead = workers.Where(e => !e.IsAlive).ToArray();
+                for (int i = 0; i < dead.Length; ++i)
+                {
+                    workers.Remove(dead[i]);
+                }
+
                 if (workers.Count < MaxGlobalSimultaneousTransfers)
                 {
                     // Add workers up to the max
@@ -295,14 +349,12 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
         protected virtual void Handle_StreamDataPortReadyMessage(MessageEventArgs e, StreamDataPortReadyMessage message)
         {
+            Log.Write(LogMessageGroup.Debug, "Transfer {0} - Remote peer listening on TCP port {1} for data connection.", message.TransferId, message.DataPort);
             var state = this.transfers.First(t => t.TransferId == message.TransferId);
-
-            var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-            socket.Connect(new IPEndPoint(this.AttachedChannel.RemoteEndPoint.Address, message.DataPort));
-
-            var buffer = File.ReadAllBytes(state.LocalPath);
-            socket.Send(buffer);
+            state.DataConnection = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            state.DataConnection.Connect(new IPEndPoint(this.AttachedChannel.RemoteEndPoint.Address, message.DataPort));
+            state.ProgressStep.Set();
+            //state.Worker.Start();
         }
 
         protected virtual void Handle_TransferStreamMessage(MessageEventArgs e, TransferStreamMessage message)
@@ -316,48 +368,37 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             state.LocalDirection = TransferDirection.Incoming;
             state.TransferInitiatedAt = DateTime.Now;
 
-            this.transfers.Add(state);
-            this.newStates.Enqueue(state);
+            this.AddTransferState(state);
 
-            this.ProcessNewStates();
+            Task.Run(() => this.ProcessStateQueue());
         }
 
-        protected void ProcessNewStates()
+        protected void AddTransferState(StreamTransferState state)
         {
-            try
+            lock (this.processLock)
             {
-                if (Monitor.TryEnter(this.newStates))
-                {
-                    while (this.newStates.Count > 0)
-                    {
-                        var state = this.newStates.Peek();
-                        var worker = StreamTransferPlugin.BindNextAvailableTransferWorker(state);
-
-                        if (worker != null)
-                        {
-                            Contract.Assume(state != null);
-                            Contract.Assume(this.newStates.Count > 0);
-
-                            this.newStates.Dequeue();
-                            this.boundWorkers.Add(state.TransferId, worker);
-
-                            worker.Start();
-                        }
-                        else
-                        {
-                            // Bail out because we're out of available workers.
-                            return;
-                        }
-                    }
-                }
+                state.Completed += this.HandleTransferStateCompletion;
+                state.Aborted += this.HandleTransferStateAbortion;
+                this.transfers.Add(state);
             }
-            finally
-            {
-                if (Monitor.IsEntered(this.newStates))
-                {
-                    Monitor.Exit(this.newStates);
-                }
-            }
+        }
+
+        protected virtual void HandleTransferStateCompletion(object sender, EventArgs e)
+        {
+            // cleanup transfer state
+            var state = sender as StreamTransferState;
+
+            state.Completed -= this.HandleTransferStateCompletion;
+            state.Aborted -= this.HandleTransferStateAbortion;
+
+            state.Worker?.Recycle();
+
+            this.ProcessStateQueue();
+        }
+
+        protected virtual void HandleTransferStateAbortion(object sender, EventArgs e)
+        {
+            this.ProcessStateQueue();
         }
 
         [ContractInvariantMethod]
@@ -365,7 +406,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         {
             Contract.Invariant(this.transfers != null);
             Contract.Invariant(this.FileTransfers != null);
-            Contract.Invariant(this.newStates != null);
+            //Contract.Invariant(this.newStates != null);
             Contract.Invariant(this.boundWorkers != null);
         }
         #endregion

@@ -44,16 +44,14 @@ namespace Gear.Client
             //var tgt = IPTarget.FromIPEndPoint(ep);
 
             var channel = ConnectedChannel.ConnectTo(new System.Net.IPEndPoint(IPAddress.Loopback, 9888));
+            channel.InvokeHandlersAsync = true;
 
             var stp = new Gear.Net.ChannelPlugins.StreamTransfer.StreamTransferPlugin();
             stp.Attach(channel);
             stp.CanHostActiveTransfers = false;
 
+            stp.SendFile("Gear.Client.exe");
             stp.SendFile("Gear.Client.exe.config");
-            //var ns = new Gear.Net.Collections.NetworkedCollection<DateTime>();
-            //ns.Consume(1234, channel);
-
-            //ns.ItemAdded += Ns_ItemAdded;
 
             while (true)
             {

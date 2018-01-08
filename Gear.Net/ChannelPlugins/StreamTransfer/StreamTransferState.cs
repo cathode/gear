@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ProtoBuf;
 
@@ -17,6 +18,10 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
     [ProtoContract]
     public class StreamTransferState : INotifyPropertyChanged
     {
+        #region Fields
+        internal AutoResetEvent ProgressStep = new AutoResetEvent(false);
+        private TransferProgressHint progressHint = TransferProgressHint.Queued;
+        #endregion
         /// <summary>
         /// Initializes a new instance of the <see cref="StreamTransferState"/> class.
         /// </summary>
@@ -39,6 +44,16 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
             this.LocalPath = finfo.FullName;
         }
+
+        /// <summary>
+        /// Raised when the transfer completes.
+        /// </summary>
+        public event EventHandler Completed;
+
+        /// <summary>
+        /// Raised if the transfer is aborted (fails or is cancelled);
+        /// </summary>
+        public event EventHandler Aborted;
 
         /// <summary>
         /// Raised when a property value changes.
@@ -90,6 +105,9 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         [ProtoIgnore]
         public Stream LocalStream { get; set; }
 
+        [ProtoMember(6)]
+        public ushort? DataPort { get; set; }
+
         [ProtoIgnore]
         public Socket DataConnection { get; set; }
 
@@ -106,12 +124,37 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         public TransferDirection LocalDirection { get; set; }
 
         [ProtoIgnore]
-        public TransferProgressHint ProgressHint { get; set; }
+        public TransferProgressHint ProgressHint
+        {
+            get
+            {
+                return this.progressHint;
+            }
+
+            set
+            {
+                this.progressHint = value;
+
+                if (value == TransferProgressHint.Completed)
+                {
+                    this.OnCompleted();
+                }
+            }
+        }
 
         [ProtoIgnore]
         public StreamTransferPlugin Parent { get; set; }
 
         [ProtoIgnore]
         public StreamTransferProgressWorker Worker { get; set; }
+
+        /// <summary>
+        /// Raises the <see cref="StreamTransferState.Completed"/> event.
+        /// </summary>
+        /// <param name="e">Event data associated with the event (unused).</param>
+        protected virtual void OnCompleted(EventArgs e = null)
+        {
+            this.Completed?.Invoke(this, e ?? EventArgs.Empty);
+        }
     }
 }
