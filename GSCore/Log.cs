@@ -35,6 +35,8 @@ namespace GSCore
 
         public static bool OutputToConsole = true;
 
+        public static LogMessageGroup ConsoleOutputGroups = LogMessageGroup.All;
+
         private static readonly Queue<LogMessage> buffer = new Queue<LogMessage>();
         private static readonly List<LogOutput> outputs = new List<LogOutput>();
         private static readonly List<LogMessageHandler> handlers = new List<LogMessageHandler>();
@@ -131,11 +133,10 @@ namespace GSCore
                 {
                     var data = Log.buffer.Dequeue();
 
-#if !DEBUG
-                    if (data.Level == LogMessageGroup.Debug)
-                   
+                    if (!Log.ConsoleOutputGroups.HasFlag(data.Level))    
+                    {
                         continue;
-#endif
+                    }
                     if (Log.OutputToConsole)
                     {
                         if (data.Level == LogMessageGroup.Critical)

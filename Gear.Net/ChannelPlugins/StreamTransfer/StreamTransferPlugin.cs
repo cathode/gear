@@ -20,23 +20,31 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
     {
         #region Fields
 
+        /// <summary>
+        /// Holds the default buffer size (in bytes) used for individual reads/writes/sends/receives during stream transfer operations.
+        /// </summary>
+        public const int DefaultBufferSize = 65000;
+
+        public const ushort DefaultTransferPortPoolStart = 55000;
+        public const ushort DefaultTransferPortPoolEnd = 59999;
+
+        public const int DefaultMaxGlobalActiveWorkers = 1;
+
         private static readonly object poolLock = new object();
         private static readonly Collection<StreamTransferProgressWorker> workers = new Collection<StreamTransferProgressWorker>();
         private static ushort lastAssignedDataPort;
         private static int maxGlobalSimultaneousTransfers;
         private readonly ObservableCollection<StreamTransferState> transfers;
         private readonly ReadOnlyObservableCollection<StreamTransferState> transfersRO;
-        private readonly Dictionary<int, StreamTransferProgressWorker> boundWorkers = new Dictionary<int, StreamTransferProgressWorker>();
-        //private readonly Queue<StreamTransferState> newStates = new Queue<StreamTransferState>();
         private readonly object processLock = new object();
         #endregion
         #region Constructors
 
         static StreamTransferPlugin()
         {
-            TransferPortPoolStart = 55000;
-            TransferPortPoolEnd = 55999;
-            MaxGlobalSimultaneousTransfers = 2;
+            TransferPortPoolStart = DefaultTransferPortPoolStart;
+            TransferPortPoolEnd = DefaultTransferPortPoolEnd;
+            MaxGlobalActiveWorkers = DefaultMaxGlobalActiveWorkers;
         }
 
         /// <summary>
@@ -51,12 +59,20 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         }
 
         #endregion
+        #region Events
+
+        /// <summary>
+        /// Notifies subscribers when this instance receives a stream transfer from the remote endpoint associated with the <see cref="ChannelPlugin.AttachedChannel"/>.
+        /// </summary>
+        public event EventHandler<StreamTransferEventArgs> TransferReceived;
+
+        #endregion
         #region Properties
 
         /// <summary>
         /// Gets or sets a maximum number of global stream transfers across all instances.
         /// </summary>
-        public static int MaxGlobalSimultaneousTransfers
+        public static int MaxGlobalActiveWorkers
         {
             get
             {
@@ -115,6 +131,11 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         #endregion
         #region Methods
 
+        /// <summary>
+        /// Gets an available <see cref="StreamTransferProgressWorker"/> and attaches the specified <see cref="StreamTransferState"/> to it.
+        /// </summary>
+        /// <param name="transferState">The <see cref="StreamTransferState"/> instance to attach to an available worker.</param>
+        /// <returns>The <see cref="StreamTransferProgressWorker"/> instance that was attached, or null if no workers were available.</returns>
         public static StreamTransferProgressWorker BindNextAvailableTransferWorker(StreamTransferState transferState)
         {
             if (transferState.Worker == null)
@@ -209,6 +230,27 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         }
 
         /// <summary>
+        /// Queues a <see cref="Stream"/> for sending to the remote peer.
+        /// </summary>
+        /// <param name="stream">The <see cref="Stream"/> to transfer.</param>
+        /// <param name="extendedAttributes">Optional. A dictionary of extended metadata to include with the stream transfer.</param>
+        /// <returns>A <see cref="StreamTransferState"/> object used to track the progress of the transfer.</returns>
+        public StreamTransferState QueueStream(Stream stream, Dictionary<string, string> extendedAttributes = null)
+        {
+            var state = new StreamTransferState();
+
+            state.LocalStream = stream;
+            state.LocalDirection = TransferDirection.Outgoing;
+            state.LocalPath = string.Empty;
+            state.Length = stream.Length;
+            state.ExtendedAttributes = extendedAttributes;
+
+            this.AddTransferState(state);
+
+            return state;
+        }
+
+        /// <summary>
         /// Initiates a stream transfer of the file at the specified path.
         /// </summary>
         /// <param name="filePath">The local path of the file to send.</param>
@@ -241,6 +283,11 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             Task.Run(() => this.ProcessStateQueue());
 
             return state;
+        }
+
+        public void ProcessQueue()
+        {
+            Task.Run(() => this.ProcessStateQueue());
         }
 
         protected void ProcessStateQueue()
@@ -315,10 +362,10 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                     workers.Remove(dead[i]);
                 }
 
-                if (workers.Count < MaxGlobalSimultaneousTransfers)
+                if (workers.Count < MaxGlobalActiveWorkers)
                 {
                     // Add workers up to the max
-                    var add = MaxGlobalSimultaneousTransfers - workers.Count;
+                    var add = MaxGlobalActiveWorkers - workers.Count;
 
                     for (int i = 0; i < add; ++i)
                     {
@@ -327,10 +374,10 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                         workers.Add(worker);
                     }
                 }
-                else if (workers.Count > MaxGlobalSimultaneousTransfers)
+                else if (workers.Count > MaxGlobalActiveWorkers)
                 {
                     // Purge extra workers
-                    var remove = workers.Count - MaxGlobalSimultaneousTransfers;
+                    var remove = workers.Count - MaxGlobalActiveWorkers;
 
                     var extra = workers.OrderBy(k => k.IsIdle).Take(remove).ToArray();
 
@@ -370,6 +417,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
             this.AddTransferState(state);
 
+            this.OnTransferReceived(new StreamTransferEventArgs(state));
+
             Task.Run(() => this.ProcessStateQueue());
         }
 
@@ -401,13 +450,21 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             this.ProcessStateQueue();
         }
 
+        protected virtual void OnTransferReceived(StreamTransferEventArgs e)
+        {
+            this.TransferReceived?.Invoke(this, e);
+
+            if (e.TransferState.LocalStream == null)
+            {
+                e.TransferState.LocalStream = new MemoryStream();
+            }
+        }
+
         [ContractInvariantMethod]
         private void ContractInvariants()
         {
             Contract.Invariant(this.transfers != null);
             Contract.Invariant(this.FileTransfers != null);
-            //Contract.Invariant(this.newStates != null);
-            Contract.Invariant(this.boundWorkers != null);
         }
         #endregion
     }

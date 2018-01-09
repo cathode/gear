@@ -179,7 +179,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             // Receive data from remote
             long remain = this.TransferState.Length;
             long recvTotal = 0;
-            this.TransferState.LocalStream = new MemoryStream();
+            //this.TransferState.LocalStream = new MemoryStream();
 
             var bufferSize = 8192;
             var buffer = new byte[bufferSize];

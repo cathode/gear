@@ -152,6 +152,7 @@
     <Compile Include="ChannelPlugins\Clustering\RetargetMessage.cs" />
     <Compile Include="ChannelPlugins\StreamTransfer\RequestStreamMessage.cs" />
     <Compile Include="ChannelPlugins\StreamTransfer\StreamDataPortReadyMessage.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\StreamTransferEventArgs.cs" />
     <Compile Include="ChannelPlugins\StreamTransfer\StreamTransferProgressWorker.cs" />
     <Compile Include="ChannelPlugins\StreamTransfer\StreamTransferState.cs" />
     <Compile Include="ChannelPlugins\StreamTransfer\TransferProgressHint.cs" />
