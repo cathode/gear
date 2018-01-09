@@ -175,33 +175,43 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             }
 
             this.TransferState.ProgressHint = TransferProgressHint.Receiving;
-
-            // Receive data from remote
-            long remain = this.TransferState.Length;
-            long recvTotal = 0;
-            //this.TransferState.LocalStream = new MemoryStream();
-
-            var bufferSize = 8192;
-            var buffer = new byte[bufferSize];
             var dc = this.TransferState.DataConnection;
-
-            while (remain > 0)
+            try
             {
-                // Calculate buffer size of next receive
-                int expect = (int)Math.Min(8192, remain);
+                // Receive data from remote
+                long remain = this.TransferState.Length;
+                long recvTotal = 0;
+                //this.TransferState.LocalStream = new MemoryStream();
 
-                var recvd = dc.Receive(buffer, expect, System.Net.Sockets.SocketFlags.None);
+                var bufferSize = 8192;
+                var buffer = new byte[bufferSize];
 
-                this.TransferState.LocalStream.Write(buffer, 0, recvd);
+                while (remain > 0)
+                {
+                    // Calculate buffer size of next receive
+                    int expect = (int)Math.Min(8192, remain);
 
-                remain -= recvd;
-                recvTotal += recvd;
+                    var recvd = dc.Receive(buffer, expect, System.Net.Sockets.SocketFlags.None);
+
+                    this.TransferState.LocalStream.Write(buffer, 0, recvd);
+
+                    remain -= recvd;
+                    recvTotal += recvd;
+                }
+
+                Log.Write(LogMessageGroup.Debug, "Transfer {0} - received {1} bytes.", this.TransferState.TransferId, recvTotal);
+
             }
-
-            Log.Write(LogMessageGroup.Debug, "Transfer {0} - received {1} bytes.", this.TransferState.TransferId, recvTotal);
-
-            // Cleanup
-            dc.Close();
+            catch (Exception ex)
+            {
+                Log.Write(LogMessageGroup.Important, "Failure while processing inbound stream transfer: {0}", ex.Message);
+                this.TransferState.ProgressHint = TransferProgressHint.Failed;
+            }
+            finally
+            {
+                // Cleanup
+                dc.Close();
+            }
         }
 
         private void WorkTransferStateOutbound()
@@ -244,28 +254,35 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             this.TransferState.ProgressStep.WaitOne();
 
             this.TransferState.ProgressHint = TransferProgressHint.Sending;
-
-            long remain = this.TransferState.Length;
-            long sendTotal = 0;
-
-            var bufferSize = 8192;
-            var buffer = new byte[bufferSize];
-            var dc = this.TransferState.DataConnection;
-
-            while (remain > 0)
+            try
             {
-                // Calculate buffer size of next send
-                int expect = (int)Math.Min(8192, remain);
+                long remain = this.TransferState.Length;
+                long sendTotal = 0;
 
-                this.TransferState.LocalStream.Read(buffer, 0, expect);
+                var bufferSize = 8192;
+                var buffer = new byte[bufferSize];
+                var dc = this.TransferState.DataConnection;
 
-                var sent = dc.Send(buffer, expect, System.Net.Sockets.SocketFlags.None);
+                while (remain > 0)
+                {
+                    // Calculate buffer size of next send
+                    int expect = (int)Math.Min(8192, remain);
 
-                remain -= sent;
-                sendTotal += sent;
+                    this.TransferState.LocalStream.Read(buffer, 0, expect);
+
+                    var sent = dc.Send(buffer, expect, System.Net.Sockets.SocketFlags.None);
+
+                    remain -= sent;
+                    sendTotal += sent;
+                }
+
+                Log.Write(LogMessageGroup.Debug, "Transfer {0} -  sent {1} bytes.", this.TransferState.TransferId, sendTotal);
             }
-
-            Log.Write(LogMessageGroup.Debug, "Transfer {0} -  sent {1} bytes.", this.TransferState.TransferId, sendTotal);
+            catch (Exception ex)
+            {
+                Log.Write(LogMessageGroup.Important, "Failure while processing outbound stream transfer: {0}", ex.Message);
+                this.TransferState.ProgressHint = TransferProgressHint.Failed;
+            }
         }
 
         [ContractInvariantMethod]

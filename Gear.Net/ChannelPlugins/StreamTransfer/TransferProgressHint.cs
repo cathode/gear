@@ -14,6 +14,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         ConnectingToDataPort,
         Sending,
         Receiving,
-        Completed
+        Completed,
+        Failed
     }
 }
