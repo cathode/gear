@@ -155,6 +155,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                     {
                         // TODO: handle timeout
                         this.TransferState.DataConnection = listener.Accept();
+                        Log.Write(LogMessageGroup.Debug, "Transfer {0} - Peer opened data connection to {1}", this.TransferState.TransferId, this.TransferState.DataConnection.LocalEndPoint);
                         listener.Close();
                         listener.Dispose();
                     });
@@ -229,6 +230,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
                 // The remote peer needs to listen for a data connection from the local peer.
                 msg.RequestDataPort = true;
+                Log.Write(LogMessageGroup.Debug, "Transfer {0} - Requesting data transfer port from remote.", this.TransferState.TransferId);
 
                 this.TransferState.Parent.AttachedChannel.Send(msg);
             }

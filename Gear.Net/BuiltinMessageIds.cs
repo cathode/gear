@@ -18,7 +18,7 @@ namespace Gear.Net
     /// </summary>
     public static class BuiltinMessageIds
     {
-        // System
+        #region System - 0x0001-0x00FF (reserved)
 
         /// <summary>
         /// Dispatch id for the <see cref="Gear.Net.Messages.PeerGreetingMessage"/> type.
@@ -28,7 +28,13 @@ namespace Gear.Net
 
         public static readonly int PeerHandoff = 0x0010;
 
-        // File transfer
+        /// <summary>
+        /// Dispatch id for the <see cref="Gear.Net.ChannelPlugins.PluginAttachmentEventMessage"/> message type.
+        /// </summary>
+        public static readonly int PluginAttachmentEvent = 0x0020;
+        #endregion
+
+        #region File transfer 0x0100-0x01FF (reserved)
         public static readonly int TransferStream = 0x0100;
         public static readonly int TransferStreamData = 0x0101;
         public static readonly int TransferFileReceipt = 0x0102;
@@ -36,32 +42,35 @@ namespace Gear.Net
         public static readonly int FileReceiveComplete = 0x0104;
 
         /// <summary>
-        /// Dispatch id for the <see cref="Gear.Net.ChannelPlugins.RequestStreamMessage"/> type.
+        /// Dispatch id for the <see cref="Gear.Net.ChannelPlugins.RequestStreamMessage"/> message type.
         /// </summary>
         public static readonly int RequestStream = 0x0105;
+        #endregion
 
-        // Clustering
+        #region Clustering - 0x0200-0x02FF (reserved)
         public static readonly int Retarget = 0x0200;
+
+        #endregion
 
         // Networked collections
 
         /// <summary>
-        /// Dispatch id for the <see cref="Gear.Net.Collections.NetworkedCollectionUpdateMessage"/> type.
+        /// Dispatch id for the <see cref="Gear.Net.Collections.NetworkedCollectionUpdateMessage"/> message type.
         /// </summary>
         public static readonly int NetworkedCollectionUpdate = 0x0180;
 
         /// <summary>
-        /// Dispatch id for the <see cref="Gear.Net.Collections.NetworkedCollectionQueryRequestMessage"/> type.
+        /// Dispatch id for the <see cref="Gear.Net.Collections.NetworkedCollectionQueryRequestMessage"/> message type.
         /// </summary>
         public static readonly int NetworkedCollectionQueryRequest = 0x0181;
 
         /// <summary>
-        /// Dispatch id for the <see cref="Gear.Net.Collections.NetworkedCollectionUpdateMessage"/> type.
+        /// Dispatch id for the <see cref="Gear.Net.Collections.NetworkedCollectionUpdateMessage"/> message type.
         /// </summary>
         public static readonly int NetworkedCollectionQueryResponse = 0x0182;
 
         /// <summary>
-        /// Dispatch id for the <see cref="Gear.Net.Collections.NetworkedCollectionStateMessage"/> type.
+        /// Dispatch id for the <see cref="Gear.Net.Collections.NetworkedCollectionStateMessage"/> message type.
         /// </summary>
         public static readonly int NetworkedCollectionAction = 0x0183;
     }

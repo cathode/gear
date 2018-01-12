@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GSCore;
 
 namespace Gear.Net.ChannelPlugins
 {
@@ -13,6 +14,13 @@ namespace Gear.Net.ChannelPlugins
     {
         #region Fields
         private Channel attachedChannel;
+        #endregion
+
+        #region Events
+        public event EventHandler<ChannelEventArgs> LocalPluginAttached;
+        public event EventHandler<ChannelEventArgs> LocalPluginDetached;
+        public event EventHandler RemotePluginAttached;
+        public event EventHandler RemotePluginDetached;
         #endregion
         #region Properties
 
@@ -45,9 +53,79 @@ namespace Gear.Net.ChannelPlugins
 
         #endregion
         #region Methods
-        public abstract void Attach(Channel channel);
+        public void Attach(Channel channel)
+        {
+            this.AttachedChannel = channel;
+            this.AttachedChannel.RegisterHandler<PluginAttachmentEventMessage>(this.Handle_PluginAttachmentEvent, this);
 
-        public abstract void Detach(Channel channel);
+            this.DoAttach(channel);
+
+            this.OnLocalPluginAttached(new ChannelEventArgs(channel));
+        }
+
+        public void Detach(Channel channel)
+        {
+            this.DoDetach(channel);
+
+            this.AttachedChannel = null;
+
+            this.OnLocalPluginDetached(new ChannelEventArgs(channel));
+
+            channel.UnregisterHandler(this);
+        }
+
+        protected abstract void DoAttach(Channel channel);
+
+        protected abstract void DoDetach(Channel channel);
+
+        protected virtual void OnLocalPluginAttached(ChannelEventArgs data)
+        {
+            this.LocalPluginAttached?.Invoke(this, data);
+
+            var msg = new PluginAttachmentEventMessage();
+            msg.PluginClassName = this.GetType().Name;
+            msg.PluginAttached = true;
+
+            data.Channel.Send(msg);
+        }
+
+        protected virtual void OnLocalPluginDetached(ChannelEventArgs data)
+        {
+            this.LocalPluginDetached?.Invoke(this, data);
+
+            var msg = new PluginAttachmentEventMessage();
+            msg.PluginClassName = this.GetType().Name;
+            msg.PluginAttached = false;
+
+            data.Channel.Send(msg);
+        }
+
+        protected virtual void OnRemotePluginAttached(EventArgs data = null)
+        {
+            this.RemotePluginAttached?.Invoke(this, data);
+        }
+
+        protected virtual void OnRemotePluginDetached(EventArgs data = null)
+        {
+            this.RemotePluginDetached?.Invoke(this, data);
+        }
+
+        protected virtual void Handle_PluginAttachmentEvent(MessageEventArgs e, PluginAttachmentEventMessage message)
+        {
+            if (message.PluginClassName == this.GetType().Name)
+            {
+                if (message.PluginAttached)
+                {
+                    Log.Write(LogMessageGroup.Debug, "Remote side has attached plugin {0} to connection.", message.PluginClassName);
+                    this.OnRemotePluginAttached();
+                }
+                else
+                {
+                    Log.Write(LogMessageGroup.Debug, "Remote side has detached plugin {0} from connection.", message.PluginClassName);
+                    this.OnRemotePluginDetached();
+                }
+            }
+        }
         #endregion
     }
 }

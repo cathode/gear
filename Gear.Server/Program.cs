@@ -17,6 +17,7 @@ using Gear.Net;
 using Gear.Services;
 using Newtonsoft.Json;
 using GSCore;
+using Gear.Net.ChannelPlugins.StreamTransfer;
 
 namespace Gear.Server
 {
@@ -45,6 +46,8 @@ namespace Gear.Server
             {
                 config = ser.Deserialize<ServerConfiguration>(reader);
             }
+
+            StreamTransferPlugin.MaxGlobalActiveWorkers = 2;
 
             var clusterId = config.ClusterId;
 
@@ -89,6 +92,7 @@ namespace Gear.Server
             var stp = new Gear.Net.ChannelPlugins.StreamTransfer.StreamTransferPlugin();
             stp.Attach(e.Channel);
             stp.CanHostActiveTransfers = true;
+           
 
             perfCountStart = DateTime.Now;
             perfCountLastUpdate = DateTime.Now;

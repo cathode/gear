@@ -76,9 +76,6 @@ namespace Gear.Net
             this.txBuffer = new Queue<IMessage>();
             this.rxQueue = new Queue<IMessage>();
             this.rxBuffer = new Queue<IMessage>();
-
-            //this.txFlushGate = new AutoResetEvent(true);
-            //this.isRxQueueIdle = true;
         }
         #endregion
 
@@ -261,7 +258,7 @@ namespace Gear.Net
             {
                 // Ensure method is limited to a single active call.
                 // If another call to FlushMessage is running (has txFlushGate locked), we just abort.
-                if (Monitor.TryEnter(this.txFlushGate))
+                if (Monitor.TryEnter(this.txFlushGate, 50))
                 {
                     // Channel can't be disconnected or dead
                     if (this.State == ChannelState.Connected)
@@ -359,6 +356,10 @@ namespace Gear.Net
                 {
                     this.messageHandlers[msg.DispatchId].ForEach((h) => { h.Action(e, msg); });
                 }
+            }
+            else
+            {
+                Log.Write(LogMessageGroup.Important, "Unrecognized message dispatch id {0} received from peer {1}", msg.DispatchId, e.Sender);
             }
         }
 

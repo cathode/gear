@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using GSCore;
 
 namespace Gear.Net
 {
@@ -91,9 +92,17 @@ namespace Gear.Net
             Contract.Requires<ArgumentNullException>(ep != null);
             Contract.Ensures(Contract.Result<IPTarget>() != null);
 
-            var hostEntry = Dns.GetHostEntry(ep.Address);
+            try
+            {
+                var hostEntry = Dns.GetHostEntry(ep.Address);
+                return new IPTarget(hostEntry.HostName, (ushort)ep.Port);
+            }
+            catch (SocketException ex)
+            {
+                Log.Write(LogMessageGroup.Important, "An exception occurred while resolving an IPTarget from the provided IPEndPoint ({0}). The exception message was: {1}", ep, ex.Message);
 
-            return new IPTarget(hostEntry.HostName, (ushort)ep.Port);
+                return new IPTarget(ep.Address.ToString(), (ushort)ep.Port);
+            }
         }
 
         public IPEndPoint[] ResolveEndPoints()

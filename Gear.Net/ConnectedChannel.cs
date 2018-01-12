@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ProtoBuf;
+using GSCore;
 
 namespace Gear.Net
 {
@@ -180,13 +181,15 @@ namespace Gear.Net
             {
                 try
                 {
+                    Log.Write(LogMessageGroup.Debug, "Attempting to open messaging connection to {0}", ep);
                     this.socket.Connect(ep);
                     this.OnConnected();
                     this.Setup();
                     return true;
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Log.Write(LogMessageGroup.Important, "Exception during connection attempt: {0}", ex.Message);
                 }
             }
 
@@ -216,6 +219,8 @@ namespace Gear.Net
         protected virtual void OnDisconnected()
         {
             this.State = ChannelState.Disconnected;
+
+            // Log.Write(LogMessageGroup.Normal, "Channel disconnected )
 
             var args = new ChannelDisconnectedEventArgs();
 
@@ -394,6 +399,8 @@ namespace Gear.Net
             }
             catch (SocketException se)
             {
+                Log.Write(LogMessageGroup.Informational, "Socket exception occurred: {0}", se.Message);
+
                 if (!this.socket.Connected)
                 {
                     // Channel is dead

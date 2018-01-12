@@ -25,9 +25,11 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         /// </summary>
         public const int DefaultBufferSize = 65000;
 
+        /// <summary>
+        /// Holds the default value for the low end of the TCP port pool used for transfer operations.
+        /// </summary>
         public const ushort DefaultTransferPortPoolStart = 55000;
         public const ushort DefaultTransferPortPoolEnd = 59999;
-
         public const int DefaultMaxGlobalActiveWorkers = 1;
 
         private static readonly object poolLock = new object();
@@ -35,8 +37,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         private static ushort lastAssignedDataPort;
         private static int maxGlobalSimultaneousTransfers;
         private readonly ObservableCollection<StreamTransferState> transfers;
-        private readonly ReadOnlyObservableCollection<StreamTransferState> transfersRO;
         private readonly object processLock = new object();
+        private Timer workerWatchdog;
         #endregion
         #region Constructors
 
@@ -53,9 +55,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         public StreamTransferPlugin()
         {
             this.transfers = new ObservableCollection<StreamTransferState>();
-
-            // Create read-only wrapper of transfers
-            this.transfersRO = new ReadOnlyObservableCollection<StreamTransferState>(this.transfers);
+            this.WatchdogTimeout = TimeSpan.FromSeconds(30);
+            this.workerWatchdog = new Timer(this.RunWatchdog, null, this.WatchdogTimeout, Timeout.InfiniteTimeSpan);
         }
 
         #endregion
@@ -120,14 +121,15 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         /// <summary>
         /// Gets an observable collection of all file transfers associated with this <see cref="StreamTransferPlugin"/> in it's lifetime.
         /// </summary>
-        public ReadOnlyObservableCollection<StreamTransferState> FileTransfers
+        public ObservableCollection<StreamTransferState> Transfers
         {
             get
             {
-                return this.transfersRO;
+                return this.transfers;
             }
         }
 
+        public TimeSpan WatchdogTimeout { get; set; }
         #endregion
         #region Methods
 
@@ -198,14 +200,61 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             }
         }
 
+        protected static void UpdateTransferWorkerPool()
+        {
+            lock (workers)
+            {
+                // Clean up dead workers
+                var dead = workers.Where(e => !e.IsAlive).ToArray();
+                if (dead.Length > 0)
+                {
+                    Log.Write(LogMessageGroup.Debug, "Purging {0} dead stream transfer workers.", dead.Length);
+
+                    for (int i = 0; i < dead.Length; ++i)
+                    {
+                        workers.Remove(dead[i]);
+                    }
+                }
+
+                if (workers.Count < MaxGlobalActiveWorkers)
+                {
+                    // Add workers up to the max
+                    var add = MaxGlobalActiveWorkers - workers.Count;
+                    Log.Write(LogMessageGroup.Debug, "Adding {0} new stream transfer workers.", add);
+                    for (int i = 0; i < add; ++i)
+                    {
+                        var worker = new StreamTransferProgressWorker();
+
+                        workers.Add(worker);
+                    }
+                }
+                else if (workers.Count > MaxGlobalActiveWorkers)
+                {
+                    // Purge extra workers
+                    var remove = workers.Count - MaxGlobalActiveWorkers;
+
+                    var extra = workers.OrderBy(k => k.IsIdle).Take(remove).ToArray();
+
+                    foreach (var worker in extra)
+                    {
+                        worker.FlagDestroyed();
+
+                        if (worker.IsIdle)
+                        {
+                            Log.Write(LogMessageGroup.Debug, "Removing idle transfer worker due to MaxGlobalActiveWorkers threshold exceeded.");
+                            workers.Remove(worker);
+                        }
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Overridden. Attaches this <see cref="StreamTransferPlugin"/> instance to the specified <see cref="Channel"/>.
         /// </summary>
         /// <param name="channel">The <see cref="Channel"/> to attach to.</param>
-        public override void Attach(Channel channel)
+        protected override void DoAttach(Channel channel)
         {
-            this.Detach(this.AttachedChannel);
-
             if (channel != null)
             {
                 channel.RegisterHandler<StreamDataPortReadyMessage>(this.Handle_StreamDataPortReadyMessage, this);
@@ -219,7 +268,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         /// Overridden. Detaches this <see cref="StreamTransferPlugin"/> instance from the specified <see cref="Channel"/>.
         /// </summary>
         /// <param name="channel">The <see cref="Channel"/> to detach from.</param>
-        public override void Detach(Channel channel)
+        protected override void DoDetach(Channel channel)
         {
             if (channel != null)
             {
@@ -296,6 +345,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             {
                 if (Monitor.TryEnter(this.processLock))
                 {
+                    this.ResetWatchdog();
+
                     // Collect any queued (but not initiated) transfers)
                     var waiting = this.transfers.Where(e => e.ProgressHint == TransferProgressHint.Queued).ToArray();
 
@@ -351,64 +402,57 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             }
         }
 
-        protected static void UpdateTransferWorkerPool()
+        protected void RunWatchdog(object state)
         {
-            lock (workers)
+            var qc = this.Transfers.Count(e => e.ProgressHint == TransferProgressHint.Queued);
+
+            if (qc > 0)
             {
-                // Clean up dead workers
-                var dead = workers.Where(e => !e.IsAlive).ToArray();
-                for (int i = 0; i < dead.Length; ++i)
-                {
-                    workers.Remove(dead[i]);
-                }
+                Log.Write(
+                    LogMessageGroup.Important,
+                    "Stream transfer watchdog invoked on thread {0}; {1} queued transfers.",
+                    Thread.CurrentThread.ManagedThreadId,
+                    qc);
 
-                if (workers.Count < MaxGlobalActiveWorkers)
-                {
-                    // Add workers up to the max
-                    var add = MaxGlobalActiveWorkers - workers.Count;
-
-                    for (int i = 0; i < add; ++i)
-                    {
-                        var worker = new StreamTransferProgressWorker();
-
-                        workers.Add(worker);
-                    }
-                }
-                else if (workers.Count > MaxGlobalActiveWorkers)
-                {
-                    // Purge extra workers
-                    var remove = workers.Count - MaxGlobalActiveWorkers;
-
-                    var extra = workers.OrderBy(k => k.IsIdle).Take(remove).ToArray();
-
-                    foreach (var worker in extra)
-                    {
-                        worker.FlagDestroyed();
-
-                        if (worker.IsIdle)
-                        {
-                            workers.Remove(worker);
-                        }
-                    }
-                }
+                this.ProcessQueue();
             }
+
+            this.ResetWatchdog();
+        }
+
+        protected internal void ResetWatchdog()
+        {
+            this.workerWatchdog.Change(this.WatchdogTimeout, Timeout.InfiniteTimeSpan);
         }
 
         protected virtual void Handle_StreamDataPortReadyMessage(MessageEventArgs e, StreamDataPortReadyMessage message)
         {
             Log.Write(LogMessageGroup.Debug, "Transfer {0} - Remote peer listening on TCP port {1} for data connection.", message.TransferId, message.DataPort);
             var state = this.transfers.First(t => t.TransferId == message.TransferId);
-            state.DataConnection = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            state.DataConnection.Connect(new IPEndPoint(this.AttachedChannel.RemoteEndPoint.Address, message.DataPort));
-            state.ProgressStep.Set();
-            //state.Worker.Start();
+            try
+            {
+                state.DataConnection = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                state.DataConnection.Connect(new IPEndPoint(this.AttachedChannel.RemoteEndPoint.Address, message.DataPort));
+                state.ProgressStep.Set();
+            }
+            catch (Exception ex)
+            {
+                Log.Write(
+                    LogMessageGroup.Severe,
+                    "Transfer {0} - Exception occurred while connecting to data transfer port {1}. Message: {2}",
+                    message.TransferId,
+                    message.DataPort,
+                    ex.Message);
+
+                state.ProgressHint = TransferProgressHint.Failed;
+            }
         }
 
         protected virtual void Handle_TransferStreamMessage(MessageEventArgs e, TransferStreamMessage message)
         {
             Contract.Requires<ArgumentNullException>(message != null);
 
-            Log.Write(LogMessageGroup.Debug, "Received stream transfer request for file {0} from {1}", message.TransferState.Name, e.Sender);
+            Log.Write(LogMessageGroup.Debug, "Received stream transfer metadata for stream {0} from {1}", message.TransferState.Name, e.Sender);
 
             var state = message.TransferState;
             state.Parent = this;
@@ -419,7 +463,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
             this.OnTransferReceived(new StreamTransferEventArgs(state));
 
-            Task.Run(() => this.ProcessStateQueue());
+            this.ProcessQueue();
         }
 
         protected void AddTransferState(StreamTransferState state)
@@ -464,7 +508,6 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         private void ContractInvariants()
         {
             Contract.Invariant(this.transfers != null);
-            Contract.Invariant(this.FileTransfers != null);
         }
         #endregion
     }

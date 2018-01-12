@@ -19,6 +19,7 @@ using Gear.Geometry;
 using Gear.Model;
 using Gear.Modeling.Primitives;
 using Gear.Net;
+using Gear.Net.ChannelPlugins.StreamTransfer;
 using GSCore;
 
 namespace Gear.Client
@@ -34,6 +35,8 @@ namespace Gear.Client
             //MessageSerializationHelper.AddMessageSubtypes();
             MessageSerializationHelper.AddMessageSubtypes(typeof(Channel).Assembly);
 
+            StreamTransferPlugin.MaxGlobalActiveWorkers = 4;
+
             // For testing
             Thread.Sleep(1000);
 
@@ -45,6 +48,7 @@ namespace Gear.Client
 
             var channel = ConnectedChannel.ConnectTo(new System.Net.IPEndPoint(IPAddress.Loopback, 9888));
             channel.InvokeHandlersAsync = true;
+           
 
             var stp = new Gear.Net.ChannelPlugins.StreamTransfer.StreamTransferPlugin();
             stp.Attach(channel);
