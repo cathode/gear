@@ -14,17 +14,30 @@ using System.Threading.Tasks;
 
 namespace Gear.Net
 {
+    /// <summary>
+    /// Represents event data for channel connectivity events.
+    /// </summary>
     public class ChannelEventArgs
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChannelEventArgs"/> class.
+        /// </summary>
+        /// <param name="channel">The <see cref="Gear.Net.Channel"/> that the event is associated with.</param>
         public ChannelEventArgs(Channel channel)
         {
-            Contract.Requires(channel != null);
+            Contract.Requires<ArgumentNullException>(channel != null);
 
             this.Channel = channel;
         }
 
+        /// <summary>
+        /// Gets the <see cref="Gear.Net.Channel"/> that the event is associated with.
+        /// </summary>
         public Channel Channel { get; private set; }
 
+        /// <summary>
+        /// Invariant contracts for this class.
+        /// </summary>
         [ContractInvariantMethod]
         private void Invariants()
         {

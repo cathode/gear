@@ -13,8 +13,11 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Gear.Net;
 using Gear.Services;
 using Newtonsoft.Json;
+using GSCore;
+using Gear.Net.ChannelPlugins.StreamTransfer;
 
 namespace Gear.Server
 {
@@ -25,11 +28,15 @@ namespace Gear.Server
         public static DateTime perfCountStart;
         public static DateTime perfCountLastUpdate;
 
-        private static Gear.Net.Collections.NetworkedCollection<string> netStrings = new Net.Collections.NetworkedCollection<string>();
+        private static Gear.Net.Collections.NetworkedCollection<DateTime> netStrings = new Net.Collections.NetworkedCollection<DateTime>();
 
         public static void Main(string[] args)
         {
-            Console.WriteLine("Gear Server - v" + Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            // Init logging first:
+            Log.Write(LogMessageGroup.Critical, "Initializing logging...");
+            Log.Write(LogMessageGroup.Important, "Gear Server - v{0}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
+            //Console.WriteLine("Gear Server - v" + Assembly.GetExecutingAssembly().GetName().Version.ToString());
             // Read configuration.
 
             var ser = new JsonSerializer();
@@ -40,18 +47,16 @@ namespace Gear.Server
                 config = ser.Deserialize<ServerConfiguration>(reader);
             }
 
-            var clusterId = config.ClusterId;
+            StreamTransferPlugin.MaxGlobalActiveWorkers = 2;
 
-            // Log to console.
-            Log.BindOutput(Console.OpenStandardOutput());
+            var clusterId = config.ClusterId;
 
             if (!string.IsNullOrEmpty(config.LogFile))
             {
                 Log.BindOutput(File.Open(config.LogFile, FileMode.Append, FileAccess.Write, FileShare.None));
             }
 
-            Log.Write("Message log initialized", "system", LogMessageGroup.Info);
-
+            Gear.Net.MessageSerializationHelper.MessageTypeDiscovered += (o, e) => { Log.Write(LogMessageGroup.Debug, "Discovered network message type: {0}", e.DiscoveredType.Name); };
             //Gear.Net.MessageSerializationHelper.AddMessageSubtypes();
             Gear.Net.MessageSerializationHelper.AddMessageSubtypes(typeof(Gear.Net.Channel).Assembly);
 
@@ -65,39 +70,34 @@ namespace Gear.Server
             // manager.StartService(ServerService.ConnectionBroker, 14122);
             // manager.StartService(ServerService.ClusterManager, 14123);
             // manager.StartService(ServerService.ZoneNode, 14124);
-
-            netStrings.Mode = Net.Collections.ReplicationMode.Producer;
-            netStrings.CollectionGroupId = 1234;
-
-            var listener = new Net.ConnectionListener(9888);
-            listener.ChannelConnected += listener_ChannelConnected;
+            var listener = new ConnectionListener(9888);
+            listener.ChannelConnected += Listener_ChannelConnected;
             listener.StartInBackground();
 
-            var rand = new Random();
             while (true)
             {
-                netStrings.Add(DateTime.Now.ToString());
-                Thread.Sleep(rand.Next(500, 10000));
+                var k = Console.ReadKey();
 
-                //var k = Console.ReadKey();
-
-                //if (k.KeyChar == 'q')
-                //{
-                //    return;
-                //}
+                if (k.KeyChar == 'q')
+                {
+                    return;
+                }
             }
         }
 
-        static void listener_ChannelConnected(object sender, Net.ChannelEventArgs e)
+        private static void Listener_ChannelConnected(object sender, ChannelEventArgs e)
         {
+            e.Channel.InvokeHandlersAsync = true;
+
+            var stp = new Gear.Net.ChannelPlugins.StreamTransfer.StreamTransferPlugin();
+            stp.Attach(e.Channel);
+            stp.CanHostActiveTransfers = true;
+           
+
             perfCountStart = DateTime.Now;
             perfCountLastUpdate = DateTime.Now;
 
             e.Channel.MessageReceived += Channel_MessageReceived;
-
-            e.Channel.SubscribeToPublisher(netStrings);
-
-            netStrings.Add("test");
         }
 
         static void Channel_MessageReceived(object sender, Net.MessageEventArgs e)

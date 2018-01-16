@@ -7,30 +7,31 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
-using System.IO;
-using System.Diagnostics.Contracts;
-using ProtoBuf;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using ProtoBuf;
+using GSCore;
 
 namespace Gear.Net
 {
     /// <summary>
-    /// Represents a communication channel that
+    /// Represents a communication channel that utilizes TCP/IP to maintain an active connection with the remote endpoint.
     /// </summary>
     public class ConnectedChannel : Channel
     {
-        private Socket socket;
-
-        private IPEndPoint cachedRemoteEP;
-
-        private Timer reconnectTimer;
-
+        #region Fields
         private readonly object reconnectSync = new object();
+        private IPTarget connectionTarget;
+        private Timer reconnectTimer;
+        private Socket socket;
+        #endregion
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectedChannel"/> class.
@@ -40,7 +41,18 @@ namespace Gear.Net
         {
             Contract.Requires(remoteEP != null);
 
-            this.cachedRemoteEP = remoteEP;
+            this.connectionTarget = IPTarget.FromIPEndPoint(remoteEP);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectedChannel"/> class.
+        /// </summary>
+        /// <param name="target"></param>
+        public ConnectedChannel(IPTarget target)
+        {
+            Contract.Requires<ArgumentNullException>(target != null);
+
+            this.connectionTarget = target;
         }
 
         /// <summary>
@@ -57,7 +69,7 @@ namespace Gear.Net
                 this.State = ChannelState.Connected;
             }
 
-            this.cachedRemoteEP = this.socket.RemoteEndPoint as IPEndPoint;
+            this.connectionTarget = IPTarget.FromIPEndPoint(this.socket.RemoteEndPoint as IPEndPoint);
         }
 
         /// <summary>
@@ -67,13 +79,13 @@ namespace Gear.Net
         /// <param name="port"></param>
         public ConnectedChannel(string hostname, ushort port)
         {
-            IPEndPoint ep;
+            Contract.Requires<ArgumentNullException>(hostname != null);
 
-            var hostEntry = Dns.GetHostEntry(hostname);
-            ep = new IPEndPoint(hostEntry.AddressList.First(a => a.AddressFamily == AddressFamily.InterNetwork), port);
-
-            this.cachedRemoteEP = ep;
+            this.connectionTarget = new IPTarget(hostname, port);
         }
+
+        #endregion
+        #region Events
 
         /// <summary>
         /// Raised when the Channel establishes a connection to the remote endpoint,
@@ -86,26 +98,40 @@ namespace Gear.Net
         /// </summary>
         public event EventHandler<ChannelDisconnectedEventArgs> Disconnected;
 
+        #endregion
+        #region Properties
         /// <summary>
         /// Gets or sets the unique id of the client or server that the channel is connected to.
         /// </summary>
         public Guid RemoteEndPointId { get; protected set; }
 
-        public EndPointKind RemoteEndPointKind { get; set; }
-
+        /// <summary>
+        /// Gets the <see cref="IPEndPoint"/> representing the locally bound address of the channel.
+        /// </summary>
         public override IPEndPoint LocalEndPoint
         {
-            get { return this.socket.LocalEndPoint as IPEndPoint; }
+            get { return this.socket?.LocalEndPoint as IPEndPoint; }
         }
 
+        /// <summary>
+        /// Gets the <see cref="IPEndPoint"/> representing the remote address of the peer this channel is connected to.
+        /// </summary>
         public override IPEndPoint RemoteEndPoint
         {
-            get { return this.socket.RemoteEndPoint as IPEndPoint; }
+            get { return this.socket?.RemoteEndPoint as IPEndPoint; }
         }
 
+        #endregion
+        #region Methods
+
+        /// <summary>
+        /// Creates and returns a new <see cref="ConnectedChannel"/> that is connected to the specified remote endpoint.
+        /// </summary>
+        /// <param name="remoteEP">An <see cref="IPEndPoint"/> that describes what to connect to.</param>
+        /// <returns>A new <see cref="ConnectedChannel"/> instance, pre-connected to the specified remote endpoint.</returns>
         public static ConnectedChannel ConnectTo(IPEndPoint remoteEP)
         {
-            Contract.Requires(remoteEP != null);
+            Contract.Requires<ArgumentNullException>(remoteEP != null);
             Contract.Ensures(Contract.Result<ConnectedChannel>() != null);
 
             var channel = new ConnectedChannel(remoteEP);
@@ -114,21 +140,35 @@ namespace Gear.Net
             return channel;
         }
 
-        public bool Connect(IPEndPoint ep = null)
+        /// <summary>
+        /// Creates and returns a new <see cref="ConnectedChannel"/> that is connected to the specified remote <see cref="IPTarget"/>.
+        /// </summary>
+        /// <param name="target">An <see cref="IPTarget"/> that describes what to connect to.</param>
+        /// <returns>A new <see cref="ConnectedChannel"/> instance, pre-connected to the specified remote <see cref="IPTarget"/>.</returns>
+        public static ConnectedChannel ConnectTo(IPTarget target)
+        {
+            Contract.Requires<ArgumentNullException>(target != null);
+            Contract.Ensures(Contract.Result<ConnectedChannel>() != null);
+
+            var channel = new ConnectedChannel(target);
+            channel.Connect();
+
+            return channel;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">Thrown if the channel is already connected.</exception>
+        public bool Connect()
         {
             if (this.State == ChannelState.Connected)
             {
                 throw new InvalidOperationException();
             }
 
-            if (ep == null)
-            {
-                ep = this.cachedRemoteEP;
-            }
-            else
-            {
-                this.cachedRemoteEP = ep;
-            }
+            var eps = this.connectionTarget.ResolveEndPoints();
 
             if (this.socket != null)
             {
@@ -137,19 +177,30 @@ namespace Gear.Net
 
             this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-            try
+            foreach (var ep in eps)
             {
-                this.socket.Connect(ep);
-                this.OnConnected();
-                this.Setup();
-                return true;
+                try
+                {
+                    Log.Write(LogMessageGroup.Debug, "Attempting to open messaging connection to {0}", ep);
+                    this.socket.Connect(ep);
+                    this.OnConnected();
+                    this.Setup();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Log.Write(LogMessageGroup.Important, "Exception during connection attempt: {0}", ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                // TODO: Handle failed connection attempt
-                this.OnDisconnected();
-                return false;
-            }
+
+            // TODO: Handle failed connection attempt
+            this.OnDisconnected();
+            return false;
+        }
+
+        public void Disconnect()
+        {
+            this.socket.Disconnect(false);
         }
 
         /// <summary>
@@ -159,10 +210,7 @@ namespace Gear.Net
         {
             this.State = ChannelState.Connected;
 
-            if (this.Connected != null)
-            {
-                this.Connected(this, EventArgs.Empty);
-            }
+            this.Connected?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -171,6 +219,8 @@ namespace Gear.Net
         protected virtual void OnDisconnected()
         {
             this.State = ChannelState.Disconnected;
+
+            // Log.Write(LogMessageGroup.Normal, "Channel disconnected )
 
             var args = new ChannelDisconnectedEventArgs();
 
@@ -195,8 +245,10 @@ namespace Gear.Net
 
         protected override int SendMessages(Queue<IMessage> messages)
         {
-            // Contract.Requires(messages != null);
-            // Contract.Requires(this.State == ChannelState.Connected);
+            if (messages == null || messages.Count == 0)
+            {
+                return 0;
+            }
 
             int sent = 0;
 
@@ -234,6 +286,11 @@ namespace Gear.Net
 
         protected override void BeginBackgroundReceive()
         {
+            if (this.socket == null)
+            {
+                throw new InvalidOperationException();
+            }
+
             var state = new RxState();
 
             // Look at only the length prefix first
@@ -273,13 +330,12 @@ namespace Gear.Net
 
         private void RecvCallback(IAsyncResult result)
         {
+            Contract.Requires<InvalidOperationException>(this.socket != null);
+
             try
             {
                 var state = (RxState)result.AsyncState;
-
                 var rxCount = this.socket.EndReceive(result);
-
-                // Console.WriteLine("Read {0} bytes for message prefix", rxCount);
                 IMessage msg = null;
 
                 // Did we at least get the length prefix?
@@ -305,6 +361,7 @@ namespace Gear.Net
                     do
                     {
                         int readRemain = bsize - state.ReceivedBytes;
+
                         // Blocking receive from socket
                         state.ReceivedBytes += this.socket.Receive(state.Buffer, state.ReceivedBytes, readRemain, SocketFlags.None);
                     }
@@ -342,6 +399,8 @@ namespace Gear.Net
             }
             catch (SocketException se)
             {
+                Log.Write(LogMessageGroup.Informational, "Socket exception occurred: {0}", se.Message);
+
                 if (!this.socket.Connected)
                 {
                     // Channel is dead
@@ -349,6 +408,13 @@ namespace Gear.Net
                 }
             }
         }
+
+        [ContractInvariantMethod]
+        private void ContractInvariants()
+        {
+            Contract.Invariant(this.connectionTarget != null);
+        }
+        #endregion
 
         protected class RxState
         {

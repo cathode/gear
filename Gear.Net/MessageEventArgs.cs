@@ -7,11 +7,11 @@
  *****************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Net;
-using System.Diagnostics.Contracts;
 
 namespace Gear.Net
 {
@@ -50,6 +50,8 @@ namespace Gear.Net
         /// Gets or sets the timestamp when the message was received.
         /// </summary>
         public DateTime ReceivedAt { get; set; }
+
+        public Channel Channel { get; set; }
 
         [ContractInvariantMethod]
         private void Invariants()

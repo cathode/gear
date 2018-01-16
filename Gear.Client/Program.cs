@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +19,8 @@ using Gear.Geometry;
 using Gear.Model;
 using Gear.Modeling.Primitives;
 using Gear.Net;
+using Gear.Net.ChannelPlugins.StreamTransfer;
+using GSCore;
 
 namespace Gear.Client
 {
@@ -26,21 +29,33 @@ namespace Gear.Client
         static void Main(string[] args)
         {
             // Log to console.
-            Log.BindOutput(Console.OpenStandardOutput());
-            Log.Write("Message log initialized", "system", LogMessageGroup.Info);
+            Log.Write(LogMessageGroup.Critical, "Initializing logging...");
+            Log.Write(LogMessageGroup.Important, "Gear Client - v{0}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
             //MessageSerializationHelper.AddMessageSubtypes();
             MessageSerializationHelper.AddMessageSubtypes(typeof(Channel).Assembly);
 
+            StreamTransferPlugin.MaxGlobalActiveWorkers = 4;
+
             // For testing
-            Thread.Sleep(5000);
+            Thread.Sleep(1000);
+
+            //var target = new IPTarget("localhost", 9888);
+
+            //var ep = target.GetNextReachableEndPoint();
+
+            //var tgt = IPTarget.FromIPEndPoint(ep);
 
             var channel = ConnectedChannel.ConnectTo(new System.Net.IPEndPoint(IPAddress.Loopback, 9888));
+            channel.InvokeHandlersAsync = true;
+           
 
-            var ns = new Gear.Net.Collections.NetworkedCollection<string>();
-            ns.Consume(1234, channel);
+            var stp = new Gear.Net.ChannelPlugins.StreamTransfer.StreamTransferPlugin();
+            stp.Attach(channel);
+            stp.CanHostActiveTransfers = false;
 
-            ns.ItemAdded += Ns_ItemAdded;
+            stp.SendFile("Gear.Client.exe");
+            stp.SendFile("Gear.Client.exe.config");
 
             while (true)
             {
@@ -48,7 +63,7 @@ namespace Gear.Client
             }
         }
 
-        private static void Ns_ItemAdded(object sender, Gear.Net.Collections.NetworkedCollectionItemEventArgs<string> e)
+        private static void Ns_ItemAdded(object sender, Gear.Net.Collections.NetworkedCollectionItemEventArgs<DateTime> e)
         {
             Log.Write(string.Format("Item added to collection: {0}", e.Items.FirstOrDefault()));
         }

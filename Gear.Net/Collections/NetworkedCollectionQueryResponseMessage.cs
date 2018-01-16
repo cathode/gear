@@ -15,10 +15,13 @@ namespace Gear.Net.Collections
         {
             get
             {
-                return Gear.Net.Messages.BuiltinMessageIds.NetworkedCollectionQueryResponse;
+                return BuiltinMessageIds.NetworkedCollectionQueryResponse;
             }
         }
 
+        /// <summary>
+        /// Gets or sets an array of the collection id
+        /// </summary>
         public long[] CollectionIds { get; set; }
     }
 }

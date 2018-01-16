@@ -27,7 +27,7 @@
     <CodeContractsRuntimeThrowOnFailure>False</CodeContractsRuntimeThrowOnFailure>
     <CodeContractsRuntimeCallSiteRequires>True</CodeContractsRuntimeCallSiteRequires>
     <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
-    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
     <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
     <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
     <CodeContractsArithmeticObligations>True</CodeContractsArithmeticObligations>
@@ -147,36 +147,60 @@
     <Compile Include="Channel.cs" />
     <Compile Include="ChannelDisconnectedEventArgs.cs" />
     <Compile Include="ChannelEventArgs.cs" />
+    <Compile Include="ChannelPlugins\ChannelPlugin.cs" />
+    <Compile Include="ChannelPlugins\Clustering\ClusteringPlugin.cs" />
+    <Compile Include="ChannelPlugins\Clustering\RetargetMessage.cs" />
+    <Compile Include="ChannelPlugins\PluginAttachmentEventMessage.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\RequestStreamMessage.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\StreamDataPortReadyMessage.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\StreamTransferEventArgs.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\StreamTransferProgressWorker.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\StreamTransferState.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\TransferProgressHint.cs" />
+    <Compile Include="ClientMetadata.cs" />
+    <Compile Include="MessagingServerPendingClient.cs" />
+    <Compile Include="PeerSession.cs" />
+    <Compile Include="ServerMetadata.cs" />
+    <Compile Include="TransferDirection.cs" />
     <Compile Include="ChannelState.cs" />
+    <Compile Include="Collections\NetworkedCollectionStateMessage.cs" />
     <Compile Include="Collections\NetworkedCollectionGroupMetadata.cs" />
     <Compile Include="Collections\NetworkedCollectionItemEventArgs.cs" />
     <Compile Include="Collections\NetworkedCollectionManager.cs" />
     <Compile Include="Collections\NetworkedCollection.cs" />
-    <Compile Include="Collections\NetworkedCollectionAction.cs" />
+    <Compile Include="Collections\NetworkedCollectionStateAction.cs" />
+    <Compile Include="Collections\NetworkedCollectionProxy.cs" />
     <Compile Include="Collections\NetworkedCollectionQueryRequestMessage.cs" />
     <Compile Include="Collections\NetworkedCollectionQueryResponseMessage.cs" />
     <Compile Include="Collections\NetworkedCollectionUpdateMessage.cs" />
     <Compile Include="Collections\ReplicationMode.cs" />
+    <Compile Include="Collections\NetworkedCollectionUpdateAction.cs" />
     <Compile Include="ConnectedChannel.cs" />
     <Compile Include="ConnectionListener.cs" />
     <Compile Include="DatagramChannel.cs" />
-    <Compile Include="EndPointKind.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\StreamTransferPlugin.cs" />
+    <Compile Include="IPTarget.cs" />
     <Compile Include="IMessage.cs" />
     <Compile Include="IMessagePublisher.cs" />
     <None Include="MessageContainer.cs" />
+    <Compile Include="MessageDataHint.cs" />
     <Compile Include="MessageEventArgs.cs" />
-    <Compile Include="MessageQueue.cs" />
+    <Compile Include="MessageHandlerRegistration.cs" />
+    <None Include="MessageQueue.cs" />
     <Compile Include="MessageSerializationHelper.cs" />
-    <Compile Include="Messages\BuiltinMessageIds.cs" />
+    <Compile Include="BuiltinMessageIds.cs" />
     <Compile Include="Messages\ConfigurationMessage.cs" />
-    <None Include="Messages\EndpointGreetingMessage.cs" />
+    <Compile Include="Messages\PeerGreetingMessage.cs" />
+    <Compile Include="Messages\PeerHandoffMessage.cs" />
     <Compile Include="Messages\TeardownChannelMessage.cs" />
-    <None Include="Messages\TransferFileDataMessage.cs" />
-    <None Include="Messages\TransferFileMessage.cs" />
-    <None Include="Messages\TransferFileReceiptMessage.cs" />
+    <Compile Include="ChannelPlugins\StreamTransfer\TransferStreamMessage.cs" />
+    <Compile Include="MessageTypeDiscoveredEventArgs.cs" />
     <Compile Include="MessagingServer.cs" />
     <Compile Include="NetworkList.cs" />
+    <Compile Include="PeerEventArgs.cs" />
     <Compile Include="PeerMetadata.cs" />
+    <Compile Include="PeerRole.cs" />
+    <Compile Include="PeerStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +209,12 @@
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GSCore\GSCore.csproj">
+      <Project>{ebc03f4d-f2d5-4018-959c-68853106dbde}</Project>
+      <Name>GSCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

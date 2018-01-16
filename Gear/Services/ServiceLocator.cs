@@ -14,6 +14,7 @@ using System.Net;
 using System.IO;
 using ProtoBuf;
 using Gear.Net;
+using GSCore;
 
 namespace Gear.Services
 {

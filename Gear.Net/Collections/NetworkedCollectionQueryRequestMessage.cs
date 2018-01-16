@@ -18,7 +18,7 @@ namespace Gear.Net.Collections
         {
             get
             {
-                return Gear.Net.Messages.BuiltinMessageIds.NetworkedCollectionQueryRequest;
+                return BuiltinMessageIds.NetworkedCollectionQueryRequest;
             }
         }
     }

@@ -1,40 +1,101 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Gear.Net.Messages;
 
 namespace Gear.Net
 {
     /// <summary>
-    /// Implements a low-level framework for coordinating connections from clients.
+    /// Implements a framework for coordinating connections from clients.
     /// </summary>
     public class MessagingServer
     {
         #region Fields
-        private ConnectionListener listener;
+        private readonly ObservableCollection<PeerSession> peers;
+        private readonly List<MessagingServerPendingClient> pending;
+        private readonly ConnectionListener listener;
+        private readonly object syncLock = new object();
         #endregion
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MessagingServer"/> class.
         /// </summary>
-        public MessagingServer()
+        /// <param name="port">The TCP port number that peers will connect on.</param>
+        public MessagingServer(ushort port)
         {
+            this.listener = new ConnectionListener(port);
+            this.peers = new ObservableCollection<PeerSession>();
+
+            this.pending = new List<MessagingServerPendingClient>();
+
+            this.listener.ChannelConnected += this.Listener_ChannelConnected;
         }
 
         #endregion
-
         #region Events
 
+        /// <summary>
+        /// Notifies subscribes when a new peer connects to this messaging server.
+        /// </summary>
+        public event EventHandler<PeerEventArgs> PeerConnected;
         #endregion
 
         #region Properties
 
         /// <summary>
-        /// Gets or sets the internet protocol port number that the messaging server will accept connections on.
+        /// Gets or sets a collection of network addresses or ranges that are explicitly allowed to connect to this end point.
         /// </summary>
-        public ushort ListenPort { get; set; }
+        public NetworkList Allowed { get; set; }
+
+        /// <summary>
+        /// Gets or sets a collection of network addresses or ranges that are explicitly denied from connecting to this end point.
+        /// </summary>
+        public NetworkList Denied { get; set; }
+
+        /// <summary>
+        /// Gets or sets a <see cref="TimeSpan"/> that determines how much time must pass without receiving a message from a peer for the peer to be considered idle.
+        /// </summary>
+        public TimeSpan IdleThreshold { get; set; }
+
+        /// <summary>
+        /// Gets or sets a <see cref="TimeSpan"/> that determines how much time must pass before an idle peer is forcibly disconnected.
+        /// </summary>
+        public TimeSpan IdleDisconnectThreshold { get; set; }
+
+        /// <summary>
+        /// Gets or sets a <see cref="TimeSpan"/> that determines how much time must pass after a peer becomes dead before the peer's local metadata cache is purged and resources that were used by the peer are cleaned up.
+        /// </summary>
+        public TimeSpan DeadExpirationThreshold { get; set; }
+
+        /// <summary>
+        /// Gets the <see cref="ConnectionListener"/> that the messaging server is using to listen for new connections.
+        /// </summary>
+        public ConnectionListener Listener
+        {
+            get
+            {
+                return this.listener;
+            }
+        }
+
+        public ServerMetadata ServerMetadata { get; private set; }
+
+        /// <summary>
+        /// Gets a collection of peers that are known to the messaging server.
+        /// </summary>
+        public ObservableCollection<PeerSession> Peers
+        {
+            get
+            {
+                return this.peers;
+            }
+        }
         #endregion
         #region Methods
 
@@ -43,10 +104,7 @@ namespace Gear.Net
         /// </summary>
         public void Start()
         {
-            if (this.listener == null)
-            {
-                this.listener = new ConnectionListener(this.ListenPort);
-            }
+            this.listener.StartInBackground();
         }
 
         /// <summary>
@@ -59,9 +117,82 @@ namespace Gear.Net
         /// </remarks>
         public void Stop(bool closeExistingConnections = true, bool immediate = false)
         {
-            throw new NotImplementedException();
         }
 
+        protected virtual void Listener_ChannelConnected(object sender, ChannelEventArgs e)
+        {
+            var cc = e.Channel as ConnectedChannel;
+
+            if (cc != null)
+            {
+                var pc = new MessagingServerPendingClient();
+                pc.ConnectedAt = DateTime.Now;
+                pc.Connection = cc;
+
+                lock (this.syncLock)
+                {
+                    this.pending.Add(pc);
+                }
+
+                cc.RegisterHandler<PeerGreetingMessage>(this.MessageHandler_PeerGreeting, this);
+            }
+        }
+
+        protected virtual void MessageHandler_PeerGreeting(MessageEventArgs e, PeerGreetingMessage message)
+        {
+            // Check if the connection is still a pending client:
+            lock (this.syncLock)
+            {
+                var pc = this.pending.FirstOrDefault(p => p.Connection == e.Channel);
+
+                if (pc != null)
+                {
+
+                }
+            }
+
+            if (message.IsResponseRequested)
+            {
+                var reply = new PeerGreetingMessage();
+                reply.IsResponseRequested = false;
+                reply.Metadata = this.ServerMetadata;
+
+                e.Channel.Send(reply);
+            }
+        }
+
+        protected virtual void PendingGC()
+        {
+            // Drop connections that have exceeded the idle threshold.
+
+            if (Monitor.TryEnter(this.syncLock))
+            {
+                try
+                {
+                    var now = DateTime.Now;
+
+                    var deads = new List<MessagingServerPendingClient>();
+
+                    foreach (var pc in this.pending)
+                    {
+                        var delta = pc.ConnectedAt - now;
+
+                        // (pc.ConnectedAt - now)
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+        }
+
+        [ContractInvariantMethod]
+        private void ContractInvariants()
+        {
+            Contract.Invariant(this.Peers != null);
+            Contract.Invariant(this.Listener != null);
+        }
         #endregion
     }
 }

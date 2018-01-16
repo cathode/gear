@@ -14,6 +14,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GSCore;
 using ProtoBuf;
 using ProtoBuf.Meta;
 
@@ -34,6 +35,8 @@ namespace Gear.Net
         private readonly object metaLock = new object();
 
         private readonly Dictionary<int, List<MessageHandlerRegistration>> messageHandlers = new Dictionary<int, List<MessageHandlerRegistration>>();
+
+        private volatile bool isRxQueueIdle;
 
         /// <summary>
         /// Holds the messages that are being serialized and flushed to the socket.
@@ -73,13 +76,14 @@ namespace Gear.Net
             this.txBuffer = new Queue<IMessage>();
             this.rxQueue = new Queue<IMessage>();
             this.rxBuffer = new Queue<IMessage>();
-
-            this.txFlushGate = new AutoResetEvent(true);
-            this.isRxQueueIdle = true;
         }
         #endregion
 
         #region Events
+
+        /// <summary>
+        /// Raised when a network message sent by the remote endpoint is received locally by this <see cref="Channel"/>.
+        /// </summary>
         public event EventHandler<MessageEventArgs> MessageReceived;
         #endregion
         #region Properties
@@ -99,10 +103,17 @@ namespace Gear.Net
         /// </summary>
         public ChannelState State { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether message handlers will be called in an async (non-blocking), or synchronous (blocking) fashion.
+        /// </summary>
+        /// <remarks>
+        /// When handlers are called in an async fashion, they can be invoked in any order and care should be taken to avoid race conditions in handler action code.
+        /// </remarks>
         public bool InvokeHandlersAsync { get; set; }
         #endregion
 
         #region Methods
+
         /// <summary>
         /// All messages published by the specified publisher will be forwarded
         /// to the remote endpoint via this channel.
@@ -119,8 +130,9 @@ namespace Gear.Net
         /// <summary>
         /// Registers a handler for the specified message dispatch ID.
         /// </summary>
-        /// <param name="dispatchId"></param>
-        /// <param name="handler"></param>
+        /// <param name="dispatchId">The dispatch id to register the handler for.</param>
+        /// <param name="handlerAction">The delegate to be invoked, which will handle a received message with the specified dispatch id.</param>
+        /// <param name="owner">The object associated with this registration (for cleanup purposes).</param>
         public void RegisterHandler(int dispatchId, Action<MessageEventArgs, IMessage> handlerAction, object owner = null)
         {
             var reg = new MessageHandlerRegistration();
@@ -135,6 +147,8 @@ namespace Gear.Net
                     this.messageHandlers.Add(dispatchId, new List<MessageHandlerRegistration>());
                 }
 
+                Contract.Assume(this.messageHandlers[dispatchId] != null);
+
                 this.messageHandlers[dispatchId].Add(reg);
             }
 
@@ -145,8 +159,8 @@ namespace Gear.Net
         /// <summary>
         /// Registers a handler for the specified message dispatch ID.
         /// </summary>
-        /// <param name="handlerAction"></param>
-        /// <param name="owner"></param>
+        /// <param name="handlerAction">The delegate to be invoked, which will handle a received message of the specified implementation type.</param>
+        /// <param name="owner">The object associated with this registration (for cleanup purposes).</param>
         /// <typeparam name="T">The message implementation type to register the handler for.</typeparam>
         public void RegisterHandler<T>(Action<MessageEventArgs, T> handlerAction, object owner = null)
             where T : IMessage
@@ -156,6 +170,10 @@ namespace Gear.Net
             this.RegisterHandler(inst.DispatchId, (e, m) => { handlerAction(e, (T)m); }, owner);
         }
 
+        /// <summary>
+        /// Removes message handlers associated with the specified object owner.
+        /// </summary>
+        /// <param name="owner">The owning object related to the message handlers to unregister.</param>
         public void UnregisterHandler(object owner)
         {
             lock (this.metaLock)
@@ -190,7 +208,7 @@ namespace Gear.Net
         /// <summary>
         /// Queues one or more messages on the channel, to be sent to the remote endpoint.
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="messages">The message(s) to be sent.</param>
         public void Send(params IMessage[] messages)
         {
             Contract.Requires(messages != null);
@@ -224,6 +242,11 @@ namespace Gear.Net
         /// </summary>
         protected abstract void BeginBackgroundReceive();
 
+        /// <summary>
+        /// When implemented in a derived class, performs the relevant actions to write the messages to be sent to the remote endpoint.
+        /// </summary>
+        /// <param name="messages"></param>
+        /// <returns></returns>
         protected abstract int SendMessages(Queue<IMessage> messages);
 
         /// <summary>
@@ -235,7 +258,7 @@ namespace Gear.Net
             {
                 // Ensure method is limited to a single active call.
                 // If another call to FlushMessage is running (has txFlushGate locked), we just abort.
-                if (Monitor.TryEnter(this.txFlushGate))
+                if (Monitor.TryEnter(this.txFlushGate, 50))
                 {
                     // Channel can't be disconnected or dead
                     if (this.State == ChannelState.Connected)
@@ -248,11 +271,11 @@ namespace Gear.Net
                             var b = this.txBuffer;
                             this.txBuffer = q;
                             this.txQueue = b;
-                        }
 
-                        if (this.txBuffer.Count > 0)
-                        {
-                            this.SendMessages(this.txBuffer);
+                            if (this.txBuffer.Count > 0)
+                            {
+                                this.SendMessages(this.txBuffer);
+                            }
                         }
                     }
                 }
@@ -266,39 +289,56 @@ namespace Gear.Net
             }
         }
 
-        private volatile bool isRxQueueIdle;
-
         /// <summary>
-        /// Runs through the the queue of messages that have been receives and invokes the appropriate events / message handlers.
+        /// Runs through the the queue of messages that have been received and invokes the appropriate events / message handlers.
         /// </summary>
         protected void ProcessRxQueue()
         {
-            if (this.isRxQueueIdle)
+            try
             {
-                this.isRxQueueIdle = false;
-
-                if (this.State == ChannelState.Connected)
+                // Ensure method is limited to a single active call.
+                // If another call to FlushMessage is running (has txFlushGate locked), we just abort.
+                if (Monitor.TryEnter(this.rxFlushGate, 50))
                 {
-                    lock (this.rxQueue)
+
+                    if (this.State == ChannelState.Connected)
                     {
-                        var q = this.rxQueue;
-                        var b = this.rxBuffer;
-                        this.rxBuffer = q;
-                        this.rxQueue = b;
+                        lock (this.rxQueue)
+                        {
+                            var q = this.rxQueue;
+                            var b = this.rxBuffer;
+                            this.rxBuffer = q;
+                            this.rxQueue = b;
+                        }
+
+                        while (this.rxBuffer.Count > 0)
+                        {
+                            var item = this.rxBuffer.Dequeue();
+
+                            this.OnMessageReceived(new MessageEventArgs(item) { ReceivedAt = DateTime.Now, Sender = this.RemoteEndPoint, Channel = this });
+                        }
                     }
 
-                    while (this.rxBuffer.Count > 0)
-                    {
-                        var item = this.rxBuffer.Dequeue();
-
-                        this.OnMessageReceived(new MessageEventArgs(item) { ReceivedAt = DateTime.Now, Sender = this.RemoteEndPoint });
-                    }
+                    this.isRxQueueIdle = true;
                 }
-
-                this.isRxQueueIdle = true;
+                else
+                {
+                    //Log.Write(LogMessageGroup.Debug, "Another thread already processing RxQueue");
+                }
+            }
+            finally
+            {
+                if (Monitor.IsEntered(this.rxFlushGate))
+                {
+                    Monitor.Exit(this.rxFlushGate);
+                }
             }
         }
 
+        /// <summary>
+        /// Raises the <see cref="MessageReceived"/> event, and invokes any registered handlers for the received message's dispatch id.
+        /// </summary>
+        /// <param name="e">Event data for the event.</param>
         protected virtual void OnMessageReceived(MessageEventArgs e)
         {
             Contract.Requires(e != null);
@@ -316,6 +356,10 @@ namespace Gear.Net
                 {
                     this.messageHandlers[msg.DispatchId].ForEach((h) => { h.Action(e, msg); });
                 }
+            }
+            else
+            {
+                Log.Write(LogMessageGroup.Important, "Unrecognized message dispatch id {0} received from peer {1}", msg.DispatchId, e.Sender);
             }
         }
 
@@ -343,7 +387,7 @@ namespace Gear.Net
         /// <summary>
         /// Adds messages to the receive queue with thread safety checks.
         /// </summary>
-        /// <param name="messages"></param>
+        /// <param name="messages">The messages to add to the receive queue.</param>
         protected void QueueRxMessageThreadSafe(params IMessage[] messages)
         {
             Contract.Requires(messages != null);
@@ -387,13 +431,6 @@ namespace Gear.Net
             Contract.Invariant(this.rxBuffer != null);
 
             Contract.Invariant(this.messageHandlers != null);
-        }
-
-        public class MessageHandlerRegistration
-        {
-            public object Owner { get; set; }
-
-            public Action<MessageEventArgs, IMessage> Action { get; set; }
         }
         #endregion
     }

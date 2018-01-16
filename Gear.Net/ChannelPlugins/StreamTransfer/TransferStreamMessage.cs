@@ -7,32 +7,27 @@ using Gear.Net;
 using Gear.Net.Messages;
 using ProtoBuf;
 
-namespace DB2Library.Net.Messages
+namespace Gear.Net.ChannelPlugins.StreamTransfer
 {
     [ProtoContract]
-    public class TransferFileDataMessage : IMessage
+    public class TransferStreamMessage : IMessage
     {
         [ProtoIgnore]
         int IMessage.DispatchId
         {
             get
             {
-                return Ids.TransferFileData;
+                return BuiltinMessageIds.TransferStream;
             }
         }
-        
+
         [ProtoMember(1)]
-        public Guid FileId { get; set; }
+        public StreamTransferState TransferState { get; set; }
 
         [ProtoMember(2)]
-        public int ChunkId { get; set; }
+        public ushort? DataPort { get; set; }
 
         [ProtoMember(3)]
-        public int Length { get; set; }
-
-        [ProtoMember(4)]
-        public byte[] Bytes { get; set; }
-
-        
+        public bool RequestDataPort { get; set; }
     }
 }

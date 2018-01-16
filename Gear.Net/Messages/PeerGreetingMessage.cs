@@ -10,12 +10,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProtoBuf;
 
-namespace Gear.Net
+namespace Gear.Net.Messages
 {
-    public enum EndPointKind
+    /// <summary>
+    /// Represents a greeting sent to a peer. The receiving side should reply with a greeting message.
+    /// </summary>
+    [ProtoContract]
+    public class PeerGreetingMessage : IMessage
     {
-        Client,
-        Service,
+        [ProtoIgnore]
+        int IMessage.DispatchId
+        {
+            get
+            {
+                return BuiltinMessageIds.PeerGreeting;
+            }
+        }
+
+        [ProtoMember(1)]
+        public PeerMetadata Metadata { get; set; }
+
+        [ProtoMember(2)]
+        public bool IsResponseRequested { get; set; }
     }
 }

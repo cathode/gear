@@ -78,8 +78,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>..\bin\Release\Gear.Client.XML</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -256,6 +255,10 @@
     <ProjectReference Include="..\Gear\Gear.csproj">
       <Project>{B13E769A-A4B6-466F-9896-7FA30F89CAFF}</Project>
       <Name>Gear</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GSCore\GSCore.csproj">
+      <Project>{ebc03f4d-f2d5-4018-959c-68853106dbde}</Project>
+      <Name>GSCore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
