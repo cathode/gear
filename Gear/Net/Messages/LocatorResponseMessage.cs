@@ -25,8 +25,7 @@ namespace Gear.Net.Messages
         {
             get
             {
-                // return BuiltinMessageIds.LocatorResponse;
-                throw new NotImplementedException();
+                return GearMessageIds.LocatorResponse;
             }
         }
 

@@ -22,8 +22,7 @@ namespace Gear.Net.Messages
         {
             get
             {
-                // return BuiltinMessageIds.BlockUpdate;
-                throw new NotImplementedException();
+                return GearMessageIds.BlockUpdate;
             }
         }
 

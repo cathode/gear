@@ -14,6 +14,7 @@ using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 using ProtoBuf;
+using GSCore;
 
 namespace Gear.Net
 {
@@ -39,11 +40,15 @@ namespace Gear.Net
                 asm = Assembly.GetExecutingAssembly();
             }
 
+            Log.Write(LogMessageGroup.Debug, "Adding message subtypes from assembly {0}", asm.FullName);
+
             var types = asm.GetTypes();
             var meta = ProtoBuf.Meta.RuntimeTypeModel.Default.Add(typeof(IMessage), true);
 
             foreach (var t in types.Where(e => e.GetInterfaces().Contains(typeof(IMessage))))
             {
+                Log.Write(LogMessageGroup.Debug, "-> Discovered: {0}", t.FullName);
+
                 IMessage instance = Activator.CreateInstance(t) as IMessage;
                 meta.AddSubType(instance.DispatchId, t);
                 MessageSerializationHelper.OnMessageTypeDiscovered(instance.DispatchId, t);
