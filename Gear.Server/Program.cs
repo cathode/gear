@@ -56,8 +56,6 @@ namespace Gear.Server
                 Log.BindOutput(File.Open(config.LogFile, FileMode.Append, FileAccess.Write, FileShare.None));
             }
 
-            Gear.Net.MessageSerializationHelper.MessageTypeDiscovered += (o, e) => { Log.Write(LogMessageGroup.Debug, "Discovered network message type: {0}", e.DiscoveredType.Name); };
-            //Gear.Net.MessageSerializationHelper.AddMessageSubtypes();
             Gear.Net.MessageSerializationHelper.AddMessageSubtypes(typeof(Gear.Net.Channel).Assembly);
 
             // var engine = new ServerEngine();

@@ -14,6 +14,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
     public class StreamTransferProgressWorker
     {
         #region Fields
+        private readonly Timer workerWatchdog;
         private Thread workThread;
         private StreamTransferState transferState;
         private AutoResetEvent workAvailable;
@@ -26,6 +27,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         /// </summary>
         public StreamTransferProgressWorker()
         {
+            this.workerWatchdog = new Timer(this.RunWatchdog, null, Timeout.Infinite, Timeout.Infinite);
+
             this.workAvailable = new AutoResetEvent(false);
             this.workThread = new Thread(new ThreadStart(this.BackgroundMainLoop));
             this.workThread.Start();
@@ -67,6 +70,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             }
         }
 
+        public DateTime LastActivity { get; set; }
+
         #endregion
         #region Methods
 
@@ -100,6 +105,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             {
                 this.workAvailable.WaitOne();
                 this.workAvailable.Reset();
+                this.LastActivity = DateTime.Now;
 
                 // Check if the worker needs to be shut down:
                 if (this.isPendingDestruction)
@@ -124,9 +130,12 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                         this.WorkTransferStateInbound();
                     }
 
-                    this.TransferState.TransferCompletedAt = DateTime.Now;
-                    Log.Write("Transfer {0} completed.", this.TransferState.TransferId);
-                    this.TransferState.ProgressHint = TransferProgressHint.Completed;
+                    if (this.TransferState != null)
+                    {
+                        this.TransferState.TransferCompletedAt = DateTime.Now;
+                        Log.Write("Transfer {0} completed.", this.TransferState.TransferId);
+                        this.TransferState.ProgressHint = TransferProgressHint.Completed;
+                    }
                 }
             }
         }
@@ -155,6 +164,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                     {
                         // TODO: handle timeout
                         this.TransferState.DataConnection = listener.Accept();
+                        this.LastActivity = DateTime.Now;
+
                         Log.Write(LogMessageGroup.Debug, "Transfer {0} - Peer opened data connection to {1}", this.TransferState.TransferId, this.TransferState.DataConnection.LocalEndPoint);
                         listener.Close();
                         listener.Dispose();
@@ -167,7 +178,16 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                     Log.Write(LogMessageGroup.Informational, "Notifying sender of data port listener bound to TCP port {0} for transfer id {1}", msg.DataPort, msg.TransferId);
                     this.TransferState.Parent.AttachedChannel.Send(msg);
 
-                    accTask.Wait();
+                    if (accTask.Wait(60000))
+                    {
+                        this.LastActivity = DateTime.Now;
+                    }
+                    else
+                    {
+                        Log.Write(LogMessageGroup.Severe, "Timeout while waiting for remote to connect to data port {0}", msg.DataPort);
+                        this.TransferState.ProgressHint = TransferProgressHint.Failed;
+                        return;
+                    }
                 }
             }
             else
@@ -182,7 +202,6 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                 // Receive data from remote
                 long remain = this.TransferState.Length;
                 long recvTotal = 0;
-                //this.TransferState.LocalStream = new MemoryStream();
 
                 var bufferSize = 8192;
                 var buffer = new byte[bufferSize];
@@ -195,6 +214,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                     var recvd = dc.Receive(buffer, expect, System.Net.Sockets.SocketFlags.None);
 
                     this.TransferState.LocalStream.Write(buffer, 0, recvd);
+                    this.LastActivity = DateTime.Now;
 
                     remain -= recvd;
                     recvTotal += recvd;
@@ -207,6 +227,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             {
                 Log.Write(LogMessageGroup.Important, "Failure while processing inbound stream transfer: {0}", ex.Message);
                 this.TransferState.ProgressHint = TransferProgressHint.Failed;
+                return;
             }
             finally
             {
@@ -233,6 +254,18 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                 Log.Write(LogMessageGroup.Debug, "Transfer {0} - Requesting data transfer port from remote.", this.TransferState.TransferId);
 
                 this.TransferState.Parent.AttachedChannel.Send(msg);
+
+                // Wait until a data port confirmation is received.
+                if (this.TransferState.ProgressStep.WaitOne(30000))
+                {
+                    this.LastActivity = DateTime.Now;
+                }
+                else
+                {
+                    Log.Write(LogMessageGroup.Severe, "Timeout while waiting for remote to provide a data port.");
+                    this.TransferState.ProgressHint = TransferProgressHint.Failed;
+                    return;
+                }
             }
             else
             {
@@ -242,18 +275,24 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                 var t = Task.Run(() =>
                 {
                     this.TransferState.DataConnection = listener.Accept();
-                    this.TransferState.ProgressStep.Set();
                 });
+
                 msg.RequestDataPort = false;
                 msg.DataPort = (ushort)((IPEndPoint)listener.LocalEndPoint).Port;
 
                 this.TransferState.Parent.AttachedChannel.Send(msg);
 
-                t.Wait();
+                if (t.Wait(60000))
+                {
+                    this.LastActivity = DateTime.Now;
+                }
+                else
+                {
+                    Log.Write(LogMessageGroup.Severe, "Timeout while waiting for remote to connect to data port {0}", msg.DataPort);
+                    this.TransferState.ProgressHint = TransferProgressHint.Failed;
+                    return;
+                }
             }
-
-            // Wait until a data port confirmation is received.
-            this.TransferState.ProgressStep.WaitOne();
 
             this.TransferState.ProgressHint = TransferProgressHint.Sending;
             try
@@ -273,6 +312,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                     this.TransferState.LocalStream.Read(buffer, 0, expect);
 
                     var sent = dc.Send(buffer, expect, System.Net.Sockets.SocketFlags.None);
+                    this.LastActivity = DateTime.Now;
 
                     remain -= sent;
                     sendTotal += sent;
@@ -285,6 +325,11 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                 Log.Write(LogMessageGroup.Important, "Failure while processing outbound stream transfer: {0}", ex.Message);
                 this.TransferState.ProgressHint = TransferProgressHint.Failed;
             }
+        }
+
+        private void RunWatchdog(object state)
+        {
+            throw new NotImplementedException();
         }
 
         [ContractInvariantMethod]

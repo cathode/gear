@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GSCore;
 using ProtoBuf;
 
 namespace Gear.Net.ChannelPlugins.StreamTransfer
@@ -139,6 +140,10 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                 {
                     this.OnCompleted();
                 }
+                if (value == TransferProgressHint.Failed)
+                {
+                    this.OnAborted();
+                }
             }
         }
 
@@ -155,6 +160,13 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         protected virtual void OnCompleted(EventArgs e = null)
         {
             this.Completed?.Invoke(this, e ?? EventArgs.Empty);
+        }
+
+        protected virtual void OnAborted(EventArgs e = null)
+        {
+            Log.Write(LogMessageGroup.Informational, "Transfer {0} failed / aborted.", this.TransferId);
+
+            this.Aborted?.Invoke(this, e ?? EventArgs.Empty);
         }
     }
 }

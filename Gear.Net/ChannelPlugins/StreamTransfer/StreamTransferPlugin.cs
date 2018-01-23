@@ -54,8 +54,12 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         /// </summary>
         public StreamTransferPlugin()
         {
-            this.transfers = new ObservableCollection<StreamTransferState>();
+            // Defaults:
+            this.AutoRetryFailedTransfers = true;
             this.WatchdogTimeout = TimeSpan.FromSeconds(30);
+
+            this.transfers = new ObservableCollection<StreamTransferState>();
+
             this.workerWatchdog = new Timer(this.RunWatchdog, null, this.WatchdogTimeout, Timeout.InfiniteTimeSpan);
         }
 
@@ -128,6 +132,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                 return this.transfers;
             }
         }
+
+        public bool AutoRetryFailedTransfers { get; set; }
 
         public TimeSpan WatchdogTimeout { get; set; }
         #endregion
@@ -350,41 +356,44 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                     // Collect any queued (but not initiated) transfers)
                     var waiting = this.transfers.Where(e => e.ProgressHint == TransferProgressHint.Queued).ToArray();
 
-                    Log.Write(LogMessageGroup.Debug, "Processing state queue on thread {0} - {1} queued waiting.", Thread.CurrentThread.ManagedThreadId, waiting.Length);
-                    foreach (var state in waiting)
+                    if (waiting.Length > 0)
                     {
-                        if (state == null)
+                        Log.Write(LogMessageGroup.Debug, "Processing state queue on thread {0} - {1} queued waiting.", Thread.CurrentThread.ManagedThreadId, waiting.Length);
+                        foreach (var state in waiting)
                         {
-                            Log.Write(LogMessageGroup.Critical, "Null stream transfer state object in collection.");
-                            throw new Exception();
-                        }
-
-                        if (state.Parent != null)
-                        {
-                            if (state.Parent != this)
+                            if (state == null)
                             {
-                                Log.Write(LogMessageGroup.Critical, "Incorrect transfer state <-> plugin parent relationship.");
+                                Log.Write(LogMessageGroup.Critical, "Null stream transfer state object in collection.");
                                 throw new Exception();
                             }
-                        }
-                        else
-                        {
-                            state.Parent = this;
-                        }
 
-                        // Attempt to attach the new state to a transfer worker.
-                        var worker = StreamTransferPlugin.BindNextAvailableTransferWorker(state);
+                            if (state.Parent != null)
+                            {
+                                if (state.Parent != this)
+                                {
+                                    Log.Write(LogMessageGroup.Critical, "Incorrect transfer state <-> plugin parent relationship.");
+                                    throw new Exception();
+                                }
+                            }
+                            else
+                            {
+                                state.Parent = this;
+                            }
 
-                        if (worker != null)
-                        {
-                            state.ProgressHint = TransferProgressHint.Initiated;
+                            // Attempt to attach the new state to a transfer worker.
+                            var worker = StreamTransferPlugin.BindNextAvailableTransferWorker(state);
 
-                            worker.Start();
-                        }
-                        else
-                        {
-                            // Bail out because we're out of available workers.
-                            return;
+                            if (worker != null)
+                            {
+                                state.ProgressHint = TransferProgressHint.Initiated;
+
+                                worker.Start();
+                            }
+                            else
+                            {
+                                // Bail out because we're out of available workers.
+                                return;
+                            }
                         }
                     }
                 }
@@ -413,9 +422,55 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                     "Stream transfer watchdog invoked on thread {0}; {1} queued transfers.",
                     Thread.CurrentThread.ManagedThreadId,
                     qc);
-
-                this.ProcessQueue();
             }
+
+            lock (this.processLock)
+            {
+                // Collect stuck transfers:
+                var stuckTransfers = this.Transfers.Where(e => e.Worker != null).ToArray();
+                var stuckThreshold = TimeSpan.FromSeconds(120);
+
+                foreach (var t in stuckTransfers)
+                {
+                    var stuckFor = t.Worker.LastActivity - DateTime.Now;
+
+                    if (stuckFor > stuckThreshold)
+                    {
+                        Log.Write(LogMessageGroup.Important, "Aborting stuck transfer {0}.", t.TransferId);
+                        t.ProgressHint = TransferProgressHint.Failed;
+                        t.Worker.Recycle();
+                    }
+                }
+
+                // Collect all failed transfers:
+                var ftrans = this.Transfers.Where(e => e.ProgressHint == TransferProgressHint.Failed && e.Worker != null).ToArray();
+
+                if (ftrans.Length > 0)
+                {
+                    Log.Write(LogMessageGroup.Important, "Recycling {0} workers with failed transfers", ftrans.Length);
+
+                    foreach (var t in ftrans)
+                    {
+                        if (t.Worker != null)
+                        {
+                            t.Worker.Recycle();
+                        }
+                    }
+                }
+
+                if (this.AutoRetryFailedTransfers)
+                {
+                    var outTrans = this.Transfers.Where(e => e.ProgressHint == TransferProgressHint.Failed && e.LocalDirection == TransferDirection.Outgoing).ToArray();
+
+                    foreach (var t in outTrans)
+                    {
+                        Log.Write(LogMessageGroup.Normal, "Transfer {0} - Retrying.", t.TransferId);
+                        t.ProgressHint = TransferProgressHint.Queued;
+                    }
+                }
+            }
+
+            this.ProcessQueue();
 
             this.ResetWatchdog();
         }
@@ -454,12 +509,23 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
             Log.Write(LogMessageGroup.Debug, "Received stream transfer metadata for stream {0} from {1}", message.TransferState.Name, e.Sender);
 
-            var state = message.TransferState;
-            state.Parent = this;
-            state.LocalDirection = TransferDirection.Incoming;
-            state.TransferInitiatedAt = DateTime.Now;
+            // Look for existing transfer state
+            var state = this.Transfers.FirstOrDefault(t => t.TransferId == message.TransferState.TransferId);
 
-            this.AddTransferState(state);
+            if (state != null)
+            {
+                Log.Write("Transfer {0} - Sender is retrying.", state.TransferId);
+                state.ProgressHint = TransferProgressHint.Queued;
+            }
+            else
+            {
+                state = message.TransferState;
+                state.Parent = this;
+                state.LocalDirection = TransferDirection.Incoming;
+                state.TransferInitiatedAt = DateTime.Now;
+
+                this.AddTransferState(state);
+            }
 
             this.OnTransferReceived(new StreamTransferEventArgs(state));
 
@@ -491,6 +557,10 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
         protected virtual void HandleTransferStateAbortion(object sender, EventArgs e)
         {
+            var state = sender as StreamTransferState;
+
+            state.Worker.Recycle();
+
             this.ProcessStateQueue();
         }
 
