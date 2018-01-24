@@ -359,7 +359,7 @@ namespace Gear.Net
             }
             else
             {
-                Log.Write(LogMessageGroup.Informational, "No handler registered for message dispatch id {0} received from peer {1}", msg.DispatchId, e.Sender);
+                Log.Write(LogMessageGroup.Informational, "No handler registered for message dispatch id {0:X8} received from peer {1}", msg.DispatchId, e.Sender);
             }
         }
 

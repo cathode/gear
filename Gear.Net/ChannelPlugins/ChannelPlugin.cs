@@ -17,9 +17,24 @@ namespace Gear.Net.ChannelPlugins
         #endregion
 
         #region Events
+        /// <summary>
+        /// Raised when this instance is attached to a message <see cref="Channel"/>.
+        /// </summary>
         public event EventHandler<ChannelEventArgs> LocalPluginAttached;
+
+        /// <summary>
+        /// Raised when this instance is detached from a message <see cref="Channel"/>.
+        /// </summary>
         public event EventHandler<ChannelEventArgs> LocalPluginDetached;
+
+        /// <summary>
+        /// Raised when an instance of this plugin is attached by the remote peer to the message <see cref="Channel"/> between the local endpoint and the remote peer.
+        /// </summary>
         public event EventHandler RemotePluginAttached;
+
+        /// <summary>
+        /// Raised 
+        /// </summary>
         public event EventHandler RemotePluginDetached;
         #endregion
         #region Properties
