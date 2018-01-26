@@ -175,6 +175,9 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                     msg.DataPort = (ushort)((IPEndPoint)listener.LocalEndPoint).Port;
                     msg.TransferId = this.TransferState.TransferId;
 
+                    // TODO: Fix timing issue with client not getting data port ready message.
+                    Thread.Sleep(100);
+
                     Log.Write(LogMessageGroup.Informational, "Notifying sender of data port listener bound to TCP port {0} for transfer id {1}", msg.DataPort, msg.TransferId);
                     this.TransferState.Parent.AttachedChannel.Send(msg);
 
