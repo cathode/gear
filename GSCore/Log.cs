@@ -43,7 +43,7 @@ namespace GSCore
         private static int threshold = 0;
         #endregion
         #region Properties
-        
+
         #endregion
         #region Methods
 
@@ -83,7 +83,7 @@ namespace GSCore
                 Log.Flush();
             }
         }
-        
+
 
         /// <summary>
         /// Binds a stream to the log output. Multiple streams can be bound simultaneously.
@@ -133,7 +133,7 @@ namespace GSCore
                 {
                     var data = Log.buffer.Dequeue();
 
-                    if (!Log.ConsoleOutputGroups.HasFlag(data.Level))    
+                    if (!Log.ConsoleOutputGroups.HasFlag(data.Level))
                     {
                         continue;
                     }
@@ -176,6 +176,11 @@ namespace GSCore
                     }
                 }
             }
+        }
+
+        public static void RotateLogFile(string path)
+        {
+            return;
         }
         #endregion
     }

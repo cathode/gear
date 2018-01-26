@@ -168,10 +168,36 @@ namespace Gear.Geometry
             throw new NotImplementedException();
         }
 
-        public static Quaternion LookAt(Vector3d lookAt)
+        public static Quaternion LookAt(Vector3d destPoint)
         {
+            return Quaternion.LookAt(Vector3d.Zero, destPoint);
+        }
+
+        public static Quaternion LookAt(Vector3d sourcePoint, Vector3d destPoint)
+        {
+            var forward = Vector3d.Normalize(destPoint - sourcePoint);
+
+            var dot = Vector3d.DotProduct(Vector3d.Forward, forward);
+
+            // No idea what this is:
+            if (Math.Abs(dot - (-1.0d)) < 0.00000000001)
+            {
+                return new Quaternion(Vector3d.Up.X, Vector3d.Up.Y, Vector3d.Up.Z, Math.PI);
+            }
+            else if (Math.Abs(dot - 1.0d) < 0.00000000001)
+            {
+                return Quaternion.Identity;
+            }
+
+            var rotateAngle = Math.Acos(dot);
+            var rotateAxis = Vector3d.CrossProduct(Vector3d.Forward, forward);
+            rotateAxis = rotateAxis.Normalize();
+
+            return new Quaternion(rotateAxis, rotateAngle);
+
+            /*
             var up = Vector3d.Up;
-            var forward = lookAt;
+
             Vector3d.OrthoNormalize(ref forward, ref up);
             var right = Vector3d.CrossProduct(up, forward);
 
@@ -185,6 +211,7 @@ namespace Gear.Geometry
             var z = (right.Y - up.X) * w4Recip;
 
             return new Quaternion(w, x, y, z).Normalized();
+            */
         }
 
         public static Quaternion Multiply(Quaternion q1, Quaternion q2)
@@ -220,10 +247,13 @@ namespace Gear.Geometry
 
         public Quaternion RotateBy(double degrees)
         {
-            var rq = new Quaternion(this.GetAxis(), degrees);
+            var axis = this.GetAxis();
+            var angle = this.GetAngle();
+            var newAngle = angle + Angle.FromDegrees(degrees);
 
-            var q = rq * this;
-            return new Quaternion(q.w, q.x, q.y, q.z);
+            newAngle = newAngle.Normalize();
+
+            return new Quaternion(axis, newAngle);
         }
 
         public Vector3d GetAxis()

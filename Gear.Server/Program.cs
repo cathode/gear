@@ -33,7 +33,7 @@ namespace Gear.Server
         public static void Main(string[] args)
         {
             // Init logging first:
-            Log.Write(LogMessageGroup.Critical, "Initializing logging...");
+            Log.Write(LogMessageGroup.Important, "Initializing logging...");
             Log.Write(LogMessageGroup.Important, "Gear Server - v{0}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
             //Console.WriteLine("Gear Server - v" + Assembly.GetExecutingAssembly().GetName().Version.ToString());

@@ -5,20 +5,20 @@
  * This software is released under the terms and conditions of the MIT        *
  * license. See the included LICENSE file for details.                        *
  *****************************************************************************/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Gear.Client.Platform;
 using Gear.Client.SceneGraph;
 using Gear.Geometry;
-using System.Diagnostics.Contracts;
 // using Gear.Client.Platform.Microsoft;
 // using Gear.Client.Platform.Microsoft.OpenGL;
 using OpenTK;
 using OpenTK.Graphics;
-using OpenTK.Input;
 using OpenTK.Graphics.OpenGL;
-using Gear.Client.Platform;
+using OpenTK.Input;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Text;
 
 namespace Gear.Client.Rendering
 {
@@ -370,7 +370,7 @@ namespace Gear.Client.Rendering
             GL.BindBuffer(BufferTarget.ArrayBuffer, this.vboId[0]);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(this.mesh.Vertices.Length * 8 * sizeof(float)), this.mesh.Vertices, BufferUsageHint.StaticDraw);
 
-            // GL.Translate(0, 0, -0.25);
+            GL.Translate(0, 0, -0.25);
             // GL.Scale(0.5, 0.5, 0.5);
         }
 
