@@ -80,6 +80,12 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             this.workAvailable.Set();
         }
 
+        internal void ForceStop()
+        {
+            this.workThread.Abort();
+            this.workerWatchdog.Dispose();
+        }
+
         internal void Recycle()
         {
             if (this.TransferState != null)
@@ -144,64 +150,67 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         {
             // Inbound transfer - remote peer is trying to transfer data to us.
 
-            // Set up transfer state
-            if (this.TransferState.DataPort == null)
+            System.Net.Sockets.Socket dc = null;
+
+            try
             {
-                if (!this.TransferState.Parent.CanHostActiveTransfers)
+                // Set up transfer state
+                if (this.TransferState.DataPort == null)
                 {
-                    Log.Write(LogMessageGroup.Severe, "Client requested data port but local end cannot host active transfers!");
-
-                    // TODO: send error message back to client.
-                    throw new NotImplementedException();
-                }
-                else
-                {
-                    // Create a listener for incoming connection from sending peer.
-                    var listener = StreamTransferPlugin.GetNextDataPortListener();
-
-                    // Accept connection on a background thread.
-                    var accTask = Task.Run(() =>
+                    if (!this.TransferState.Parent.CanHostActiveTransfers)
                     {
-                        // TODO: handle timeout
-                        this.TransferState.DataConnection = listener.Accept();
-                        this.LastActivity = DateTime.Now;
+                        Log.Write(LogMessageGroup.Severe, "Client requested data port but local end cannot host active transfers!");
 
-                        Log.Write(LogMessageGroup.Debug, "Transfer {0} - Peer opened data connection to {1}", this.TransferState.TransferId, this.TransferState.DataConnection.LocalEndPoint);
-                        listener.Close();
-                        listener.Dispose();
-                    });
-
-                    var msg = new StreamDataPortReadyMessage();
-                    msg.DataPort = (ushort)((IPEndPoint)listener.LocalEndPoint).Port;
-                    msg.TransferId = this.TransferState.TransferId;
-
-                    // TODO: Fix timing issue with client not getting data port ready message.
-                    Thread.Sleep(100);
-
-                    Log.Write(LogMessageGroup.Informational, "Notifying sender of data port listener bound to TCP port {0} for transfer id {1}", msg.DataPort, msg.TransferId);
-                    this.TransferState.Parent.AttachedChannel.Send(msg);
-
-                    if (accTask.Wait(60000))
-                    {
-                        this.LastActivity = DateTime.Now;
+                        // TODO: send error message back to client.
+                        throw new NotImplementedException();
                     }
                     else
                     {
-                        Log.Write(LogMessageGroup.Severe, "Timeout while waiting for remote to connect to data port {0}", msg.DataPort);
-                        this.TransferState.ProgressHint = TransferProgressHint.Failed;
-                        return;
+                        // Create a listener for incoming connection from sending peer.
+                        var listener = StreamTransferPlugin.GetNextDataPortListener();
+
+                        // Accept connection on a background thread.
+                        var accTask = Task.Run(() =>
+                        {
+                            // TODO: handle timeout
+                            this.TransferState.DataConnection = listener.Accept();
+                            this.LastActivity = DateTime.Now;
+
+                            Log.Write(LogMessageGroup.Debug, "Transfer {0} - Peer opened data connection to {1}", this.TransferState.TransferId, this.TransferState.DataConnection.LocalEndPoint);
+                            listener.Close();
+                            listener.Dispose();
+                        });
+
+                        var msg = new StreamDataPortReadyMessage();
+                        msg.DataPort = (ushort)((IPEndPoint)listener.LocalEndPoint).Port;
+                        msg.TransferId = this.TransferState.TransferId;
+
+                        // TODO: Fix timing issue with client not getting data port ready message.
+                        Thread.Sleep(100);
+
+                        Log.Write(LogMessageGroup.Informational, "Notifying sender of data port listener bound to TCP port {0} for transfer id {1}", msg.DataPort, msg.TransferId);
+                        this.TransferState.Parent.AttachedChannel.Send(msg);
+
+                        if (accTask.Wait(60000))
+                        {
+                            this.LastActivity = DateTime.Now;
+                        }
+                        else
+                        {
+                            Log.Write(LogMessageGroup.Severe, "Timeout while waiting for remote to connect to data port {0}", msg.DataPort);
+                            this.TransferState.ProgressHint = TransferProgressHint.Failed;
+                            return;
+                        }
                     }
                 }
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
+                else
+                {
+                    throw new NotImplementedException();
+                }
 
-            this.TransferState.ProgressHint = TransferProgressHint.Receiving;
-            var dc = this.TransferState.DataConnection;
-            try
-            {
+                this.TransferState.ProgressHint = TransferProgressHint.Receiving;
+                dc = this.TransferState.DataConnection;
+
                 // Receive data from remote
                 long remain = this.TransferState.Length;
                 long recvTotal = 0;
@@ -226,6 +235,10 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                 Log.Write(LogMessageGroup.Debug, "Transfer {0} - received {1} bytes.", this.TransferState.TransferId, recvTotal);
 
             }
+            catch (ThreadAbortException ex)
+            {
+                Log.Write(LogMessageGroup.Important, "Worker on thread {0} was force stopped.", Thread.CurrentThread.ManagedThreadId);
+            }
             catch (Exception ex)
             {
                 Log.Write(LogMessageGroup.Important, "Failure while processing inbound stream transfer: {0}", ex.Message);
@@ -235,71 +248,73 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             finally
             {
                 // Cleanup
-                dc.Close();
+                dc?.Close();
             }
         }
 
         private void WorkTransferStateOutbound()
         {
             // Outbound transfer - local peer has the stream data and needs to transfer it to remote peer.
-            var sm = this.TransferState.LocalStream;
-
-            // Build metadata to send to remote
-            var msg = new TransferStreamMessage();
-            msg.TransferState = this.TransferState;
-
-            if (!this.TransferState.Parent.CanHostActiveTransfers)
-            {
-                this.TransferState.ProgressHint = TransferProgressHint.ConnectingToDataPort;
-
-                // The remote peer needs to listen for a data connection from the local peer.
-                msg.RequestDataPort = true;
-                Log.Write(LogMessageGroup.Debug, "Transfer {0} - Requesting data transfer port from remote.", this.TransferState.TransferId);
-
-                this.TransferState.Parent.AttachedChannel.Send(msg);
-
-                // Wait until a data port confirmation is received.
-                if (this.TransferState.ProgressStep.WaitOne(30000))
-                {
-                    this.LastActivity = DateTime.Now;
-                }
-                else
-                {
-                    Log.Write(LogMessageGroup.Severe, "Timeout while waiting for remote to provide a data port.");
-                    this.TransferState.ProgressHint = TransferProgressHint.Failed;
-                    return;
-                }
-            }
-            else
-            {
-                this.transferState.ProgressHint = TransferProgressHint.WaitingForDataConnection;
-                var listener = StreamTransferPlugin.GetNextDataPortListener();
-
-                var t = Task.Run(() =>
-                {
-                    this.TransferState.DataConnection = listener.Accept();
-                });
-
-                msg.RequestDataPort = false;
-                msg.DataPort = (ushort)((IPEndPoint)listener.LocalEndPoint).Port;
-
-                this.TransferState.Parent.AttachedChannel.Send(msg);
-
-                if (t.Wait(60000))
-                {
-                    this.LastActivity = DateTime.Now;
-                }
-                else
-                {
-                    Log.Write(LogMessageGroup.Severe, "Timeout while waiting for remote to connect to data port {0}", msg.DataPort);
-                    this.TransferState.ProgressHint = TransferProgressHint.Failed;
-                    return;
-                }
-            }
-
-            this.TransferState.ProgressHint = TransferProgressHint.Sending;
             try
             {
+
+                var sm = this.TransferState.LocalStream;
+
+                // Build metadata to send to remote
+                var msg = new TransferStreamMessage();
+                msg.TransferState = this.TransferState;
+
+                if (!this.TransferState.Parent.CanHostActiveTransfers)
+                {
+                    this.TransferState.ProgressHint = TransferProgressHint.ConnectingToDataPort;
+
+                    // The remote peer needs to listen for a data connection from the local peer.
+                    msg.RequestDataPort = true;
+                    Log.Write(LogMessageGroup.Debug, "Transfer {0} - Requesting data transfer port from remote.", this.TransferState.TransferId);
+
+                    this.TransferState.Parent.AttachedChannel.Send(msg);
+
+                    // Wait until a data port confirmation is received.
+                    if (this.TransferState.ProgressStep.WaitOne(30000))
+                    {
+                        this.LastActivity = DateTime.Now;
+                    }
+                    else
+                    {
+                        Log.Write(LogMessageGroup.Severe, "Timeout while waiting for remote to provide a data port.");
+                        this.TransferState.ProgressHint = TransferProgressHint.Failed;
+                        return;
+                    }
+                }
+                else
+                {
+                    this.transferState.ProgressHint = TransferProgressHint.WaitingForDataConnection;
+                    var listener = StreamTransferPlugin.GetNextDataPortListener();
+
+                    var t = Task.Run(() =>
+                    {
+                        this.TransferState.DataConnection = listener.Accept();
+                    });
+
+                    msg.RequestDataPort = false;
+                    msg.DataPort = (ushort)((IPEndPoint)listener.LocalEndPoint).Port;
+
+                    this.TransferState.Parent.AttachedChannel.Send(msg);
+
+                    if (t.Wait(60000))
+                    {
+                        this.LastActivity = DateTime.Now;
+                    }
+                    else
+                    {
+                        Log.Write(LogMessageGroup.Severe, "Timeout while waiting for remote to connect to data port {0}", msg.DataPort);
+                        this.TransferState.ProgressHint = TransferProgressHint.Failed;
+                        return;
+                    }
+                }
+
+                this.TransferState.ProgressHint = TransferProgressHint.Sending;
+
                 long remain = this.TransferState.Length;
                 long sendTotal = 0;
 
@@ -323,6 +338,10 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
                 Log.Write(LogMessageGroup.Debug, "Transfer {0} -  sent {1} bytes.", this.TransferState.TransferId, sendTotal);
             }
+            catch (ThreadAbortException ex)
+            {
+                Log.Write(LogMessageGroup.Important, "Worker on thread {0} was force stopped.", Thread.CurrentThread.ManagedThreadId);
+            }
             catch (Exception ex)
             {
                 Log.Write(LogMessageGroup.Important, "Failure while processing outbound stream transfer: {0}", ex.Message);
@@ -332,7 +351,7 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
 
         private void RunWatchdog(object state)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         [ContractInvariantMethod]

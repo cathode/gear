@@ -265,9 +265,27 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             {
                 channel.RegisterHandler<StreamDataPortReadyMessage>(this.Handle_StreamDataPortReadyMessage, this);
                 channel.RegisterHandler<TransferStreamMessage>(this.Handle_TransferStreamMessage, this);
+
+                var cc = channel as ConnectedChannel;
+
+                if (cc != null)
+                {
+                    cc.Disconnected += this.AttachedChannel_Disconnected;
+                    cc.Connected += this.AttachedChannel_Connected;
+                }
             }
 
             this.AttachedChannel = channel;
+        }
+
+        private void AttachedChannel_Connected(object sender, EventArgs e)
+        {
+        }
+
+        private void AttachedChannel_Disconnected(object sender, ChannelDisconnectedEventArgs e)
+        {
+            // Fail any in-progress transfers and force stop all workers.
+            this.AbortActiveTransfers();
         }
 
         /// <summary>
@@ -279,9 +297,36 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             if (channel != null)
             {
                 channel.UnregisterHandler(this);
+
+                var cc = channel as ConnectedChannel;
+
+                if (cc != null)
+                {
+                    cc.Disconnected -= this.AttachedChannel_Disconnected;
+                    cc.Connected -= this.AttachedChannel_Connected;
+                }
             }
 
             this.AttachedChannel = null;
+
+            this.AbortActiveTransfers();
+
+            this.Transfers.Clear();
+        }
+
+        private void AbortActiveTransfers()
+        {
+            lock (this.processLock)
+            {
+                var active = this.transfers.Where(t => t.ProgressHint != TransferProgressHint.Queued && t.ProgressHint != TransferProgressHint.Completed);
+
+                foreach (var trans in active)
+                {
+                    trans.Worker?.ForceStop();
+                    trans.ProgressHint = TransferProgressHint.Failed;
+                    trans.Worker?.Recycle();
+                }
+            }
         }
 
         /// <summary>
@@ -352,6 +397,13 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                 if (Monitor.TryEnter(this.processLock))
                 {
                     this.ResetWatchdog();
+
+                    // Only process if connection is open (if relevant):
+                    if (this.AttachedChannel is ConnectedChannel && ((ConnectedChannel)this.AttachedChannel).State == ChannelState.Disconnected)
+                    {
+                        return;
+                    }
+
 
                     // Collect any queued (but not initiated) transfers)
                     var waiting = this.transfers.Where(e => e.ProgressHint == TransferProgressHint.Queued).ToArray();
