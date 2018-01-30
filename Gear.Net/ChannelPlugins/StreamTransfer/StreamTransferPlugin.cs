@@ -181,8 +181,15 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
                 int tries = 0;
                 int max = Math.Abs(StreamTransferPlugin.TransferPortPoolStart - StreamTransferPlugin.TransferPortPoolEnd);
 
+                StreamTransferPlugin.lastAssignedDataPort = Math.Max(StreamTransferPlugin.lastAssignedDataPort, StreamTransferPlugin.TransferPortPoolStart);
+
                 while (tries < max)
                 {
+                    if (StreamTransferPlugin.lastAssignedDataPort > StreamTransferPlugin.TransferPortPoolEnd)
+                    {
+                        StreamTransferPlugin.lastAssignedDataPort = StreamTransferPlugin.TransferPortPoolStart;
+                    }
+
                     var port = StreamTransferPlugin.lastAssignedDataPort++;
 
                     var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -599,6 +606,11 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
             // cleanup transfer state
             var state = sender as StreamTransferState;
 
+            if (state.LocalDirection == TransferDirection.Outgoing)
+            {
+                state.LocalStream?.Close();
+            }
+
             state.Completed -= this.HandleTransferStateCompletion;
             state.Aborted -= this.HandleTransferStateAbortion;
 
@@ -610,6 +622,8 @@ namespace Gear.Net.ChannelPlugins.StreamTransfer
         protected virtual void HandleTransferStateAbortion(object sender, EventArgs e)
         {
             var state = sender as StreamTransferState;
+
+            //state.LocalStream?.Close();
 
             state.Worker.Recycle();
 
