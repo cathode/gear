@@ -26,6 +26,9 @@ namespace Gear.Client
 {
     public class ClientProgram
     {
+        private static SceneGraph.Scene activeScene;
+        private static Gear.Client.Rendering.GLRenderer renderer;
+
         public static void Main(string[] args)
         {
             // Set up logging to console.
@@ -42,12 +45,12 @@ namespace Gear.Client
             // For testing
             Thread.Sleep(1000);
 
-            var renderer = new Gear.Client.Rendering.GLRenderer();
+            var renderer = ClientProgram.renderer = new Gear.Client.Rendering.GLRenderer();
             // var renderer = new Gear.Client.Rendering.Software.SoftwareRenderer();
             renderer.Initialize(new Rendering.RendererOptions());
 
-            var scene = new SceneGraph.Scene();
-            scene.Root = new SceneGraph.Node(Gear.Modeling.Mesh.NewCube());
+            var scene = ClientProgram.activeScene = new SceneGraph.Scene();
+            scene.Root = new SceneGraph.Node(Gear.Modeling.Mesh.NewIcosahedron(1.0f));
             scene.Root.Position = new Vector3d(0, 0, -0.2);
             scene.Root.Orientation = Quaternion.LookAt(new Vector3d(1, 0, 0));
             scene.Root.TransformOrder = SceneGraph.TransformOrder.TranslateRotateScale;
@@ -58,7 +61,42 @@ namespace Gear.Client
                 scene.Root.Orientation = scene.Root.Orientation.RotateBy(1);
             };
 
+            renderer.GameWindow.MouseDown += GameWindow_MouseDown;
+            renderer.GameWindow.MouseUp += GameWindow_MouseUp;
+            renderer.GameWindow.MouseMove += GameWindow_MouseMove;
+            renderer.GameWindow.MouseWheel += GameWindow_MouseWheel;
+
             renderer.Start();
+        }
+
+        private static void GameWindow_MouseWheel(object sender, OpenTK.Input.MouseWheelEventArgs e)
+        {
+            //throw new NotImplementedException();
+            ClientProgram.renderer.ActiveCamera.FocalDistance += e.DeltaPrecise;
+        }
+
+        private static void GameWindow_MouseMove(object sender, OpenTK.Input.MouseMoveEventArgs e)
+        {
+            if (ClientProgram.isMouseDown)
+            {
+                var pos = ClientProgram.renderer.ActiveCamera.Position;
+
+                pos = pos + new Vector3d(e.XDelta * 0.1, e.YDelta * 0.1, 0);
+                ClientProgram.renderer.ActiveCamera.Position = pos;
+                ClientProgram.renderer.ActiveCamera.Orientation = ClientProgram.renderer.ActiveCamera.Orientation = Quaternion.LookAt(pos, Vector3d.Zero);
+            }
+        }
+
+        private static bool isMouseDown = false;
+
+        private static void GameWindow_MouseUp(object sender, OpenTK.Input.MouseButtonEventArgs e)
+        {
+            isMouseDown = false;
+        }
+
+        private static void GameWindow_MouseDown(object sender, OpenTK.Input.MouseButtonEventArgs e)
+        {
+            isMouseDown = true;
         }
     }
 }

@@ -259,6 +259,14 @@ namespace Gear.Client.Rendering
                 this.activeCamera = value;
             }
         }
+
+        public GameWindow GameWindow
+        {
+            get
+            {
+                return this.gameWindow;
+            }
+        }
         #endregion
         #region Methods
 
@@ -492,16 +500,18 @@ namespace Gear.Client.Rendering
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
 
-            // GL.Scale(0.1, 0.1, 0.1);
+            var rt = this.ActiveCamera.Orientation;
 
-            // var ct = this.ActiveCamera.Position;
+            //this.ActiveCamera.Orientation = rt.RotateBy(1.5);
+            GL.Rotate(rt.W, rt.X, rt.Y, rt.Z);
 
-            // GL.Translate(-ct.X, -ct.Y, -ct.Z);
+            var ct = this.ActiveCamera.Position;
 
-            // var rt = this.ActiveCamera.Orientation;
+            GL.Translate(-ct.X, -ct.Y, -ct.Z);
 
-            // this.ActiveCamera.Orientation = rt.RotateBy(1.5);
-            // GL.Rotate(rt.W, rt.X, rt.Y, rt.Z);
+            var focal = Math.Max(Math.Min(this.ActiveCamera.FocalDistance / 512.0, 0.9), 0.1);
+
+            GL.Scale(focal, focal, focal);
 
             // TEST CODE:
 
@@ -521,6 +531,9 @@ namespace Gear.Client.Rendering
 
             // Render frame time
             // OpenTK.Graphics.OpenGL4.gl
+
+
+            this.RenderHud();
 
             this.gameWindow.SwapBuffers();
         }
@@ -559,6 +572,32 @@ namespace Gear.Client.Rendering
             {
                 this.Stopping(this, e);
             }
+        }
+
+        private void RenderHud()
+        {
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.PushMatrix();
+            GL.LoadIdentity();
+
+            GL.Ortho(0.0, 1920.0, 1080.0, 0.0, -1.0, 10.0);
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadIdentity();
+            GL.Disable(EnableCap.CullFace);
+
+            GL.Clear(ClearBufferMask.DepthBufferBit);
+
+            GL.Begin(PrimitiveType.Quads);
+            GL.Color3(1.0f, 0.0f, 0.0f);
+            GL.Vertex2(0, 0);
+            GL.Vertex2(100.0, 0.0);
+            GL.Vertex2(100.0, 100.0);
+            GL.Vertex2(0.0, 100.0);
+            GL.End();
+
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.PopMatrix();
+            GL.MatrixMode(MatrixMode.Modelview);
         }
 
         [ContractInvariantMethod]
